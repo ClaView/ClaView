@@ -1,0 +1,38 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Frontend
+node_modules/
+.next/
+
+# Generated data and outputs
+/artifacts/*
+!/artifacts/.gitkeep
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/data/indexes/*
+!/data/indexes/.gitkeep
+*.log
+
+# Local files
+.DS_Store
+Thumbs.db
