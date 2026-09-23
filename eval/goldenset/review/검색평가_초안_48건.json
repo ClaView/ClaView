@@ -1,0 +1,681 @@
+{
+  "schema_version": "1.0",
+  "note": "개발·팀 검토용 평가 초안. 독립적인 사람이 검증한 골든셋 또는 실행 결과가 아님. review_axes는 검토할 구분 축이며 상반되는 기준을 동시에 선택하라는 뜻이 아니다.",
+  "cases": [
+    {
+      "id": "Q01-P",
+      "type": "explicit",
+      "query": "2024년 경제심리지수 원계열을 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_513Y001"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_513Y001",
+      "execution_status": "not_run",
+      "review_axes": [
+        "원계열/순환변동치"
+      ]
+    },
+    {
+      "id": "Q01-A",
+      "type": "ambiguous",
+      "query": "경기 심리 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_513Y001",
+        "DT_511Y002",
+        "DT_512Y013"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "경제심리지수의 원계열과 순환변동치 중 어느 계열을 볼까요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_513Y001",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q01-N",
+      "type": "negative",
+      "query": "소비자심리지수만 보여줘.",
+      "expected_action": "경제심리지수로 대체하지 않고 소비자동향조사의 소비자심리지수 계열 탐색",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_513Y001",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q02-P",
+      "type": "explicit",
+      "query": "2024년 계절조정 명목 GDP를 분기별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_200Y103"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_200Y103",
+      "execution_status": "not_run",
+      "review_axes": [
+        "명목/실질",
+        "계절조정/원계열",
+        "GDP/GNI/산업별 부가가치",
+        "분기/연간"
+      ]
+    },
+    {
+      "id": "Q02-A",
+      "type": "ambiguous",
+      "query": "경제성장률 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_200Y103",
+        "DT_200Y104",
+        "DT_200Y105",
+        "DT_200Y106"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "GDP와 GNI 중 어떤 지표이며, 명목·실질과 원계열·계절조정 중 어떤 기준을 원하시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_200Y103",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q02-N",
+      "type": "negative",
+      "query": "2024년 계절조정 실질 GDP를 보여줘.",
+      "expected_action": "명목 대표 표 대신 실질 대응 표 탐색",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_200Y103",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q03-P",
+      "type": "explicit",
+      "query": "2024년 계절조정 경상수지를 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_301Y017"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_301Y017",
+      "execution_status": "not_run",
+      "review_axes": [
+        "계절조정/원계열",
+        "경상수지/상품수지/서비스수지",
+        "수입(收入)/상품수입(輸入)"
+      ]
+    },
+    {
+      "id": "Q03-A",
+      "type": "ambiguous",
+      "query": "무역수지 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_301Y017"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "경상수지 전체인가요, 상품·서비스수지인가요? 계절조정 기준을 원하시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_301Y017",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q03-N",
+      "type": "negative",
+      "query": "통관기준 무역수지를 보여줘.",
+      "expected_action": "경상수지로 대체하지 않고 통관기준 데이터의 범위·출처 확인",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_301Y017",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q04-P",
+      "type": "explicit",
+      "query": "2024년 미국에 대한 대외금융자산 중 증권투자 잔액을 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_311Y002"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_311Y002",
+      "execution_status": "not_run",
+      "review_axes": [
+        "자산/부채",
+        "투자종류",
+        "지역/통화",
+        "연간"
+      ]
+    },
+    {
+      "id": "Q04-A",
+      "type": "ambiguous",
+      "query": "해외투자 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_311Y002",
+        "DT_311Y001",
+        "DT_311Y003"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "우리나라의 해외자산과 외국인에 대한 부채 중 어느 쪽이며, 잔액을 보시려는 건가요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_311Y002",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q04-N",
+      "type": "negative",
+      "query": "2024년 한 해 동안 미국에 새로 투자한 금액을 보여줘.",
+      "expected_action": "잔액을 신규 투자 거래액으로 제시 금지",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_311Y002",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q05-P",
+      "type": "explicit",
+      "query": "2024년 국내은행 중소기업 대출태도 지수를 분기별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_514Y001"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_514Y001",
+      "execution_status": "not_run",
+      "review_axes": [
+        "대출태도/대출수요/신용위험",
+        "기관·차주 범위",
+        "실적/전망"
+      ]
+    },
+    {
+      "id": "Q05-A",
+      "type": "ambiguous",
+      "query": "은행이 대출을 더 까다롭게 봤는지 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_514Y001",
+        "DT_514Y002",
+        "DT_514Y003"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "은행의 대출태도, 차주의 대출수요, 신용위험 중 어떤 것을 보시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_514Y001",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q05-N",
+      "type": "negative",
+      "query": "최근 분기의 대출태도 전망치를 실제 대출실적으로 보여줘.",
+      "expected_action": "전망을 실적으로 재표기 금지",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_514Y001",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q06-P",
+      "type": "explicit",
+      "query": "2024년 제조업의 매출액가중 업황실적BSI를 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_512Y015"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_512Y015",
+      "execution_status": "not_run",
+      "review_axes": [
+        "실적/전망",
+        "매출액가중 여부",
+        "업종",
+        "BSI 세부지표"
+      ]
+    },
+    {
+      "id": "Q06-A",
+      "type": "ambiguous",
+      "query": "기업 체감경기 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_512Y015",
+        "DT_512Y016",
+        "DT_512Y013",
+        "DT_512Y014"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "실적과 전망 중 무엇이며, 매출액가중 기준을 원하시나요? 업황·매출 등 어떤 지표인가요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_512Y015",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q06-N",
+      "type": "negative",
+      "query": "제조업의 매출액가중 업황전망BSI를 보여줘.",
+      "expected_action": "실적 표 대신 전망 대응 표 탐색",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_512Y015",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q07-P",
+      "type": "explicit",
+      "query": "2024년 제11차 산업분류 기준 제조업 종합의 유동자산을 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_501Y001"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_501Y001",
+      "execution_status": "not_run",
+      "review_axes": [
+        "제11차 한국표준산업분류",
+        "기업규모",
+        "재무 계정",
+        "통계 적용기간"
+      ]
+    },
+    {
+      "id": "Q07-A",
+      "type": "ambiguous",
+      "query": "기업 자산 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_501Y001",
+        "DT_501Y002",
+        "DT_501Y013"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "어떤 업종·기업규모의 어느 재무 항목을 보시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_501Y001",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q07-N",
+      "type": "negative",
+      "query": "제조업 영업이익을 이 재무상태표에서 찾아줘.",
+      "expected_action": "재무상태표에 있다고 가정하지 않고 손익계산서 메타 탐색",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_501Y001",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q08-P",
+      "type": "explicit",
+      "query": "2024년 말 일반정부의 순대외채권을 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_311Y006"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_311Y006",
+      "execution_status": "not_run",
+      "review_axes": [
+        "채권/채무/순채권",
+        "단기/장기",
+        "부문",
+        "분기/연간"
+      ]
+    },
+    {
+      "id": "Q08-A",
+      "type": "ambiguous",
+      "query": "외채 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_311Y006",
+        "DT_311Y004",
+        "DT_311Y005"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "대외채권, 대외채무, 둘의 차이인 순대외채권 중 무엇을 원하시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_311Y006",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q08-N",
+      "type": "negative",
+      "query": "2024년 말 대외채무 규모를 보여줘.",
+      "expected_action": "순대외채권 대신 대외채무 표 탐색",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_311Y006",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q09-P",
+      "type": "explicit",
+      "query": "2024년 생산자물가지수 기본분류 총지수를 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_404Y014"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_404Y014",
+      "execution_status": "not_run",
+      "review_axes": [
+        "기본/특수/품목 분류",
+        "지수 기준시점",
+        "잠정/확정",
+        "가중치 적용연도"
+      ]
+    },
+    {
+      "id": "Q09-A",
+      "type": "ambiguous",
+      "query": "생산자 가격 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_404Y014",
+        "DT_404Y015",
+        "DT_404Y016",
+        "DT_405Y006",
+        "DT_405Y007"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "생산자물가의 총지수인가요, 특정 분류·품목인가요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_404Y014",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q09-N",
+      "type": "negative",
+      "query": "소비자물가지수를 생산자물가지수로 대신 보여줘.",
+      "expected_action": "다른 지표로 대체하지 않고 한국은행 소관 검색 범위와 대안 설명",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_404Y014",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q10-P",
+      "type": "explicit",
+      "query": "2024년 전국 전체 소비자심리지수를 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_511Y002"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_511Y002",
+      "execution_status": "not_run",
+      "review_axes": [
+        "개별 CSI/종합 소비자심리지수",
+        "현재/전망",
+        "전망 시계",
+        "응답자 계층",
+        "표본개편"
+      ]
+    },
+    {
+      "id": "Q10-A",
+      "type": "ambiguous",
+      "query": "소비 심리 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_511Y002",
+        "DT_511Y003",
+        "DT_511Y004",
+        "DT_513Y001"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "종합 소비자심리지수인가요, 생활형편·물가 등 개별 전망지수인가요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_511Y002",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q10-N",
+      "type": "negative",
+      "query": "물가수준전망CSI를 실제 물가상승률 퍼센트로 보여줘.",
+      "expected_action": "지수를 상승률로 재명명·변환 금지",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_511Y002",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q11-P",
+      "type": "explicit",
+      "query": "2024년 수입물가지수의 원재료를 달러기준으로 월별 조회해줘.",
+      "expected_candidate_table_ids": [
+        "DT_401Y018"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_401Y018",
+      "execution_status": "not_run",
+      "review_axes": [
+        "수입/수출",
+        "가격/금액/물량",
+        "용도",
+        "통화기준",
+        "지수 기준시점"
+      ]
+    },
+    {
+      "id": "Q11-A",
+      "type": "ambiguous",
+      "query": "수입 가격 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_401Y018",
+        "DT_403Y004",
+        "DT_403Y003",
+        "DT_401Y015"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "가격·금액·물량 중 무엇이며, 원화·달러·계약통화 중 어떤 기준을 보시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_401Y018",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q11-N",
+      "type": "negative",
+      "query": "2024년 수입물량지수를 보여줘.",
+      "expected_action": "물가 표 대신 물량지수 표 탐색",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_401Y018",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q12-P",
+      "type": "explicit",
+      "query": "2024년 말 일반정부의 명목가격 기준 채권발행잔액을 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_282Y001"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_282Y001",
+      "execution_status": "not_run",
+      "review_axes": [
+        "명목가격/시가",
+        "발행잔액/순발행액",
+        "원화/외화",
+        "단기/장기/잔존만기",
+        "국내/국외 발행시장"
+      ]
+    },
+    {
+      "id": "Q12-A",
+      "type": "ambiguous",
+      "query": "채권 발행 규모 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_282Y001",
+        "DT_282Y002",
+        "DT_282Y003"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "현재 남아 있는 발행잔액인가요, 기간 중 순발행액인가요? 명목가격과 시가 중 어느 기준인가요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_282Y001",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q12-N",
+      "type": "negative",
+      "query": "2024년 채권 순발행액을 이 잔액으로 보여줘.",
+      "expected_action": "잔액 대신 순발행액 대응 표 확인",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_282Y001",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q13-P",
+      "type": "explicit",
+      "query": "2024년 신용카드 물품및용역구매 금액을 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_602Y002"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_602Y002",
+      "execution_status": "not_run",
+      "review_axes": [
+        "지급수단",
+        "건수/금액",
+        "신용카드 구매/현금서비스",
+        "입금/출금"
+      ]
+    },
+    {
+      "id": "Q13-A",
+      "type": "ambiguous",
+      "query": "카드 사용 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_602Y002",
+        "DT_602Y001",
+        "DT_601Y003"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "어떤 지급수단의 건수와 금액 중 무엇을 보시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_602Y002",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q13-N",
+      "type": "negative",
+      "query": "신용카드 사용 건수를 십억원으로 보여줘.",
+      "expected_action": "건수·금액 단위 불일치를 안내",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_602Y002",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q14-P",
+      "type": "explicit",
+      "query": "2024년 개편 M2의 말잔 계절조정계열을 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_161Y007"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_161Y007",
+      "execution_status": "not_run",
+      "review_axes": [
+        "말잔/평잔",
+        "계절조정/원계열",
+        "M2/M1/Lf/L",
+        "개편/구 지표"
+      ]
+    },
+    {
+      "id": "Q14-A",
+      "type": "ambiguous",
+      "query": "통화량 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_161Y007",
+        "DT_161Y005",
+        "DT_161Y006",
+        "DT_161Y008",
+        "DT_101Y001"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "M2의 말잔·평잔과 원계열·계절조정 중 어느 기준을 원하시나요? 구 지표를 지정하신 건가요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_161Y007",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q14-N",
+      "type": "negative",
+      "query": "구 M2의 평잔 원계열을 이 말잔 표로 대신 보여줘.",
+      "expected_action": "구/개편·말잔/평잔·원계열/계절조정을 동시에 검증",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_161Y007",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q15-P",
+      "type": "explicit",
+      "query": "2023년 8월부터 2026년 7월까지 예금은행 신규취급액 기준 가계대출금리를 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_121Y006"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_121Y006",
+      "execution_status": "not_run",
+      "review_axes": [
+        "신규취급액/잔액",
+        "가계/기업",
+        "대출종류",
+        "예금은행 범위"
+      ]
+    },
+    {
+      "id": "Q15-A",
+      "type": "ambiguous",
+      "query": "대출이자 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_121Y006",
+        "DT_121Y015",
+        "DT_121Y007"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "예금은행 기준인가요? 신규취급액과 잔액 기준 중 하나 또는 두 기준 비교를 원하시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_121Y006",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q15-N",
+      "type": "negative",
+      "query": "내가 이번 달 낸 대출이자 금액을 알려줘.",
+      "expected_action": "집계 금리로 개인 납부 이자액을 만들어내지 않음",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_121Y006",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q16-P",
+      "type": "explicit",
+      "query": "2024년 예금은행 잔액 기준 가계대출금리를 월별로 보여줘.",
+      "expected_candidate_table_ids": [
+        "DT_121Y015"
+      ],
+      "expected_action": "resolve_explicit_conditions_then_validate_codes",
+      "forbidden": "명시 조건 삭제, 검증하지 않은 API 코드 사용",
+      "evidence": "DT_121Y015",
+      "execution_status": "not_run",
+      "review_axes": [
+        "잔액/신규취급액",
+        "마이너스통장 포함 여부",
+        "가계/기업",
+        "대출종류"
+      ]
+    },
+    {
+      "id": "Q16-A",
+      "type": "ambiguous",
+      "query": "기존 대출 금리 보여줘",
+      "acceptable_candidate_table_ids": [
+        "DT_121Y015",
+        "DT_121Y006"
+      ],
+      "expected_action": "retrieve_candidates_and_clarify_missing_semantics",
+      "suggested_question": "잔액 기준의 어떤 대출종류를 원하시나요? 신규취급액 기준과 비교하시나요?",
+      "forbidden": "select_representative_as_default",
+      "evidence": "DT_121Y015",
+      "execution_status": "not_run"
+    },
+    {
+      "id": "Q16-N",
+      "type": "negative",
+      "query": "잔액 기준 금리와 신규취급액 기준 금리를 더해서 총금리를 보여줘.",
+      "expected_action": "서로 다른 집계 기준 금리 합산 거절·나란히 비교 제안",
+      "forbidden": "silently_substitute_or_fabricate",
+      "evidence": "DT_121Y015",
+      "execution_status": "not_run"
+    }
+  ]
+}

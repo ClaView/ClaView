@@ -1,1 +1,1 @@
-"""ClaView team package."""
+"""ClaView statistics exploration and visualization package."""
