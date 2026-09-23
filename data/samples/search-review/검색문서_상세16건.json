@@ -1,0 +1,957 @@
+{
+  "schema_version": "1.0",
+  "created_on": "2026-09-22",
+  "documents": [
+    {
+      "doc_id": "301:DT_513Y001",
+      "category": "경제심리지수",
+      "org_id": "301",
+      "table_id": "DT_513Y001",
+      "title": "경제심리지수",
+      "catalog_path": "한국은행 > 경제심리지수",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_513Y001",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월 2003.01~2026.08",
+        "unit_display": "화면에 공통 단위 표기 없음; 지수의 기준값·단위 표기는 API 메타 확인 필요",
+        "dimension_labels": [
+          "계정코드별"
+        ],
+        "displayed_member_examples": [
+          "경제심리지수(원계열)",
+          "경제심리지수(순환변동치)"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "원계열은 매년 1월 표준화구간 연장 시 과거 시계열 수정. 순환변동치는 계절·불규칙 변동 갱신으로 매월 전체 시계열 수정."
+      },
+      "team_search_document": "경제심리지수의 원계열과 순환변동치를 월별로 찾는 표. 소비자심리지수나 기업경기실사지수 자체를 요청한 경우에는 각각의 표·계열도 탐색한다.",
+      "selection_axes": [
+        "원계열/순환변동치"
+      ],
+      "clarification_example": "경제심리지수의 원계열과 순환변동치 중 어느 계열을 볼까요?",
+      "related_table_ids": [
+        "DT_511Y002",
+        "DT_512Y013"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 1
+    },
+    {
+      "doc_id": "301:DT_200Y103",
+      "category": "국민계정",
+      "org_id": "301",
+      "table_id": "DT_200Y103",
+      "title": "경제활동별 GDP 및 GNI(계절조정, 명목, 분기)",
+      "catalog_path": "한국은행 > 국민계정 > 국민계정(2020년기준) > 경제활동별, 지출항목별, 부가가치항목별 규모",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_200Y103",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "분기 1960 1/4~2026 2/4",
+        "unit_display": "십억원",
+        "dimension_labels": [
+          "계정항목별"
+        ],
+        "displayed_member_examples": [
+          "농림어업",
+          "제조업",
+          "총부가가치(기초가격)",
+          "국내총생산(시장가격, GDP)",
+          "국민총소득(GNI)"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "산업별 금액은 기초가격 총부가가치 기준. 속보·잠정·확정 공표 단계와 기초자료 이용 차이로 수치가 달라질 수 있음."
+      },
+      "team_search_document": "경제활동별 규모와 GDP·GNI를 계절조정된 명목 분기 금액으로 제공. 실질 성장률이나 원계열을 지정하면 다른 기준 표를 찾아야 한다.",
+      "selection_axes": [
+        "명목/실질",
+        "계절조정/원계열",
+        "GDP/GNI/산업별 부가가치",
+        "분기/연간"
+      ],
+      "clarification_example": "GDP와 GNI 중 어떤 지표이며, 명목·실질과 원계열·계절조정 중 어떤 기준을 원하시나요?",
+      "related_table_ids": [
+        "DT_200Y104",
+        "DT_200Y105",
+        "DT_200Y106"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 2
+    },
+    {
+      "doc_id": "301:DT_301Y017",
+      "category": "국제수지통계",
+      "org_id": "301",
+      "table_id": "DT_301Y017",
+      "title": "경상수지(계절조정)",
+      "catalog_path": "한국은행 > 국제수지통계 > 국제수지",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_301Y017",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월 1980.01~2026.07",
+        "unit_display": "백만달러",
+        "dimension_labels": [
+          "계정코드별"
+        ],
+        "displayed_member_examples": [
+          "경상수지",
+          "상품수지",
+          "상품수출",
+          "상품수입(FOB)",
+          "서비스수지",
+          "서비스수입",
+          "서비스지급",
+          "본원소득수지",
+          "이전소득수지"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "계절조정지수 갱신에 따라 과거 시계열을 매년 2월 정례 수정."
+      },
+      "team_search_document": "계절조정된 월별 경상수지와 구성항목 조회에 사용한다. 서비스수입은 수입상품의 뜻으로 정규화하지 않는다.",
+      "selection_axes": [
+        "계절조정/원계열",
+        "경상수지/상품수지/서비스수지",
+        "수입(收入)/상품수입(輸入)"
+      ],
+      "clarification_example": "경상수지 전체인가요, 상품·서비스수지인가요? 계절조정 기준을 원하시나요?",
+      "related_table_ids": [],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 3
+    },
+    {
+      "doc_id": "301:DT_311Y002",
+      "category": "국제투자대조표(IIP)",
+      "org_id": "301",
+      "table_id": "DT_311Y002",
+      "title": "지역별 국제투자대조표",
+      "catalog_path": "한국은행 > 국제투자대조표(IIP)",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_311Y002",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "년 2002~2025",
+        "unit_display": "백만달러",
+        "dimension_labels": [
+          "계정코드별",
+          "지역코드별"
+        ],
+        "displayed_member_examples": [
+          "대외금융자산",
+          "대외금융부채",
+          "직접투자",
+          "증권투자",
+          "지분증권",
+          "부채성증권",
+          "파생금융상품",
+          "기타투자",
+          "총액",
+          "미국",
+          "중국",
+          "일본",
+          "유럽연합"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "이번 기본 화면에서 별도 주석 버튼 없음. 동일 명칭의 직접투자·증권투자는 자산/부채 양쪽에 나타나므로 상위 경로 보존."
+      },
+      "team_search_document": "지역별 대외금융자산·부채의 투자유형별 잔액 탐색에 사용. 특정 기간에 새로 투자한 거래액과 구분한다.",
+      "selection_axes": [
+        "자산/부채",
+        "투자종류",
+        "지역/통화",
+        "연간"
+      ],
+      "clarification_example": "우리나라의 해외자산과 외국인에 대한 부채 중 어느 쪽이며, 잔액을 보시려는 건가요?",
+      "related_table_ids": [
+        "DT_311Y001",
+        "DT_311Y003"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 4
+    },
+    {
+      "doc_id": "301:DT_514Y001",
+      "category": "금융기관대출행태조사",
+      "org_id": "301",
+      "table_id": "DT_514Y001",
+      "title": "대출행태서베이(대출태도)",
+      "catalog_path": "한국은행 > 금융기관대출행태조사",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_514Y001",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "분기 2002 1/4~2026 3/4",
+        "unit_display": "공통 단위 표기 없음; 조사 지수이며 API 단위 확인 필요",
+        "dimension_labels": [
+          "계정코드별"
+        ],
+        "displayed_member_examples": [
+          "국내은행-차주가중종합지수",
+          "국내은행-대기업",
+          "국내은행-중소기업",
+          "국내은행-가계(일반)",
+          "국내은행-가계(주택)",
+          "상호저축은행",
+          "신용카드회사"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "가장 최근 분기는 전망치, 나머지는 실적치. 양수는 대출태도 완화, 음수는 강화. 차주가중종합지수는 개별은행 차주별 대출금액으로 가중평균."
+      },
+      "team_search_document": "금융기관의 대출태도 완화·강화를 조사한 분기 지수. 실제 금리나 대출액을 제공하는 표와 다르다.",
+      "selection_axes": [
+        "대출태도/대출수요/신용위험",
+        "기관·차주 범위",
+        "실적/전망"
+      ],
+      "clarification_example": "은행의 대출태도, 차주의 대출수요, 신용위험 중 어떤 것을 보시나요?",
+      "related_table_ids": [
+        "DT_514Y002",
+        "DT_514Y003"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 5
+    },
+    {
+      "doc_id": "301:DT_512Y015",
+      "category": "기업경기조사",
+      "org_id": "301",
+      "table_id": "DT_512Y015",
+      "title": "기업경기조사(매출액가중 실적)",
+      "catalog_path": "한국은행 > 기업경기조사 > 기업경기조사",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_512Y015",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월 2009.08~2026.08",
+        "unit_display": "공통 단위 표기 없음; BSI 지수의 API 단위 확인 필요",
+        "dimension_labels": [
+          "업종코드별",
+          "BSI코드별"
+        ],
+        "displayed_member_examples": [
+          "전산업",
+          "제조업",
+          "비제조업",
+          "업황실적BSI",
+          "매출실적BSI",
+          "채산성실적BSI",
+          "자금사정실적BSI",
+          "인력사정실적BSI"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "현재 화면에서 별도 주석 버튼 없음. 화면의 '실적BSI'는 매출액 원자료가 아니라 조사 지수의 항목명."
+      },
+      "team_search_document": "기업경기를 매출액가중 실적 BSI로 조회하는 표. 업황·매출·자금사정 등 지표와 업종을 선택해야 한다.",
+      "selection_axes": [
+        "실적/전망",
+        "매출액가중 여부",
+        "업종",
+        "BSI 세부지표"
+      ],
+      "clarification_example": "실적과 전망 중 무엇이며, 매출액가중 기준을 원하시나요? 업황·매출 등 어떤 지표인가요?",
+      "related_table_ids": [
+        "DT_512Y016",
+        "DT_512Y013",
+        "DT_512Y014"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 6
+    },
+    {
+      "doc_id": "301:DT_501Y001",
+      "category": "기업경영분석",
+      "org_id": "301",
+      "table_id": "DT_501Y001",
+      "title": "재무상태표(제11차 한국표준산업분류, 2009~)",
+      "catalog_path": "한국은행 > 기업경영분석",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_501Y001",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "년 2009~2024",
+        "unit_display": "백만원",
+        "dimension_labels": [
+          "업종코드별",
+          "기업규모별",
+          "계정항목별"
+        ],
+        "displayed_member_examples": [
+          "전산업",
+          "C 제조업",
+          "비제조업",
+          "종합",
+          "유동자산"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "기본 화면에는 계정항목 '유동자산', 기업규모 '종합'이 선택돼 있음. 이것을 전체 항목·규모 목록으로 간주하지 않는다."
+      },
+      "team_search_document": "제11차 한국표준산업분류에 따른 기업 재무상태표. 업종·기업규모·재무 계정을 함께 선택한다.",
+      "selection_axes": [
+        "제11차 한국표준산업분류",
+        "기업규모",
+        "재무 계정",
+        "통계 적용기간"
+      ],
+      "clarification_example": "어떤 업종·기업규모의 어느 재무 항목을 보시나요?",
+      "related_table_ids": [
+        "DT_501Y002",
+        "DT_501Y013"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 7
+    },
+    {
+      "doc_id": "301:DT_311Y006",
+      "category": "대외채무및대외채권",
+      "org_id": "301",
+      "table_id": "DT_311Y006",
+      "title": "순대외채권",
+      "catalog_path": "한국은행 > 대외채무및대외채권",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_311Y006",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "분기, 년 1994 4/4~2026 2/4",
+        "unit_display": "백만달러",
+        "dimension_labels": [
+          "계정코드별"
+        ],
+        "displayed_member_examples": [
+          "1.단기",
+          "2.장기",
+          "A.일반정부",
+          "B.중앙은행",
+          "C.예금취급기관",
+          "D.기타부문",
+          "D-가.기타금융기관",
+          "D-나.비금융기업 등"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "이번 기본 화면에서 별도 주석 버튼 없음. 총계 행은 숫자만의 계정명이 있을 수 있으므로 코드 확인 없이 총계 계열을 추정하지 않는다."
+      },
+      "team_search_document": "순대외채권을 부문과 만기 구분으로 찾는 표. 대외채권·대외채무 각각의 규모와 구분한다.",
+      "selection_axes": [
+        "채권/채무/순채권",
+        "단기/장기",
+        "부문",
+        "분기/연간"
+      ],
+      "clarification_example": "대외채권, 대외채무, 둘의 차이인 순대외채권 중 무엇을 원하시나요?",
+      "related_table_ids": [
+        "DT_311Y004",
+        "DT_311Y005"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 8
+    },
+    {
+      "doc_id": "301:DT_404Y014",
+      "category": "생산자물가조사(2020=100)",
+      "org_id": "301",
+      "table_id": "DT_404Y014",
+      "title": "생산자물가지수(기본분류)",
+      "catalog_path": "한국은행 > 생산자물가조사(2020=100)",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_404Y014",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-22"
+      },
+      "official_observations": {
+        "period_display": "월, 분기, 년 1965.01~2026.08",
+        "unit_display": "지수; 대다수 2020=100, 일부 계열은 다른 기준시점",
+        "dimension_labels": [
+          "계정코드별"
+        ],
+        "displayed_member_examples": [
+          "총지수 (2020=100)",
+          "농림수산품 (2020=100)",
+          "공산품 (2020=100)",
+          "정제혼합용원료유 (2025.12=100)"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "금월은 잠정치, 익월 공표 시 확정. 2010년 이후 가중치 매년 변경; 화면에는 2026년 적용 가중치. 최하위 품목별 지수는 통계적 유의성에 주의."
+      },
+      "team_search_document": "생산자물가지수를 기본분류별로 찾는 표. 모든 계열을 일괄 2020=100으로 간주하지 않는다.",
+      "selection_axes": [
+        "기본/특수/품목 분류",
+        "지수 기준시점",
+        "잠정/확정",
+        "가중치 적용연도"
+      ],
+      "clarification_example": "생산자물가의 총지수인가요, 특정 분류·품목인가요?",
+      "related_table_ids": [
+        "DT_404Y015",
+        "DT_404Y016",
+        "DT_405Y006",
+        "DT_405Y007"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 9
+    },
+    {
+      "doc_id": "301:DT_511Y002",
+      "category": "소비자동향조사",
+      "org_id": "301",
+      "table_id": "DT_511Y002",
+      "title": "소비자동향조사(전국, 월, 2008.9~)",
+      "catalog_path": "한국은행 > 소비자동향조사",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_511Y002",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월 2008.07~2026.08",
+        "unit_display": "공통 단위 표기 없음; CSI/CCSI 지수로 API 단위 확인 필요",
+        "dimension_labels": [
+          "CSI코드별",
+          "CSI분류코드별"
+        ],
+        "displayed_member_examples": [
+          "현재생활형편CSI",
+          "생활형편전망CSI",
+          "물가수준전망(1년후)CSI",
+          "주택가격전망CSI",
+          "소비자심리지수",
+          "전체",
+          "남자",
+          "여자",
+          "40세미만",
+          "자가",
+          "임차 등"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "표명은 2008.9~지만 화면 수록기간은 2008.07부터. 현재는 6개월 전 대비, 일반 전망은 현재 대비 6개월 후; 물가·주택가격·임금은 1년 후. 계층간 단순비교 및 표본개편(2013.1, 2018.9, 2022.7) 전후 비교 주의."
+      },
+      "team_search_document": "전국 소비자동향의 개별 CSI 및 소비자심리지수를 월별로 찾는다. 전망 지수를 실제 물가 상승률로 해석하지 않는다.",
+      "selection_axes": [
+        "개별 CSI/종합 소비자심리지수",
+        "현재/전망",
+        "전망 시계",
+        "응답자 계층",
+        "표본개편"
+      ],
+      "clarification_example": "종합 소비자심리지수인가요, 생활형편·물가 등 개별 전망지수인가요?",
+      "related_table_ids": [
+        "DT_511Y003",
+        "DT_511Y004",
+        "DT_513Y001"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 10
+    },
+    {
+      "doc_id": "301:DT_401Y018",
+      "category": "수출입물가조사(2020=100)",
+      "org_id": "301",
+      "table_id": "DT_401Y018",
+      "title": "수입물가지수(용도별)",
+      "catalog_path": "한국은행 > 수출입물가조사(2020=100) > 수입물가",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_401Y018",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월, 분기, 년 1971.01~2026.08",
+        "unit_display": "지수; 총지수 2020=100, 일부 계열 기준시점 상이",
+        "dimension_labels": [
+          "계정코드별",
+          "통화계약구분코드별"
+        ],
+        "displayed_member_examples": [
+          "총지수 (2020=100)",
+          "원재료 (2020=100)",
+          "중간재 (2020=100)",
+          "자본재 (2020=100)",
+          "소비재 (2020=100)",
+          "중간재음료품 (2022.12=100)",
+          "원화기준",
+          "계약통화기준",
+          "달러기준"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "금월 잠정, 익월 공표시 확정. 가중치 매년 변경. 원화·계약통화·달러 기준이 별도 분류로 존재하며 통화 환산을 임의 수행하지 않는다."
+      },
+      "team_search_document": "수입물가지수를 원재료·중간재·자본재·소비재 등 용도와 통화기준으로 찾는 표.",
+      "selection_axes": [
+        "수입/수출",
+        "가격/금액/물량",
+        "용도",
+        "통화기준",
+        "지수 기준시점"
+      ],
+      "clarification_example": "가격·금액·물량 중 무엇이며, 원화·달러·계약통화 중 어떤 기준을 보시나요?",
+      "related_table_ids": [
+        "DT_403Y004",
+        "DT_403Y003",
+        "DT_401Y015"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 11
+    },
+    {
+      "doc_id": "301:DT_282Y001",
+      "category": "자금순환표",
+      "org_id": "301",
+      "table_id": "DT_282Y001",
+      "title": "발행잔액(명목)",
+      "catalog_path": "한국은행 > 자금순환표 > 2008 SNA 기준 > 상세채권통계(2018~)",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_282Y001",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "분기, 년 2018 1/4~2026 1/4",
+        "unit_display": "십억원",
+        "dimension_labels": [
+          "기관코드별",
+          "계정항목별"
+        ],
+        "displayed_member_examples": [
+          "총계",
+          "원화",
+          "외화",
+          "단기",
+          "장기",
+          "잔존만기 1년이하",
+          "국내시장",
+          "국외시장",
+          "금융법인",
+          "일반정부",
+          "비금융법인"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "주석: 거주자 경제주체(금융법인·비금융법인·일반정부)의 명목가격 기준 채권발행잔액, SNA2008 기준."
+      },
+      "team_search_document": "채권 발행잔액을 명목가격 기준으로 기관·통화·만기·발행시장별로 찾는 표. 여기의 명목은 GDP의 명목/실질 축을 그대로 적용하지 않고 시가평가와 구분한다.",
+      "selection_axes": [
+        "명목가격/시가",
+        "발행잔액/순발행액",
+        "원화/외화",
+        "단기/장기/잔존만기",
+        "국내/국외 발행시장"
+      ],
+      "clarification_example": "현재 남아 있는 발행잔액인가요, 기간 중 순발행액인가요? 명목가격과 시가 중 어느 기준인가요?",
+      "related_table_ids": [
+        "DT_282Y002",
+        "DT_282Y003"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 12
+    },
+    {
+      "doc_id": "301:DT_602Y002",
+      "category": "지급결제통계",
+      "org_id": "301",
+      "table_id": "DT_602Y002",
+      "title": "지급수단별 통계",
+      "catalog_path": "한국은행 > 지급결제통계 > BIS기준통계",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_602Y002",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월, 분기, 년 1991.01~2026.06",
+        "unit_display": "건수: 천건 / 금액: 십억원",
+        "dimension_labels": [
+          "계정항목별",
+          "금액구분코드별"
+        ],
+        "displayed_member_examples": [
+          "어음,수표",
+          "계좌이체",
+          "입금이체",
+          "출금이체",
+          "카드",
+          "신용카드",
+          "신용카드(물품및용역구매)",
+          "신용카드(현금서비스)",
+          "직불카드",
+          "체크카드",
+          "건수 (천건)",
+          "금액 (십억원)"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "이번 화면에서 별도 주석 버튼 없음. 집계가 기간 합계인지 일평균인지 본 화면만으로 확정하지 않음; 조회 결과·공식 설명 확인 후 표시."
+      },
+      "team_search_document": "지급수단별 사용 건수와 금액을 찾는다. 건수 단위와 금액 단위를 반드시 계열에 귀속시킨다.",
+      "selection_axes": [
+        "지급수단",
+        "건수/금액",
+        "신용카드 구매/현금서비스",
+        "입금/출금"
+      ],
+      "clarification_example": "어떤 지급수단의 건수와 금액 중 무엇을 보시나요?",
+      "related_table_ids": [
+        "DT_602Y001",
+        "DT_601Y003"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 13
+    },
+    {
+      "doc_id": "301:DT_161Y007",
+      "category": "통화금융통계",
+      "org_id": "301",
+      "table_id": "DT_161Y007",
+      "title": "M2 상품별 구성내역(말잔, 계절조정계열)",
+      "catalog_path": "한국은행 > 통화금융통계 > 통화 및 유동성지표 > M2(광의통화) > M2 상품별 구성내역(말잔)",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_161Y007",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월, 분기, 년 2003.10~2026.07",
+        "unit_display": "십억원",
+        "dimension_labels": [
+          "계정항목별"
+        ],
+        "displayed_member_examples": [
+          "M2(말잔, 계절조정계열)",
+          "현금통화",
+          "요구불예금",
+          "수시입출식저축성예금",
+          "MMF 지분",
+          "만기2년미만정기예적금",
+          "시장형상품 1)",
+          "[참고] 구 M2(말잔, 계절조정계열)"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "CMA 2009.7부터, 초대형 IB 발행어음·발행어음형 CMA 2017.11부터 포함. 2026.6.16 기초자료 변경을 반영한 과거 시계열 수정. 같은 표 안에 참고용 구 M2도 있음."
+      },
+      "team_search_document": "구 통계 폴더 밖의 M2 상품별 구성내역(말잔·계절조정). 같은 이름의 DT_101Y001은 구 통계 경로이므로 표명만으로 중복제거하지 않는다.",
+      "selection_axes": [
+        "말잔/평잔",
+        "계절조정/원계열",
+        "M2/M1/Lf/L",
+        "개편/구 지표"
+      ],
+      "clarification_example": "M2의 말잔·평잔과 원계열·계절조정 중 어느 기준을 원하시나요? 구 지표를 지정하신 건가요?",
+      "related_table_ids": [
+        "DT_161Y005",
+        "DT_161Y006",
+        "DT_161Y008",
+        "DT_101Y001"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 14
+    },
+    {
+      "doc_id": "301:DT_121Y006",
+      "category": "통화금융통계",
+      "org_id": "301",
+      "table_id": "DT_121Y006",
+      "title": "예금은행 대출금리(신규취급액 기준)",
+      "catalog_path": "한국은행 > 통화금융통계 > 금리 > 예금은행 가중평균금리 > 대출금리",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_121Y006",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월, 분기, 년 1996.01~2026.07",
+        "unit_display": "가계대출: 연리%; 대출평균 표시: 연%",
+        "dimension_labels": [
+          "계정항목별"
+        ],
+        "displayed_member_examples": [
+          "대출평균 1) (연%)",
+          "기업대출 (연리%)",
+          "가계대출 (연리%)",
+          "주택담보대출 (연리%)",
+          "전세자금대출 (연리%)",
+          "일반신용대출 2) (연리%)"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "최종월 잠정치. 당좌대출·마이너스통장대출 제외(마이너스통장 2001.9부터 제외). 일부 분류·고정/변동 주담대 통계 소급 수정 이력 있음."
+      },
+      "team_search_document": "예금은행 신규취급액 기준 대출금리. 가계대출 금리를 조회할 때 가계대출 계열을 선택하며 잔액 기준과 비교 시 포괄범위 차이를 표시한다.",
+      "selection_axes": [
+        "신규취급액/잔액",
+        "가계/기업",
+        "대출종류",
+        "예금은행 범위"
+      ],
+      "clarification_example": "예금은행 기준인가요? 신규취급액과 잔액 기준 중 하나 또는 두 기준 비교를 원하시나요?",
+      "related_table_ids": [
+        "DT_121Y015",
+        "DT_121Y007"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 15
+    },
+    {
+      "doc_id": "301:DT_121Y015",
+      "category": "통화금융통계",
+      "org_id": "301",
+      "table_id": "DT_121Y015",
+      "title": "예금은행 대출금리(잔액 기준)",
+      "catalog_path": "한국은행 > 통화금융통계 > 금리 > 예금은행 가중평균금리 > 대출금리",
+      "provenance": {
+        "catalog_file": "bok_tables_20260916.csv",
+        "catalog_snapshot_date": "2026-09-16",
+        "page_url": "https://kosis.kr/statHtml/statHtml.do?orgId=301&tblId=DT_121Y015",
+        "observed_on": "2026-09-22",
+        "method": "KOSIS browser visible table and notes; default displayed selection, not exhaustive metadata API",
+        "data_updated_on": "2026-09-21"
+      },
+      "official_observations": {
+        "period_display": "월, 분기, 년 1996.01~2026.07",
+        "unit_display": "연리%",
+        "dimension_labels": [
+          "계정항목별"
+        ],
+        "displayed_member_examples": [
+          "총대출 1)",
+          "기업대출 2)",
+          "가계대출 2)",
+          "주택담보대출",
+          "전세자금대출",
+          "당좌대출 4)",
+          "총대출(당좌대출 제외)"
+        ],
+        "member_list_complete": false,
+        "notes_summary": "최종월 잠정치. 총대출은 당좌·마이너스통장대출 포함; 기업대출·가계대출 주석은 마이너스통장 포함. 일부 분류·금리 소급 수정 이력 있음."
+      },
+      "team_search_document": "예금은행 대출잔액 기준 금리. 신규취급액과 기간만 맞춰도 같은 모집단이 되는 것은 아니므로 주석 차이를 결과에 남긴다.",
+      "selection_axes": [
+        "잔액/신규취급액",
+        "마이너스통장 포함 여부",
+        "가계/기업",
+        "대출종류"
+      ],
+      "clarification_example": "잔액 기준의 어떤 대출종류를 원하시나요? 신규취급액 기준과 비교하시나요?",
+      "related_table_ids": [
+        "DT_121Y006"
+      ],
+      "api_binding": {
+        "item_code": null,
+        "dimension_codes": null,
+        "series_periods": null,
+        "verified_api_request": false
+      },
+      "readiness": {
+        "table_search": true,
+        "semantic_review": "team_review_pending",
+        "api_execution": false
+      },
+      "sequence": 16
+    }
+  ]
+}

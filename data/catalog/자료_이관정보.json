@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-23",
+  "source_collected_at": null,
+  "source_description": "팀이 제공한 KOSIS 한국은행 목록·메타정보 조사 산출물",
+  "verification_scope": "저장 파일의 식별자·집계·상태 대조. 실시간 API 재호출 및 원표 수치 검증 제외",
+  "sources": [
+    {
+      "file": "boK_tables.csv",
+      "sha256": "bf775647ef5fdd6e76fe508d5a7c54cacf71429e4e7aa559d834f8e485fbb891"
+    },
+    {
+      "file": "boK_meta_status.csv",
+      "sha256": "6eca9b84c3be167815c4bf92a84cd747458279f1ebe847de77a8037d08cda58b"
+    },
+    {
+      "file": "boK_meta_raw.jsonl",
+      "sha256": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e"
+    }
+  ],
+  "files": [
+    {
+      "path": "catalog/boK_tables.csv",
+      "sha256": "29b5eb206a4fba7d3312631ae7005a77f4aa68077591809b1f81596eb0c85f14",
+      "rows": 349,
+      "transformation": "컬럼·행·셀 값 보존. UTF-8 및 줄바꿈 정리"
+    },
+    {
+      "path": "catalog/boK_meta_status.csv",
+      "sha256": "8a1eacf11f3a384a00a2ed31310f59dd5f3151f42aec7dc8b23b10ff5244ce47",
+      "rows": 349,
+      "transformation": "컬럼·행·셀 값 보존. UTF-8 및 줄바꿈 정리"
+    },
+    {
+      "path": "samples/한국은행_메타정보_대표3표.json",
+      "sha256": "18ea1e2a80e94a243df7e477fdb6af51255d39b5dbcadfe385813d0b2a2cc58d",
+      "table_ids": [
+        "DT_121Y006",
+        "DT_121Y015",
+        "DT_105Y001"
+      ],
+      "transformation": "파싱된 원본 캐시 객체를 값 변경 없이 추출·들여쓰기"
+    }
+  ],
+  "limitations": [
+    "원본에 수집 시각 필드 없음",
+    "전수 캐시·수집 코드 미이관",
+    "대표 메타는 원시 HTTP 응답 아님",
+    "수치 샘플은 빈 배열이므로 미이관",
+    "최신 KOSIS 전체 목록 완전성은 미검증"
+  ]
+}

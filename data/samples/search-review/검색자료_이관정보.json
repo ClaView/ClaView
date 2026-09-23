@@ -1,0 +1,86 @@
+{
+  "reviewed_on": "2026-09-23",
+  "source_kind": "team_provided_search_drafts",
+  "transformation": "Korean filenames, UTF-8/LF; JSON values and array order preserved",
+  "files": [
+    {
+      "source_filename": "catalog-349.json",
+      "shared_path": "data/samples/search-review/검색문서_기본349건.json",
+      "source_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+      "shared_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+      "parsed_values_equal": true
+    },
+    {
+      "source_filename": "documents-16.json",
+      "shared_path": "data/samples/search-review/검색문서_상세16건.json",
+      "source_sha256": "c0c685b9cb76869f0b0989461e7085245192fe8ce641f9bbb2ef106cf49bf519",
+      "shared_sha256": "c0c685b9cb76869f0b0989461e7085245192fe8ce641f9bbb2ef106cf49bf519",
+      "parsed_values_equal": true
+    },
+    {
+      "source_filename": "term-mappings.json",
+      "shared_path": "data/mappings/review/검색용_의미매핑_초안.json",
+      "source_sha256": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1",
+      "shared_sha256": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1",
+      "parsed_values_equal": true
+    },
+    {
+      "source_filename": "evaluation-cases.json",
+      "shared_path": "eval/goldenset/review/검색평가_초안_48건.json",
+      "source_sha256": "12f5bbfc7b210273b786d036ce75b288e38a313c7b82e6ecd5064c2ab24eed00",
+      "shared_sha256": "12f5bbfc7b210273b786d036ce75b288e38a313c7b82e6ecd5064c2ab24eed00",
+      "parsed_values_equal": true
+    }
+  ],
+  "validation": {
+    "validation_kind": "offline_structure_and_reference_only",
+    "counts": {
+      "catalog": 349,
+      "details": 16,
+      "categories": 14,
+      "mappings": 76,
+      "normalization_only": 8,
+      "relations": {
+        "alias": 22,
+        "related": 31,
+        "criterion": 23
+      },
+      "cases": 48,
+      "case_types": {
+        "explicit": 16,
+        "ambiguous": 16,
+        "negative": 16
+      }
+    },
+    "catalog_title_differences": [],
+    "exact_question_matches_with_five_case_draft": [
+      {
+        "case_id": "Q01-P",
+        "query": "2024년 경제심리지수 원계열을 월별로 보여줘."
+      }
+    ],
+    "files": [
+      {
+        "path": "data/samples/search-review/검색문서_기본349건.json",
+        "sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+      },
+      {
+        "path": "data/samples/search-review/검색문서_상세16건.json",
+        "sha256": "c0c685b9cb76869f0b0989461e7085245192fe8ce641f9bbb2ef106cf49bf519"
+      },
+      {
+        "path": "data/mappings/review/검색용_의미매핑_초안.json",
+        "sha256": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      {
+        "path": "eval/goldenset/review/검색평가_초안_48건.json",
+        "sha256": "12f5bbfc7b210273b786d036ce75b288e38a313c7b82e6ecd5064c2ab24eed00"
+      }
+    ],
+    "issues": [],
+    "passed": true,
+    "api_requests_tested": 0,
+    "retrieval_cases_executed": 0,
+    "semantic_review": "pending"
+  }
+}

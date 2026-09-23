@@ -1,0 +1,927 @@
+[
+  {
+    "tblId": "DT_121Y006",
+    "orgId": "301",
+    "name": "예금은행 대출금리(신규취급액 기준)",
+    "cat": "대출금리",
+    "meta": {
+      "TBL": [
+        {
+          "TBL_NM_ENG": "Based on Newly Extended",
+          "TBL_NM": "예금은행 대출금리(신규취급액 기준)"
+        }
+      ],
+      "PRD": [
+        {
+          "PRD_SE": "월",
+          "STRT_PRD_DE": "1996.01",
+          "END_PRD_DE": "2026.07"
+        },
+        {
+          "PRD_SE": "분기",
+          "STRT_PRD_DE": "1996 1/4",
+          "END_PRD_DE": "2026 2/4"
+        },
+        {
+          "PRD_SE": "년",
+          "STRT_PRD_DE": "1996",
+          "END_PRD_DE": "2025"
+        }
+      ],
+      "ITM": [
+        {
+          "OBJ_NM_ENG": "Item code list",
+          "ITM_NM_ENG": "Based on Newly Extended",
+          "ITM_ID": "13103134553999",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "항목",
+          "ITM_NM": "예금은행 대출금리(신규취급액 기준)",
+          "ORG_ID": "301",
+          "OBJ_ID": "ITEM"
+        },
+        {
+          "UNIT_ID": "14STD07559",
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Based on Newly Extended",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "신규취급액 기준",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134553ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA01",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "대출평균 1)",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14999301.790",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA",
+          "UNIT_NM": "연%",
+          "ITM_NM_ENG": "Loans ＆ Discounts 1)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA02",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "기업대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA01",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Corporations",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA0201",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "대기업대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA02",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Large Corporations",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA0202",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "중소기업대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA02",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Small ＆ Medium Corporations",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA0203",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "운전자금대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA02",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans For Operations",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA0204",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "시설자금대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA02",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans For Equipments",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA03",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "가계대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA01",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Households",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA0301",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "소액대출 (500만원 이하)",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA03",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Households(Less Than 5 Mil. Won)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA0302",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "주택담보대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA03",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Households(Houses)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA0303",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "예·적금담보대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA03",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Households(Deposits)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA0304",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "보증대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA03",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Households(Guarantees)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA03051",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "일반신용대출 2)",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA03",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Households(General) 2)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA03052",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "집단대출 2)",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA03",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Households(Group) 2)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA04",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "공공및기타부문대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA01",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Loans To Public ＆ Other Sectors",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA030201",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "고정형 주택담보대출 3)",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA0302",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Fixed Loans To Households(Houses) 3)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA03041",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "전세자금대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA0304",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Leasehold Deposit Loans (Jeonse)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA05",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "상업어음할인",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA02",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Bills Discounted",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA030202",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "변동형 주택담보대출 3)",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA0302",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "Variable Loans To Households(Houses) 3)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_ID": "13102134553ACC_ITEM.BECBLA07",
+          "TBL_ID": "DT_121Y006",
+          "OBJ_NM": "계정항목별",
+          "UNIT_ENG_NM": "Percent Per Annum",
+          "ITM_NM": "기업일반자금대출",
+          "OBJ_ID": "13101134553ACC_ITEM",
+          "UNIT_ID": "14STD07559",
+          "UP_ITM_ID": "13102134553ACC_ITEM.BECBLA02",
+          "UNIT_NM": "연리%",
+          "ITM_NM_ENG": "General Loans of Corporations",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1"
+        }
+      ],
+      "UNIT": [],
+      "CMMT": [
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "최종월 수치는 잠정치"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n1) 당좌대출 및 마이너스통장대출 제외(마이너스통장대출은 2001.9월부터 제외)"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n2) 2017.9월~2018.2월 일반신용대출과 집단대출 일부 항목 분류 조정"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n3) 고정형 주택담보대출은 일부 정책대출(보금자리론) 포함, 2021.7월~2024.4월 고정형·변동형 대출 금리 및 비중 통계 개편을 반영하여 시계열 소급"
+        }
+      ]
+    },
+    "status": {
+      "TBL": "ok",
+      "PRD": "ok",
+      "ITM": "ok",
+      "UNIT": "empty",
+      "CMMT": "ok"
+    }
+  },
+  {
+    "tblId": "DT_121Y015",
+    "orgId": "301",
+    "name": "예금은행 대출금리(잔액 기준)",
+    "cat": "대출금리",
+    "meta": {
+      "TBL": [
+        {
+          "TBL_NM_ENG": "Based on Outstanding",
+          "TBL_NM": "예금은행 대출금리(잔액 기준)"
+        }
+      ],
+      "PRD": [
+        {
+          "PRD_SE": "월",
+          "STRT_PRD_DE": "1996.01",
+          "END_PRD_DE": "2026.07"
+        },
+        {
+          "PRD_SE": "분기",
+          "STRT_PRD_DE": "1996 1/4",
+          "END_PRD_DE": "2026 2/4"
+        },
+        {
+          "PRD_SE": "년",
+          "STRT_PRD_DE": "1996",
+          "END_PRD_DE": "2025"
+        }
+      ],
+      "ITM": [
+        {
+          "OBJ_NM_ENG": "Item code list",
+          "ITM_NM_ENG": "Based on Outstanding",
+          "ITM_ID": "13103134612999",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "항목",
+          "ITM_NM": "예금은행 대출금리(잔액 기준)",
+          "ORG_ID": "301",
+          "OBJ_ID": "ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_NM_ENG": "Based on Outstanding",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "잔액 기준",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB",
+          "ITM_NM_ENG": "Total Loans ＆ Discounts 1)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB01",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "총대출 1)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB",
+          "ITM_NM_ENG": "Total Loans ＆ Discounts expt. Overdrafts",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB02",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "총대출(당좌대출 제외)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB01",
+          "ITM_NM_ENG": "Loans To Corporations 2)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB0201",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "기업대출 2)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0201",
+          "ITM_NM_ENG": "Loans To Large Corporations",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020101",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "대기업대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0201",
+          "ITM_NM_ENG": "Loans To Small ＆ Medium Corporations",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020102",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "중소기업대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0201",
+          "ITM_NM_ENG": "Loans For Operations",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020103",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "운전자금대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0201",
+          "ITM_NM_ENG": "Loans For Equipments",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020104",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "시설자금대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB01",
+          "ITM_NM_ENG": "Loans To Households 2)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB0202",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "가계대출 2)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0202",
+          "ITM_NM_ENG": "Loans To Households(Less Than 5 Mil. Won)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020201",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "소액대출 (500만원 이하)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0202",
+          "ITM_NM_ENG": "Loans To Households(Houses)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020202",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "주택담보대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0202",
+          "ITM_NM_ENG": "Loans To Households(Deposits)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020203",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "예·적금담보대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0202",
+          "ITM_NM_ENG": "Loans To Households(Guarantees)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020204",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "보증대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0202",
+          "ITM_NM_ENG": "Loans To Households(General) 3)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020206",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "일반신용대출 3)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB0202",
+          "ITM_NM_ENG": "Loans To Households(Group) 3)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020207",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "집단대출 3)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB01",
+          "ITM_NM_ENG": "Loans To Public ＆ Other Sectors",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB03",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "공공및기타부문대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB01",
+          "ITM_NM_ENG": "Overdrafts 4)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB04",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "당좌대출 4)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB020202",
+          "ITM_NM_ENG": "Fixed Loans To Households(Houses) 5)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020208",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "고정형 주택담보대출 5)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB020204",
+          "ITM_NM_ENG": "Leasehold Deposit Loans (Jeonse)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020210",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "전세자금대출",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134612ACC_ITEM.BECBLB020202",
+          "ITM_NM_ENG": "Variable Loans To Households(Houses) 5)",
+          "ITM_ID": "13102134612ACC_ITEM.BECBLB020209",
+          "TBL_ID": "DT_121Y015",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "변동형 주택담보대출 5)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134612ACC_ITEM"
+        }
+      ],
+      "UNIT": [
+        {
+          "UNIT_NM": "연리%",
+          "UNIT_NM_ENG": "Percent Per Annum"
+        }
+      ],
+      "CMMT": [
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "최종월 수치는 잠정치 "
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n1) 당좌대출 및 마이너스통장대출 포함"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n2) 마이너스통장대출 포함"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n3) 2017.9월~2018.2월 일반신용대출과 집단대출 일부 항목 분류 조정"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n4) 2015.1월~2019.4월 일부 금융기관 당좌대출 금리 수정 사항 반영"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n5) 고정형 주택담보대출은 일부 정책대출(보금자리론) 포함, 2021.7월~2024.4월 고정형·변동형 대출 금리 및 비중 통계 개편을 반영하여 시계열 소급"
+        }
+      ]
+    },
+    "status": {
+      "TBL": "ok",
+      "PRD": "ok",
+      "ITM": "ok",
+      "UNIT": "ok",
+      "CMMT": "ok"
+    }
+  },
+  {
+    "tblId": "DT_105Y001",
+    "orgId": "301",
+    "name": "예금규모별 계좌수 및 금액",
+    "cat": "예금규모별 계좌 및 금액",
+    "meta": {
+      "TBL": [
+        {
+          "TBL_NM_ENG": "The number of accounts and Outstanding amount by Size",
+          "TBL_NM": "예금규모별 계좌수 및 금액"
+        }
+      ],
+      "PRD": [
+        {
+          "PRD_SE": "반기",
+          "STRT_PRD_DE": "2002 1/2",
+          "END_PRD_DE": "2025 2/2"
+        }
+      ],
+      "ITM": [
+        {
+          "OBJ_NM_ENG": "Item code list",
+          "ITM_NM_ENG": "The number of accounts and Outstanding amount by Size",
+          "ITM_ID": "13103134743999",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "항목",
+          "ITM_NM": "예금규모별 계좌수 및 금액",
+          "ORG_ID": "301",
+          "OBJ_ID": "ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_NM_ENG": "Demand Deposits without items in the process of collection",
+          "ITM_ID": "13102134743ACC_ITEM.1010000",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "요구불예금(실세)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134743ACC_ITEM.1020000",
+          "ITM_NM_ENG": "Time Deposits",
+          "ITM_ID": "13102134743ACC_ITEM.1020100",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "정기예금",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134743ACC_ITEM.1030000",
+          "ITM_NM_ENG": "Specified Money in Trust",
+          "ITM_ID": "13102134743ACC_ITEM.1030100",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "특정금전신탁",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_NM_ENG": "Time ＆ Savings Deposits",
+          "ITM_ID": "13102134743ACC_ITEM.1020000",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "저축성예금",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134743ACC_ITEM.1020000",
+          "ITM_NM_ENG": "Installment Savings Deposits",
+          "ITM_ID": "13102134743ACC_ITEM.1020200",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "정기적금",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134743ACC_ITEM.1020000",
+          "ITM_NM_ENG": "Company Savings Deposits",
+          "ITM_ID": "13102134743ACC_ITEM.1020300",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "기업자유예금",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_NM_ENG": "Money in Trust",
+          "ITM_ID": "13102134743ACC_ITEM.1030000",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "금전신탁",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "UP_ITM_ID": "13102134743ACC_ITEM.1020000",
+          "ITM_NM_ENG": "Savings Deposits",
+          "ITM_ID": "13102134743ACC_ITEM.1020400",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "저축예금",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "ACCOUNT",
+          "ITM_NM_ENG": "CD",
+          "ITM_ID": "13102134743ACC_ITEM.1040000",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "계정항목별",
+          "ITM_NM": "양도성예금증서",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "1",
+          "OBJ_ID": "13101134743ACC_ITEM"
+        },
+        {
+          "OBJ_NM_ENG": "Selection of Items",
+          "ITM_NM_ENG": "The number of accounts(unit : Thousand)",
+          "ITM_ID": "13102134743GUBUN_CD.A",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "구분코드별",
+          "ITM_NM": "계좌수(천좌)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "2",
+          "OBJ_ID": "13101134743GUBUN_CD"
+        },
+        {
+          "OBJ_NM_ENG": "Selection of Items",
+          "ITM_NM_ENG": "Outstanding amount(unit : Billion Won)",
+          "ITM_ID": "13102134743GUBUN_CD.B",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "구분코드별",
+          "ITM_NM": "금액(십억원)",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "2",
+          "OBJ_ID": "13101134743GUBUN_CD"
+        },
+        {
+          "OBJ_NM_ENG": "Amount Code",
+          "ITM_NM_ENG": "Total",
+          "ITM_ID": "13102134743AMT_CD.A10",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "금액구분코드별",
+          "ITM_NM": "합계",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "3",
+          "OBJ_ID": "13101134743AMT_CD"
+        },
+        {
+          "OBJ_NM_ENG": "Amount Code",
+          "ITM_NM_ENG": "Up to \\100 million",
+          "ITM_ID": "13102134743AMT_CD.A11",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "금액구분코드별",
+          "ITM_NM": "1억이하",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "3",
+          "OBJ_ID": "13101134743AMT_CD"
+        },
+        {
+          "OBJ_NM_ENG": "Amount Code",
+          "ITM_NM_ENG": "Over \\100 million and up to \\500 million",
+          "ITM_ID": "13102134743AMT_CD.A12",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "금액구분코드별",
+          "ITM_NM": "1억초과5억이하",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "3",
+          "OBJ_ID": "13101134743AMT_CD"
+        },
+        {
+          "OBJ_NM_ENG": "Amount Code",
+          "ITM_NM_ENG": "Over \\500 million and up to \\1 billion",
+          "ITM_ID": "13102134743AMT_CD.A13",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "금액구분코드별",
+          "ITM_NM": "5억초과10억이하",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "3",
+          "OBJ_ID": "13101134743AMT_CD"
+        },
+        {
+          "OBJ_NM_ENG": "Amount Code",
+          "ITM_NM_ENG": "Over \\1 billion",
+          "ITM_ID": "13102134743AMT_CD.A14",
+          "TBL_ID": "DT_105Y001",
+          "OBJ_NM": "금액구분코드별",
+          "ITM_NM": "10억초과",
+          "ORG_ID": "301",
+          "OBJ_ID_SN": "3",
+          "OBJ_ID": "13101134743AMT_CD"
+        }
+      ],
+      "UNIT": [],
+      "CMMT": [
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "1) 최종반기는 잠정치"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n2) 특정금전신탁: 퇴직연금신탁 제외 기준"
+        },
+        {
+          "CMMT_NM": "통계표",
+          "CMMT_DC": "\r\n3) 일부 기관의 기초자료 정비로 2014.상반기~2018.하반기 금전신탁 합계 및 1억원이하 계좌의 계좌수 기발표 수치를 수정 반영함"
+        }
+      ]
+    },
+    "status": {
+      "TBL": "ok",
+      "PRD": "ok",
+      "ITM": "ok",
+      "UNIT": "empty",
+      "CMMT": "ok"
+    }
+  }
+]
