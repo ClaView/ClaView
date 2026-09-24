@@ -26,7 +26,7 @@
     },
     {
       "source_filename": "evaluation-cases.json",
-      "shared_path": "eval/goldenset/review/검색평가_초안_48건.json",
+      "shared_path": "eval/cases/review/검색평가_초안_48건.json",
       "source_sha256": "12f5bbfc7b210273b786d036ce75b288e38a313c7b82e6ecd5064c2ab24eed00",
       "shared_sha256": "12f5bbfc7b210273b786d036ce75b288e38a313c7b82e6ecd5064c2ab24eed00",
       "parsed_values_equal": true
@@ -73,7 +73,7 @@
         "sha256": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
       },
       {
-        "path": "eval/goldenset/review/검색평가_초안_48건.json",
+        "path": "eval/cases/review/검색평가_초안_48건.json",
         "sha256": "12f5bbfc7b210273b786d036ce75b288e38a313c7b82e6ecd5064c2ab24eed00"
       }
     ],

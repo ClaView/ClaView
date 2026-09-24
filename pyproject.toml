@@ -13,7 +13,8 @@ dependencies = []
 dev = ["pytest>=8,<10", "ruff>=0.12,<1"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/claview"]
+only-include = ["src"]
+sources = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
