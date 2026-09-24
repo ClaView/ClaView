@@ -7,6 +7,7 @@
 
 # Python
 .venv/
+/.uv-cache/
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -24,13 +25,8 @@ node_modules/
 
 # Generated data and outputs
 /data/raw/*
-!/data/raw/.gitkeep
 /data/processed/*
-!/data/processed/.gitkeep
 /data/indexes/*
-!/data/indexes/.gitkeep
-/artifacts/*
-!/artifacts/.gitkeep
 *.log
 
 # Local files
