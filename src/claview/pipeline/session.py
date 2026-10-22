@@ -23,7 +23,7 @@ from claview.b.models import SelectionModel
 from .b_port import make_b_port
 
 ROOT = Path(__file__).resolve().parents[3]
-# B's copy of the 349-table catalog (same bytes as A's reference/baseline-1006/data).
+# The 349-table catalog in data/ (A reads the same files, plan 27).
 B_CATALOG = ROOT / "data" / "catalog" / "search_catalog.json"
 B_METADATA = ROOT / "data" / "raw" / "boK_meta_raw.jsonl"
 

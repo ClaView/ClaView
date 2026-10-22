@@ -11,9 +11,6 @@
 /packages/claview-period/** -text
 /data/** -text
 /eval/** -text
-/reference/** -text
 /scripts/** -text
 /docs/B/** -text
-/docs/inputs/** -text
-/requirements-period.txt -text
 /uv.lock -text

@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 
 # Catalog raw data (349 tables): table list and metadata snapshot.
-CATALOG_DATA_DIR = ROOT / "reference" / "baseline-1006" / "data"
+CATALOG_DATA_DIR = ROOT / "data"
 CATALOG_SEARCH = CATALOG_DATA_DIR / "catalog" / "search_catalog.json"
 CATALOG_META_RAW = CATALOG_DATA_DIR / "raw" / "boK_meta_raw.jsonl"
 
@@ -31,7 +31,7 @@ CASE_ROLES = CASES_DIR / "case_roles_v2.json"
 EXTERNAL_SYNONYMS = ROOT / "runs" / "eda_v3" / "6_external_synonyms" / "synonyms_external.jsonl"
 
 # Axis-role inputs supplied by the user (draft note and three CSV files, kept as given).
-AXIS_ROLES_INPUT_DIR = ROOT / "docs" / "inputs" / "axis-roles-20261016"
+AXIS_ROLES_INPUT_DIR = ROOT / "data" / "a" / "axis-roles-20261016"
 AXIS_ROLES_DRAFT = AXIS_ROLES_INPUT_DIR / "지표축_나누기_초안_20261016.md"
 AXIS_NAME_ROLES = AXIS_ROLES_INPUT_DIR / "축이름_역할_초안.csv"
 GENERIC_AXIS_ROLES = AXIS_ROLES_INPUT_DIR / "일반축_축마다_판정.csv"

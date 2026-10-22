@@ -1,2 +1,0 @@
-# Local shared dependency only; install offline from the sibling B package (README).
-claview-period==0.2.0

@@ -15,11 +15,11 @@ import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-REF = ROOT / "reference/baseline-1006/data"
+REF = ROOT / "data"
 META = REF / "raw/boK_meta_raw.jsonl"
 CATALOG = REF / "catalog/search_catalog.json"
 MAPPINGS = REF / "mappings"
-DRAFT = ROOT / "docs/inputs/axis-roles-20261016"
+DRAFT = ROOT / "data/a/axis-roles-20261016"
 CORPUS = ROOT.parent / "clabi/claview-runs/q-improve-20261013-01/jt/work/sh/data"
 OUT = ROOT / "runs/eda_v3"
 DATASETS = ("golden", "development")  # official (new200) is never loaded into the study

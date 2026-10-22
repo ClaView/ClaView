@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-META = ROOT / "reference/baseline-1006/data/raw/boK_meta_raw.jsonl"
+META = ROOT / "data/raw/boK_meta_raw.jsonl"
 CORPUS = ROOT.parent / "clabi/claview-runs/q-improve-20261013-01/jt/work/sh/data"
 INDICATOR_AXES = {"계정항목별", "계정코드별", "BSI코드별", "CSI코드별", "CSI분류코드별"}
 TARGET_AXES = {"업종코드별", "기업규모별", "지역코드별", "보고기관별", "기관코드별", "제도부문코드별", "제도부문별"}
