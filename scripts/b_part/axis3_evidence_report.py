@@ -26,7 +26,7 @@ from claview.b.metadata import MetadataStore
 from claview.b.stages import resolve_relative_period
 
 ROOT = Path(__file__).resolve().parents[2]
-CASES_DIR = ROOT / "eval" / "cases" / "b_period"
+CASES_DIR = ROOT / "eval" / "cases" / "b" / "period"
 SETS = [
     "golden_set_v1_axis3_h_recent_years",
     "golden_set_v1_axis3_cross_frequency",
@@ -64,7 +64,7 @@ def main() -> None:
 
     print("== A. Existing human-labeled goldens ('최근 N년') ==")
     print(f"{'case':10} {'freq':4} {'N':>2} {'table':11} {'anchor':7} {'gold start':10} matches")
-    golden = json.loads((CASES_DIR.parent / "golden_set_v1.json").read_text(encoding="utf-8-sig"))[
+    golden = json.loads((CASES_DIR.parents[1] / "golden" / "golden_set_v1.json").read_text(encoding="utf-8-sig"))[
         "cases"
     ]
     for c in golden:

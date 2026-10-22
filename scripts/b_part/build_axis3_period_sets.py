@@ -269,7 +269,7 @@ def main() -> None:
     golden = {
         c["case_id"]: c
         for c in json.loads(
-            (ROOT / "eval" / "cases" / "golden_set_v1.json").read_text(encoding="utf-8-sig")
+            (ROOT / "eval" / "cases" / "golden" / "golden_set_v1.json").read_text(encoding="utf-8-sig")
         )["cases"]
     }
     outputs = [
@@ -295,7 +295,7 @@ def main() -> None:
     for prefix, specs, stem, dataset_id in outputs:
         cases = build_set(store, prefix, specs, golden)
         payload = {"schema_version": SCHEMA_VERSION, "dataset_id": dataset_id, "cases": cases}
-        out = ROOT / "eval" / "cases" / "b_period" / f"{stem}.json"
+        out = ROOT / "eval" / "cases" / "b" / "period" / f"{stem}.json"
         kept = carry_over_verification(out, cases)
         out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"wrote {len(cases)} cases to {out} ({kept} kept their recorded kosis_verification)")

@@ -70,7 +70,7 @@ if __name__ == "__main__":
     before_path, after_path, output_path = map(Path, sys.argv[1:4])
     before = json.loads(before_path.read_text(encoding="utf-8"))
     after = json.loads(after_path.read_text(encoding="utf-8"))
-    mini = json.loads((ROOT / "eval/cases/mini_sets_v1.json").read_text(encoding="utf-8"))
+    mini = json.loads((ROOT / "eval/cases/a/mini_sets_v1.json").read_text(encoding="utf-8"))
     result = compare(before, after, load_groups(set(before)), {r["case_id"] for r in mini["dev_mini"]})
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

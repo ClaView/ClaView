@@ -15,8 +15,8 @@ def main():
     transfers = {
         "data/search/catalog-349.json": "data/catalog/search_catalog.json",
         "data/metadata/boK_meta_raw.jsonl": "data/raw/boK_meta_raw.jsonl",
-        "current/golden_set_v1.json": "eval/cases/golden_set_v1.json",
-        "current/golden_set_v1.schema.json": "eval/cases/golden_set_v1.schema.json",
+        "current/golden_set_v1.json": "eval/cases/golden/golden_set_v1.json",
+        "current/golden_set_v1.schema.json": "eval/cases/golden/golden_set_v1.schema.json",
     }
     records = []
     for source, destination in transfers.items():

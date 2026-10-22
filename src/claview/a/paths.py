@@ -23,7 +23,7 @@ ANSWER_GROUPS = CORPUS_DATA_DIR / "Q_candidate_group.jsonl"
 REPLAY_CACHE_DIRS = tuple(CORPUS_DIR / "cache" / name for name in ("b0_fill_r2", "b0_fill", "node_check_04"))
 
 # Evaluation cases in this checkout: reduced sets and case roles.
-CASES_DIR = ROOT / "eval" / "cases"
+CASES_DIR = ROOT / "eval" / "cases" / "a"
 MINI_SETS = CASES_DIR / "mini_sets_v1.json"
 CASE_ROLES = CASES_DIR / "case_roles_v2.json"
 

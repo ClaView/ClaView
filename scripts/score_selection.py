@@ -1,7 +1,7 @@
 """Table-selection scores of the new interpretation + new selection on a reduced set (plan 04, 7-3; no model, no call).
 
 Runs claview_v3 only (2.1-2.7 then select_tables; the network is blocked and no old module is loaded) on one
-reduced set (eval/cases/mini_sets_v1.json) and scores:
+reduced set (eval/cases/a/mini_sets_v1.json) and scores:
 - set_exact: the old evaluation's set scoring (reused/table_sets.score_sets: every answer group matched one to one
   by a different output table, no extra table, as many tables as groups), output = the tables of every requirement
   that is not no_table;

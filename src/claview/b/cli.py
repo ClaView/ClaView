@@ -41,7 +41,7 @@ def main():
     )
     p.add_argument("--catalog", type=Path, default=Path("data/catalog/search_catalog.json"))
     p.add_argument("--metadata", type=Path, default=Path("data/raw/boK_meta_raw.jsonl"))
-    p.add_argument("--cases", type=Path, default=Path("eval/cases/golden_set_v1.json"))
+    p.add_argument("--cases", type=Path, default=Path("eval/cases/golden/golden_set_v1.json"))
     p.add_argument("--mode", choices=["retrieval", "replay", "live"], default="retrieval")
     p.add_argument("--case", default="CV-AB-19")
     p.add_argument("--query")

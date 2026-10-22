@@ -2,7 +2,7 @@
 
 Runs 2.1-2.7 of claview_v3 (new modules only: the import guard refuses the old pipeline, the network is blocked) on
 the questions of one reduced set and compares the requirement draft count with:
-- (다) the confirmed requirement expectation (eval/cases/requirement_expect_dev_mini.json, approved by the user):
+- (다) the confirmed requirement expectation (eval/cases/a/requirement_expect_dev_mini.json, approved by the user):
   the main measure;
 - (가) proxy 1: the number of answer groups (the definition of scripts/score_by_stage.py, same source file);
 - (나) proxy 2: answer groups that differ only by family, year range or frequency counted as one (family = table

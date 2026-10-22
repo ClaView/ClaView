@@ -11,7 +11,7 @@ FILES = {
     "catalog": "data/samples/search-review/검색문서_기본349건.json",
     "details": "data/samples/search-review/검색문서_상세16건.json",
     "mappings": "data/mappings/review/검색용_의미매핑_초안.json",
-    "cases": "eval/cases/review/검색평가_초안_48건.json",
+    "cases": "eval/cases/b/search_review/검색평가_초안_48건.json",
 }
 
 

@@ -53,7 +53,7 @@ from claview.b.stages import BSteps, Services, object_schema  # noqa: E402
 
 CATALOG = ROOT / "data" / "catalog" / "search_catalog.json"
 METADATA = ROOT / "data" / "raw" / "boK_meta_raw.jsonl"
-GOLDEN = ROOT / "eval" / "cases" / "golden_set_v1.json"
+GOLDEN = ROOT / "eval" / "cases" / "golden" / "golden_set_v1.json"
 OUTPUT = ROOT / "eval" / "results" / "hcx_ratelimit_check.json"
 
 TRANSPORT_EVENTS = {"transport_attempt", "transport_response", "transport_error", "transport_wait"}

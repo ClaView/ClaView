@@ -26,7 +26,7 @@ from claview.b.stages import (
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "tests/b/fixtures"
-GOLD = json.loads((ROOT / "eval/cases/golden_set_v1.json").read_text(encoding="utf-8-sig"))
+GOLD = json.loads((ROOT / "eval/cases/golden/golden_set_v1.json").read_text(encoding="utf-8-sig"))
 
 
 def case(number=19):
@@ -51,7 +51,7 @@ def services(store, c=None, config=None, responses=None):
 
 def test_golden_schema_is_unchanged_contract():
     schema = json.loads(
-        (ROOT / "eval/cases/golden_set_v1.schema.json").read_text(encoding="utf-8-sig")
+        (ROOT / "eval/cases/golden/golden_set_v1.schema.json").read_text(encoding="utf-8-sig")
     )
     Draft202012Validator(schema).validate(GOLD)
     broken = copy.deepcopy(GOLD)

@@ -25,7 +25,7 @@ from .interpret.pipeline import interpret_question
 from .development_metrics import proposal_signature, repeat_report, selection_signature
 from .period import package_identity
 
-SAMPLE = paths.ROOT / "eval/cases/plan18_sample_proposal.json"
+SAMPLE = paths.ROOT / "eval/cases/a/plan18_sample_proposal.json"
 MODELS = paths.PACKAGE_DATA_DIR / "plan18_models.json"
 
 

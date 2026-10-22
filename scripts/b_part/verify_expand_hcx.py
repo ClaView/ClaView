@@ -90,7 +90,7 @@ DEFAULT_CASES = [
 ]
 CATALOG = ROOT / "data" / "catalog" / "search_catalog.json"
 METADATA = ROOT / "data" / "raw" / "boK_meta_raw.jsonl"
-GOLDEN = ROOT / "eval" / "cases" / "golden_set_v1.json"
+GOLDEN = ROOT / "eval" / "cases" / "golden" / "golden_set_v1.json"
 OUTPUT = ROOT / "eval" / "results" / "expand_hcx_verify.json"
 
 

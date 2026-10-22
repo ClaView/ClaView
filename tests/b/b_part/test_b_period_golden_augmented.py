@@ -63,7 +63,8 @@ _CASES_PATH = (
     Path(__file__).resolve().parents[3]
     / "eval"
     / "cases"
-    / "b_period"
+    / "b"
+    / "period"
     / "golden_set_v1_period_augmented.json"
 )
 _CASES = json.loads(_CASES_PATH.read_text(encoding="utf-8-sig"))["cases"]

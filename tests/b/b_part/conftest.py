@@ -12,11 +12,11 @@ from claview.b.search import SearchIndex
 ROOT = Path(__file__).resolve().parents[3]
 CATALOG_PATH = ROOT / "data" / "catalog" / "search_catalog.json"
 METADATA_PATH = ROOT / "data" / "raw" / "boK_meta_raw.jsonl"
-GOLDEN_PATH = ROOT / "eval" / "cases" / "golden_set_v1.json"
-SCHEMA_PATH = ROOT / "eval" / "cases" / "b_period" / "golden_set_v1.schema.json"
-PERIOD_AUGMENTED_PATH = ROOT / "eval" / "cases" / "b_period" / "golden_set_v1_period_augmented.json"
+GOLDEN_PATH = ROOT / "eval" / "cases" / "golden" / "golden_set_v1.json"
+SCHEMA_PATH = ROOT / "eval" / "cases" / "b" / "period" / "golden_set_v1.schema.json"
+PERIOD_AUGMENTED_PATH = ROOT / "eval" / "cases" / "b" / "period" / "golden_set_v1_period_augmented.json"
 PERIOD_AUGMENTED_SCHEMA_PATH = (
-    ROOT / "eval" / "cases" / "b_period" / "golden_set_v1_period_augmented.schema.json"
+    ROOT / "eval" / "cases" / "b" / "period" / "golden_set_v1_period_augmented.schema.json"
 )
 
 

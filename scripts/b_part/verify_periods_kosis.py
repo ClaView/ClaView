@@ -1,6 +1,6 @@
 """Checks, against the REAL KOSIS Open API, whether actual data exists for
 every candidate period recorded in
-eval/cases/b_period/golden_set_v1_period_augmented.json -- not just whether a period
+eval/cases/b/period/golden_set_v1_period_augmented.json -- not just whether a period
 falls inside the table's declared metadata coverage [start, end], but
 whether KOSIS actually returns a real (non-missing, non-"-") value for
 every period in the range. Metadata coverage bounds can overstate what is
@@ -54,7 +54,7 @@ sys.path.insert(
 from claview.b.contracts import StageFailure, Trace  # noqa: E402
 from claview.b.fetch import KosisClient, build_api_request, normalize_rows  # noqa: E402
 
-CASES_PATH = ROOT / "eval" / "cases" / "b_period" / "golden_set_v1_period_augmented.json"
+CASES_PATH = ROOT / "eval" / "cases" / "b" / "period" / "golden_set_v1_period_augmented.json"
 
 
 def _probe_selection(case: dict, period: dict) -> dict:
@@ -166,7 +166,7 @@ def main() -> None:
         "--file",
         default=None,
         help="Case file to verify (path relative to the project root, or absolute); default: "
-        "eval/cases/b_period/golden_set_v1_period_augmented.json. Any file using the same "
+        "eval/cases/b/period/golden_set_v1_period_augmented.json. Any file using the same "
         "period_augmented schema works, e.g. the axis-3 sets under eval/cases/.",
     )
     args = parser.parse_args()

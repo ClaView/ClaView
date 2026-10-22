@@ -1,4 +1,4 @@
-"""Builds eval/cases/b_period/golden_set_v1_period_augmented.json.
+"""Builds eval/cases/b/period/golden_set_v1_period_augmented.json.
 
 This is a generator script, not a one-off hand-typed file, because every
 case needs a real item_id/dimension code pulled from the actual 349-table
@@ -599,7 +599,7 @@ def main() -> None:
         "dataset_id": "claview-golden-set-v1-period-augmented-13",
         "cases": cases,
     }
-    out_path = ROOT / "eval" / "cases" / "b_period" / "golden_set_v1_period_augmented.json"
+    out_path = ROOT / "eval" / "cases" / "b" / "period" / "golden_set_v1_period_augmented.json"
     kept = carry_over_verification(out_path, cases)
     out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"wrote {len(cases)} cases to {out_path} ({kept} kept their recorded kosis_verification)")

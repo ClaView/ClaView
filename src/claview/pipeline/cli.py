@@ -23,7 +23,7 @@ from claview.a import _guard
 _guard.install_network_block()
 
 ROOT = Path(__file__).resolve().parents[3]
-GOLDEN = ROOT / "eval" / "cases" / "golden_set_v1.json"
+GOLDEN = ROOT / "eval" / "cases" / "golden" / "golden_set_v1.json"
 
 
 def summary(state: dict) -> dict:

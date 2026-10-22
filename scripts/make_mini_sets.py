@@ -6,7 +6,7 @@ check_mini (numbers only, from new200): about half of each wrong cause + fragile
 Selection is deterministic (sha256 of the case ID), not hand-picked.
 
 Inputs: runs/score_by_stage/cases.csv and runs/decision_gates/signals.json (run those scripts first).
-Output: eval/cases/mini_sets_v1.json
+Output: eval/cases/a/mini_sets_v1.json
 Usage: python -B -X utf8 scripts/make_mini_sets.py
 """
 from __future__ import annotations
@@ -45,7 +45,7 @@ def _pick(rows, n, twins=None, used=None):
 def main() -> dict:
     rows = list(csv.DictReader((ROOT / "runs/score_by_stage/cases.csv").open(encoding="utf-8-sig")))
     signals = {s["case_id"]: s for s in json.loads((ROOT / "runs/decision_gates/signals.json").read_text("utf8"))}
-    roles = json.loads((ROOT / "eval/cases/case_roles_v2.json").read_text("utf8"))["cases"]
+    roles = json.loads((ROOT / "eval/cases/a/case_roles_v2.json").read_text("utf8"))["cases"]
     twins = {cid: r["twin_group"] for cid, r in roles.items()}
     for r in rows:
         r["fragile"] = _fragile(signals[r["case_id"]])
@@ -79,7 +79,7 @@ def main() -> dict:
            "selection": "deterministic sha256(case_id) order; one correct case per twin group in dev_mini",
            "dev_mini": [entry(r, role(r)) for r in dev_mini],
            "check_mini": [entry(r, role(r)) for r in check]}
-    (ROOT / "eval/cases/mini_sets_v1.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), "utf8")
+    (ROOT / "eval/cases/a/mini_sets_v1.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), "utf8")
     return out
 
 

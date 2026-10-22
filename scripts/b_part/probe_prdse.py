@@ -16,8 +16,8 @@ Setup is the same as scripts/b_part/verify_periods_kosis.py (KOSIS_API_KEY env v
 run from the project root). Usage:
 
     python scripts/b_part/probe_prdse.py \\
-        --file eval/cases/b_period/golden_set_v1_axis3_cross_frequency.json \\
-        --file eval/cases/b_period/golden_set_v1_axis3_h_recent_years.json \\
+        --file eval/cases/b/period/golden_set_v1_axis3_cross_frequency.json \\
+        --file eval/cases/b/period/golden_set_v1_axis3_h_recent_years.json \\
         AX3-B-01 AX3-B-07 AX3-B-09 AX3-B-12 AX3-B-02 AX3-A-01
 
 ~2 requests per case (one per candidate code); nothing is written to disk.

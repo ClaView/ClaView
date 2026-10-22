@@ -44,7 +44,7 @@ from claview.b.stages import (
     selection_key,
 )
 
-_CASES_DIR = Path(__file__).resolve().parents[3] / "eval" / "cases" / "b_period"
+_CASES_DIR = Path(__file__).resolve().parents[3] / "eval" / "cases" / "b" / "period"
 _SET_STEMS = [
     "golden_set_v1_axis3_h_recent_years",
     "golden_set_v1_axis3_cross_frequency",

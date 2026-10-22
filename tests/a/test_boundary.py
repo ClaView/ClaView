@@ -166,7 +166,7 @@ def test_forbidden_dirs_are_component_wise():
     assert _guard.is_under(SRC / "claview" / "aflow" / "x.py")
     assert _guard.is_under(ROOT / "scripts" / "x.py") and _guard.is_under(ROOT / "eval" / "x.py")
     assert not _guard.is_under(PKG / "paths.py")
-    assert not _guard.is_forbidden_source(ROOT / "eval" / "cases" / "mini_sets_v1.json")
+    assert not _guard.is_forbidden_source(ROOT / "eval" / "cases" / "a" / "mini_sets_v1.json")
     # src/claview/ outside this package stays forbidden (B and old A); the parent's own entry and __init__ do not.
     assert _guard.is_under(SRC / "claview" / "fetch.py") and _guard.is_under(SRC / "claview" / "b" / "x.py")
     assert _guard.is_under(SRC / "claview" / "aflow") and _guard.is_under(SRC / "claview" / "ab_pipeline.py")
@@ -242,15 +242,16 @@ def test_compiling_or_executing_old_source_is_refused(refusals):
     assert {"compile old source", "exec old source"} <= set(refusals.violations())
 
 
-OLD_EVAL_SOURCE = ROOT / "eval" / "table_sets.py"
+# A source file under a forbidden folder outside src/claview (the old eval/*.py modules were removed in plan 27).
+OLD_EVAL_SOURCE = ROOT / "scripts" / "run_flow.py"
 
 
 def test_relative_paths_to_old_source_are_refused(refusals, monkeypatch):
     """Relative names (str, bytes, path-like, os.open) resolve against the working directory before the check."""
     if not OLD_EVAL_SOURCE.exists():
-        pytest.skip("eval/table_sets.py absent")
+        pytest.skip("old source example absent")
     monkeypatch.chdir(ROOT)
-    rel = "eval/table_sets.py"
+    rel = OLD_EVAL_SOURCE.relative_to(ROOT).as_posix()
     for opener in (lambda: open(rel, encoding="utf-8"), lambda: open(rel.encode(), "rb"),
                    lambda: open(Path(rel), "rb"), lambda: os.open(rel, os.O_RDONLY),
                    lambda: Path(rel).read_text(encoding="utf-8"), lambda: runpy.run_path(rel)):
@@ -268,9 +269,10 @@ def test_relative_paths_to_old_source_are_refused(refusals, monkeypatch):
 
 def test_relative_paths_after_chdir_are_refused(refusals, monkeypatch):
     if not OLD_EVAL_SOURCE.exists():
-        pytest.skip("eval/table_sets.py absent")
-    monkeypatch.chdir(ROOT / "eval")
-    for name in ("table_sets.py", "./table_sets.py", os.path.join("..", "eval", "table_sets.py")):
+        pytest.skip("old source example absent")
+    monkeypatch.chdir(OLD_EVAL_SOURCE.parent)
+    stem, folder = OLD_EVAL_SOURCE.name, OLD_EVAL_SOURCE.parent.name
+    for name in (stem, "./" + stem, os.path.join("..", folder, stem)):
         with pytest.raises(ForbiddenImportError):
             open(name, "rb")
         with pytest.raises(ForbiddenImportError):
@@ -423,7 +425,7 @@ def test_relative_paths_outside_old_folders_stay_allowed(monkeypatch, tmp_path):
 
 
 def test_data_files_under_eval_stay_readable():
-    roles = ROOT / "eval" / "cases" / "case_roles_v2.json"
+    roles = ROOT / "eval" / "cases" / "a" / "case_roles_v2.json"
     if not roles.exists():
         pytest.skip("case roles file absent")
     with roles.open("rb") as stream:
