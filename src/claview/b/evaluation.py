@@ -6,7 +6,7 @@ import json
 from collections import Counter
 
 from .contracts import Config, Json, Trace
-from .graphs import build_b_graph, invoke_pipeline
+from .graphs import build_b_graph
 from .models import ScriptedModel
 from .services import Services
 from .stages import selection_key
@@ -121,45 +121,17 @@ def evaluate(
                 {"query": query, "a_result": expected["A"]},
                 {"recursion_limit": 10 + 4 * len(expected["A"]["tables"])},
             )["stage_outcome"]
-            if mode == "replay":
-                services.model = ScriptedModel(scripted_answers(case))
-            trace.add("evaluation_segment", mode=mode, stage="integrated", input_a="predicted")
-            combined = invoke_pipeline(query, services, through="B", selection_mode="legacy")
-            a = combined["stage_outcomes"]["A"]
-            actual_b = combined["stage_outcomes"].get("B")
-            searched = next((e for e in trace.events if e["event"] == "a_search"), None)
-            merged = next((e for e in trace.events if e["event"] == "a_candidates"), None)
-            reviewed = next((e for e in trace.events if e["event"] == "a_candidate_review"), None)
-            model_ids = {
-                c["doc_id"]
-                for c in (
-                    merged["merged"] if merged else searched["candidates"] if searched else []
-                )
-            }
-            if reviewed:
-                model_ids = set(reviewed["after_ids"])
+            # The A -> B end-to-end evaluation lives in claview.pipeline.evaluate (new A).
             row.update(
                 {
-                    "a_status": a["status"],
-                    "a_format_valid": any(e["event"] == "a_format_checked" for e in trace.events),
-                    "a_candidate_inclusion": len(wanted & model_ids) / len(wanted),
-                    "a_exact": a["status"] == "ok"
-                    and table_keys(a["result"]) == table_keys(expected["A"]),
                     "b_independent_status": b["status"],
                     "b_success": b_success(b, expected["B"]),
-                    "integrated_b_success": bool(actual_b) and b_success(actual_b, expected["B"]),
                     "b_issues": b["issues"],
                     "b_conditions_exact": b["status"] == "ok"
                     and condition_counts(b["result"]) == condition_counts(expected["B"]),
                     "b_unit_exact": b["status"] == "ok"
                     and Counter((selection_key(s), s["unit"]) for s in b["result"]["selections"])
                     == Counter((selection_key(s), s["unit"]) for s in expected["B"]["selections"]),
-                    "integrated_b_status": actual_b["status"] if actual_b else "not_run",
-                    "integrated_b_exact": bool(
-                        actual_b
-                        and actual_b["status"] == "ok"
-                        and condition_counts(actual_b["result"]) == condition_counts(expected["B"])
-                    ),
                     "trace_ref": trace.run_id,
                 }
             )
@@ -175,18 +147,7 @@ def evaluate(
         "candidate_count_max": max(x["candidate_count"] for x in results),
     }
     if mode != "retrieval":
-        summary["a_candidate_inclusion"] = sum(x["a_candidate_inclusion"] for x in results) / len(
-            cases
-        )
-        for key in (
-            "a_format_valid",
-            "a_exact",
-            "b_conditions_exact",
-            "b_unit_exact",
-            "b_success",
-            "integrated_b_success",
-            "integrated_b_exact",
-        ):
+        for key in ("b_conditions_exact", "b_unit_exact", "b_success"):
             summary[key + "_count"] = sum(x[key] for x in results)
     return {
         "mode": mode,

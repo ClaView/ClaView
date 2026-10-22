@@ -19,8 +19,10 @@ dependencies = [
 claview-period = { path = "packages/claview-period", editable = true }
 
 [project.scripts]
-claview = "claview.b.cli:main"
+# `claview` is the A -> B flow; `claview-b` is B alone (and its search tools).
+claview = "claview.pipeline.cli:main"
 claview-pipeline = "claview.pipeline.cli:main"
+claview-b = "claview.b.cli:main"
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "ruff>=0.12,<1"]
