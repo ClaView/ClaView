@@ -100,7 +100,7 @@ def inspect(root=ROOT):
         require(
             bool(case.get("query")) and bool(case.get("expected_action")), f"Incomplete case: {key}"
         )
-    golden_text = (root / "eval/cases/골든셋_초안_5건.md").read_text(encoding="utf-8")
+    golden_text = (root / "eval/cases/golden/골든셋_초안_5건.md").read_text(encoding="utf-8")
     golden_questions = [
         line[2:].strip() for line in golden_text.splitlines() if line.startswith("> ")
     ]

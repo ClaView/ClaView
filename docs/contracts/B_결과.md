@@ -4,7 +4,7 @@
 
 ## 봉투
 
-`{"stage": "B", "status", "result", "issues", "trace_ref"}`. `status`는 `ok`, 또는 실패 상태(`error`, `unresolved` 등). 계열 수가 상한을 넘거나 상대 기간을 확인해야 하면 `needs_confirmation`이고 이때도 `result`가 붙는다.
+`{"stage": "B", "status", "result", "issues", "trace_ref"}`. `status`는 `ok`, 또는 실패 상태(`error`, `unresolved` 등). 고른 계열 수가 상한을 넘으면 `needs_confirmation`(코드 `selection_count_requires_confirmation`)이고 이때 `result`에는 확인용 정보(메시지, 계열 수, 상한, 후보 이름)가 붙는다. 상대 기간이 표의 조회 가능 기간과 어긋나는 경우는 멈추지 않는다: 조회 가능 기간으로 선택·검증을 계속하고 그 사실을 `result.period_notices`에 안내로 남기며, 성공하면 상태는 `ok`다(2026-10-06 흐름 변경).
 
 ## result
 
