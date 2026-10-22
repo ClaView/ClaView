@@ -1,0 +1,1208 @@
+{
+  "version": "case_roles_v1",
+  "direction_date": "2026-10-11",
+  "expected_table_groups_sha256": "93f7cff4aad8166c34c3193bf49364f91fcf2e53fcec69ad9c01d0fef2061731",
+  "twin_group_rule": "sha256 of sorted answer groups with sorted unique allowed table IDs; first 16 hex digits prefixed tg-",
+  "cases": {
+    "A:CX-Q001": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-6657242e934822d4"
+    },
+    "A:CX-Q002": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-f564137979cb5f81"
+    },
+    "A:CX-Q003": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-fe9d6221b4e60b54"
+    },
+    "A:CX-Q004": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-6148e5567f4632b2"
+    },
+    "A:CX-Q005": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-9d9410af58b90f2d"
+    },
+    "A:CX-Q006": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-7e74e8aa489537de"
+    },
+    "A:CX-Q007": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-c20afcea8e60daa6"
+    },
+    "A:CX-Q008": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-a508f18582855ac4"
+    },
+    "A:CX-Q009": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-2971c3631f0852d0"
+    },
+    "A:CX-Q010": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-914308a31da0b2f5"
+    },
+    "A:CX-Q011": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-96075ede0d366bd0"
+    },
+    "A:CX-Q012": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-25a4bd43feb5262a"
+    },
+    "A:CX-Q013": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-b2c26d3c3f5c1dc0"
+    },
+    "A:CX-Q014": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-45a821f346017b90"
+    },
+    "A:CX-Q015": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-40839eaf9dc7128d"
+    },
+    "A:CX-Q016": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-d500bf6b44d23621"
+    },
+    "A:CX-Q017": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-cad2b9d5fbdb6d30"
+    },
+    "A:CX-Q018": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e5dbc124e3c358ea"
+    },
+    "A:CX-Q019": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-c3f7c0859326577b"
+    },
+    "A:CX-Q020": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-ae8558db81aed60d"
+    },
+    "A:CX-Q021": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-f32bba05d946106f"
+    },
+    "A:CX-Q022": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a532b96bdeb51780"
+    },
+    "A:CX-Q023": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-121bef44edef5154"
+    },
+    "A:CX-Q024": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-7dab5e108a0b6dd6"
+    },
+    "A:CX-Q025": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-22b2592974ade170"
+    },
+    "A:CX-Q026": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-7dab5e108a0b6dd6"
+    },
+    "A:CX-Q027": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d9923aaaf94462ad"
+    },
+    "A:CX-Q028": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-15cbb586668c626e"
+    },
+    "A:CX-Q029": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-8937d7c68e73eb6e"
+    },
+    "A:CX-Q030": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-92470a1cbeef38e7"
+    },
+    "A:CX-Q031": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-856174e830a02c3c"
+    },
+    "A:CX-Q032": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a467312e96702e83"
+    },
+    "A:CX-Q033": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-ca76234d0349edcd"
+    },
+    "A:CX-Q034": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-2542b5e0ec59fde4"
+    },
+    "A:CX-Q035": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-1d59ac3e0e14bfce"
+    },
+    "A:CX-Q036": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-69bc4068fb135526"
+    },
+    "A:CX-Q037": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3dd1162e74b7bf4b"
+    },
+    "A:CX-Q038": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-48d9372a47604846"
+    },
+    "A:CX-Q039": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-f61d983455babfe9"
+    },
+    "A:CX-Q040": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-fb9bffc739578010"
+    },
+    "A:CX-Q041": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-c4e5935f542540a2"
+    },
+    "A:CX-Q042": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-1aa3a5d1f83a6d91"
+    },
+    "A:CX-Q043": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-b0bf295cd5bbc187"
+    },
+    "A:CX-Q044": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3ccd7524d3cefb98"
+    },
+    "A:CX-Q045": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-22785dfa868f9644"
+    },
+    "A:CX-Q046": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-4f4b99472701ea68"
+    },
+    "A:CX-Q047": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-207047a8e38d61d5"
+    },
+    "A:CX-Q048": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-ca9e00fc55fc8489"
+    },
+    "A:CX-Q049": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-82065284706fbef7"
+    },
+    "A:CX-Q050": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-66b4e820c65d5db0"
+    },
+    "A:CX-Q051": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d"
+    },
+    "A:CX-Q052": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e518a6b94046cd81"
+    },
+    "A:CX-Q053": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-06c028d5738c1d4d"
+    },
+    "A:CX-Q054": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-5e1210e2cdc06b8d"
+    },
+    "A:CX-Q055": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d"
+    },
+    "A:CX-Q056": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-6c7eef96d93c9a85"
+    },
+    "A:CX-Q057": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-c528dae127545e23"
+    },
+    "A:CX-Q058": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-0fb23d7879002b6b"
+    },
+    "A:CX-Q059": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3292be75ff230638"
+    },
+    "A:CX-Q060": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-e129ecf0f9338d6b"
+    },
+    "A:CX-Q061": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-19f0f7a818c34f94"
+    },
+    "A:CX-Q062": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-5a27c8d8a773ccc9"
+    },
+    "A:CX-Q063": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-82f8148acd0f9929"
+    },
+    "A:CX-Q064": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-590c9181b0ffd27a"
+    },
+    "A:CX-Q065": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3e02bc757c88553b"
+    },
+    "A:CX-Q066": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a1d0d21838fa1706"
+    },
+    "A:CX-Q067": {
+      "role": "boundary",
+      "origin": "hold",
+      "twin_group": "tg-3e02bc757c88553b"
+    },
+    "A:CX-Q068": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-70f725a562636c48"
+    },
+    "A:CX-Q069": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3e02bc757c88553b"
+    },
+    "A:CX-Q070": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-25a2318a30c8f31f"
+    },
+    "A:CX-Q071": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-362667941cd09332"
+    },
+    "A:CX-Q072": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-5e43b2160c155dbd"
+    },
+    "A:CX-Q073": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad"
+    },
+    "A:CX-Q074": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-082ce2a82be6871e"
+    },
+    "A:CX-Q075": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad"
+    },
+    "A:CX-Q076": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-362667941cd09332"
+    },
+    "A:CX-Q077": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-a29ac34accb57cfc"
+    },
+    "A:CX-Q078": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-0821389569d4cb65"
+    },
+    "A:CX-Q079": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-0f35bde9efe35248"
+    },
+    "A:CX-Q080": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-8c5cedd050197847"
+    },
+    "A:CX-Q081": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-1252fcabf6467e18"
+    },
+    "A:CX-Q082": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-751c31f4971ae05b"
+    },
+    "A:CX-Q083": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-9a8ffbb2b337fc2e"
+    },
+    "A:CX-Q084": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-40305416e814240a"
+    },
+    "B:CX-Q001": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-fe9d6221b4e60b54"
+    },
+    "B:CX-Q002": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-9043f895d7ca1065"
+    },
+    "B:CX-Q003": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-e07c527091af7421"
+    },
+    "B:CX-Q004": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-6657242e934822d4"
+    },
+    "B:CX-Q005": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-7e74e8aa489537de"
+    },
+    "B:CX-Q006": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9d9410af58b90f2d"
+    },
+    "B:CX-Q007": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-4db7e68d0e9cdc23"
+    },
+    "B:CX-Q008": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-6c2b67bdc9c0cdcd"
+    },
+    "B:CX-Q009": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3815285e00040c13"
+    },
+    "B:CX-Q010": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-6148e5567f4632b2"
+    },
+    "B:CX-Q011": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-93d0d9188e14d7df"
+    },
+    "B:CX-Q012": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-98fc06d9e5200215"
+    },
+    "B:CX-Q013": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-96075ede0d366bd0"
+    },
+    "B:CX-Q014": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-b2c26d3c3f5c1dc0"
+    },
+    "B:CX-Q015": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a9674c1df9c86514"
+    },
+    "B:CX-Q016": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-b2c26d3c3f5c1dc0"
+    },
+    "B:CX-Q017": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-5e1210e2cdc06b8d"
+    },
+    "B:CX-Q018": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-e518a6b94046cd81"
+    },
+    "B:CX-Q019": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d"
+    },
+    "B:CX-Q020": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-76835b3dcaf11cc5"
+    },
+    "B:CX-Q021": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-397dee443fd1a8c0"
+    },
+    "B:CX-Q022": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-fe8ab2fa08ed58f0"
+    },
+    "B:CX-Q023": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9b894c68677aab41"
+    },
+    "B:CX-Q024": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-0d67c3ffbdc8581e"
+    },
+    "B:CX-Q025": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-880a1266cd9552d3"
+    },
+    "B:CX-Q026": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-cad2b9d5fbdb6d30"
+    },
+    "B:CX-Q027": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-880a1266cd9552d3"
+    },
+    "B:CX-Q028": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d500bf6b44d23621"
+    },
+    "B:CX-Q029": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-40839eaf9dc7128d"
+    },
+    "B:CX-Q030": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e5dbc124e3c358ea"
+    },
+    "B:CX-Q031": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-f32bba05d946106f"
+    },
+    "B:CX-Q032": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-880a1266cd9552d3"
+    },
+    "B:CX-Q033": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d9923aaaf94462ad"
+    },
+    "B:CX-Q034": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-121bef44edef5154"
+    },
+    "B:CX-Q035": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-2542b5e0ec59fde4"
+    },
+    "B:CX-Q036": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3720689db3a8d943"
+    },
+    "B:CX-Q037": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-92470a1cbeef38e7"
+    },
+    "B:CX-Q038": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-460e0b8dfb2cad9c"
+    },
+    "B:CX-Q039": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-8937d7c68e73eb6e"
+    },
+    "B:CX-Q040": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-22b2592974ade170"
+    },
+    "B:CX-Q041": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-1d59ac3e0e14bfce"
+    },
+    "B:CX-Q042": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-856174e830a02c3c"
+    },
+    "B:CX-Q043": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-0886405b3d55d1b3"
+    },
+    "B:CX-Q044": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-48d9372a47604846"
+    },
+    "B:CX-Q045": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-e22f22cc8743d0ad"
+    },
+    "B:CX-Q046": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-f61d983455babfe9"
+    },
+    "B:CX-Q047": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3dd1162e74b7bf4b"
+    },
+    "B:CX-Q048": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-69bc4068fb135526"
+    },
+    "B:CX-Q049": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-a6a0f9c3fae205da"
+    },
+    "B:CX-Q050": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-c4e5935f542540a2"
+    },
+    "B:CX-Q051": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-1aa3a5d1f83a6d91"
+    },
+    "B:CX-Q052": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-fb9bffc739578010"
+    },
+    "B:CX-Q053": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-207047a8e38d61d5"
+    },
+    "B:CX-Q054": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-ca9e00fc55fc8489"
+    },
+    "B:CX-Q055": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3ccd7524d3cefb98"
+    },
+    "B:CX-Q056": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-1421786d9283d4c7"
+    },
+    "B:CX-Q057": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-22785dfa868f9644"
+    },
+    "B:CX-Q058": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-72fe7d0ccf4a74ce"
+    },
+    "B:CX-Q059": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-4f4b99472701ea68"
+    },
+    "B:CX-Q060": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-2cd1df74f0c4dfc8"
+    },
+    "B:CX-Q061": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-2f5a1284590a42f4"
+    },
+    "B:CX-Q062": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-b0bf295cd5bbc187"
+    },
+    "B:CX-Q063": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-78208cf3a74d2318"
+    },
+    "B:CX-Q064": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-207047a8e38d61d5"
+    },
+    "B:CX-Q065": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e129ecf0f9338d6b"
+    },
+    "B:CX-Q066": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-5a27c8d8a773ccc9"
+    },
+    "B:CX-Q067": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-09c919ceb82197e7"
+    },
+    "B:CX-Q068": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3292be75ff230638"
+    },
+    "B:CX-Q069": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-64487645a833cafb"
+    },
+    "B:CX-Q070": {
+      "role": "boundary",
+      "origin": "hold",
+      "twin_group": "tg-c291e8950182dc5e"
+    },
+    "B:CX-Q071": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad"
+    },
+    "B:CX-Q072": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-082ce2a82be6871e"
+    },
+    "B:CX-Q073": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-8926deb52bdf6385"
+    },
+    "B:CX-Q074": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-37cb591e7eb40aff"
+    },
+    "B:CX-Q075": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-362667941cd09332"
+    },
+    "B:CX-Q076": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-751c31f4971ae05b"
+    },
+    "B:CX-Q077": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-51f2f6ed59929a20"
+    },
+    "B:CX-Q078": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-40305416e814240a"
+    },
+    "B:CX-Q079": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3e02bc757c88553b"
+    },
+    "B:CX-Q080": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-f17ccde96177011e"
+    },
+    "B:CX-Q081": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-590c9181b0ffd27a"
+    },
+    "B:CX-Q082": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a1d0d21838fa1706"
+    },
+    "B:CX-Q083": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-45f916c85e8f4883"
+    },
+    "B:CX-Q084": {
+      "role": "boundary",
+      "origin": "dev",
+      "twin_group": "tg-45f916c85e8f4883"
+    },
+    "B:CX-Q085": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e07c527091af7421"
+    },
+    "B:CX-Q086": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-98fc06d9e5200215"
+    },
+    "B:CX-Q087": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d"
+    },
+    "B:CX-Q088": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-5e1210e2cdc06b8d"
+    },
+    "B:CX-Q089": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-880a1266cd9552d3"
+    },
+    "B:CX-Q090": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-cad2b9d5fbdb6d30"
+    },
+    "B:CX-Q091": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-8937d7c68e73eb6e"
+    },
+    "B:CX-Q092": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-d9923aaaf94462ad"
+    },
+    "B:CX-Q093": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-a6a0f9c3fae205da"
+    },
+    "B:CX-Q094": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-ca9e00fc55fc8489"
+    },
+    "B:CX-Q095": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad"
+    },
+    "B:CX-Q096": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3e02bc757c88553b"
+    },
+    "CV-AB-01": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-11fc6095f774ae08"
+    },
+    "CV-AB-02": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-11fc6095f774ae08"
+    },
+    "CV-AB-03": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-11fc6095f774ae08"
+    },
+    "CV-AB-04": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-c4e5935f542540a2"
+    },
+    "CV-AB-05": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-c4e5935f542540a2"
+    },
+    "CV-AB-06": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-622dc26d64a34560"
+    },
+    "CV-AB-07": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-880a1266cd9552d3"
+    },
+    "CV-AB-08": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-622dc26d64a34560"
+    },
+    "CV-AB-09": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-b2c26d3c3f5c1dc0"
+    },
+    "CV-AB-10": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-5cc5af43d66a853a"
+    },
+    "CV-AB-11": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-0f0a4be69eeb7a52"
+    },
+    "CV-AB-12": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-4e0b6666cc82662a"
+    },
+    "CV-AB-13": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-e8b9251776e90d55"
+    },
+    "CV-AB-14": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-ca9e00fc55fc8489"
+    },
+    "CV-AB-15": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-362667941cd09332"
+    },
+    "CV-AB-16": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-7dab5e108a0b6dd6"
+    },
+    "CV-AB-17": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-121bef44edef5154"
+    },
+    "CV-AB-18": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-d9923aaaf94462ad"
+    },
+    "CV-AB-19": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-92470a1cbeef38e7"
+    },
+    "CV-AB-20": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-856174e830a02c3c"
+    },
+    "CV-AB-21": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-a532b96bdeb51780"
+    },
+    "CV-AB-22": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-e3955bdc8dc8ee74"
+    },
+    "PC:EQ-01": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-45f916c85e8f4883"
+    },
+    "PC:EQ-02": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-8937d7c68e73eb6e"
+    },
+    "PC:EQ-03": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3e02bc757c88553b"
+    },
+    "PC:EQ-04": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-608a393ecb7e7fe0"
+    },
+    "PC:EQ-05": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-11fc6095f774ae08"
+    },
+    "PC:EQ-06": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-8926deb52bdf6385"
+    },
+    "PC:EQ-07": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad"
+    },
+    "PC:EQ-08": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-84ee4f334b020884"
+    },
+    "PC:EQ-09": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e5dbc124e3c358ea"
+    },
+    "PC:EQ-10": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-de75c67f6c6ef52d"
+    },
+    "PC:EQ-11": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-95d574e188c22876"
+    },
+    "PC:EQ-12": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-f32bba05d946106f"
+    },
+    "PC:EQ-13": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3fd3ebdbd083624c"
+    },
+    "PC:EQ-14": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-5efbc26e499e7264"
+    },
+    "PC:EQ-15": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-48d9372a47604846"
+    },
+    "PC:EQ-16": {
+      "role": "boundary",
+      "origin": "dev",
+      "twin_group": "tg-5cc5af43d66a853a"
+    },
+    "PC:EQ-17": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-05a7aacc45fc4a15"
+    },
+    "PC:EQ-18": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-40b3099f1d84a332"
+    },
+    "PC:EQ-19": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-6758092fce10a738"
+    },
+    "PC:EQ-20": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-96075ede0d366bd0"
+    },
+    "PC:EQ-21": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-f6eb1ec6783a1d16"
+    },
+    "PC:EQ-22": {
+      "role": "boundary",
+      "origin": "dev",
+      "twin_group": "tg-81b412719a0653ae"
+    },
+    "PC:EQ-23": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d"
+    },
+    "PC:EQ-24": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-05b1c0fab8ed7ba0"
+    },
+    "PC:EQ-25": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e518a6b94046cd81"
+    },
+    "PC:EQ-26": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-707e8db39efec5d3"
+    },
+    "PC:EQ-27": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-856174e830a02c3c"
+    },
+    "PC:EQ-28": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-c859c8ff9e14c0fd"
+    },
+    "PC:EQ-29": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-fe8ab2fa08ed58f0"
+    },
+    "PC:EQ-30": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e95b2ce361098f4e"
+    },
+    "PC:EQ-31": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-381a2512542b543e"
+    },
+    "PC:EQ-32": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-45a821f346017b90"
+    },
+    "PC:EQ-33": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a6a0f9c3fae205da"
+    },
+    "PC:EQ-34": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-c3193cd30084717f"
+    },
+    "PC:EQ-39": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-914fd337bad9e638"
+    },
+    "PC:EQ-40": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-de906a2951106526"
+    },
+    "PC:EQ-41": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-0080869fa4416d0b"
+    },
+    "PC:EQ-42": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-d5ec4283347b00d3"
+    }
+  }
+}

@@ -1,0 +1,678 @@
+{
+  "version": "claview-a-eval/1",
+  "status": "frozen_authored_drafts_not_independent_blind_test",
+  "author_exposed": true,
+  "human_reviewed_new_cases": 0,
+  "test_executed": false,
+  "policy": {
+    "test_usage": "Do not read test questions/labels or this generator to build mappings/documents; official whole-catalog indexing is allowed.",
+    "family_axis": "test_family families absent from regression/dev/test_expression",
+    "expression_axis": "known family, reserved variant and semantic bundle; not a pure expression-only causal comparison",
+    "grouping": "variant, semantic, referenced-table bundles cannot cross development/test partitions",
+    "independence": "Genuine blind test requires future human-held questions not exposed to the implementer."
+  },
+  "splits": {
+    "regression": {
+      "unique_cases": 22,
+      "locked": false,
+      "input_sha256": "2b104cd8e74caf9210dbacf750768924c9d508bc694e50e4785ffaeb78e41d70",
+      "gold_sha256": "f6925c0030668468a8ce166b30a8aaf4c95218274315702b460d56448149d896",
+      "families": [
+        "104",
+        "121",
+        "151",
+        "161",
+        "200",
+        "301",
+        "311",
+        "401",
+        "402",
+        "404",
+        "405",
+        "501",
+        "513"
+      ],
+      "tags": {
+        "legacy_regression": 22
+      },
+      "groups": [
+        {
+          "case_id": "CV-AB-01",
+          "families": [
+            "200"
+          ],
+          "variant_group": "legacy-DT_200Y101",
+          "semantic_group": "legacy-DT_200Y101"
+        },
+        {
+          "case_id": "CV-AB-02",
+          "families": [
+            "200"
+          ],
+          "variant_group": "legacy-DT_200Y101",
+          "semantic_group": "legacy-DT_200Y101"
+        },
+        {
+          "case_id": "CV-AB-03",
+          "families": [
+            "200"
+          ],
+          "variant_group": "legacy-DT_200Y101",
+          "semantic_group": "legacy-DT_200Y101"
+        },
+        {
+          "case_id": "CV-AB-04",
+          "families": [
+            "301"
+          ],
+          "variant_group": "legacy-DT_301Y013",
+          "semantic_group": "legacy-DT_301Y013"
+        },
+        {
+          "case_id": "CV-AB-05",
+          "families": [
+            "301"
+          ],
+          "variant_group": "legacy-DT_301Y013",
+          "semantic_group": "legacy-DT_301Y013"
+        },
+        {
+          "case_id": "CV-AB-06",
+          "families": [
+            "151"
+          ],
+          "variant_group": "legacy-DT_151Y001",
+          "semantic_group": "legacy-DT_151Y001"
+        },
+        {
+          "case_id": "CV-AB-07",
+          "families": [
+            "121"
+          ],
+          "variant_group": "legacy-DT_121Y006",
+          "semantic_group": "legacy-DT_121Y006"
+        },
+        {
+          "case_id": "CV-AB-08",
+          "families": [
+            "151"
+          ],
+          "variant_group": "legacy-DT_151Y001",
+          "semantic_group": "legacy-DT_151Y001"
+        },
+        {
+          "case_id": "CV-AB-09",
+          "families": [
+            "161"
+          ],
+          "variant_group": "legacy-DT_161Y008",
+          "semantic_group": "legacy-DT_161Y008"
+        },
+        {
+          "case_id": "CV-AB-10",
+          "families": [
+            "301"
+          ],
+          "variant_group": "legacy-DT_301Y015",
+          "semantic_group": "legacy-DT_301Y015"
+        },
+        {
+          "case_id": "CV-AB-11",
+          "families": [
+            "200"
+          ],
+          "variant_group": "legacy-DT_200Y102",
+          "semantic_group": "legacy-DT_200Y102"
+        },
+        {
+          "case_id": "CV-AB-12",
+          "families": [
+            "311"
+          ],
+          "variant_group": "legacy-DT_311Y001",
+          "semantic_group": "legacy-DT_311Y001"
+        },
+        {
+          "case_id": "CV-AB-13",
+          "families": [
+            "104"
+          ],
+          "variant_group": "legacy-DT_104Y016",
+          "semantic_group": "legacy-DT_104Y016"
+        },
+        {
+          "case_id": "CV-AB-14",
+          "families": [
+            "501"
+          ],
+          "variant_group": "legacy-DT_501Y006",
+          "semantic_group": "legacy-DT_501Y006"
+        },
+        {
+          "case_id": "CV-AB-15",
+          "families": [
+            "513"
+          ],
+          "variant_group": "legacy-DT_513Y001",
+          "semantic_group": "legacy-DT_513Y001"
+        },
+        {
+          "case_id": "CV-AB-16",
+          "families": [
+            "404"
+          ],
+          "variant_group": "legacy-DT_404Y014",
+          "semantic_group": "legacy-DT_404Y014"
+        },
+        {
+          "case_id": "CV-AB-17",
+          "families": [
+            "404"
+          ],
+          "variant_group": "legacy-DT_404Y015",
+          "semantic_group": "legacy-DT_404Y015"
+        },
+        {
+          "case_id": "CV-AB-18",
+          "families": [
+            "404"
+          ],
+          "variant_group": "legacy-DT_404Y016",
+          "semantic_group": "legacy-DT_404Y016"
+        },
+        {
+          "case_id": "CV-AB-19",
+          "families": [
+            "401"
+          ],
+          "variant_group": "legacy-DT_401Y018",
+          "semantic_group": "legacy-DT_401Y018"
+        },
+        {
+          "case_id": "CV-AB-20",
+          "families": [
+            "402"
+          ],
+          "variant_group": "legacy-DT_402Y014",
+          "semantic_group": "legacy-DT_402Y014"
+        },
+        {
+          "case_id": "CV-AB-21",
+          "families": [
+            "405"
+          ],
+          "variant_group": "legacy-DT_405Y006",
+          "semantic_group": "legacy-DT_405Y006"
+        },
+        {
+          "case_id": "CV-AB-22",
+          "families": [
+            "405"
+          ],
+          "variant_group": "legacy-DT_405Y007",
+          "semantic_group": "legacy-DT_405Y007"
+        }
+      ]
+    },
+    "dev": {
+      "unique_cases": 36,
+      "locked": false,
+      "input_sha256": "172c390f1baf40d8639a310c3ed6be12db87414303cd2e5002da5f17d103f3ba",
+      "gold_sha256": "b06348678677b38c7947c059191010a46d3422c664f88dedd39897d2af21e996",
+      "families": [
+        "105",
+        "121",
+        "151",
+        "200",
+        "401",
+        "404",
+        "405",
+        "513",
+        "outside_domain"
+      ],
+      "tags": {
+        "ambiguity": 3,
+        "equivalent_alternatives": 1,
+        "everyday": 5,
+        "exact_title": 2,
+        "follow_up": 2,
+        "metadata_dependent": 12,
+        "minimal_pair_currency": 3,
+        "minimal_pair_nominal_real": 3,
+        "minimal_pair_stock_new": 3,
+        "missing_metadata": 2,
+        "multiple_tables": 2,
+        "negation": 3,
+        "one_table_many_series": 6,
+        "out_of_scope": 4,
+        "synonym_abbreviation": 3,
+        "typo_spacing": 2
+      },
+      "groups": [
+        {
+          "case_id": "A-D01",
+          "families": [
+            "151"
+          ],
+          "variant_group": "household-credit",
+          "semantic_group": "household-credit"
+        },
+        {
+          "case_id": "A-D02",
+          "families": [
+            "151"
+          ],
+          "variant_group": "household-credit",
+          "semantic_group": "household-credit"
+        },
+        {
+          "case_id": "A-D03",
+          "families": [
+            "151"
+          ],
+          "variant_group": "household-credit",
+          "semantic_group": "household-credit"
+        },
+        {
+          "case_id": "A-D04",
+          "families": [
+            "151"
+          ],
+          "variant_group": "household-credit",
+          "semantic_group": "household-credit"
+        },
+        {
+          "case_id": "A-D05",
+          "families": [
+            "200"
+          ],
+          "variant_group": "national-growth",
+          "semantic_group": "national-growth"
+        },
+        {
+          "case_id": "A-D06",
+          "families": [
+            "200"
+          ],
+          "variant_group": "gdp-expenditure",
+          "semantic_group": "gdp-expenditure"
+        },
+        {
+          "case_id": "A-D07",
+          "families": [
+            "200"
+          ],
+          "variant_group": "gdp-expenditure",
+          "semantic_group": "gdp-expenditure"
+        },
+        {
+          "case_id": "A-D08",
+          "families": [
+            "200"
+          ],
+          "variant_group": "gdp-expenditure",
+          "semantic_group": "gdp-expenditure"
+        },
+        {
+          "case_id": "A-D09",
+          "families": [
+            "200"
+          ],
+          "variant_group": "gdp-expenditure",
+          "semantic_group": "gdp-expenditure"
+        },
+        {
+          "case_id": "A-D10",
+          "families": [
+            "200"
+          ],
+          "variant_group": "gdp-expenditure",
+          "semantic_group": "gdp-expenditure"
+        },
+        {
+          "case_id": "A-D11",
+          "families": [
+            "200"
+          ],
+          "variant_group": "gdp-expenditure",
+          "semantic_group": "gdp-expenditure"
+        },
+        {
+          "case_id": "A-D12",
+          "families": [
+            "121"
+          ],
+          "variant_group": "loan-interest",
+          "semantic_group": "loan-interest"
+        },
+        {
+          "case_id": "A-D13",
+          "families": [
+            "121"
+          ],
+          "variant_group": "loan-interest",
+          "semantic_group": "loan-interest"
+        },
+        {
+          "case_id": "A-D14",
+          "families": [
+            "121"
+          ],
+          "variant_group": "loan-interest",
+          "semantic_group": "loan-interest"
+        },
+        {
+          "case_id": "A-D15",
+          "families": [
+            "121"
+          ],
+          "variant_group": "loan-interest",
+          "semantic_group": "loan-interest"
+        },
+        {
+          "case_id": "A-D16",
+          "families": [
+            "121"
+          ],
+          "variant_group": "loan-interest",
+          "semantic_group": "loan-interest"
+        },
+        {
+          "case_id": "A-D17",
+          "families": [
+            "121"
+          ],
+          "variant_group": "loan-interest",
+          "semantic_group": "loan-interest"
+        },
+        {
+          "case_id": "A-D18",
+          "families": [
+            "401"
+          ],
+          "variant_group": "import-use",
+          "semantic_group": "import-use"
+        },
+        {
+          "case_id": "A-D19",
+          "families": [
+            "401"
+          ],
+          "variant_group": "import-use",
+          "semantic_group": "import-use"
+        },
+        {
+          "case_id": "A-D20",
+          "families": [
+            "401"
+          ],
+          "variant_group": "import-use",
+          "semantic_group": "import-use"
+        },
+        {
+          "case_id": "A-D21",
+          "families": [
+            "401"
+          ],
+          "variant_group": "import-use",
+          "semantic_group": "import-use"
+        },
+        {
+          "case_id": "A-D22",
+          "families": [
+            "404"
+          ],
+          "variant_group": "producer-basic",
+          "semantic_group": "producer-basic"
+        },
+        {
+          "case_id": "A-D23",
+          "families": [
+            "404"
+          ],
+          "variant_group": "producer-basic",
+          "semantic_group": "producer-basic"
+        },
+        {
+          "case_id": "A-D24",
+          "families": [
+            "401",
+            "404"
+          ],
+          "variant_group": "producer-import-comparison",
+          "semantic_group": "producer-import-comparison"
+        },
+        {
+          "case_id": "A-D25",
+          "families": [
+            "401"
+          ],
+          "variant_group": "import-total-alternatives",
+          "semantic_group": "import-total-alternatives"
+        },
+        {
+          "case_id": "A-D26",
+          "families": [
+            "513"
+          ],
+          "variant_group": "economic-sentiment",
+          "semantic_group": "economic-sentiment"
+        },
+        {
+          "case_id": "A-D27",
+          "families": [
+            "513"
+          ],
+          "variant_group": "economic-sentiment",
+          "semantic_group": "economic-sentiment"
+        },
+        {
+          "case_id": "A-D28",
+          "families": [
+            "405"
+          ],
+          "variant_group": "price-scope",
+          "semantic_group": "price-scope"
+        },
+        {
+          "case_id": "A-D29",
+          "families": [
+            "405"
+          ],
+          "variant_group": "price-scope",
+          "semantic_group": "price-scope"
+        },
+        {
+          "case_id": "A-D30",
+          "families": [
+            "outside_domain"
+          ],
+          "variant_group": "outside-domain",
+          "semantic_group": "outside-domain"
+        },
+        {
+          "case_id": "A-D31",
+          "families": [
+            "outside_domain"
+          ],
+          "variant_group": "outside-domain",
+          "semantic_group": "outside-domain"
+        },
+        {
+          "case_id": "A-D32",
+          "families": [
+            "outside_domain"
+          ],
+          "variant_group": "outside-domain",
+          "semantic_group": "outside-domain"
+        },
+        {
+          "case_id": "A-D33",
+          "families": [
+            "outside_domain"
+          ],
+          "variant_group": "outside-domain",
+          "semantic_group": "outside-domain"
+        },
+        {
+          "case_id": "A-D34",
+          "families": [
+            "105"
+          ],
+          "variant_group": "metadata-gap-DT_105Y001",
+          "semantic_group": "metadata-gap-DT_105Y001"
+        },
+        {
+          "case_id": "A-D35",
+          "families": [
+            "404"
+          ],
+          "variant_group": "metadata-gap-DT_404Y017",
+          "semantic_group": "metadata-gap-DT_404Y017"
+        },
+        {
+          "case_id": "A-D36",
+          "families": [
+            "401",
+            "404"
+          ],
+          "variant_group": "price-ambiguity",
+          "semantic_group": "price-ambiguity"
+        }
+      ]
+    },
+    "test_expression": {
+      "unique_cases": 4,
+      "locked": true,
+      "input_sha256": "4d20f8b845fd6e6efdb5c85faeb20f12b872dbc9701a3a112258d8322a5e82e6",
+      "gold_sha256": "6c9cb2218cd96bb95b345585719e06a6f4569906d1064e9bc7a9d931df874a16",
+      "families": [
+        "121"
+      ],
+      "tags": {
+        "ambiguity": 1,
+        "everyday": 3,
+        "minimal_pair_stock_new": 3
+      },
+      "groups": [
+        {
+          "case_id": "A-E01",
+          "families": [
+            "121"
+          ],
+          "variant_group": "deposit-interest",
+          "semantic_group": "deposit-interest"
+        },
+        {
+          "case_id": "A-E02",
+          "families": [
+            "121"
+          ],
+          "variant_group": "deposit-interest",
+          "semantic_group": "deposit-interest"
+        },
+        {
+          "case_id": "A-E03",
+          "families": [
+            "121"
+          ],
+          "variant_group": "deposit-interest",
+          "semantic_group": "deposit-interest"
+        },
+        {
+          "case_id": "A-E04",
+          "families": [
+            "121"
+          ],
+          "variant_group": "deposit-interest",
+          "semantic_group": "deposit-interest"
+        }
+      ]
+    },
+    "test_family": {
+      "unique_cases": 8,
+      "locked": true,
+      "input_sha256": "3738dba7745b77a058e266f366d54f265f9c2b6aede33a3a76dc360b599a59fb",
+      "gold_sha256": "883b60107c24d0e0f8a5457f7fe5050b03d3935a002f9be4edec82c72fbda7e9",
+      "families": [
+        "403",
+        "payments"
+      ],
+      "tags": {
+        "everyday": 1,
+        "exact_title": 3,
+        "metadata_dependent": 1,
+        "multiple_tables": 2,
+        "negation": 1,
+        "one_table_many_series": 1,
+        "typo_spacing": 1
+      },
+      "groups": [
+        {
+          "case_id": "A-F01",
+          "families": [
+            "payments"
+          ],
+          "variant_group": "payments",
+          "semantic_group": "payments"
+        },
+        {
+          "case_id": "A-F02",
+          "families": [
+            "payments"
+          ],
+          "variant_group": "payments",
+          "semantic_group": "payments"
+        },
+        {
+          "case_id": "A-F03",
+          "families": [
+            "payments"
+          ],
+          "variant_group": "payments",
+          "semantic_group": "payments"
+        },
+        {
+          "case_id": "A-F04",
+          "families": [
+            "payments"
+          ],
+          "variant_group": "payments",
+          "semantic_group": "payments"
+        },
+        {
+          "case_id": "A-F05",
+          "families": [
+            "403"
+          ],
+          "variant_group": "trade-index",
+          "semantic_group": "trade-index"
+        },
+        {
+          "case_id": "A-F06",
+          "families": [
+            "403"
+          ],
+          "variant_group": "trade-index",
+          "semantic_group": "trade-index"
+        },
+        {
+          "case_id": "A-F07",
+          "families": [
+            "403"
+          ],
+          "variant_group": "trade-index",
+          "semantic_group": "trade-index"
+        },
+        {
+          "case_id": "A-F08",
+          "families": [
+            "403"
+          ],
+          "variant_group": "trade-index",
+          "semantic_group": "trade-index"
+        }
+      ]
+    }
+  }
+}

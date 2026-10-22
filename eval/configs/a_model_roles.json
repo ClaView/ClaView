@@ -1,0 +1,27 @@
+{
+  "schema_version": "claview-a-role-experiments/1",
+  "checked_at": "2026-10-05",
+  "allow_external_calls": false,
+  "account_access_verified": false,
+  "default_search_policy": "baseline",
+  "roles": {
+    "QueryInterpreter": {"models": ["HCX-003", "HCX-007"], "probe_ids": ["A-D29", "A-D11", "A-D14"]},
+    "EvidenceJudge": {"models": ["HCX-003", "HCX-007"], "probe_ids": ["A-D18", "A-D34"]},
+    "DecisionClassifier": {"models": ["HCX-003", "HCX-007", "jev-1.13.0"], "probe_ids": ["A-D10", "A-D15", "A-D36", "A-D30", "A-D34"]},
+    "ClarificationWriter": {"models": [], "status": "template_default_model_deferred"}
+  },
+  "max_output_tokens": 512,
+  "max_attempts_per_task": 2,
+  "max_seconds_per_task": 30,
+  "max_seconds_total": 1800,
+  "max_cost_by_currency": {"KRW": "0", "USD": "0"},
+  "sources": {
+    "hcx_models": "https://guide.ncloud-docs.com/docs/clovastudio-model",
+    "hcx003_api": "https://api.ncloud-docs.com/docs/clovastudio-chatcompletions",
+    "hcx007_api": "https://api.ncloud-docs.com/docs/clovastudio-chatcompletionsv3-so",
+    "hcx_quota": "https://guide.ncloud-docs.com/docs/clovastudio-ratelimiting",
+    "hcx_pricing_unresolved": "https://www.ncloud.com/product/aiService/clovaStudio",
+    "jev_api": "https://docs.typesafe.ai/api",
+    "jev_models_pricing": "https://docs.typesafe.ai/models"
+  }
+}

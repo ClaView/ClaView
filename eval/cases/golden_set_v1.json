@@ -1,0 +1,1958 @@
+{
+  "schema_version": "claview-ab/0.4-draft",
+  "dataset_id": "claview-golden-set-v1-ab-22",
+  "cases": [
+    {
+      "case_id": "CV-AB-01",
+      "query": "2015~2025년 연간 실질 GDP 성장률 추이를 그래프로 보여줘.",
+      "source": {
+        "used_part": "GDP 성장률 선",
+        "url": "https://www.bok.or.kr/portal/bbs/P0000596/view.do?menuNo=200071&nttId=10097176"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_200Y101",
+              "table_name": "주요지표(연간지표)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-01-S1",
+              "label": "국내총생산(실질성장률)",
+              "org_id": "301",
+              "table_id": "DT_200Y101",
+              "item_id": "13103136288999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102136288ACC_ITEM.20101",
+                  "name": "국내총생산(실질성장률)"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2015",
+                "end": "2025"
+              },
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-02",
+      "query": "2016~2025년 연간 실질 총고정자본형성 증감률 추이를 그래프로 보여줘.",
+      "source": {
+        "used_part": "총고정자본형성 증감률 선",
+        "url": "https://www.bok.or.kr/portal/bbs/P0000596/view.do?menuNo=200071&nttId=10097176"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_200Y101",
+              "table_name": "주요지표(연간지표)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-02-S1",
+              "label": "총고정자본형성(실질증감률)",
+              "org_id": "301",
+              "table_id": "DT_200Y101",
+              "item_id": "13103136288999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102136288ACC_ITEM.30102",
+                  "name": "총고정자본형성"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-03",
+      "query": "2016~2025년 연간 실질 재화와 서비스의 수출 증감률 추이를 그래프로 보여줘.",
+      "source": {
+        "used_part": "총수출 증감률 선",
+        "url": "https://www.bok.or.kr/portal/bbs/P0000596/view.do?menuNo=200071&nttId=10097176"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_200Y101",
+              "table_name": "주요지표(연간지표)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-03-S1",
+              "label": "재화와 서비스의 수출(실질증감률)",
+              "org_id": "301",
+              "table_id": "DT_200Y101",
+              "item_id": "13103136288999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102136288ACC_ITEM.30105",
+                  "name": "재화와 서비스의 수출"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-04",
+      "query": "2005~2025년 연간 경상수지와 상품·서비스·본원소득·이전소득수지 추이를 그래프로 비교해줘.",
+      "source": {
+        "used_part": "경상수지와 네 구성 수지",
+        "url": "https://www.bok.or.kr/portal/bbs/P0000596/view.do?menuNo=200071&nttId=10097176"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "table_name": "국제수지"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-04-S1",
+              "label": "경상수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.000000",
+                  "name": "경상수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-04-S2",
+              "label": "상품수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.100000",
+                  "name": "상품수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-04-S3",
+              "label": "서비스수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.200000",
+                  "name": "서비스수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-04-S4",
+              "label": "본원소득수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.300000",
+                  "name": "본원소득수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-04-S5",
+              "label": "이전소득수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.400000",
+                  "name": "이전소득수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-05",
+      "query": "2005~2025년 연간 서비스수지와 가공·운송·여행·건설수지 추이를 그래프로 비교해줘.",
+      "source": {
+        "used_part": "서비스수지와 가공·운송·여행·건설수지; 기타 제외",
+        "url": "https://www.bok.or.kr/portal/bbs/P0000596/view.do?menuNo=200071&nttId=10097176"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "table_name": "국제수지"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-05-S1",
+              "label": "서비스수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.200000",
+                  "name": "서비스수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-05-S2",
+              "label": "가공서비스수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.2A0000",
+                  "name": "가공서비스수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-05-S3",
+              "label": "운송수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.2B0000",
+                  "name": "운송수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-05-S4",
+              "label": "여행수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.2C0000",
+                  "name": "여행수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-05-S5",
+              "label": "건설수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.2D0000",
+                  "name": "건설수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2005",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-06",
+      "query": "2008년 1분기부터 2024년 4분기까지 분기별 가계신용 잔액 추이를 그래프로 보여줘.",
+      "source": {
+        "used_part": "위쪽 패널의 가계신용 규모 막대",
+        "url": "https://www.bok.or.kr/portal/bbs/P0000596/view.do?menuNo=200071&nttId=10090587"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "table_name": "가계신용(업권별, 분기)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-06-S1",
+              "label": "가계신용",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1000000",
+                  "name": "가계신용"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "200801",
+                "end": "202404"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-07",
+      "query": "최근 3년간 예금은행 기업대출 금리를 대기업대출·중소기업대출로 나눠 월별 꺾은선 그래프로 보여줘",
+      "source": {
+        "used_part": "결론부 문단 — 기업대출 중심 대출금리 전망 서술(각주6 포함)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000347/view.do?menuNo=200761&nttId=10087727"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "table_name": "예금은행 대출금리(신규취급액 기준)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-07-S1",
+              "label": "대기업대출",
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "item_id": "13103134553999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134553ACC_ITEM.BECBLA0201",
+                  "name": "대기업대출"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202308",
+                "end": "202607"
+              },
+              "unit": "연리%"
+            },
+            {
+              "series_id": "CV-AB-07-S2",
+              "label": "중소기업대출",
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "item_id": "13103134553999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134553ACC_ITEM.BECBLA0202",
+                  "name": "중소기업대출"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202308",
+                "end": "202607"
+              },
+              "unit": "연리%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-08",
+      "query": "2020년 이후 가계신용 잔액을 업권별로 나눠 분기별 막대그래프로 그려줘",
+      "source": {
+        "used_part": "가계대출 증감·업권별 데이터 전반(자료: 금융감독원·주택금융공사·한국은행 공동표기)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000347/view.do?menuNo=200761&nttId=10072588"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "table_name": "가계신용(업권별, 분기)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-08-S1",
+              "label": "예금은행",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1111000",
+                  "name": "예금은행"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S2",
+              "label": "상호저축은행",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1112000",
+                  "name": "상호저축은행"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S3",
+              "label": "신용협동조합",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1113100",
+                  "name": "신용협동조합"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S4",
+              "label": "상호금융",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1113200",
+                  "name": "상호금융"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S5",
+              "label": "새마을금고",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1113300",
+                  "name": "새마을금고"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S6",
+              "label": "우체국 등",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1114000",
+                  "name": "우체국 등"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S7",
+              "label": "보험회사",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1121000",
+                  "name": "보험회사"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S8",
+              "label": "연금기금",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1121400",
+                  "name": "연금기금"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S9",
+              "label": "여신전문기관",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1122000",
+                  "name": "여신전문기관"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S10",
+              "label": "공적금융기관",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1122300",
+                  "name": "공적금융기관"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S11",
+              "label": "기타금융중개회사",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1122400",
+                  "name": "기타금융중개회사"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S12",
+              "label": "기타",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1123000",
+                  "name": "기타"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S13",
+              "label": "여신전문기관",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1210000",
+                  "name": "여신전문기관"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-08-S14",
+              "label": "판매회사",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1220000",
+                  "name": "판매회사"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-09",
+      "query": "2021년부터 2025년까지 M2 통화량(원계열, 말잔 기준)을 상품별 구성으로 나눠 연도별 누적 막대그래프로 보여줘",
+      "source": {
+        "used_part": "통화량(M2)·유동성 데이터 전반(자료표기: 한국은행 경제통계시스템 ECOS)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000347/view.do?menuNo=200761&nttId=10081393"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "table_name": "M2 상품별 구성내역(말잔, 원계열)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-09-S1",
+              "label": "현금통화",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA01",
+                  "name": "현금통화"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S2",
+              "label": "요구불예금",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA02",
+                  "name": "요구불예금"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S3",
+              "label": "수시입출식저축성예금",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA03",
+                  "name": "수시입출식저축성예금"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S4",
+              "label": "MMF 지분",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA04",
+                  "name": "MMF 지분"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S5",
+              "label": "만기2년미만정기예적금",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA05",
+                  "name": "만기2년미만정기예적금"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S6",
+              "label": "양도성예금증서",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA06",
+                  "name": "양도성예금증서"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S7",
+              "label": "매출어음",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA07",
+                  "name": "매출어음"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S8",
+              "label": "CMA",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA08",
+                  "name": "CMA"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S9",
+              "label": "만기2년미만금전신탁",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA10",
+                  "name": "만기2년미만금전신탁"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S10",
+              "label": "발행어음",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA11",
+                  "name": "발행어음"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S11",
+              "label": "신탁형증권저축",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA12",
+                  "name": "신탁형증권저축"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S12",
+              "label": "만기2년미만외화예수금",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA13",
+                  "name": "만기2년미만외화예수금"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S13",
+              "label": "만기2년미만금융채",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA14",
+                  "name": "만기2년미만금융채"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-09-S14",
+              "label": "환매조건부채권매도",
+              "org_id": "301",
+              "table_id": "DT_161Y008",
+              "item_id": "13103844599999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844599ACC_ITEM.BBGA15",
+                  "name": "환매조건부채권매도"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-10",
+      "query": "최근 10년간 지역별 수출 규모를 지역별로 비교하는 막대그래프를 만들어줘",
+      "source": {
+        "used_part": "지역별 상품수출 비중",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000347/view.do?menuNo=200761&nttId=10085208"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "table_name": "지역별 경상수지"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-10-S1",
+              "label": "미국",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.US",
+                  "name": "미국"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-10-S2",
+              "label": "중국",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.CN",
+                  "name": "중국"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-10-S3",
+              "label": "일본",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.JP",
+                  "name": "일본"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-10-S4",
+              "label": "EU",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.EU",
+                  "name": "EU"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-10-S5",
+              "label": "동남아",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.SEA",
+                  "name": "동남아"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-10-S6",
+              "label": "중동",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.MDA",
+                  "name": "중동"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-10-S7",
+              "label": "중남미",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.CSA",
+                  "name": "중남미"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-AB-10-S8",
+              "label": "기타",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.ETC",
+                  "name": "기타"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2016",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-11",
+      "query": "2015년 이후 실질 GDP 성장률(전년동기비) 추이를 분기별 꺾은선 그래프로 보여줘",
+      "source": {
+        "used_part": "실질 GDP 성장률(국민계정) 계열",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000347/view.do?menuNo=200761&nttId=10093387"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_200Y102",
+              "table_name": "주요지표(분기지표)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-11-S1",
+              "label": "국내총생산(GDP)(실질 원계열 전년동기비)",
+              "org_id": "301",
+              "table_id": "DT_200Y102",
+              "item_id": "13103136269999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102136269ACC_ITEM.10211",
+                  "name": "국내총생산(GDP)(실질 원계열 전년동기비)"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "201501",
+                "end": "202602"
+              },
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-12",
+      "query": "최근 5년간 우리나라 순대외금융자산 규모 추이를 분기별 꺾은선 그래프로 보여줘",
+      "source": {
+        "used_part": "본문 서술 및 각주5 — 순대외금융자산 수치 직접 인용",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000347/view.do?menuNo=200761&nttId=10085208"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "table_name": "국제투자대조표(IIP)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-12-S1",
+              "label": "순대외금융자산",
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "item_id": "13103134486999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134486ACC_CD.3000000",
+                  "name": "순대외금융자산"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202103",
+                "end": "202602"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-13",
+      "query": "최근 5년간 예금은행 대출금을 시설자금·운전자금·특별자금 용도별로 나눠 월별 그래프로 보여줘",
+      "source": {
+        "used_part": "용도별(시설자금·운전자금) 대출 데이터",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000347/view.do?menuNo=200761&nttId=10072618"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_104Y016",
+              "table_name": "예금은행 대출금(말잔)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-13-S1",
+              "label": "시설자금",
+              "org_id": "301",
+              "table_id": "DT_104Y016",
+              "item_id": "13103860883999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102860883ACC_ITEM.BDCA11",
+                  "name": "시설자금"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202108",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-13-S2",
+              "label": "운전자금",
+              "org_id": "301",
+              "table_id": "DT_104Y016",
+              "item_id": "13103860883999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102860883ACC_ITEM.BDCA12",
+                  "name": "운전자금"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202108",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-AB-13-S3",
+              "label": "특별자금",
+              "org_id": "301",
+              "table_id": "DT_104Y016",
+              "item_id": "13103860883999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102860883ACC_ITEM.BDCA13",
+                  "name": "특별자금"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202108",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-14",
+      "query": "2020년 이후 전산업 매출액영업이익률을 연도별 표로 정리해줘",
+      "source": {
+        "used_part": "전산업 매출액영업이익률 헤드라인 수치(정기간행물, 특정 회차·URL 미확정)",
+        "url": "확정필요(P0000599 게시판, 구체 게시물 URL 미특정)"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_501Y006",
+              "table_name": "손익 지표(제11차 한국표준산업분류, 2009~)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-14-S1",
+              "label": "전산업",
+              "org_id": "301",
+              "table_id": "DT_501Y006",
+              "item_id": "13103134573999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134573BZTYP_CD.ZZZ00",
+                  "name": "전산업"
+                },
+                "objL2": {
+                  "code": "13102134573ENTERPRISE_SCALE.A",
+                  "name": "종합"
+                },
+                "objL3": {
+                  "code": "13102134573ACC_ITEM.611",
+                  "name": "매출액영업이익률"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2020",
+                "end": "2024"
+              },
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-15",
+      "query": "최근 2년간 경제심리지수(ESI, 원계열)를 월별 그래프로 보여줘",
+      "source": {
+        "used_part": "경제(소비자·기업)심리지수 간접 인용(주 근거는 매월 정기 발표 BSI·ESI 보도자료)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000347/view.do?menuNo=200761&nttId=10093387"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_513Y001",
+              "table_name": "경제심리지수"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-15-S1",
+              "label": "경제심리지수(원계열)",
+              "org_id": "301",
+              "table_id": "DT_513Y001",
+              "item_id": "13103134473999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134473ACC_CD.E1000",
+                  "name": "경제심리지수(원계열)"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202409",
+                "end": "202608"
+              },
+              "unit": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-16",
+      "query": "2024년 공산품과 서비스의 생산자물가가 어떻게 달랐는지 월별로 비교해줘",
+      "source": {
+        "used_part": "간행물 인쇄 49쪽(PDF 51쪽), (다) 분류체계 ① 기본분류 — 생산자물가지수 5개 대분류 중 공산품·서비스 설명 문단",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000228/view.do?nttId=10088874&searchCnd=1&searchKwd=%EC%9A%B0%EB%A6%AC%EB%82%98%EB%9D%BC%EC%9D%98+%EB%AC%BC%EA%B0%80%ED%86%B5%EA%B3%84&depth2=200699&depth=200699&pageUnit=10&pageIndex=1&programType=newsData&menuNo=200642&oldMenuNo=200699"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_404Y014",
+              "table_name": "생산자물가지수(기본분류)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-16-S1",
+              "label": "공산품",
+              "org_id": "301",
+              "table_id": "DT_404Y014",
+              "item_id": "13103134604999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134604ACC_CD.3AA",
+                  "name": "공산품"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            },
+            {
+              "series_id": "CV-AB-16-S2",
+              "label": "서비스",
+              "org_id": "301",
+              "table_id": "DT_404Y014",
+              "item_id": "13103134604999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134604ACC_CD.5AA",
+                  "name": "서비스"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-17",
+      "query": "2024년 신선식품 생산자물가와 신선식품을 뺀 물가를 월별 그래프로 비교해줘",
+      "source": {
+        "used_part": "간행물 인쇄 50쪽(PDF 52쪽), ② 특수분류 ㉯ 신선식품·신선식품이외 정의 문단",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000228/view.do?nttId=10088874&searchCnd=1&searchKwd=%EC%9A%B0%EB%A6%AC%EB%82%98%EB%9D%BC%EC%9D%98+%EB%AC%BC%EA%B0%80%ED%86%B5%EA%B3%84&depth2=200699&depth=200699&pageUnit=10&pageIndex=1&programType=newsData&menuNo=200642&oldMenuNo=200699"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_404Y015",
+              "table_name": "생산자물가지수(특수분류)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-17-S1",
+              "label": "신선식품",
+              "org_id": "301",
+              "table_id": "DT_404Y015",
+              "item_id": "13103134727999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134727ACC_CD.S210AA",
+                  "name": "신선식품"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            },
+            {
+              "series_id": "CV-AB-17-S2",
+              "label": "신선식품이외",
+              "org_id": "301",
+              "table_id": "DT_404Y015",
+              "item_id": "13103134727999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134727ACC_CD.S220AA",
+                  "name": "신선식품이외"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-18",
+      "query": "2024년에 산업용 전력 가격이 어느 달에 가장 크게 변했는지 월별 그래프로 보여줘",
+      "source": {
+        "used_part": "간행물 인쇄 48쪽(PDF 50쪽), ② 품목별 가중치 및 <그림 3> 신지수 가중치 10대 품목(2024년) — 산업용전력 언급",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000228/view.do?nttId=10088874&searchCnd=1&searchKwd=%EC%9A%B0%EB%A6%AC%EB%82%98%EB%9D%BC%EC%9D%98+%EB%AC%BC%EA%B0%80%ED%86%B5%EA%B3%84&depth2=200699&depth=200699&pageUnit=10&pageIndex=1&programType=newsData&menuNo=200642&oldMenuNo=200699"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_404Y016",
+              "table_name": "생산자물가지수(품목별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-18-S1",
+              "label": "산업용전력",
+              "org_id": "301",
+              "table_id": "DT_404Y016",
+              "item_id": "13103134764999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134764ACC_CD.40111103AA",
+                  "name": "산업용전력"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202312",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-19",
+      "query": "2024년 수입 원재료와 중간재의 물가 흐름을 원화 기준으로 월별 비교해줘",
+      "source": {
+        "used_part": "간행물 인쇄 97~98쪽(PDF 99~100쪽), (다) 분류체계 ② 특수분류(용도별) 및 <표 17> 원재료·중간재 가중치",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000228/view.do?nttId=10088874&searchCnd=1&searchKwd=%EC%9A%B0%EB%A6%AC%EB%82%98%EB%9D%BC%EC%9D%98+%EB%AC%BC%EA%B0%80%ED%86%B5%EA%B3%84&depth2=200699&depth=200699&pageUnit=10&pageIndex=1&programType=newsData&menuNo=200642&oldMenuNo=200699"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_401Y018",
+              "table_name": "수입물가지수(용도별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-19-S1",
+              "label": "원재료",
+              "org_id": "301",
+              "table_id": "DT_401Y018",
+              "item_id": "13103134729999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134729ACC_CD.110AA",
+                  "name": "원재료"
+                },
+                "objL2": {
+                  "code": "13102134729CRR_CTRT_CD.W",
+                  "name": "원화기준"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            },
+            {
+              "series_id": "CV-AB-19-S2",
+              "label": "중간재",
+              "org_id": "301",
+              "table_id": "DT_401Y018",
+              "item_id": "13103134729999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134729ACC_CD.120AA",
+                  "name": "중간재"
+                },
+                "objL2": {
+                  "code": "13102134729CRR_CTRT_CD.W",
+                  "name": "원화기준"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-20",
+      "query": "2024년 수출 공산품과 농림수산품의 가격이 전년보다 얼마나 올랐는지 원화 기준 막대그래프로 비교해줘",
+      "source": {
+        "used_part": "간행물 인쇄 97쪽·103쪽(PDF 99쪽·105쪽), (다) 분류체계 ① 기본분류(농림수산품·공산품) 및 (6) 이용상의 유의점(원화·계약통화·달러화 기준 설명)",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000228/view.do?nttId=10088874&searchCnd=1&searchKwd=%EC%9A%B0%EB%A6%AC%EB%82%98%EB%9D%BC%EC%9D%98+%EB%AC%BC%EA%B0%80%ED%86%B5%EA%B3%84&depth2=200699&depth=200699&pageUnit=10&pageIndex=1&programType=newsData&menuNo=200642&oldMenuNo=200699"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_402Y014",
+              "table_name": "수출물가지수(기본분류)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-20-S1",
+              "label": "공산품",
+              "org_id": "301",
+              "table_id": "DT_402Y014",
+              "item_id": "13103134642999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134642ACC_CD.3AA",
+                  "name": "공산품"
+                },
+                "objL2": {
+                  "code": "13102134642CRR_CTRT_CD.W",
+                  "name": "원화기준"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2024"
+              },
+              "unit": "2020=100"
+            },
+            {
+              "series_id": "CV-AB-20-S2",
+              "label": "농림수산품",
+              "org_id": "301",
+              "table_id": "DT_402Y014",
+              "item_id": "13103134642999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134642ACC_CD.1AA",
+                  "name": "농림수산품"
+                },
+                "objL2": {
+                  "code": "13102134642CRR_CTRT_CD.W",
+                  "name": "원화기준"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2024"
+              },
+              "unit": "2020=100"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-21",
+      "query": "2024년 국내에 공급된 원재료·중간재·최종재 물가 흐름을 월별로 한 그래프에서 비교해줘",
+      "source": {
+        "used_part": "간행물 인쇄 114~115쪽(PDF 116~117쪽), 3. 국내공급물가지수 및 총산출물가지수 가.연혁 및 (2) 분류체계 <표 20> 원재료·중간재·최종재",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000228/view.do?nttId=10088874&searchCnd=1&searchKwd=%EC%9A%B0%EB%A6%AC%EB%82%98%EB%9D%BC%EC%9D%98+%EB%AC%BC%EA%B0%80%ED%86%B5%EA%B3%84&depth2=200699&depth=200699&pageUnit=10&pageIndex=1&programType=newsData&menuNo=200642&oldMenuNo=200699"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_405Y006",
+              "table_name": "국내공급물가지수"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-21-S1",
+              "label": "원재료",
+              "org_id": "301",
+              "table_id": "DT_405Y006",
+              "item_id": "13103134640999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134640ACC_CD.100A",
+                  "name": "원재료"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            },
+            {
+              "series_id": "CV-AB-21-S2",
+              "label": "중간재",
+              "org_id": "301",
+              "table_id": "DT_405Y006",
+              "item_id": "13103134640999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134640ACC_CD.200A",
+                  "name": "중간재"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            },
+            {
+              "series_id": "CV-AB-21-S3",
+              "label": "최종재",
+              "org_id": "301",
+              "table_id": "DT_405Y006",
+              "item_id": "13103134640999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134640ACC_CD.300A",
+                  "name": "최종재"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-AB-22",
+      "query": "2024년에 국내에서 생산해 국내에 팔거나 수출한 것들의 전체 물가 흐름을 월별로 보여줘",
+      "source": {
+        "used_part": "간행물 인쇄 114~118쪽(PDF 116~120쪽), 3. 국내공급물가지수 및 총산출물가지수 가.연혁, (1) 모집단거래액(국내출하액+수출액) — 총산출물가지수 총지수 설명",
+        "url": "https://www.bok.or.kr/portal/bbs/B0000228/view.do?nttId=10088874&searchCnd=1&searchKwd=%EC%9A%B0%EB%A6%AC%EB%82%98%EB%9D%BC%EC%9D%98+%EB%AC%BC%EA%B0%80%ED%86%B5%EA%B3%84&depth2=200699&depth=200699&pageUnit=10&pageIndex=1&programType=newsData&menuNo=200642&oldMenuNo=200699"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_405Y007",
+              "table_name": "총산출물가지수"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AB-22-S1",
+              "label": "총지수",
+              "org_id": "301",
+              "table_id": "DT_405Y007",
+              "item_id": "13103134577999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134577ACC_CD.*A",
+                  "name": "총지수"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "2020=100"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

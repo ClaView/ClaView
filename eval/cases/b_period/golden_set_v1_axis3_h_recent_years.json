@@ -1,0 +1,550 @@
+{
+  "schema_version": "claview-ab/0.4-draft-period-augmented",
+  "dataset_id": "claview-golden-set-v1-axis3-h-recent-years-8",
+  "cases": [
+    {
+      "case_id": "AX3-A-01",
+      "query": "최근 1년간 예금규모별 저축성예금 계좌수 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202501",
+          "end": "202502"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202401",
+          "end": "202502"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202501",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-A-01-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202501",
+                "end": "202502"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-A-02",
+      "query": "최근 2년간 예금규모별 저축성예금 계좌수 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202401",
+          "end": "202502"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202301",
+          "end": "202502"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202401",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-A-02-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202401",
+                "end": "202502"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-A-03",
+      "query": "최근 3년간 예금규모별 저축성예금 계좌수 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202301",
+          "end": "202502"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202201",
+          "end": "202502"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202301",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-A-03-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202301",
+                "end": "202502"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-A-04",
+      "query": "최근 10년간 예금규모별 저축성예금 계좌수 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "201601",
+          "end": "202502"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "201501",
+          "end": "202502"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "201601",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-A-04-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "201601",
+                "end": "202502"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-A-05",
+      "query": "최근 1년간 지식서비스 무역통계 수출(IT 개발 및 운영 서비스) 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202502",
+          "end": "202601"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202501",
+          "end": "202601"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202501",
+          "end": "202601"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "table_name": "지식서비스 무역통계(유형별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-A-05-S1",
+              "label": "지식서비스 무역통계(유형별) / 수출 / IT 개발 및 운영 서비스",
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "item_id": "13103836578999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102836578GUBUN_CD.AA0200",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102836578ACC_ITEM.ISA0210",
+                  "name": "IT 개발 및 운영 서비스"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202502",
+                "end": "202601"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-A-06",
+      "query": "최근 3년간 지식서비스 무역통계 수출(IT 개발 및 운영 서비스) 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202302",
+          "end": "202601"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202301",
+          "end": "202601"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202301",
+          "end": "202601"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "table_name": "지식서비스 무역통계(유형별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-A-06-S1",
+              "label": "지식서비스 무역통계(유형별) / 수출 / IT 개발 및 운영 서비스",
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "item_id": "13103836578999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102836578GUBUN_CD.AA0200",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102836578ACC_ITEM.ISA0210",
+                  "name": "IT 개발 및 운영 서비스"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202302",
+                "end": "202601"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-A-07",
+      "query": "최근 5년간 지식서비스 무역통계 수출(IT 개발 및 운영 서비스) 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202102",
+          "end": "202601"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202101",
+          "end": "202601"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202101",
+          "end": "202601"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "table_name": "지식서비스 무역통계(유형별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-A-07-S1",
+              "label": "지식서비스 무역통계(유형별) / 수출 / IT 개발 및 운영 서비스",
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "item_id": "13103836578999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102836578GUBUN_CD.AA0200",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102836578ACC_ITEM.ISA0210",
+                  "name": "IT 개발 및 운영 서비스"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202102",
+                "end": "202601"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-A-08",
+      "query": "최근 10년간 지식서비스 무역통계 수출(IT 개발 및 운영 서비스) 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "201602",
+          "end": "202601"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "201601",
+          "end": "202601"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "201601",
+          "end": "202601"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "table_name": "지식서비스 무역통계(유형별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-A-08-S1",
+              "label": "지식서비스 무역통계(유형별) / 수출 / IT 개발 및 운영 서비스",
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "item_id": "13103836578999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102836578GUBUN_CD.AA0200",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102836578ACC_ITEM.ISA0210",
+                  "name": "IT 개발 및 운영 서비스"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "201602",
+                "end": "202601"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    }
+  ]
+}

@@ -13,3 +13,9 @@
 - 공통 모델의 기준을 중복 관리하지 않습니다. 공통 규격 변경은 사용하는 기능과 테스트를 함께 확인합니다.
 - 노션은 일정·업무·회의, 저장소는 코드·구현 문서·재현 자료의 기준입니다.
 - 기존 자료를 임의로 이동·삭제하지 않습니다. Git 초기화·이력 변경·commit·push는 별도 요청에 따릅니다.
+
+## 통합 브랜치(integrated-router) 추가 원칙
+
+- `src/claview_v3/`·`tests_v3/`(A)와 `src/claview/`·`tests/`·`packages/claview-period/`(B) 등 복사한 파일은 출처 바이트 그대로 둡니다. 출처와 해시는 `docs/통합_출처_해시.json`에 있습니다. 동작을 바꿀 때는 해당 파트 담당과 합의합니다.
+- A·B 연결 코드는 `src/claview_flow/`에만 둡니다. 합성 B 모델·조회는 `tests_flow/`에만 두고 정확도 근거로 쓰지 않습니다.
+- 시험은 A(`tests_v3`), B(`tests`), 기간 패키지, 통합(`tests_flow`)을 각각 다른 pytest 프로세스로 돌립니다(README 2절).

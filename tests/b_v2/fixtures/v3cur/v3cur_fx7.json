@@ -1,0 +1,4721 @@
+{
+ "question": "2023년 원/달러 환율을 월별로 보여줘",
+ "as_of": "2026-10-20",
+ "request_id": "fx7",
+ "analysis": {
+  "text": {
+   "raw": "2023년 원/달러 환율을 월별로 보여줘",
+   "norm": "2023년 원/달러 환율을 월별로 보여줘",
+   "nospace": "2023년원/달러환율을월별로보여줘",
+   "offsets": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+   ]
+  },
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2023년",
+    "span": [
+     0,
+     5
+    ],
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "2023년",
+      "year": "2023",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    },
+    "status": "candidate"
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "span": [
+     15,
+     17
+    ],
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    },
+    "status": "candidate"
+   }
+  ],
+  "fragments": [
+   {
+    "id": "g1",
+    "quote": "원/달러 환율을",
+    "span": [
+     6,
+     14
+    ],
+    "role": "core",
+    "protected_by": null,
+    "phrase": "item"
+   }
+  ],
+  "terms": [
+   {
+    "fragment_id": "g1",
+    "name": "달러 (아세안)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (중국)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (기타)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (EU(영국제외))",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (EU)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (일본)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (중동)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (중남미)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (전체)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (미국)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (동남아)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (호주)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (브라질)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (영국)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (홍콩)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (인도네시아)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (인도)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (러시아)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (사우디아라비아)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (싱가포르)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (대만)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "달러 (베트남)",
+    "type": "target",
+    "table_ids": [
+     "DT_303Y002",
+     "DT_303Y005"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "환율",
+    "type": "indicator",
+    "table_ids": [
+     "DT_512Y021"
+    ],
+    "obj_id": "13101135843DIFF_CD",
+    "obj_name": "경영애로사항코드별",
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   }
+  ],
+  "judgement": {
+   "pairs": [],
+   "requirement_draft": [
+    {
+     "id": "d1",
+     "fragment_ids": [
+      "g1"
+     ],
+     "indicator_fragment_id": "g1",
+     "indicator": "환율",
+     "context": null,
+     "targets": [
+      "달러"
+     ],
+     "breakdown": [],
+     "condition_ids": [],
+     "status": "ok",
+     "broad": false,
+     "row": 4
+    }
+   ],
+   "certain": false,
+   "failed_conditions": [
+    "inexact_term",
+    "leftover_word",
+    "scope_ambiguous"
+   ],
+   "attribution": {
+    "P1": "common",
+    "F1": "common"
+   },
+   "table_group_hint": [],
+   "calc_hints": [],
+   "negated": [],
+   "leftover": [
+    "원"
+   ],
+   "unused_names": [],
+   "structure": "{\"clauses\":1,\"conditions\":[\"frequency@in\",\"period@in\"],\"context\":false,\"drafts\":1,\"items\":[[1]],\"other_clauses\":0,\"phrases\":[],\"relation_operands\":[],\"rows\":[4]}",
+   "failed_sources": [
+    {
+     "condition": "inexact_term",
+     "requirement_ids": [
+      "r1"
+     ],
+     "detail": "weak_indicator:indicator",
+     "condition_ids": [],
+     "fragment_ids": [
+      "g1"
+     ]
+    },
+    {
+     "condition": "inexact_term",
+     "requirement_ids": [
+      "r1"
+     ],
+     "detail": "no_catalog_name:target",
+     "condition_ids": [],
+     "fragment_ids": [
+      "g1"
+     ]
+    },
+    {
+     "condition": "scope_ambiguous",
+     "requirement_ids": [],
+     "detail": "group_scope",
+     "condition_ids": [],
+     "fragment_ids": [
+      "g1"
+     ]
+    },
+    {
+     "condition": "leftover_word",
+     "requirement_ids": [],
+     "detail": "leftover",
+     "condition_ids": [],
+     "fragment_ids": []
+    }
+   ],
+   "model_step": "pending"
+  },
+  "interpretation": {
+   "status": "ask",
+   "common_condition_ids": [],
+   "relations": [],
+   "display_condition_ids": [],
+   "requirements": [
+    {
+     "id": "r1",
+     "quote": "2023년 원/달러 환율을 월별로",
+     "span": [
+      0,
+      18
+     ],
+     "indicator": {
+      "quote": "환율",
+      "span": [
+       11,
+       13
+      ],
+      "fragment_id": "g1",
+      "name": "환율",
+      "path": "exact"
+     },
+     "measure_kind": null,
+     "targets": [
+      {
+       "quote": "달러",
+       "span": [
+        8,
+        10
+       ],
+       "fragment_id": "g1",
+       "name": "달러"
+      }
+     ],
+     "condition_ids": [
+      "P1",
+      "F1"
+     ],
+     "shared_condition_ids": [],
+     "ambiguous_condition_ids": [],
+     "status": "ok",
+     "reasons": [
+      "row:4"
+     ],
+     "context": null,
+     "breakdown": []
+    }
+   ],
+   "reasons": [
+    "inexact_term",
+    "leftover_word",
+    "scope_ambiguous"
+   ],
+   "table_group_hint": []
+  },
+  "segments": [
+   {
+    "segment_id": "s1",
+    "span": [
+     0,
+     5
+    ],
+    "quote": "2023년",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s2",
+    "span": [
+     5,
+     6
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s3",
+    "span": [
+     6,
+     7
+    ],
+    "quote": "원",
+    "kind": "word"
+   },
+   {
+    "segment_id": "s4",
+    "span": [
+     7,
+     8
+    ],
+    "quote": "/",
+    "kind": "punct"
+   },
+   {
+    "segment_id": "s5",
+    "span": [
+     8,
+     10
+    ],
+    "quote": "달러",
+    "kind": "name"
+   },
+   {
+    "segment_id": "s6",
+    "span": [
+     10,
+     11
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s7",
+    "span": [
+     11,
+     13
+    ],
+    "quote": "환율",
+    "kind": "name"
+   },
+   {
+    "segment_id": "s8",
+    "span": [
+     13,
+     14
+    ],
+    "quote": "을",
+    "kind": "grammar"
+   },
+   {
+    "segment_id": "s9",
+    "span": [
+     14,
+     15
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s10",
+    "span": [
+     15,
+     17
+    ],
+    "quote": "월별",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s11",
+    "span": [
+     17,
+     18
+    ],
+    "quote": "로",
+    "kind": "grammar"
+   },
+   {
+    "segment_id": "s12",
+    "span": [
+     18,
+     19
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s13",
+    "span": [
+     19,
+     22
+    ],
+    "quote": "보여줘",
+    "kind": "request"
+   }
+  ],
+  "mentions": [
+   {
+    "mention_id": "m1",
+    "kind": "condition",
+    "segment_ids": [
+     "s1"
+    ],
+    "condition_ids": [
+     "P1"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m2",
+    "kind": "name",
+    "segment_ids": [
+     "s5"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXASEANUSD",
+      "value_name": "달러 (아세안)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXCNUSD",
+      "value_name": "달러 (중국)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXETCUSD",
+      "value_name": "달러 (기타)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXEU27USD",
+      "value_name": "달러 (EU(영국제외))",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXEUUSD",
+      "value_name": "달러 (EU)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXJPUSD",
+      "value_name": "달러 (일본)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXMIUSD",
+      "value_name": "달러 (중동)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXSAUSD",
+      "value_name": "달러 (동남아)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXSMUSD",
+      "value_name": "달러 (중남미)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXTOTUSD",
+      "value_name": "달러 (전체)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y001",
+      "obj_id": "13101134484ACC_CD",
+      "value_id": "13102134484ACC_CD.REGEXUSUSD",
+      "value_name": "달러 (미국)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXAUUSD",
+      "value_name": "달러 (호주)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXBRUSD",
+      "value_name": "달러 (브라질)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXGBUSD",
+      "value_name": "달러 (영국)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXHKUSD",
+      "value_name": "달러 (홍콩)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXIDUSD",
+      "value_name": "달러 (인도네시아)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXINUSD",
+      "value_name": "달러 (인도)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXRUUSD",
+      "value_name": "달러 (러시아)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXSAUSD",
+      "value_name": "달러 (사우디아라비아)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXSGUSD",
+      "value_name": "달러 (싱가포르)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXTWUSD",
+      "value_name": "달러 (대만)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y002",
+      "obj_id": "13101134625ACC_CD",
+      "value_id": "13102134625ACC_CD.CTYEXVNUSD",
+      "value_name": "달러 (베트남)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMASEANUSD",
+      "value_name": "달러 (아세안)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMCNUSD",
+      "value_name": "달러 (중국)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMETCUSD",
+      "value_name": "달러 (기타)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMEU27USD",
+      "value_name": "달러 (EU(영국제외))",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMEUUSD",
+      "value_name": "달러 (EU)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMJPUSD",
+      "value_name": "달러 (일본)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMMIUSD",
+      "value_name": "달러 (중동)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMSAUSD",
+      "value_name": "달러 (동남아)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMSMUSD",
+      "value_name": "달러 (중남미)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMTOTUSD",
+      "value_name": "달러 (전체)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y004",
+      "obj_id": "13101134711ACC_CD",
+      "value_id": "13102134711ACC_CD.REGIMUSUSD",
+      "value_name": "달러 (미국)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMAUUSD",
+      "value_name": "달러 (호주)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMBRUSD",
+      "value_name": "달러 (브라질)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMGBUSD",
+      "value_name": "달러 (영국)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMHKUSD",
+      "value_name": "달러 (홍콩)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMIDUSD",
+      "value_name": "달러 (인도네시아)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMINUSD",
+      "value_name": "달러 (인도)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMRUUSD",
+      "value_name": "달러 (러시아)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMSAUSD",
+      "value_name": "달러 (사우디아라비아)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMSGUSD",
+      "value_name": "달러 (싱가포르)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMTWUSD",
+      "value_name": "달러 (대만)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_303Y005",
+      "obj_id": "13101134669ACC_CD",
+      "value_id": "13102134669ACC_CD.CTYIMVNUSD",
+      "value_name": "달러 (베트남)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     }
+    ],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m3",
+    "kind": "name",
+    "segment_ids": [
+     "s7"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [
+     {
+      "table_id": "DT_512Y021",
+      "obj_id": "13101135843DIFF_CD",
+      "value_id": "13102135843DIFF_CD.D11",
+      "value_name": "환율",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     }
+    ],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m4",
+    "kind": "condition",
+    "segment_ids": [
+     "s10"
+    ],
+    "condition_ids": [
+     "F1"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m5",
+    "kind": "request",
+    "segment_ids": [
+     "s13"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   }
+  ],
+  "ref_map": {
+   "segment_mentions": {
+    "s1": [
+     "m1"
+    ],
+    "s2": [],
+    "s3": [],
+    "s4": [],
+    "s5": [
+     "m2"
+    ],
+    "s6": [],
+    "s7": [
+     "m3"
+    ],
+    "s8": [],
+    "s9": [],
+    "s10": [
+     "m4"
+    ],
+    "s11": [],
+    "s12": [],
+    "s13": [
+     "m5"
+    ]
+   },
+   "segment_fragments": {
+    "s1": [],
+    "s2": [],
+    "s3": [
+     "g1"
+    ],
+    "s4": [
+     "g1"
+    ],
+    "s5": [
+     "g1"
+    ],
+    "s6": [
+     "g1"
+    ],
+    "s7": [
+     "g1"
+    ],
+    "s8": [
+     "g1"
+    ],
+    "s9": [],
+    "s10": [],
+    "s11": [],
+    "s12": [],
+    "s13": []
+   },
+   "fragment_segments": {
+    "g1": [
+     "s3",
+     "s4",
+     "s5",
+     "s6",
+     "s7",
+     "s8"
+    ]
+   },
+   "mention_fragments": {
+    "m1": [],
+    "m2": [
+     "g1"
+    ],
+    "m3": [
+     "g1"
+    ],
+    "m4": [],
+    "m5": []
+   }
+  },
+  "decomposition": {
+   "requested_mode": "rules",
+   "execution_mode": null,
+   "applied_source": "rules",
+   "fallback_reason": null,
+   "error_class": null,
+   "as_of": "2026-10-20",
+   "reading_id": null,
+   "verify": null,
+   "bindings": [],
+   "requirement_ids": {},
+   "assumption_seeds": [],
+   "certainty": null,
+   "alternative": null,
+   "rule_diagnostics": {
+    "certain": false,
+    "failed_conditions": [
+     "inexact_term",
+     "leftover_word",
+     "scope_ambiguous"
+    ],
+    "failed_sources": [
+     {
+      "condition": "inexact_term",
+      "requirement_ids": [
+       "r1"
+      ],
+      "detail": "weak_indicator:indicator",
+      "condition_ids": [],
+      "fragment_ids": [
+       "g1"
+      ]
+     },
+     {
+      "condition": "inexact_term",
+      "requirement_ids": [
+       "r1"
+      ],
+      "detail": "no_catalog_name:target",
+      "condition_ids": [],
+      "fragment_ids": [
+       "g1"
+      ]
+     },
+     {
+      "condition": "scope_ambiguous",
+      "requirement_ids": [],
+      "detail": "group_scope",
+      "condition_ids": [],
+      "fragment_ids": [
+       "g1"
+      ]
+     },
+     {
+      "condition": "leftover_word",
+      "requirement_ids": [],
+      "detail": "leftover",
+      "condition_ids": [],
+      "fragment_ids": []
+     }
+    ],
+    "status": "ask"
+   },
+   "rule_checks": [],
+   "condition_fields": {
+    "P1": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null,
+     "period_diagnosis": "ok"
+    },
+    "F1": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null
+    }
+   },
+   "inferred": {
+    "r1": []
+   }
+  }
+ },
+ "selections": [
+  {
+   "requirement_id": "r1",
+   "tables": [],
+   "unspecified": [],
+   "status": "no_table",
+   "model_step": "skipped",
+   "reasons": [
+    "no_cover"
+   ],
+   "alternatives": [],
+   "differences": [],
+   "signals": {
+    "pool": 18,
+    "with_evidence": 2,
+    "retried": false,
+    "cells": 1,
+    "covered": 0,
+    "alternatives": 0,
+    "queries": [
+     "환율",
+     "달러 환율"
+    ],
+    "term_tables": [],
+    "term_tables_truncated": false,
+    "conventions": [],
+    "score_gap": null,
+    "period_check": false,
+    "facts": {
+     "requirement": {
+      "identity": {
+       "fragment_ids": [
+        "g1"
+       ],
+       "conditions": [
+        "frequency::M:+",
+        "period:::+:point:2023////:////:::"
+       ],
+       "key": "g1#frequency::M:+|period:::+:point:2023////:////:::"
+      },
+      "period_request": {
+       "requested": true,
+       "relative": false,
+       "frequencies": [
+        "M"
+       ],
+       "start": "2023",
+       "end": "2023"
+      },
+      "period_anchor": [
+       {
+        "frequency": "M",
+        "anchor": null,
+        "resolved_range": [
+         "2023-01",
+         "2023-12"
+        ],
+        "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+        "relative": false,
+        "candidates": 1
+       }
+      ]
+     },
+     "tables": {
+      "DT_512Y021": {
+       "table_id": "DT_512Y021",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102135843DIFF_CD.D11",
+          "obj_id": "13101135843DIFF_CD",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "환율"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.01",
+            "2026.08"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_501Y054": {
+       "table_id": "DT_501Y054",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102134533ACC_ITEM.11242",
+          "obj_id": "13101134533ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "(환율조정차)"
+         }
+        ],
+        "partial_count": 1,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": true
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_303Y001": {
+       "table_id": "DT_303Y001",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1992.01",
+            "2025.12"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": true,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_303Y002": {
+       "table_id": "DT_303Y002",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1992.01",
+            "2025.12"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": true,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_303Y004": {
+       "table_id": "DT_303Y004",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1992.01",
+            "2025.12"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": true,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_303Y005": {
+       "table_id": "DT_303Y005",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1992.01",
+            "2025.12"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": true,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_311Y003": {
+       "table_id": "DT_311Y003",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_401Y015": {
+       "table_id": "DT_401Y015",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_401Y016": {
+       "table_id": "DT_401Y016",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_401Y017": {
+       "table_id": "DT_401Y017",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_501Y001": {
+       "table_id": "DT_501Y001",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_501Y049": {
+       "table_id": "DT_501Y049",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_501Y050": {
+       "table_id": "DT_501Y050",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_501Y051": {
+       "table_id": "DT_501Y051",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_501Y052": {
+       "table_id": "DT_501Y052",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_501Y053": {
+       "table_id": "DT_501Y053",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_501Y055": {
+       "table_id": "DT_501Y055",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": false
+        }
+       ],
+       "lower_items": []
+      },
+      "DT_401Y018": {
+       "table_id": "DT_401Y018",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "환율",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2023-01",
+           "2023-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 1
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        },
+        {
+         "check": "region",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "present": false,
+         "partial": true
+        }
+       ],
+       "lower_items": []
+      }
+     }
+    },
+    "covers_all": {},
+    "pool_cut": {
+     "caps": {
+      "channel:title": 0,
+      "channel:item": 6,
+      "pool": 0,
+      "term_tables": 0
+     },
+     "cut": 6,
+     "matched_count": 0,
+     "matched": [],
+     "restorable": 0,
+     "restored": [],
+     "left_out": 6,
+     "unchecked": 0,
+     "restoration_cut": false,
+     "pool_cut": false
+    },
+    "pruned": {
+     "records": [],
+     "options": 0,
+     "options_cut": false
+    },
+    "decision_preview": {
+     "needs": {
+      "requirement_id": "r1",
+      "identity": {
+       "fragment_ids": [
+        "g1"
+       ],
+       "conditions": [
+        "frequency::M:+",
+        "period:::+:point:2023////:////:::"
+       ],
+       "key": "g1#frequency::M:+|period:::+:point:2023////:////:::"
+      },
+      "certainty": {
+       "all": true,
+       "condition_ids": [],
+       "fragment_ids": [
+        "g1"
+       ],
+       "sources": [
+        {
+         "condition": "inexact_term",
+         "requirement_ids": [
+          "r1"
+         ],
+         "detail": "weak_indicator:indicator",
+         "condition_ids": [],
+         "fragment_ids": [
+          "g1"
+         ]
+        },
+        {
+         "condition": "inexact_term",
+         "requirement_ids": [
+          "r1"
+         ],
+         "detail": "no_catalog_name:target",
+         "condition_ids": [],
+         "fragment_ids": [
+          "g1"
+         ]
+        },
+        {
+         "condition": "scope_ambiguous",
+         "requirement_ids": [],
+         "detail": "group_scope",
+         "condition_ids": [],
+         "fragment_ids": [
+          "g1"
+         ]
+        },
+        {
+         "condition": "leftover_word",
+         "requirement_ids": [],
+         "detail": "leftover",
+         "condition_ids": [],
+         "fragment_ids": []
+        }
+       ]
+      },
+      "filter": {
+       "negated": [],
+       "negated_fragment_ids": [],
+       "negated_settled": false,
+       "forbidden": []
+      },
+      "evidence": {
+       "indicator": {
+        "name": "환율",
+        "quote": "환율",
+        "path": "exact",
+        "fragment_id": "g1",
+        "settled": false,
+        "mapped": true
+       },
+       "targets": [
+        {
+         "name": "달러",
+         "quote": "달러",
+         "named": true,
+         "fragment_id": "g1",
+         "settled": false,
+         "mapped": false
+        }
+       ],
+       "lower_items": [],
+       "conditions": [
+        {
+         "condition_id": "P1",
+         "kind": "period",
+         "axis": null,
+         "value": null,
+         "polarity": "+",
+         "byeol": false,
+         "settled": false
+        },
+        {
+         "condition_id": "F1",
+         "kind": "frequency",
+         "axis": null,
+         "value": "M",
+         "polarity": "+",
+         "byeol": false,
+         "settled": false
+        }
+       ]
+      },
+      "set": [],
+      "causes": [
+       {
+        "kind": "failed_source",
+        "condition": "inexact_term",
+        "requirement_ids": [
+         "r1"
+        ],
+        "detail": "weak_indicator:indicator",
+        "condition_ids": [],
+        "fragment_ids": [
+         "g1"
+        ]
+       },
+       {
+        "kind": "failed_source",
+        "condition": "inexact_term",
+        "requirement_ids": [
+         "r1"
+        ],
+        "detail": "no_catalog_name:target",
+        "condition_ids": [],
+        "fragment_ids": [
+         "g1"
+        ]
+       },
+       {
+        "kind": "failed_source",
+        "condition": "scope_ambiguous",
+        "requirement_ids": [],
+        "detail": "group_scope",
+        "condition_ids": [],
+        "fragment_ids": [
+         "g1"
+        ]
+       },
+       {
+        "kind": "failed_source",
+        "condition": "leftover_word",
+        "requirement_ids": [],
+        "detail": "leftover",
+        "condition_ids": [],
+        "fragment_ids": []
+       },
+       {
+        "kind": "target_name",
+        "detail": "no_term"
+       }
+      ]
+     },
+     "candidates": {
+      "pool": 18,
+      "restored": [],
+      "alive": 18,
+      "live": 18,
+      "editions": 18,
+      "tried": 0
+     },
+     "refutations": {
+      "tables": {},
+      "cells": {}
+     },
+     "cells": 1,
+     "decision": {
+      "unit": "r1",
+      "requirement_ids": [
+       "r1"
+      ],
+      "alternatives": [
+       {
+        "assignment": {
+         "r1": [
+          "DT_303Y002"
+         ]
+        },
+        "tables": [
+         "DT_303Y002"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -25.3563,
+         -0.0,
+         "국가별결제통화",
+         [
+          3
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a1"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_303Y005"
+         ]
+        },
+        "tables": [
+         "DT_303Y005"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -25.3563,
+         -0.0,
+         "국가별결제통화",
+         [
+          5
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a2"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_303Y001"
+         ]
+        },
+        "tables": [
+         "DT_303Y001"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -25.3563,
+         -0.0,
+         "지역별결제통화",
+         [
+          2
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a3"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_303Y004"
+         ]
+        },
+        "tables": [
+         "DT_303Y004"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -25.3563,
+         -0.0,
+         "지역별결제통화",
+         [
+          4
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a4"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_512Y021"
+         ]
+        },
+        "tables": [
+         "DT_512Y021"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [],
+        "label": "proven",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -21.0,
+         -1.0,
+         "table:DT_512Y021",
+         [
+          0
+         ]
+        ],
+        "indicator_relation": "component",
+        "id": "r1.a5"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_401Y015"
+         ]
+        },
+        "tables": [
+         "DT_401Y015"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -5.3563,
+         -0.0,
+         "수입물가지수",
+         [
+          7
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a6"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_401Y016"
+         ]
+        },
+        "tables": [
+         "DT_401Y016"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -5.3563,
+         -0.0,
+         "수입물가지수",
+         [
+          8
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a7"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_401Y017"
+         ]
+        },
+        "tables": [
+         "DT_401Y017"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -5.3563,
+         -0.0,
+         "수입물가지수",
+         [
+          9
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a8"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_401Y018"
+         ]
+        },
+        "tables": [
+         "DT_401Y018"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -5.0,
+         -0.0,
+         "수입물가지수",
+         [
+          17
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a9"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y054"
+         ]
+        },
+        "tables": [
+         "DT_501Y054"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         9.5,
+         -1.0,
+         "재무상태표",
+         [
+          1
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a10"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_311Y003"
+         ]
+        },
+        "tables": [
+         "DT_311Y003"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         19.6437,
+         -0.0,
+         "table:DT_311Y003",
+         [
+          6
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a11"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y001"
+         ]
+        },
+        "tables": [
+         "DT_501Y001"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          10
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a12"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y049"
+         ]
+        },
+        "tables": [
+         "DT_501Y049"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          11
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a13"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y050"
+         ]
+        },
+        "tables": [
+         "DT_501Y050"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          12
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a14"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y051"
+         ]
+        },
+        "tables": [
+         "DT_501Y051"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          13
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a15"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y052"
+         ]
+        },
+        "tables": [
+         "DT_501Y052"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          14
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a16"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y053"
+         ]
+        },
+        "tables": [
+         "DT_501Y053"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          15
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a17"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y055"
+         ]
+        },
+        "tables": [
+         "DT_501Y055"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          16
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a18"
+       }
+      ],
+      "dimensions": [
+       {
+        "name": "other",
+        "kind": "other",
+        "values": [
+         "수입",
+         "수출",
+         "axis_values",
+         "classification",
+         "survey_method",
+         "제11차",
+         "한국표준산업분류",
+         "size_law"
+        ],
+        "alternative_ids": [
+         "r1.a2",
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "family",
+        "kind": "family",
+        "values": [],
+        "alternative_ids": [
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "mixed_basis",
+        "kind": "mixed_basis",
+        "values": [
+         "currency"
+        ],
+        "alternative_ids": [
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "frequency",
+        "kind": "frequency",
+        "values": [
+         "frequencies"
+        ],
+        "alternative_ids": [
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "relation",
+        "kind": "relation",
+        "values": [
+         "undetermined",
+         "component"
+        ],
+        "alternative_ids": [
+         "r1.a5"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "period",
+        "kind": "period",
+        "values": [
+         "1997~1998",
+         "2009~",
+         "2015~2016",
+         "2009~2014",
+         "2008~2010",
+         "2000~2007",
+         "1999",
+         "1990~1996"
+        ],
+        "alternative_ids": [
+         "r1.a10",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       }
+      ],
+      "cut": {
+       "pool_cut": false,
+       "cover_cut": false,
+       "decision_cut": false
+      },
+      "gaps": [],
+      "today": {
+       "tables": [],
+       "in_alternatives": false,
+       "first": false,
+       "alternative_id": null,
+       "explained_by": []
+      }
+     },
+     "bundle": {
+      "unit": "r1",
+      "requirement_ids": [
+       "r1"
+      ],
+      "alternatives": [
+       {
+        "assignment": {
+         "r1": [
+          "DT_303Y002"
+         ]
+        },
+        "tables": [
+         "DT_303Y002"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -25.3563,
+         -0.0,
+         "국가별결제통화",
+         [
+          3
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a1"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_303Y005"
+         ]
+        },
+        "tables": [
+         "DT_303Y005"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -25.3563,
+         -0.0,
+         "국가별결제통화",
+         [
+          5
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a2"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_303Y001"
+         ]
+        },
+        "tables": [
+         "DT_303Y001"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -25.3563,
+         -0.0,
+         "지역별결제통화",
+         [
+          2
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a3"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_303Y004"
+         ]
+        },
+        "tables": [
+         "DT_303Y004"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -25.3563,
+         -0.0,
+         "지역별결제통화",
+         [
+          4
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a4"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_512Y021"
+         ]
+        },
+        "tables": [
+         "DT_512Y021"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [],
+        "label": "proven",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -21.0,
+         -1.0,
+         "table:DT_512Y021",
+         [
+          0
+         ]
+        ],
+        "indicator_relation": "component",
+        "id": "r1.a5"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_401Y015"
+         ]
+        },
+        "tables": [
+         "DT_401Y015"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -5.3563,
+         -0.0,
+         "수입물가지수",
+         [
+          7
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a6"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_401Y016"
+         ]
+        },
+        "tables": [
+         "DT_401Y016"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -5.3563,
+         -0.0,
+         "수입물가지수",
+         [
+          8
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a7"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_401Y017"
+         ]
+        },
+        "tables": [
+         "DT_401Y017"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -5.3563,
+         -0.0,
+         "수입물가지수",
+         [
+          9
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a8"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_401Y018"
+         ]
+        },
+        "tables": [
+         "DT_401Y018"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         -5.0,
+         -0.0,
+         "수입물가지수",
+         [
+          17
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a9"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y054"
+         ]
+        },
+        "tables": [
+         "DT_501Y054"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         9.5,
+         -1.0,
+         "재무상태표",
+         [
+          1
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a10"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_311Y003"
+         ]
+        },
+        "tables": [
+         "DT_311Y003"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         19.6437,
+         -0.0,
+         "table:DT_311Y003",
+         [
+          6
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a11"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y001"
+         ]
+        },
+        "tables": [
+         "DT_501Y001"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          10
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a12"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y049"
+         ]
+        },
+        "tables": [
+         "DT_501Y049"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          11
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a13"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y050"
+         ]
+        },
+        "tables": [
+         "DT_501Y050"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          12
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a14"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y051"
+         ]
+        },
+        "tables": [
+         "DT_501Y051"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          13
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a15"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y052"
+         ]
+        },
+        "tables": [
+         "DT_501Y052"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          14
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a16"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y053"
+         ]
+        },
+        "tables": [
+         "DT_501Y053"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          15
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a17"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_501Y055"
+         ]
+        },
+        "tables": [
+         "DT_501Y055"
+        ],
+        "complete": true,
+        "covered": 1,
+        "cells": 1,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -1,
+         1,
+         20.0,
+         -0.0,
+         "재무상태표",
+         [
+          16
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a18"
+       }
+      ],
+      "dimensions": [
+       {
+        "name": "other",
+        "kind": "other",
+        "values": [
+         "수입",
+         "수출",
+         "axis_values",
+         "classification",
+         "survey_method",
+         "제11차",
+         "한국표준산업분류",
+         "size_law"
+        ],
+        "alternative_ids": [
+         "r1.a2",
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "family",
+        "kind": "family",
+        "values": [],
+        "alternative_ids": [
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "mixed_basis",
+        "kind": "mixed_basis",
+        "values": [
+         "currency"
+        ],
+        "alternative_ids": [
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "frequency",
+        "kind": "frequency",
+        "values": [
+         "frequencies"
+        ],
+        "alternative_ids": [
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "relation",
+        "kind": "relation",
+        "values": [
+         "undetermined",
+         "component"
+        ],
+        "alternative_ids": [
+         "r1.a5"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "period",
+        "kind": "period",
+        "values": [
+         "1997~1998",
+         "2009~",
+         "2015~2016",
+         "2009~2014",
+         "2008~2010",
+         "2000~2007",
+         "1999",
+         "1990~1996"
+        ],
+        "alternative_ids": [
+         "r1.a10",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18"
+        ],
+        "set_by_question": false
+       }
+      ],
+      "cut": {
+       "pool_cut": false,
+       "cover_cut": false,
+       "decision_cut": false
+      },
+      "gaps": [],
+      "today": {
+       "tables": [],
+       "in_alternatives": false,
+       "first": false,
+       "alternative_id": null,
+       "explained_by": []
+      }
+     }
+    }
+   }
+  }
+ ],
+ "selection_groups": [],
+ "selection_route": {
+  "kind": "no_table",
+  "requirement_ids": [
+   "r1"
+  ],
+  "options": [],
+  "default": null,
+  "reasons": [
+   "no_cover"
+  ],
+  "partial": false,
+  "confirm": false,
+  "questions": []
+ },
+ "requirements": [
+  {
+   "scope_id": "r1",
+   "text": "2023년 원/달러 환율을 월별로",
+   "a_status": "no_table",
+   "gaps": [],
+   "reason_codes": [
+    "interp:ok",
+    "row:4",
+    "select:no_cover"
+   ],
+   "source": "A"
+  }
+ ],
+ "unresolved": [
+  {
+   "scope_id": "r1",
+   "kind": "no_table",
+   "detail": [
+    "no_cover"
+   ],
+   "from_node": "select"
+  },
+  {
+   "scope_id": "r1",
+   "kind": "requirement_not_met",
+   "detail": "no_table",
+   "from_node": "A"
+  }
+ ],
+ "selection": {
+  "tables": [],
+  "backups": []
+ }
+}

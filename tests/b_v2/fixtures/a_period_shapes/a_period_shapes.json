@@ -1,0 +1,151 @@
+[
+ {
+  "question": "최근 3개월 소비자물가지수를 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 3개월",
+    "span": [
+     0,
+     6
+    ],
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 3,
+     "unit": "month",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "unresolved"
+    },
+    "status": "candidate"
+   }
+  ],
+  "a_diagnosis": {
+   "P1": "unsupported"
+  }
+ },
+ {
+  "question": "지난 분기 가계신용을 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "지난 분기",
+    "span": [
+     0,
+     5
+    ],
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "지난 분기",
+      "year": null,
+      "alias": "지난",
+      "sub_unit": "Q",
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": true,
+     "invalid": false,
+     "extract_status": "unresolved"
+    },
+    "status": "candidate"
+   }
+  ],
+  "a_diagnosis": {
+   "P1": "unsupported"
+  }
+ },
+ {
+  "question": "지난달 원/달러 환율을 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "지난달",
+    "span": [
+     0,
+     3
+    ],
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "지난달",
+      "year": null,
+      "alias": "지난",
+      "sub_unit": "M",
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": true,
+     "invalid": false,
+     "extract_status": "unresolved"
+    },
+    "status": "candidate"
+   }
+  ],
+  "a_diagnosis": {
+   "P1": "unsupported"
+  }
+ },
+ {
+  "question": "최근 6개월 수출입물가지수를 월별로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 6개월",
+    "span": [
+     0,
+     6
+    ],
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 6,
+     "unit": "month",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "unresolved"
+    },
+    "status": "candidate"
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "span": [
+     16,
+     18
+    ],
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    },
+    "status": "candidate"
+   }
+  ],
+  "a_diagnosis": {
+   "P1": "unsupported"
+  }
+ }
+]

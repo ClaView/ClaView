@@ -1,0 +1,36 @@
+{
+  "policy_id": "a-stage2-dev-policy/1",
+  "registered_at": "2026-10-05",
+  "status": "provisional_before_stage2_prediction",
+  "scope": "A only; authored draft scores are diagnostics, never approved semantic accuracy",
+  "primary": "macro Recall@5 over gold display_candidates questions; each requirement group has equal weight within a question",
+  "secondary": ["all-required@5", "Top1 relevant hit", "MRR", "NDCG@5", "clarify axis precision and recall", "out-of-scope false recommendation", "supported false reject", "incorrect hard filtering", "technical failure"],
+  "existing_regression_baseline": {
+    "source": "eval/results/a-stage1-20261005-verified/baseline.json",
+    "n": 22,
+    "macro_recall_5": 1.0,
+    "all_required_5": 1.0,
+    "top1": 0.5,
+    "mrr": 0.7151515151515152,
+    "p95_query_ms_nearest_rank": 101.235
+  },
+  "provisional_acceptance_gates": {
+    "regression_macro_recall_5_min": 1.0,
+    "regression_all_required_5_min": 1.0,
+    "regression_top1_min": 0.5,
+    "regression_mrr_min": 0.7151515151515152,
+    "incorrect_hard_filter_case_increase_max": 0,
+    "out_of_scope_false_recommendation_count_increase_max": 0,
+    "supported_false_reject_count_increase_max": 0,
+    "operational_technical_failure_count_increase_max": 0,
+    "offline_p95_query_ms_max": 250,
+    "offline_external_api_calls_max": 0,
+    "offline_billed_cost_usd_max": 0,
+    "final_reviewed_out_of_scope_false_recommendation_target": 0.0
+  },
+  "gate_rationale": "Small exposed regression set: preserve its existing coverage and rank as a conservative guard. 250 ms allows about 2.5x the measured offline p95 for extra local processing, not an end-user SLA. Draft negative cases support debugging only. Final semantic acceptance requires reviewed labels and confidence intervals/sample expansion.",
+  "comparison_protocol": "Same frozen input/gold hashes, corpus snapshot, as_of, mode and scorer version; run old/new in fresh databases. Report paired per-case wins/losses and failures. Never combine draft and inherited or human-reviewed denominators.",
+  "future_live_policy": "Disabled in Stage 2. Before any live development experiment, separately freeze a user-authorized total call/budget cap and measured latency/cost gates; 0-call offline baseline cannot estimate live model cost. Do not adjust gates after unlocking test.",
+  "test_policy": "Keep test_expression and test_family locked during development. Freeze reviewed label revision and policy hash before final execution. Corrections after test require a new dataset version and explicit exposure record, not silent relabeling.",
+  "human_selection": "Actual human and mocked confirmation accuracy remain separate, unmeasured fields. Retrieval Top1 is not user selection accuracy."
+}

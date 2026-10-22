@@ -1,0 +1,2540 @@
+{
+ "question": "최근 2년 생산자물가지수를 보여줘",
+ "as_of": "2026-10-20",
+ "analysis": {
+  "text": {
+   "raw": "최근 2년 생산자물가지수를 보여줘",
+   "norm": "최근 2년 생산자물가지수를 보여줘",
+   "nospace": "최근2년생산자물가지수를보여줘",
+   "offsets": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+   ]
+  },
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 2년",
+    "span": [
+     0,
+     5
+    ],
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 2,
+     "unit": "year",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "explicit"
+    },
+    "status": "candidate"
+   }
+  ],
+  "fragments": [
+   {
+    "id": "g1",
+    "quote": "생산자물가지수를",
+    "span": [
+     6,
+     14
+    ],
+    "role": "core",
+    "protected_by": null,
+    "phrase": "item"
+   }
+  ],
+  "terms": [
+   {
+    "fragment_id": "g1",
+    "name": "생산자물가지수",
+    "type": "series_name",
+    "table_ids": [
+     "DT_404Y014",
+     "DT_404Y015",
+     "DT_404Y016"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   }
+  ],
+  "judgement": {
+   "pairs": [],
+   "requirement_draft": [
+    {
+     "id": "d1",
+     "fragment_ids": [
+      "g1"
+     ],
+     "indicator_fragment_id": "g1",
+     "indicator": "생산자물가지수",
+     "context": null,
+     "targets": [],
+     "breakdown": [],
+     "condition_ids": [],
+     "status": "ok",
+     "broad": false
+    }
+   ],
+   "certain": true,
+   "failed_conditions": [],
+   "attribution": {
+    "P1": "common"
+   },
+   "table_group_hint": [],
+   "calc_hints": [],
+   "negated": [],
+   "leftover": [],
+   "unused_names": [],
+   "structure": "{\"clauses\":1,\"conditions\":[\"period@in\"],\"context\":false,\"drafts\":1,\"items\":[[1]],\"other_clauses\":0,\"phrases\":[],\"relation_operands\":[],\"rows\":[]}",
+   "failed_sources": []
+  },
+  "interpretation": {
+   "status": "ok",
+   "common_condition_ids": [],
+   "relations": [],
+   "display_condition_ids": [],
+   "requirements": [
+    {
+     "id": "r1",
+     "quote": "최근 2년 생산자물가지수를",
+     "span": [
+      0,
+      14
+     ],
+     "indicator": {
+      "quote": "생산자물가지수",
+      "span": [
+       6,
+       13
+      ],
+      "fragment_id": "g1",
+      "name": "생산자물가지수",
+      "path": "exact"
+     },
+     "measure_kind": null,
+     "targets": [],
+     "condition_ids": [
+      "P1"
+     ],
+     "shared_condition_ids": [],
+     "ambiguous_condition_ids": [],
+     "status": "ok",
+     "reasons": [],
+     "context": null,
+     "breakdown": []
+    }
+   ],
+   "reasons": [],
+   "table_group_hint": []
+  }
+ },
+ "selections": [
+  {
+   "requirement_id": "r1",
+   "tables": [
+    {
+     "table_id": "DT_404Y016",
+     "org_id": "301",
+     "table_name": "생산자물가지수(품목별)",
+     "covers": {
+      "targets": [],
+      "periods": [
+       "2025-01~2025-12",
+       "2026-01~2026-06",
+       "2026-07~2026-08"
+      ],
+      "frequencies": [],
+      "basis": []
+     }
+    }
+   ],
+   "unspecified": [
+    {
+     "dimension": "classification+currency+valuation",
+     "kind": "mixed_basis+other",
+     "table_ids": [
+      "DT_404Y016"
+     ],
+     "other_table_ids": [
+      "DT_404Y014",
+      "DT_404Y015"
+     ],
+     "other_values": [
+      "기본분류",
+      "특수분류"
+     ],
+     "more": false
+    }
+   ],
+   "status": "confirm",
+   "model_step": "skipped",
+   "reasons": [
+    "partial_cover",
+    "period_unknown",
+    "unspecified"
+   ],
+   "alternatives": [],
+   "differences": [],
+   "signals": {
+    "pool": 16,
+    "with_evidence": 4,
+    "retried": false,
+    "cells": 4,
+    "covered": 3,
+    "alternatives": 1,
+    "queries": [
+     "생산자물가지수"
+    ],
+    "term_tables": [],
+    "term_tables_truncated": false,
+    "conventions": [],
+    "score_gap": null,
+    "period_check": true,
+    "score_items": {
+     "DT_404Y016": [
+      {
+       "item": "title_word",
+       "value": 4.0,
+       "reason": "생산자물가지수"
+      }
+     ]
+    },
+    "facts": {
+     "requirement": {
+      "identity": {
+       "fragment_ids": [
+        "g1"
+       ],
+       "conditions": [
+        "period:::+"
+       ],
+       "key": "g1#period:::+"
+      },
+      "period_request": {
+       "requested": true,
+       "relative": true,
+       "frequencies": [],
+       "start": "2025",
+       "end": "2026"
+      },
+      "period_anchor": [
+       {
+        "frequency": "M",
+        "anchor": "2026-08",
+        "resolved_range": [
+         "2024-09",
+         "2026-08"
+        ],
+        "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+        "relative": true,
+        "candidates": 3
+       },
+       {
+        "frequency": "Q",
+        "anchor": "2026-06",
+        "resolved_range": [
+         "2024-07",
+         "2026-06"
+        ],
+        "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+        "relative": true,
+        "candidates": 3
+       },
+       {
+        "frequency": "Y",
+        "anchor": "2025-12",
+        "resolved_range": [
+         "2024-01",
+         "2025-12"
+        ],
+        "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+        "relative": true,
+        "candidates": 3
+       }
+      ]
+     },
+     "tables": {
+      "DT_401Y017": {
+       "table_id": "DT_401Y017",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1971",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_401Y018": {
+       "table_id": "DT_401Y018",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1971",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_402Y016": {
+       "table_id": "DT_402Y016",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1971",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_401Y015": {
+       "table_id": "DT_401Y015",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1971",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_104Y016": {
+       "table_id": "DT_104Y016",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1960.01",
+            "2026.07"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1960",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "partial"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_404Y016": {
+       "table_id": "DT_404Y016",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title_core"
+         },
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": "13103134764999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "생산자물가지수(품목별)"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": []
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1965.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1965 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1965",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_641Y001": {
+       "table_id": "DT_641Y001",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1971",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_404Y014": {
+       "table_id": "DT_404Y014",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title_core"
+         },
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": "13103134604999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "생산자물가지수(기본분류)"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": []
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1965.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1965 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1965",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_404Y015": {
+       "table_id": "DT_404Y015",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title_core"
+         },
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": "13103134727999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "생산자물가지수(특수분류)"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": []
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1965.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1965 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1965",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_404Y017": {
+       "table_id": "DT_404Y017",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134500999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "생산자물가지수-총지수(1910~1964)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1910.07",
+            "1964.12"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "outside",
+           "coverage": [
+            "1910 3/4",
+            "1964 4/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "outside",
+           "coverage": [
+            "1910",
+            "1964"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "partial"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_405Y007": {
+       "table_id": "DT_405Y007",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "2010.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2010 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "2010",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_401Y016": {
+       "table_id": "DT_401Y016",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1971",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_402Y014": {
+       "table_id": "DT_402Y014",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1971",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_402Y015": {
+       "table_id": "DT_402Y015",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1971.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1971",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_403Y001": {
+       "table_id": "DT_403Y001",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1988.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1988 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1988",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      },
+      "DT_405Y006": {
+       "table_id": "DT_405Y006",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "생산자물가지수",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "partial",
+           "coverage": [
+            "1980.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1980 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "unknown",
+           "coverage": [
+            "1980",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": "2026-08",
+          "resolved_range": [
+           "2024-09",
+           "2026-08"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2024-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         },
+         {
+          "frequency": "Y",
+          "anchor": "2025-12",
+          "resolved_range": [
+           "2024-01",
+           "2025-12"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 3
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ]
+      }
+     }
+    },
+    "covers_all": {
+     "생산자물가지수": {
+      "covers": [],
+      "cut": false
+     },
+     "mixed": {
+      "covers": [],
+      "cut": false
+     }
+    },
+    "pool_cut": {
+     "caps": {
+      "channel:title": 55,
+      "channel:item": 141,
+      "pool": 0,
+      "term_tables": 0
+     },
+     "cut": 148,
+     "matched_count": 0,
+     "matched": [],
+     "pool_cut": false
+    },
+    "pruned": {
+     "records": [
+      {
+       "step": "undominated",
+       "table_ids": [
+        "DT_404Y014"
+       ],
+       "kept": [
+        "DT_404Y016"
+       ],
+       "reason": "score",
+       "family": "생산자물가지수"
+      },
+      {
+       "step": "undominated",
+       "table_ids": [
+        "DT_404Y015"
+       ],
+       "kept": [
+        "DT_404Y016"
+       ],
+       "reason": "score",
+       "family": "생산자물가지수"
+      },
+      {
+       "step": "representative",
+       "table_ids": [
+        "DT_404Y014"
+       ],
+       "kept": [
+        "DT_404Y016"
+       ],
+       "for": "DT_404Y016",
+       "reason": "score",
+       "marked": true
+      },
+      {
+       "step": "representative",
+       "table_ids": [
+        "DT_404Y015"
+       ],
+       "kept": [
+        "DT_404Y016"
+       ],
+       "for": "DT_404Y016",
+       "reason": "score",
+       "marked": true
+      }
+     ],
+     "options": 3,
+     "options_cut": false
+    },
+    "dimensions": {
+     "bundles": [
+      {
+       "table_ids": [
+        "DT_404Y016"
+       ],
+       "source": "current",
+       "score": 30.0,
+       "complete": true,
+       "family": "생산자물가지수",
+       "value": [
+        "원화",
+        "품목별",
+        "시가"
+       ]
+      },
+      {
+       "table_ids": [
+        "DT_404Y014"
+       ],
+       "source": "replacement",
+       "score": 29.955371,
+       "complete": true,
+       "family": "생산자물가지수",
+       "value": [
+        "기본분류"
+       ],
+       "dimension": "classification+currency+valuation"
+      },
+      {
+       "table_ids": [
+        "DT_404Y015"
+       ],
+       "source": "replacement",
+       "score": 29.955371,
+       "complete": true,
+       "family": "생산자물가지수",
+       "value": [
+        "특수분류"
+       ],
+       "dimension": "classification+currency+valuation"
+      }
+     ],
+     "dimensions": [
+      {
+       "dimension": "classification+currency+valuation",
+       "class": "unset",
+       "kind": "mixed_basis+other",
+       "values": [
+        "기본분류",
+        "특수분류"
+       ],
+       "gap": null
+      }
+     ],
+     "result": "ask",
+     "ask_reasons": [
+      "unspecified_mixed_basis"
+     ],
+     "resolved_by": [],
+     "gap": null,
+     "set_would_drop": []
+    }
+   }
+  }
+ ],
+ "selection_groups": [
+  {
+   "requirement_ids": [
+    "r1"
+   ],
+   "table_ids": [
+    "DT_404Y016"
+   ]
+  }
+ ],
+ "selection_route": {
+  "kind": "ask_selection",
+  "requirement_ids": [
+   "r1"
+  ],
+  "options": [
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_404Y016"
+    ],
+    "default": true,
+    "source": "current",
+    "tables": [
+     {
+      "table_id": "DT_404Y016",
+      "table_name": "생산자물가지수(품목별)",
+      "values": []
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_404Y014"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_404Y014",
+      "table_name": "생산자물가지수(기본분류)",
+      "values": []
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_404Y015"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_404Y015",
+      "table_name": "생산자물가지수(특수분류)",
+      "values": []
+     }
+    ]
+   }
+  ],
+  "default": {
+   "choices": {
+    "r1": [
+     "DT_404Y016"
+    ]
+   }
+  },
+  "reasons": [
+   "unspecified_mixed_basis"
+  ],
+  "partial": false,
+  "confirm": true,
+  "questions": [
+   {
+    "requirement_ids": [
+     "r1"
+    ],
+    "dimension": "classification+currency+valuation",
+    "values": [
+     "기본분류",
+     "특수분류"
+    ],
+    "options": [
+     {
+      "value": [
+       "원화",
+       "품목별",
+       "시가"
+      ],
+      "table_ids": [
+       "DT_404Y016"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_404Y016",
+        "table_name": "생산자물가지수(품목별)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": true,
+      "source": "current",
+      "label": "생산자물가지수(품목별)",
+      "assignment": {
+       "r1": [
+        "DT_404Y016"
+       ]
+      },
+      "effect": {
+       "dimension": "classification+currency+valuation",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o1"
+     },
+     {
+      "value": [
+       "기본분류"
+      ],
+      "table_ids": [
+       "DT_404Y014"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_404Y014",
+        "table_name": "생산자물가지수(기본분류)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "replacement",
+      "label": "생산자물가지수(기본분류)",
+      "assignment": {
+       "r1": [
+        "DT_404Y014"
+       ]
+      },
+      "effect": {
+       "dimension": "classification+currency+valuation",
+       "value": "기본분류",
+       "polarity": "+"
+      },
+      "id": "q1.o2"
+     },
+     {
+      "value": [
+       "특수분류"
+      ],
+      "table_ids": [
+       "DT_404Y015"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_404Y015",
+        "table_name": "생산자물가지수(특수분류)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "replacement",
+      "label": "생산자물가지수(특수분류)",
+      "assignment": {
+       "r1": [
+        "DT_404Y015"
+       ]
+      },
+      "effect": {
+       "dimension": "classification+currency+valuation",
+       "value": "특수분류",
+       "polarity": "+"
+      },
+      "id": "q1.o3"
+     }
+    ],
+    "deferred": false,
+    "cause": "unspecified_mixed_basis",
+    "open": false,
+    "effect_kind": "pick_assignment",
+    "id": "q1",
+    "version": {
+     "analysis": "de96d0126e9617b6",
+     "selection": "2a27adc6ecfe9060"
+    }
+   }
+  ]
+ },
+ "requirements": [
+  {
+   "scope_id": "r1",
+   "text": "최근 2년 생산자물가지수를",
+   "a_status": "confirm",
+   "gaps": [
+    {
+     "dimension": "classification+currency+valuation",
+     "kind": "mixed_basis+other",
+     "table_ids": [
+      "DT_404Y016"
+     ],
+     "other_table_ids": [
+      "DT_404Y014",
+      "DT_404Y015"
+     ],
+     "other_values": [
+      "기본분류",
+      "특수분류"
+     ],
+     "more": false
+    }
+   ],
+   "reason_codes": [
+    "interp:ok",
+    "select:partial_cover",
+    "select:period_unknown",
+    "select:unspecified"
+   ],
+   "source": "A"
+  }
+ ],
+ "unresolved": [
+  {
+   "scope_id": "r1",
+   "kind": "requirement_not_met",
+   "detail": "confirm",
+   "from_node": "A"
+  }
+ ],
+ "selection": {
+  "tables": [
+   {
+    "org_id": "301",
+    "table_id": "DT_404Y016",
+    "table_name": "생산자물가지수(품목별)"
+   }
+  ],
+  "backups": []
+ }
+}

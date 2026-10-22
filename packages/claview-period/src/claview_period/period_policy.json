@@ -1,0 +1,7 @@
+{
+  "policy_version": "period-policy/2026-10-21.1",
+  "about": "Shared period policy of ClaView A and B (user decisions of 2026-10-20). Frequencies longest first; default_recent_years is the window assumed when a question names no period.",
+  "frequency_order": ["Y", "H", "Q", "M"],
+  "periods_per_year": {"Y": 1, "H": 2, "Q": 4, "M": 12},
+  "default_recent_years": {"Y": 10, "H": 5, "Q": 5, "M": 3}
+}

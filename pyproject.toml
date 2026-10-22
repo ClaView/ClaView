@@ -5,9 +5,21 @@ build-backend = "hatchling.build"
 [project]
 name = "claview"
 version = "0.1.0"
-description = "KOSIS statistics exploration and visualization agent"
+description = "KOSIS statistics agent: A table selection (claview_v3), B series/period selection (claview), one flow (claview_flow)"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+    "httpx>=0.28,<1",
+    "jsonschema>=4.23,<5",
+    "langgraph>=1.2,<2",
+    "claview-period==0.2.0",
+]
+
+[tool.uv.sources]
+# The shared period package (resolver, policy file, contract) lives in this repository.
+claview-period = { path = "packages/claview-period", editable = true }
+
+[project.scripts]
+claview = "claview.cli:main"
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "ruff>=0.12,<1"]
@@ -17,11 +29,16 @@ only-include = ["src"]
 sources = ["src"]
 
 [tool.pytest.ini_options]
+# Run the suites as separate pytest processes (README): tests_v3 installs an import guard
+# that refuses the B package `claview`, so A and B tests cannot share one process.
 testpaths = ["tests"]
 
 [tool.ruff]
 target-version = "py312"
 line-length = 100
+# Copied code keeps its own style: A v1 (N5) inside B, and A completion-2 (claview_v3, tests_v3,
+# its scripts and reference data) copied byte-for-byte. New integration code is linted.
+extend-exclude = ["src/claview/aflow", "src/claview_v3", "tests_v3", "reference"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]

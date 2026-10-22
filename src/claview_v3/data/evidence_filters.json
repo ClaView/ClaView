@@ -1,0 +1,21 @@
+{
+  "_about": [
+    "Evidence checks used as filters in table selection (plan 04, 4-2 and decision 3).",
+    "Every check starts in record mode: it is judged and recorded, its verdict only orders the candidates.",
+    "A check becomes \"filter\" only after the 417-question record shows it drops no answer table and the user",
+    "confirms the list (scripts/record_evidence.py writes the record to runs/m3_evidence_record/)."
+  ],
+  "status": "record_only",
+  "checks": {
+    "matched_items": "record",
+    "basis": "record",
+    "unit": "record",
+    "exclude": "record",
+    "cross_axis": "record",
+    "frequency": "record",
+    "period": "record",
+    "region": "record",
+    "indicator": "record",
+    "breakdown": "record"
+  }
+}

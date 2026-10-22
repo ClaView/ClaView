@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClaView period-resolution augmentation set (2026-10-02)",
+  "description": "Extends golden_set_v1.schema.json's case shape for cases added specifically to probe claview.stages.resolve_relative_period beyond the original 22 golden_set_v1 cases: adds the 'H'(반기) frequency, and a required 'policy_status' + 'period_candidates' pair per case so an ambiguous or currently-broken relative-period interpretation is tracked explicitly rather than asserted as a single silent truth. See README_기간증강.md for how to read this file.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset_id", "cases"],
+  "properties": {
+    "schema_version": {"const": "claview-ab/0.4-draft-period-augmented"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "cases": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/case"}}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "table": {
+      "type": "object", "additionalProperties": false,
+      "required": ["org_id", "table_id", "table_name"],
+      "properties": {"org_id": {"$ref": "#/$defs/text"}, "table_id": {"$ref": "#/$defs/text"}, "table_name": {"$ref": "#/$defs/text"}}
+    },
+    "dimension": {
+      "type": "object", "additionalProperties": false, "required": ["code", "name"],
+      "properties": {"code": {"$ref": "#/$defs/text"}, "name": {"$ref": "#/$defs/text"}}
+    },
+    "period": {
+      "type": "object", "additionalProperties": false, "required": ["frequency", "start", "end"],
+      "properties": {"frequency": {"enum": ["Y", "Q", "M", "H"]}, "start": {"$ref": "#/$defs/text"}, "end": {"$ref": "#/$defs/text"}},
+      "allOf": [
+        {"if": {"properties": {"frequency": {"const": "Y"}}}, "then": {"properties": {"start": {"pattern": "^[0-9]{4}$"}, "end": {"pattern": "^[0-9]{4}$"}}}},
+        {"if": {"properties": {"frequency": {"const": "H"}}}, "then": {"properties": {"start": {"pattern": "^[0-9]{4}0[1-2]$"}, "end": {"pattern": "^[0-9]{4}0[1-2]$"}}}},
+        {"if": {"properties": {"frequency": {"const": "Q"}}}, "then": {"properties": {"start": {"pattern": "^[0-9]{4}0[1-4]$"}, "end": {"pattern": "^[0-9]{4}0[1-4]$"}}}},
+        {"if": {"properties": {"frequency": {"const": "M"}}}, "then": {"properties": {"start": {"pattern": "^[0-9]{4}(0[1-9]|1[0-2])$"}, "end": {"pattern": "^[0-9]{4}(0[1-9]|1[0-2])$"}}}}
+      ]
+    },
+    "selection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["series_id", "label", "org_id", "table_id", "item_id", "dimensions", "period", "unit"],
+      "properties": {
+        "series_id": {"$ref": "#/$defs/text"}, "label": {"$ref": "#/$defs/text"},
+        "org_id": {"$ref": "#/$defs/text"}, "table_id": {"$ref": "#/$defs/text"}, "item_id": {"$ref": "#/$defs/text"},
+        "dimensions": {"type": "object", "minProperties": 1, "additionalProperties": false, "patternProperties": {"^objL[1-8]$": {"$ref": "#/$defs/dimension"}}},
+        "period": {"$ref": "#/$defs/period"}, "unit": {"type": ["string", "null"]}
+      }
+    },
+    "case": {
+      "type": "object", "additionalProperties": false,
+      "required": ["case_id", "query", "as_of", "policy_status", "period_candidates", "expected"],
+      "properties": {
+        "case_id": {"$ref": "#/$defs/text"}, "query": {"$ref": "#/$defs/text"},
+        "as_of": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", "description": "The Config.as_of this case was authored and hand-derived against. All cases in this file use the same value as the shared pytest `config` fixture so they replay under the identical as_of -- recorded here so the value is never re-guessed."},
+        "policy_status": {
+          "enum": ["implemented", "assumption_untested", "open_bug"],
+          "description": "implemented: the expected period follows a rule the team has already agreed on and the current code reproduces it exactly. assumption_untested: current code resolves to *a* period without erroring, but which convention is correct is not yet settled (see period_candidates) -- current output is recorded as expected so a regression is caught, not because it is confirmed correct. open_bug: the expected period is the human-reasoned correct answer, but current code raises an error instead of returning it -- this case is expected to FAIL against current code until the team decides and fixes it, the same way CV-AB-12 did before the Q-specific rule."
+        },
+        "period_candidates": {
+          "type": "object", "minProperties": 1, "additionalProperties": false,
+          "patternProperties": {"^[a-z_]+$": {"$ref": "#/$defs/period"}},
+          "description": "Named competing interpretations considered for this query (e.g. 'sliding_window' vs 'calendar_anchor', or 'as_of_year_based' vs 'anchor_year_based'). Exactly one of these equals expected.B.selections[*].period for policy_status != open_bug; for open_bug it holds the human-reasoned fallback the code does not yet produce, labeled 'anchor_year_fallback' or similar."
+        },
+        "kosis_verification": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "status": {"enum": ["pending", "confirmed_present", "confirmed_gap"]},
+            "notes": {"type": "string"}
+          },
+          "description": "Filled in by running scripts/verify_periods_kosis.py against the real KOSIS API -- not yet run as of this file's creation, so every case starts as status=pending."
+        },
+        "source": {"type": "object", "additionalProperties": false, "required": ["url", "used_part"], "properties": {"url": {"$ref": "#/$defs/text"}, "used_part": {"$ref": "#/$defs/text"}}},
+        "expected": {
+          "type": "object", "additionalProperties": false, "required": ["decision", "A", "B"],
+          "properties": {
+            "decision": {"const": "select"},
+            "A": {"type": "object", "additionalProperties": false, "required": ["tables"], "properties": {"tables": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/table"}}}},
+            "B": {"type": "object", "additionalProperties": false, "required": ["selections"], "properties": {"selections": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/selection"}}}}
+          }
+        }
+      }
+    }
+  }
+}

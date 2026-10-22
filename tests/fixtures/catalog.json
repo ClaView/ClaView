@@ -1,0 +1,52 @@
+{
+  "documents": [
+    {
+      "doc_id": "301:DT_401Y018",
+      "org_id": "301",
+      "table_id": "DT_401Y018",
+      "title": "수입물가지수(용도별)",
+      "category": "수출입물가조사(2020=100)",
+      "path": "한국은행 > 수출입물가조사(2020=100) > 수입물가",
+      "path_ids": "301 > 301_301004 > 301_301004_001",
+      "catalog_class": "수입물가",
+      "catalog_snapshot_date": "2026-09-16",
+      "record_source": "bok_tables_20260916.csv",
+      "path_indicates_legacy": false,
+      "search_text": "작성기관: 한국은행\n공식 표명: 수입물가지수(용도별)\n공식 목록 경로: 한국은행 > 수출입물가조사(2020=100) > 수입물가\n표 ID: DT_401Y018",
+      "metadata_level": "detailed_record_available",
+      "api_verified": false
+    },
+    {
+      "doc_id": "301:DT_405Y006",
+      "org_id": "301",
+      "table_id": "DT_405Y006",
+      "title": "국내공급물가지수",
+      "category": "생산자물가조사(2020=100)",
+      "path": "한국은행 > 생산자물가조사(2020=100)",
+      "path_ids": "301 > 301_301002",
+      "catalog_class": "생산자물가조사(2020=100)",
+      "catalog_snapshot_date": "2026-09-16",
+      "record_source": "bok_tables_20260916.csv",
+      "path_indicates_legacy": false,
+      "search_text": "작성기관: 한국은행\n공식 표명: 국내공급물가지수\n공식 목록 경로: 한국은행 > 생산자물가조사(2020=100)\n표 ID: DT_405Y006",
+      "metadata_level": "catalog_only",
+      "api_verified": false
+    },
+    {
+      "doc_id": "301:DT_501Y006",
+      "org_id": "301",
+      "table_id": "DT_501Y006",
+      "title": "손익 지표(제11차 한국표준산업분류, 2009~)",
+      "category": "기업경영분석",
+      "path": "한국은행 > 기업경영분석",
+      "path_ids": "301 > 301_301001",
+      "catalog_class": "기업경영분석",
+      "catalog_snapshot_date": "2026-09-16",
+      "record_source": "bok_tables_20260916.csv",
+      "path_indicates_legacy": false,
+      "search_text": "작성기관: 한국은행\n공식 표명: 손익 지표(제11차 한국표준산업분류, 2009~)\n공식 목록 경로: 한국은행 > 기업경영분석\n표 ID: DT_501Y006",
+      "metadata_level": "catalog_only",
+      "api_verified": false
+    }
+  ]
+}

@@ -1,0 +1,942 @@
+{
+ "CV-AB-01": {
+  "query": "2015~2025년 연간 실질 GDP 성장률 추이를 그래프로 보여줘.",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2015~2025년",
+    "value": null,
+    "attrs": {
+     "form": "range",
+     "start_expr": {
+      "text": "2015",
+      "year": "2015",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": {
+      "text": "2025년",
+      "year": "2025",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "연간",
+    "value": "Y",
+    "attrs": {
+     "value": "Y",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": [
+   {
+    "quote": "성장률",
+    "kind": "rate"
+   }
+  ]
+ },
+ "CV-AB-02": {
+  "query": "2016~2025년 연간 실질 총고정자본형성 증감률 추이를 그래프로 보여줘.",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2016~2025년",
+    "value": null,
+    "attrs": {
+     "form": "range",
+     "start_expr": {
+      "text": "2016",
+      "year": "2016",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": {
+      "text": "2025년",
+      "year": "2025",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "연간",
+    "value": "Y",
+    "attrs": {
+     "value": "Y",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": [
+   {
+    "quote": "증감률",
+    "kind": "rate"
+   }
+  ]
+ },
+ "CV-AB-03": {
+  "query": "2016~2025년 연간 실질 재화와 서비스의 수출 증감률 추이를 그래프로 보여줘.",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2016~2025년",
+    "value": null,
+    "attrs": {
+     "form": "range",
+     "start_expr": {
+      "text": "2016",
+      "year": "2016",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": {
+      "text": "2025년",
+      "year": "2025",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "연간",
+    "value": "Y",
+    "attrs": {
+     "value": "Y",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": [
+   {
+    "quote": "증감률",
+    "kind": "rate"
+   }
+  ]
+ },
+ "CV-AB-04": {
+  "query": "2005~2025년 연간 경상수지와 상품·서비스·본원소득·이전소득수지 추이를 그래프로 비교해줘.",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2005~2025년",
+    "value": null,
+    "attrs": {
+     "form": "range",
+     "start_expr": {
+      "text": "2005",
+      "year": "2005",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": {
+      "text": "2025년",
+      "year": "2025",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "연간",
+    "value": "Y",
+    "attrs": {
+     "value": "Y",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-05": {
+  "query": "2005~2025년 연간 서비스수지와 가공·운송·여행·건설수지 추이를 그래프로 비교해줘.",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2005~2025년",
+    "value": null,
+    "attrs": {
+     "form": "range",
+     "start_expr": {
+      "text": "2005",
+      "year": "2005",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": {
+      "text": "2025년",
+      "year": "2025",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "연간",
+    "value": "Y",
+    "attrs": {
+     "value": "Y",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-06": {
+  "query": "2008년 1분기부터 2024년 4분기까지 분기별 가계신용 잔액 추이를 그래프로 보여줘.",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2008년 1분기부터 2024년 4분기까지",
+    "value": null,
+    "attrs": {
+     "form": "range",
+     "start_expr": {
+      "text": "2008년 1분기",
+      "year": "2008",
+      "alias": null,
+      "sub_unit": "Q",
+      "sub_value": "1",
+      "end_mark": false
+     },
+     "end_expr": {
+      "text": "2024년 4분기",
+      "year": "2024",
+      "alias": null,
+      "sub_unit": "Q",
+      "sub_value": "4",
+      "end_mark": false
+     },
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "분기별",
+    "value": "Q",
+    "attrs": {
+     "value": "Q",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-07": {
+  "query": "최근 3년간 예금은행 기업대출 금리를 대기업대출·중소기업대출로 나눠 월별 꺾은선 그래프로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 3년간",
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 3,
+     "unit": "year",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-08": {
+  "query": "2020년 이후 가계신용 잔액을 업권별로 나눠 분기별 막대그래프로 그려줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2020년 이후",
+    "value": null,
+    "attrs": {
+     "form": "since",
+     "start_expr": {
+      "text": "2020년",
+      "year": "2020",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": true,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "분기별",
+    "value": "Q",
+    "attrs": {
+     "value": "Q",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-09": {
+  "query": "2021년부터 2025년까지 M2 통화량(원계열, 말잔 기준)을 상품별 구성으로 나눠 연도별 누적 막대그래프로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2021년부터 2025년까지",
+    "value": null,
+    "attrs": {
+     "form": "range",
+     "start_expr": {
+      "text": "2021년",
+      "year": "2021",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": {
+      "text": "2025년",
+      "year": "2025",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "연도별",
+    "value": "Y",
+    "attrs": {
+     "value": "Y",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-10": {
+  "query": "최근 10년간 지역별 수출 규모를 지역별로 비교하는 막대그래프를 만들어줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 10년간",
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 10,
+     "unit": "year",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-11": {
+  "query": "2015년 이후 실질 GDP 성장률(전년동기비) 추이를 분기별 꺾은선 그래프로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2015년 이후",
+    "value": null,
+    "attrs": {
+     "form": "since",
+     "start_expr": {
+      "text": "2015년",
+      "year": "2015",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": true,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "K1",
+    "kind": "calc",
+    "quote": "전년동기비",
+    "value": "전년동기비",
+    "attrs": {
+     "axis": "comparison",
+     "value": "전년동기비",
+     "polarity": "+",
+     "origin": "dictionary"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "분기별",
+    "value": "Q",
+    "attrs": {
+     "value": "Q",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": [
+   {
+    "quote": "성장률",
+    "kind": "rate"
+   }
+  ]
+ },
+ "CV-AB-12": {
+  "query": "최근 5년간 우리나라 순대외금융자산 규모 추이를 분기별 꺾은선 그래프로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 5년간",
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 5,
+     "unit": "year",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "분기별",
+    "value": "Q",
+    "attrs": {
+     "value": "Q",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-13": {
+  "query": "최근 5년간 예금은행 대출금을 시설자금·운전자금·특별자금 용도별로 나눠 월별 그래프로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 5년간",
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 5,
+     "unit": "year",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-14": {
+  "query": "2020년 이후 전산업 매출액영업이익률을 연도별 표로 정리해줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2020년 이후",
+    "value": null,
+    "attrs": {
+     "form": "since",
+     "start_expr": {
+      "text": "2020년",
+      "year": "2020",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": true,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "연도별",
+    "value": "Y",
+    "attrs": {
+     "value": "Y",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-15": {
+  "query": "최근 2년간 경제심리지수(ESI, 원계열)를 월별 그래프로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 2년간",
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 2,
+     "unit": "year",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-16": {
+  "query": "2024년 공산품과 서비스의 생산자물가가 어떻게 달랐는지 월별로 비교해줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2024년",
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "2024년",
+      "year": "2024",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-17": {
+  "query": "2024년 신선식품 생산자물가와 신선식품을 뺀 물가를 월별 그래프로 비교해줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2024년",
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "2024년",
+      "year": "2024",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-18": {
+  "query": "2024년에 산업용 전력 가격이 어느 달에 가장 크게 변했는지 월별 그래프로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2024년",
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "2024년",
+      "year": "2024",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "K1",
+    "kind": "calc",
+    "quote": "가장 크게",
+    "value": "최댓값",
+    "attrs": {
+     "axis": "calc",
+     "value": "최댓값",
+     "polarity": "+",
+     "origin": "handoff_rule"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": [
+   {
+    "quote": "변했",
+    "kind": "change"
+   }
+  ]
+ },
+ "CV-AB-19": {
+  "query": "2024년 수입 원재료와 중간재의 물가 흐름을 원화 기준으로 월별 비교해줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2024년",
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "2024년",
+      "year": "2024",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-20": {
+  "query": "2024년 수출 공산품과 농림수산품의 가격이 전년보다 얼마나 올랐는지 원화 기준 막대그래프로 비교해줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2024년",
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "2024년",
+      "year": "2024",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "K1",
+    "kind": "calc",
+    "quote": "전년보다",
+    "value": "전년동기비",
+    "attrs": {
+     "axis": "comparison",
+     "value": "전년동기비",
+     "polarity": "+",
+     "origin": "handoff_rule"
+    }
+   }
+  ],
+  "calc_hints": [
+   {
+    "quote": "올랐",
+    "kind": "change"
+   }
+  ]
+ },
+ "CV-AB-21": {
+  "query": "2024년 국내에 공급된 원재료·중간재·최종재 물가 흐름을 월별로 한 그래프에서 비교해줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2024년",
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "2024년",
+      "year": "2024",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ },
+ "CV-AB-22": {
+  "query": "2024년에 국내에서 생산해 국내에 팔거나 수출한 것들의 전체 물가 흐름을 월별로 보여줘",
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2024년",
+    "value": null,
+    "attrs": {
+     "form": "point",
+     "start_expr": {
+      "text": "2024년",
+      "year": "2024",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": false,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    }
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    }
+   }
+  ],
+  "calc_hints": []
+ }
+}

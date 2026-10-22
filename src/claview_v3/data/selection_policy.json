@@ -1,0 +1,39 @@
+{
+  "_about": [
+    "Policy of the dimensions a question does not set (plan 04, decision 5 as changed by the user on 2026-10-18;",
+    "docs/research/표선택_미지정차원_대표표_검토_20261018.md, section 2).",
+    "unspecified_policy: representative = one representative table per dimension kind (default);",
+    "keep_all = every family table that gives the same cells is put in and marked (cap 3, the earlier decision 5).",
+    "Dimension kinds are read from catalog axis values and bracket qualifiers (select/cover.py dimension_kinds):",
+    "basis_axis_kinds maps each basis axis of condition_words.json to a kind; bracket words not on a basis axis are",
+    "frequency words, source words, or other; values of an axis whose name holds an agency word are compared too.",
+    "conventions: emptied (plan 10, user decision 2026-10-20: no default for a dimension the question did not set;",
+    "the survey view is a confirm kind and asked).",
+    "decision (plan 10 D step, select/differences.py): set_dimension_filter = keep only the contenders meeting a",
+    "dimension the question set; family_score_gap = score gap at which other-family alternatives go on (confirm,",
+    "d_resolved), null = always asked; ask_unset_kinds = mark kinds of unset dimensions that are asked;",
+    "undecided_ask (agent/question_route.py) = off | narrow (an undecided interpretation with a split piece not in",
+    "the catalog is asked, not decided) | wide (also with an unused catalog name)."
+  ],
+  "decision": {"set_dimension_filter": true, "family_score_gap": 15, "ask_unset_kinds": ["mixed_basis", "other", "survey"],
+               "undecided_ask": "off"},
+  "unspecified_policy": "representative",
+  "basis_aliases": {"seasonal": {"원계열": ["비계절조정", "비계절조정계열"]}},
+  "basis_axis_kinds": {
+    "seasonal": "mixed_basis",
+    "stock": "mixed_basis",
+    "price": "mixed_basis",
+    "loan_basis": "mixed_basis",
+    "currency": "mixed_basis",
+    "survey_view": "survey",
+    "survey_method": "other",
+    "size_law": "other",
+    "classification": "other",
+    "valuation": "other"
+  },
+  "frequency_words": ["연간", "분기", "월", "반기", "분기및연간", "연간지표", "분기지표", "월간"],
+  "source_words": ["구계열", "신계열", "구", "신"],
+  "agency_axis_words": ["출처", "기관", "작성", "자료원"],
+  "conventions": {},
+  "confirm_kinds": ["mixed_basis", "other", "survey"]
+}

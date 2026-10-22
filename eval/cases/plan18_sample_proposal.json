@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "status": "proposed_not_approved",
+  "source": "dev_mini development members only; no golden/new100",
+  "coverage_gaps": ["가운뎃점이 포함된 카탈로그 고유명", "한 조각에 두 개념이 붙은 확정 사례", "명시 제외형", "A·B·C 세 값 나열의 정확한 꼴"],
+  "comparison_ids": ["B:CX-Q007", "A:CX-Q040", "PC:EQ-25", "B:CX-Q017", "B:CX-Q023"],
+  "cases": [
+    {"case_id": "B:CX-Q007", "focus": "A와 B의 X; 나열 수식 범위"},
+    {"case_id": "A:CX-Q040", "focus": "아니라 대체 극성; 규칙 certain 질문"},
+    {"case_id": "PC:EQ-25", "focus": "가운뎃점 축 나열; 요구 과분해"},
+    {"case_id": "A:CX-Q052", "focus": "나눔과 요청 문구"},
+    {"case_id": "B:CX-Q017", "focus": "다표 가능 요구의 구조 보존"},
+    {"case_id": "B:CX-Q023", "focus": "원계열·계절조정 비교 범위"},
+    {"case_id": "PC:EQ-30", "focus": "비교·비율 관계"},
+    {"case_id": "A:CX-Q028", "focus": "두 지표 나열; 규칙 certain 질문"},
+    {"case_id": "B:CX-Q001", "focus": "공유 수식과 두 지표; 규칙 certain 질문"},
+    {"case_id": "A:CX-Q063", "focus": "기준값 비교"},
+    {"case_id": "PC:EQ-21", "focus": "기간·말잔·원계열"},
+    {"case_id": "B:CX-Q088", "focus": "일상 표현과 두 분류 축"},
+    {"case_id": "B:CX-Q089", "focus": "일상 대출 이자율 표현"},
+    {"case_id": "B:CX-Q094", "focus": "서술형 지표·계산 의미"},
+    {"case_id": "PC:EQ-10", "focus": "평범한 확실 질문; 명시 주기"},
+    {"case_id": "PC:EQ-17", "focus": "평범한 확실 질문; 닫힌 기간"},
+    {"case_id": "PC:EQ-28", "focus": "평범한 확실 질문; 분류 축"},
+    {"case_id": "PC:EQ-42", "focus": "평범한 확실 질문; 기간 생략"},
+    {"case_id": "PC:EQ-19", "focus": "평범한 확실 질문; 연도·대상"},
+    {"case_id": "B:CX-Q036", "focus": "평범한 확실 질문; 기준 단위"}
+  ]
+}

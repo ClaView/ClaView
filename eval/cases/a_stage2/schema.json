@@ -1,0 +1,738 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "input_case": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "prior_turns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "role": {
+                "enum": [
+                  "user",
+                  "assistant"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "role",
+              "text"
+            ]
+          },
+          "minItems": 0,
+          "uniqueItems": false
+        }
+      },
+      "required": [
+        "case_id",
+        "query",
+        "query_revision",
+        "prior_turns"
+      ]
+    },
+    "gold_case": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "prior_turns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "role": {
+                "enum": [
+                  "user",
+                  "assistant"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "role",
+              "text"
+            ]
+          },
+          "minItems": 0,
+          "uniqueItems": false
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "families": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "variant_group": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantic_group": {
+          "type": "string",
+          "minLength": 1
+        },
+        "review_status": {
+          "enum": [
+            "inherited_regression",
+            "draft",
+            "human_reviewed"
+          ]
+        },
+        "reviewer": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "review_note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "enum": [
+            "display_candidates",
+            "ask_clarification",
+            "out_of_scope",
+            "insufficient_evidence"
+          ]
+        },
+        "target_kind": {
+          "enum": [
+            "none",
+            "single",
+            "multiple_required",
+            "equivalent_alternatives"
+          ]
+        },
+        "table_groups": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9]+:[A-Za-z0-9_]+$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "minItems": 0,
+          "uniqueItems": false
+        },
+        "clarification_axes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 1
+              },
+              "table_id": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[A-Za-z0-9_]+$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "field": {
+                "type": "string",
+                "minLength": 1
+              },
+              "quote": {
+                "type": "string",
+                "minLength": 1
+              },
+              "snapshot_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "source",
+              "table_id",
+              "field",
+              "quote",
+              "snapshot_sha256"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": false
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "case_id",
+        "query",
+        "query_revision",
+        "prior_turns",
+        "tags",
+        "families",
+        "variant_group",
+        "semantic_group",
+        "review_status",
+        "reviewer",
+        "review_note",
+        "decision",
+        "target_kind",
+        "table_groups",
+        "clarification_axes",
+        "evidence",
+        "rationale"
+      ]
+    },
+    "prediction_case": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1
+        },
+        "query_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "prior_turns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "role": {
+                "enum": [
+                  "user",
+                  "assistant"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "role",
+              "text"
+            ]
+          },
+          "minItems": 0,
+          "uniqueItems": false
+        },
+        "decision": {
+          "enum": [
+            "display_candidates",
+            "ask_clarification",
+            "out_of_scope",
+            "insufficient_evidence",
+            "technical_failure"
+          ]
+        },
+        "clarification_axes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "before_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+:[A-Za-z0-9_]+$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "after_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+:[A-Za-z0-9_]+$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "display_order": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+:[A-Za-z0-9_]+$"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "elapsed_ms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "usage": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "model_calls": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "external_api_calls": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "blocked_network_attempts": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "b_calls": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "billed_cost_usd": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "model_calls",
+            "external_api_calls",
+            "blocked_network_attempts",
+            "b_calls",
+            "billed_cost_usd"
+          ]
+        },
+        "trace": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "case_id",
+        "query",
+        "query_revision",
+        "prior_turns",
+        "decision",
+        "clarification_axes",
+        "before_ids",
+        "after_ids",
+        "display_order",
+        "error_code",
+        "elapsed_ms",
+        "usage",
+        "trace"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "claview-a-eval/1"
+        },
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "split": {
+          "enum": [
+            "regression",
+            "dev",
+            "test_expression",
+            "test_family"
+          ]
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "case_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "query": {
+                "type": "string",
+                "minLength": 1
+              },
+              "query_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "prior_turns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "role": {
+                      "enum": [
+                        "user",
+                        "assistant"
+                      ]
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "role",
+                    "text"
+                  ]
+                },
+                "minItems": 0,
+                "uniqueItems": false
+              }
+            },
+            "required": [
+              "case_id",
+              "query",
+              "query_revision",
+              "prior_turns"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "split",
+        "cases"
+      ]
+    },
+    "gold": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "claview-a-eval/1"
+        },
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "split": {
+          "enum": [
+            "regression",
+            "dev",
+            "test_expression",
+            "test_family"
+          ]
+        },
+        "inputs_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_sha256": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "case_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "query": {
+                "type": "string",
+                "minLength": 1
+              },
+              "query_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "prior_turns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "role": {
+                      "enum": [
+                        "user",
+                        "assistant"
+                      ]
+                    },
+                    "text": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "role",
+                    "text"
+                  ]
+                },
+                "minItems": 0,
+                "uniqueItems": false
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "families": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "variant_group": {
+                "type": "string",
+                "minLength": 1
+              },
+              "semantic_group": {
+                "type": "string",
+                "minLength": 1
+              },
+              "review_status": {
+                "enum": [
+                  "inherited_regression",
+                  "draft",
+                  "human_reviewed"
+                ]
+              },
+              "reviewer": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "review_note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "decision": {
+                "enum": [
+                  "display_candidates",
+                  "ask_clarification",
+                  "out_of_scope",
+                  "insufficient_evidence"
+                ]
+              },
+              "target_kind": {
+                "enum": [
+                  "none",
+                  "single",
+                  "multiple_required",
+                  "equivalent_alternatives"
+                ]
+              },
+              "table_groups": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[A-Za-z0-9_]+$"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "minItems": 0,
+                "uniqueItems": false
+              },
+              "clarification_axes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0,
+                "uniqueItems": true
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "table_id": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^[0-9]+:[A-Za-z0-9_]+$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "field": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "quote": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "snapshot_sha256": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    }
+                  },
+                  "required": [
+                    "source",
+                    "table_id",
+                    "field",
+                    "quote",
+                    "snapshot_sha256"
+                  ]
+                },
+                "minItems": 1,
+                "uniqueItems": false
+              },
+              "rationale": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "case_id",
+              "query",
+              "query_revision",
+              "prior_turns",
+              "tags",
+              "families",
+              "variant_group",
+              "semantic_group",
+              "review_status",
+              "reviewer",
+              "review_note",
+              "decision",
+              "target_kind",
+              "table_groups",
+              "clarification_axes",
+              "evidence",
+              "rationale"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": false
+        }
+      },
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "split",
+        "inputs_sha256",
+        "source_sha256",
+        "cases"
+      ]
+    }
+  },
+  "$ref": "#/$defs/gold"
+}

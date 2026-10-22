@@ -1,0 +1,7 @@
+{
+ "_about": ["Phrase-rule parameters of split_fragments (2.3), plan 04 r5 and plan 05. The words of 2.3 and 2.5", "(request, filler, list, negation, marker, particle words) moved to lexicon.json (plan 08 T2)."],
+ "_about_scope": "plan 05 A (10/19): relation kinds that a scope phrase 'X 중 B가 차지하는 비중' reads as one requirement over the whole X (B its breakdown) when B is under X in every common table.",
+ "scope_relations": ["share_of", "percent_of"],
+ "_about_glued": "plan 05 G (10/19): a word written without spaces at least this long that holds no name span is read again for names without word boundaries (never exact).",
+ "glued_word_min_chars": 8
+}

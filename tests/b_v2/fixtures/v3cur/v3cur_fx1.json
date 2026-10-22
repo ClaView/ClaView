@@ -1,0 +1,8021 @@
+{
+ "question": "2015년부터 M2 말잔 원계열을 월별로 보여줘",
+ "as_of": "2026-10-20",
+ "request_id": "fx1",
+ "analysis": {
+  "text": {
+   "raw": "2015년부터 M2 말잔 원계열을 월별로 보여줘",
+   "norm": "2015년부터 M2 말잔 원계열을 월별로 보여줘",
+   "nospace": "2015년부터M2말잔원계열을월별로보여줘",
+   "offsets": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+   ]
+  },
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "2015년부터",
+    "span": [
+     0,
+     7
+    ],
+    "value": null,
+    "attrs": {
+     "form": "since",
+     "start_expr": {
+      "text": "2015년",
+      "year": "2015",
+      "alias": null,
+      "sub_unit": null,
+      "sub_value": null,
+      "end_mark": false
+     },
+     "end_expr": null,
+     "open_end": true,
+     "amount": null,
+     "unit": null,
+     "relative": false,
+     "invalid": false,
+     "extract_status": "explicit"
+    },
+    "status": "candidate"
+   },
+   {
+    "id": "B1",
+    "kind": "basis",
+    "quote": "말잔",
+    "span": [
+     11,
+     13
+    ],
+    "value": "말잔",
+    "attrs": {
+     "axis": "stock",
+     "value": "말잔",
+     "polarity": "+",
+     "origin": "dictionary"
+    },
+    "status": "candidate"
+   },
+   {
+    "id": "B2",
+    "kind": "basis",
+    "quote": "원계열",
+    "span": [
+     14,
+     17
+    ],
+    "value": "원계열",
+    "attrs": {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "+",
+     "origin": "dictionary"
+    },
+    "status": "candidate"
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "월별",
+    "span": [
+     19,
+     21
+    ],
+    "value": "M",
+    "attrs": {
+     "value": "M",
+     "anchor": null
+    },
+    "status": "candidate"
+   }
+  ],
+  "fragments": [
+   {
+    "id": "g1",
+    "quote": "M2 말잔 원계열을",
+    "span": [
+     8,
+     18
+    ],
+    "role": "core",
+    "protected_by": null,
+    "phrase": "item"
+   }
+  ],
+  "terms": [
+   {
+    "fragment_id": "g1",
+    "name": "M2(말잔 계절조정계열)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y001",
+     "DT_161Y007"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(End Of period SA)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y001"
+    ],
+    "obj_id": "13101134693ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(말잔 원계열)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y002",
+     "DT_101Y014"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(End Of)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y002",
+     "DT_101Y014",
+     "DT_161Y008"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(평잔 계절조정계열)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y003"
+    ],
+    "obj_id": "13101134507ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Average SA) 1)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y003"
+    ],
+    "obj_id": "13101134507ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(평잔 원계열)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y004",
+     "DT_101Y015",
+     "DT_161Y006"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Average)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y004",
+     "DT_101Y015",
+     "DT_161Y006"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(말잔 계절조정계열) 1)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y005"
+    ],
+    "obj_id": "13101134485ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(End Of period S.A.) 1)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y005"
+    ],
+    "obj_id": "13101134485ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(평잔 계절조정계열) 1)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y006"
+    ],
+    "obj_id": "13101134610ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Average S.A.) 1)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y006"
+    ],
+    "obj_id": "13101134610ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(말잔)",
+    "type": "target",
+    "table_ids": [
+     "DT_101Y007",
+     "DT_161Y014"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(End Of)",
+    "type": "target",
+    "table_ids": [
+     "DT_101Y007",
+     "DT_161Y012",
+     "DT_161Y014"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(평잔)",
+    "type": "target",
+    "table_ids": [
+     "DT_101Y008",
+     "DT_161Y013"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Average)",
+    "type": "target",
+    "table_ids": [
+     "DT_101Y008",
+     "DT_161Y010",
+     "DT_161Y013"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2 (광의통화)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y009",
+     "DT_101Y011"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Borad Money)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y009"
+    ],
+    "obj_id": "13101134652ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Broad Money)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_101Y011",
+     "DT_161Y015",
+     "DT_161Y017"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2",
+    "type": "indicator",
+    "table_ids": [
+     "DT_111Y001",
+     "DT_111Y003",
+     "DT_171Y001",
+     "DT_171Y002",
+     "DT_171Y003",
+     "DT_171Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(평잔계절조정계열)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_161Y005"
+    ],
+    "obj_id": "13101852615ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Average SA)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_161Y005"
+    ],
+    "obj_id": "13101852615ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Old series)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_161Y005",
+     "DT_161Y006",
+     "DT_161Y007",
+     "DT_161Y008"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(End of SA)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_161Y007"
+    ],
+    "obj_id": "13101852611ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2 (말잔원계열)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_161Y008"
+    ],
+    "obj_id": "13101844599ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(평잔 계절조정계열) 1)",
+    "type": "target",
+    "table_ids": [
+     "DT_161Y009"
+    ],
+    "obj_id": "13101852612ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(Average SA) 1)",
+    "type": "target",
+    "table_ids": [
+     "DT_161Y009"
+    ],
+    "obj_id": "13101852612ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(평잔 원계열)",
+    "type": "target",
+    "table_ids": [
+     "DT_161Y010"
+    ],
+    "obj_id": "13101852608ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(말잔 계절조정계열) 1)",
+    "type": "target",
+    "table_ids": [
+     "DT_161Y011"
+    ],
+    "obj_id": "13101844600ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(End of SA) 1)",
+    "type": "target",
+    "table_ids": [
+     "DT_161Y011"
+    ],
+    "obj_id": "13101844600ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2(말잔 원계열)",
+    "type": "target",
+    "table_ids": [
+     "DT_161Y012"
+    ],
+    "obj_id": "13101852609ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "M2( 광의통화 )",
+    "type": "indicator",
+    "table_ids": [
+     "DT_161Y015",
+     "DT_161Y017"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   }
+  ],
+  "judgement": {
+   "pairs": [],
+   "requirement_draft": [
+    {
+     "id": "d1",
+     "fragment_ids": [
+      "g1"
+     ],
+     "indicator_fragment_id": "g1",
+     "indicator": "M2",
+     "context": null,
+     "targets": [],
+     "breakdown": [],
+     "condition_ids": [],
+     "status": "ok",
+     "broad": false
+    }
+   ],
+   "certain": false,
+   "failed_conditions": [
+    "inexact_term"
+   ],
+   "attribution": {
+    "P1": "common",
+    "B1": "common",
+    "B2": "common",
+    "F1": "common"
+   },
+   "table_group_hint": [],
+   "calc_hints": [],
+   "negated": [],
+   "leftover": [],
+   "unused_names": [],
+   "structure": "{\"clauses\":1,\"conditions\":[\"basis.seasonal@in\",\"basis.stock@in\",\"frequency@in\",\"period@in\"],\"context\":false,\"drafts\":1,\"items\":[[1]],\"other_clauses\":0,\"phrases\":[],\"relation_operands\":[],\"rows\":[]}",
+   "failed_sources": [
+    {
+     "condition": "inexact_term",
+     "requirement_ids": [
+      "r1"
+     ],
+     "detail": "mixed_type:indicator",
+     "condition_ids": [],
+     "fragment_ids": [
+      "g1"
+     ]
+    }
+   ],
+   "model_step": "pending"
+  },
+  "interpretation": {
+   "status": "ask",
+   "common_condition_ids": [],
+   "relations": [],
+   "display_condition_ids": [],
+   "requirements": [
+    {
+     "id": "r1",
+     "quote": "2015년부터 M2 말잔 원계열을 월별로",
+     "span": [
+      0,
+      22
+     ],
+     "indicator": {
+      "quote": "M2",
+      "span": [
+       8,
+       10
+      ],
+      "fragment_id": "g1",
+      "name": "M2",
+      "path": "exact"
+     },
+     "measure_kind": null,
+     "targets": [],
+     "condition_ids": [
+      "P1",
+      "B1",
+      "B2",
+      "F1"
+     ],
+     "shared_condition_ids": [],
+     "ambiguous_condition_ids": [],
+     "status": "ok",
+     "reasons": [],
+     "context": null,
+     "breakdown": []
+    }
+   ],
+   "reasons": [
+    "inexact_term"
+   ],
+   "table_group_hint": []
+  },
+  "segments": [
+   {
+    "segment_id": "s1",
+    "span": [
+     0,
+     7
+    ],
+    "quote": "2015년부터",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s2",
+    "span": [
+     7,
+     8
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s3",
+    "span": [
+     8,
+     10
+    ],
+    "quote": "M2",
+    "kind": "name"
+   },
+   {
+    "segment_id": "s4",
+    "span": [
+     10,
+     11
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s5",
+    "span": [
+     11,
+     13
+    ],
+    "quote": "말잔",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s6",
+    "span": [
+     13,
+     14
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s7",
+    "span": [
+     14,
+     17
+    ],
+    "quote": "원계열",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s8",
+    "span": [
+     17,
+     18
+    ],
+    "quote": "을",
+    "kind": "grammar"
+   },
+   {
+    "segment_id": "s9",
+    "span": [
+     18,
+     19
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s10",
+    "span": [
+     19,
+     21
+    ],
+    "quote": "월별",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s11",
+    "span": [
+     21,
+     22
+    ],
+    "quote": "로",
+    "kind": "grammar"
+   },
+   {
+    "segment_id": "s12",
+    "span": [
+     22,
+     23
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s13",
+    "span": [
+     23,
+     26
+    ],
+    "quote": "보여줘",
+    "kind": "request"
+   }
+  ],
+  "mentions": [
+   {
+    "mention_id": "m1",
+    "kind": "condition",
+    "segment_ids": [
+     "s1"
+    ],
+    "condition_ids": [
+     "P1"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m2",
+    "kind": "name",
+    "segment_ids": [
+     "s3"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [
+     {
+      "table_id": "DT_101Y001",
+      "obj_id": "13101134693ACC_ITEM",
+      "value_id": "13102134693ACC_ITEM.BBGS00",
+      "value_name": "M2(말잔 계절조정계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y002",
+      "obj_id": "13101134509ACC_ITEM",
+      "value_id": "13102134509ACC_ITEM.BBGA00",
+      "value_name": "M2(말잔 원계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y003",
+      "obj_id": "13101134507ACC_ITEM",
+      "value_id": "13102134507ACC_ITEM.BBHS00",
+      "value_name": "M2(평잔 계절조정계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y004",
+      "obj_id": "13101134508ACC_ITEM",
+      "value_id": "13102134508ACC_ITEM.BBHA00",
+      "value_name": "M2(평잔 원계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y005",
+      "obj_id": "13101134485ACC_ITEM",
+      "value_id": "13102134485ACC_ITEM.BBGS00",
+      "value_name": "M2(말잔 계절조정계열) 1)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y006",
+      "obj_id": "13101134610ACC_ITEM",
+      "value_id": "13102134610ACC_ITEM.BBHS00",
+      "value_name": "M2(평잔 계절조정계열) 1)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y007",
+      "obj_id": "13101134694ACC_ITEM",
+      "value_id": "13102134694ACC_ITEM.BBIA00",
+      "value_name": "M2(말잔)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_101Y008",
+      "obj_id": "13101134737ACC_ITEM",
+      "value_id": "13102134737ACC_ITEM.BBJA00",
+      "value_name": "M2(평잔)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_101Y009",
+      "obj_id": "13101134652ACC_ITEM",
+      "value_id": "13102134652ACC_ITEM.BBAALA",
+      "value_name": "M2 (광의통화)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y011",
+      "obj_id": "13101134739ACC_ITEM",
+      "value_id": "13102134739ACC_ITEM.BBACLA",
+      "value_name": "M2 (광의통화)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y014",
+      "obj_id": "13101134585ACC_ITEM",
+      "value_id": "13102134585ACC_ITEM.BBGA00",
+      "value_name": "M2(말잔 원계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_101Y015",
+      "obj_id": "13101134650ACC_ITEM",
+      "value_id": "13102134650ACC_ITEM.BBHA00",
+      "value_name": "M2(평잔 원계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_111Y001",
+      "obj_id": "13101134695ACC_ITEM",
+      "value_id": "13102134695ACC_ITEM.LES1000",
+      "value_name": "M2",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_111Y003",
+      "obj_id": "13101130866ACC_ITEM",
+      "value_id": "13102130866ACC_ITEM.LAS1000",
+      "value_name": "M2",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y005",
+      "obj_id": "13101852615ACC_ITEM",
+      "value_id": "13102852615ACC_ITEM.BBHS00",
+      "value_name": "M2(평잔계절조정계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y005",
+      "obj_id": "13101852615ACC_ITEM",
+      "value_id": "13102852615ACC_ITEM.BBHS11",
+      "value_name": "M2(Old series)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y006",
+      "obj_id": "13101852603ACC_ITEM",
+      "value_id": "13102852603ACC_ITEM.BBHA00",
+      "value_name": "M2(평잔 원계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y006",
+      "obj_id": "13101852603ACC_ITEM",
+      "value_id": "13102852603ACC_ITEM.BBHA16",
+      "value_name": "M2(Old series)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y007",
+      "obj_id": "13101852611ACC_ITEM",
+      "value_id": "13102852611ACC_ITEM.BBGS00",
+      "value_name": "M2(말잔 계절조정계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y007",
+      "obj_id": "13101852611ACC_ITEM",
+      "value_id": "13102852611ACC_ITEM.BBGS11",
+      "value_name": "M2(Old series)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y008",
+      "obj_id": "13101844599ACC_ITEM",
+      "value_id": "13102844599ACC_ITEM.BBGA00",
+      "value_name": "M2 (말잔원계열)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y008",
+      "obj_id": "13101844599ACC_ITEM",
+      "value_id": "13102844599ACC_ITEM.BBGA16",
+      "value_name": "M2(Old series)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y009",
+      "obj_id": "13101852612ACC_ITEM",
+      "value_id": "13102852612ACC_ITEM.BBHS00",
+      "value_name": "M2(평잔 계절조정계열) 1)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_161Y010",
+      "obj_id": "13101852608ACC_ITEM",
+      "value_id": "13102852608ACC_ITEM.BBHA00",
+      "value_name": "M2(평잔 원계열)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_161Y011",
+      "obj_id": "13101844600ACC_ITEM",
+      "value_id": "13102844600ACC_ITEM.BBGS00",
+      "value_name": "M2(말잔 계절조정계열) 1)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_161Y012",
+      "obj_id": "13101852609ACC_ITEM",
+      "value_id": "13102852609ACC_ITEM.BBGA00",
+      "value_name": "M2(말잔 원계열)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_161Y013",
+      "obj_id": "13101852600ACC_ITEM",
+      "value_id": "13102852600ACC_ITEM.BBJA00",
+      "value_name": "M2(평잔)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_161Y014",
+      "obj_id": "13101852616ACC_ITEM",
+      "value_id": "13102852616ACC_ITEM.BBIA00",
+      "value_name": "M2(말잔)",
+      "role": "target",
+      "path": "lexical",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_161Y015",
+      "obj_id": "13101852620ACC_ITEM",
+      "value_id": "13102852620ACC_ITEM.BBABLA",
+      "value_name": "M2( 광의통화 )",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_161Y017",
+      "obj_id": "13101844601ACC_ITEM",
+      "value_id": "13102844601ACC_ITEM.BBABLA",
+      "value_name": "M2( 광의통화 )",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_171Y001",
+      "obj_id": "13101844597ACC_ITEM",
+      "value_id": "13102844597ACC_ITEM.LES1100",
+      "value_name": "M2",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_171Y002",
+      "obj_id": "13101852617ACC_ITEM",
+      "value_id": "13102852617ACC_ITEM.LE01100",
+      "value_name": "M2",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_171Y003",
+      "obj_id": "13101852605ACC_ITEM",
+      "value_id": "13102852605ACC_ITEM.LAS1100",
+      "value_name": "M2",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_171Y004",
+      "obj_id": "13101852613ACC_ITEM",
+      "value_id": "13102852613ACC_ITEM.LA01100",
+      "value_name": "M2",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     }
+    ],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m3",
+    "kind": "condition",
+    "segment_ids": [
+     "s5"
+    ],
+    "condition_ids": [
+     "B1"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m4",
+    "kind": "name",
+    "segment_ids": [
+     "s7"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [
+     {
+      "table_id": "DT_200Y102",
+      "obj_id": "13101136269ACC_ITEM",
+      "value_id": "13102136269ACC_ITEM.2012",
+      "value_name": "원계열(전년동기비)",
+      "role": "basis",
+      "path": "lexical",
+      "type": "basis"
+     }
+    ],
+    "overlaps": [
+     "m5"
+    ]
+   },
+   {
+    "mention_id": "m5",
+    "kind": "condition",
+    "segment_ids": [
+     "s7"
+    ],
+    "condition_ids": [
+     "B2"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": [
+     "m4"
+    ]
+   },
+   {
+    "mention_id": "m6",
+    "kind": "condition",
+    "segment_ids": [
+     "s10"
+    ],
+    "condition_ids": [
+     "F1"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m7",
+    "kind": "request",
+    "segment_ids": [
+     "s13"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   }
+  ],
+  "ref_map": {
+   "segment_mentions": {
+    "s1": [
+     "m1"
+    ],
+    "s2": [],
+    "s3": [
+     "m2"
+    ],
+    "s4": [],
+    "s5": [
+     "m3"
+    ],
+    "s6": [],
+    "s7": [
+     "m4",
+     "m5"
+    ],
+    "s8": [],
+    "s9": [],
+    "s10": [
+     "m6"
+    ],
+    "s11": [],
+    "s12": [],
+    "s13": [
+     "m7"
+    ]
+   },
+   "segment_fragments": {
+    "s1": [],
+    "s2": [],
+    "s3": [
+     "g1"
+    ],
+    "s4": [
+     "g1"
+    ],
+    "s5": [
+     "g1"
+    ],
+    "s6": [
+     "g1"
+    ],
+    "s7": [
+     "g1"
+    ],
+    "s8": [
+     "g1"
+    ],
+    "s9": [],
+    "s10": [],
+    "s11": [],
+    "s12": [],
+    "s13": []
+   },
+   "fragment_segments": {
+    "g1": [
+     "s3",
+     "s4",
+     "s5",
+     "s6",
+     "s7",
+     "s8"
+    ]
+   },
+   "mention_fragments": {
+    "m1": [],
+    "m2": [
+     "g1"
+    ],
+    "m3": [
+     "g1"
+    ],
+    "m4": [
+     "g1"
+    ],
+    "m5": [
+     "g1"
+    ],
+    "m6": [],
+    "m7": []
+   }
+  },
+  "decomposition": {
+   "requested_mode": "rules",
+   "execution_mode": null,
+   "applied_source": "rules",
+   "fallback_reason": null,
+   "error_class": null,
+   "as_of": "2026-10-20",
+   "reading_id": null,
+   "verify": null,
+   "bindings": [],
+   "requirement_ids": {},
+   "assumption_seeds": [],
+   "certainty": null,
+   "alternative": null,
+   "rule_diagnostics": {
+    "certain": false,
+    "failed_conditions": [
+     "inexact_term"
+    ],
+    "failed_sources": [
+     {
+      "condition": "inexact_term",
+      "requirement_ids": [
+       "r1"
+      ],
+      "detail": "mixed_type:indicator",
+      "condition_ids": [],
+      "fragment_ids": [
+       "g1"
+      ]
+     }
+    ],
+    "status": "ask"
+   },
+   "rule_checks": [],
+   "condition_fields": {
+    "P1": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null,
+     "period_diagnosis": "ok"
+    },
+    "B1": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null
+    },
+    "B2": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null
+    },
+    "F1": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null
+    }
+   },
+   "inferred": {
+    "r1": []
+   }
+  }
+ },
+ "selections": [
+  {
+   "requirement_id": "r1",
+   "tables": [
+    {
+     "table_id": "DT_161Y008",
+     "org_id": "301",
+     "table_name": "M2 상품별 구성내역(말잔, 원계열)",
+     "covers": {
+      "targets": [],
+      "periods": [
+       "2015-01~2026-07"
+      ],
+      "frequencies": [
+       "M"
+      ],
+      "basis": []
+     }
+    }
+   ],
+   "unspecified": [],
+   "status": "confirm",
+   "model_step": "pending",
+   "reasons": [
+    "family_alternatives",
+    "interpretation_undecided"
+   ],
+   "alternatives": [
+    [
+     "DT_161Y012"
+    ],
+    [
+     "DT_171Y002"
+    ],
+    [
+     "DT_161Y014"
+    ]
+   ],
+   "differences": [
+    {
+     "family": "m2상품별구성내역",
+     "table_ids": [
+      "DT_161Y008"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "CMA",
+      "M2 (말잔원계열)",
+      "MMF 지분",
+      "[참고] 구 M2(말잔 원계열)",
+      "만기2년미만금융채",
+      "만기2년미만금전신탁",
+      "만기2년미만외화예수금",
+      "만기2년미만정기예적금"
+     ]
+    },
+    {
+     "family": "m2경제주체별보유현황",
+     "table_ids": [
+      "DT_161Y012"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "M2(말잔 원계열)",
+      "Non-MMF",
+      "가계 및 비영리단체 1)",
+      "금융보조기관",
+      "기타금융기관 3)",
+      "기타금융중개기관",
+      "기타부문 4)",
+      "보험기관"
+     ]
+    },
+    {
+     "family": "lf상품별구성내역",
+     "table_ids": [
+      "DT_171Y002"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "2년이상 장기금융상품 2)",
+      "Lf(금융기관유동성) : 상품별(말잔 원계열)",
+      "M2",
+      "비예금취급기관 발행 금융상품 3)",
+      "예금취급기관 발행 금융상품 1)"
+     ]
+    },
+    {
+     "family": "m2기관별구성내역",
+     "table_ids": [
+      "DT_161Y014"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "M2(말잔)",
+      "MMF",
+      "기타비은행 2)",
+      "기타예금취급기관",
+      "서민금융기관 1)",
+      "신탁",
+      "예금은행",
+      "중앙은행"
+     ]
+    }
+   ],
+   "signals": {
+    "pool": 28,
+    "with_evidence": 26,
+    "retried": false,
+    "cells": 1,
+    "covered": 1,
+    "alternatives": 4,
+    "queries": [
+     "M2"
+    ],
+    "term_tables": [],
+    "term_tables_truncated": false,
+    "conventions": [],
+    "score_gap": 0.055949,
+    "period_check": false,
+    "score_items": {
+     "DT_161Y008": [
+      {
+       "item": "title_word",
+       "value": 4.0,
+       "reason": "M2"
+      }
+     ]
+    },
+    "facts": {
+     "requirement": {
+      "identity": {
+       "fragment_ids": [
+        "g1"
+       ],
+       "conditions": [
+        "basis:seasonal:원계열:+",
+        "basis:stock:말잔:+",
+        "frequency::M:+",
+        "period:::+:since:2015////:////:::"
+       ],
+       "key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::"
+      },
+      "period_request": {
+       "requested": true,
+       "relative": false,
+       "frequencies": [
+        "M"
+       ],
+       "start": "2015",
+       "end": null
+      },
+      "period_anchor": [
+       {
+        "frequency": "M",
+        "anchor": null,
+        "resolved_range": [
+         "2015-01",
+         null
+        ],
+        "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+        "relative": false,
+        "candidates": 6
+       }
+      ]
+     },
+     "tables": {
+      "DT_161Y013": {
+       "table_id": "DT_161Y013",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "mention",
+          "value_id": "13102852600ACC_ITEM.BBJA00",
+          "obj_id": "13101852600ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103852600999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 기관별 구성내역(평잔)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "mention_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [],
+          "title_words": false,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B2",
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y014": {
+       "table_id": "DT_161Y014",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "mention",
+          "value_id": "13102852616ACC_ITEM.BBIA00",
+          "obj_id": "13101852616ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103852616999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 기관별 구성내역(말잔)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "mention_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [],
+          "title_words": false,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B2",
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y007": {
+       "table_id": "DT_101Y007",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "mention",
+          "value_id": "13102134694ACC_ITEM.BBIA00",
+          "obj_id": "13101134694ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134694999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 기관별구성내역(말잔)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "mention_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [],
+          "title_words": false,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1960.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B2",
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y008": {
+       "table_id": "DT_101Y008",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "mention",
+          "value_id": "13102134737ACC_ITEM.BBJA00",
+          "obj_id": "13101134737ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134737999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 기관별구성내역(평잔)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "mention_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [],
+          "title_words": false,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1986.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B2",
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_111Y001": {
+       "table_id": "DT_111Y001",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102134695ACC_ITEM.LES1000",
+          "obj_id": "13101134695ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "Lf(금융기관유동성) : 상품별(말잔 계절조정계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "M2"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1986.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_111Y003": {
+       "table_id": "DT_111Y003",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102130866ACC_ITEM.LAS1000",
+          "obj_id": "13101130866ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "Lf(금융기관유동성) : 상품별(평잔 계절조정계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "M2"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1986.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_171Y001": {
+       "table_id": "DT_171Y001",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102844597ACC_ITEM.LES1100",
+          "obj_id": "13101844597ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "예금취급기관 발행 금융상품 1)",
+           "Lf(금융기관유동성) : 상품별(말잔 계절조정계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "M2"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_171Y002": {
+       "table_id": "DT_171Y002",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102852617ACC_ITEM.LE01100",
+          "obj_id": "13101852617ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "예금취급기관 발행 금융상품 1)",
+           "Lf(금융기관유동성) : 상품별(말잔 원계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "M2"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_171Y003": {
+       "table_id": "DT_171Y003",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102852605ACC_ITEM.LAS1100",
+          "obj_id": "13101852605ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "예금취급기관 발행 금융상품 1)",
+           "Lf(금융기관유동성) : 상품별(평잔 계절조정계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "M2"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_171Y004": {
+       "table_id": "DT_171Y004",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102852613ACC_ITEM.LA01100",
+          "obj_id": "13101852613ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "예금취급기관 발행 금융상품 1)",
+           "Lf(금융기관유동성) : 상품별(평잔 원계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "M2"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y006": {
+       "table_id": "DT_161Y006",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102852603ACC_ITEM.BBHA00",
+          "obj_id": "13101852603ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔 원계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103852603999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 상품별 구성내역(평잔 원계열)"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102852603ACC_ITEM.BBHA16",
+          "obj_id": "13101852603ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "M2(평잔 원계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "[참고] 구 M2(평잔 원계열)"
+         }
+        ],
+        "partial_count": 3,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y008": {
+       "table_id": "DT_161Y008",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102844599ACC_ITEM.BBGA00",
+          "obj_id": "13101844599ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 (말잔원계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103844599999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 상품별 구성내역(말잔 원계열)"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102844599ACC_ITEM.BBGA16",
+          "obj_id": "13101844599ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "M2 (말잔원계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "[참고] 구 M2(말잔 원계열)"
+         }
+        ],
+        "partial_count": 3,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y002": {
+       "table_id": "DT_101Y002",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102134509ACC_ITEM.BBGA00",
+          "obj_id": "13101134509ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔 원계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134509999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 상품별 구성내역(말잔 원계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1960.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y004": {
+       "table_id": "DT_101Y004",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102134508ACC_ITEM.BBHA00",
+          "obj_id": "13101134508ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔 원계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134508999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 상품별 구성내역(평잔 원계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1986.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y010": {
+       "table_id": "DT_161Y010",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "mention",
+          "value_id": "13102852608ACC_ITEM.BBHA00",
+          "obj_id": "13101852608ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔 원계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103852608999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 경제주체별 보유현황(평잔 원계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "mention_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y012": {
+       "table_id": "DT_161Y012",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "mention",
+          "value_id": "13102852609ACC_ITEM.BBGA00",
+          "obj_id": "13101852609ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔 원계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103852609999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 경제주체별 보유현황(말잔 원계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "mention_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_111Y002": {
+       "table_id": "DT_111Y002",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1980.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "period",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_111Y004": {
+       "table_id": "DT_111Y004",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1986.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y001": {
+       "table_id": "DT_101Y001",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102134693ACC_ITEM.BBGS00",
+          "obj_id": "13101134693ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔 계절조정계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134693999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 상품별 구성내역(말잔 계절조정계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1970.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y003": {
+       "table_id": "DT_101Y003",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102134507ACC_ITEM.BBHS00",
+          "obj_id": "13101134507ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔 계절조정계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134507999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 상품별 구성내역(평잔 계절조정계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "1986.01",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y005": {
+       "table_id": "DT_161Y005",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102852615ACC_ITEM.BBHS00",
+          "obj_id": "13101852615ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔계절조정계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103852615999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 상품별 구성내역(평잔 계절조정계열)"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102852615ACC_ITEM.BBHS11",
+          "obj_id": "13101852615ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "M2(평잔계절조정계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "[참고] 구 M2(평잔 계절조정계열)"
+         }
+        ],
+        "partial_count": 3,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y007": {
+       "table_id": "DT_161Y007",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102852611ACC_ITEM.BBGS00",
+          "obj_id": "13101852611ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔 계절조정계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103852611999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 상품별 구성내역(말잔 계절조정계열)"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102852611ACC_ITEM.BBGS11",
+          "obj_id": "13101852611ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "M2(말잔 계절조정계열)"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "[참고] 구 M2(말잔 계절조정계열)"
+         }
+        ],
+        "partial_count": 3,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y005": {
+       "table_id": "DT_101Y005",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102134485ACC_ITEM.BBGS00",
+          "obj_id": "13101134485ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔 계절조정계열) 1)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134485999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 경제주체별 보유현황(말잔 계절조정계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "2001.12",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y006": {
+       "table_id": "DT_101Y006",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102134610ACC_ITEM.BBHS00",
+          "obj_id": "13101134610ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔 계절조정계열) 1)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134610999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 경제주체별 보유현황(평잔 계절조정계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "2001.12",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y014": {
+       "table_id": "DT_101Y014",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102134585ACC_ITEM.BBGA00",
+          "obj_id": "13101134585ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔 원계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134585999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 경제주체별 보유현황(말잔 원계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "2001.12",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_101Y015": {
+       "table_id": "DT_101Y015",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "undetermined",
+          "value_id": "13102134650ACC_ITEM.BBHA00",
+          "obj_id": "13101134650ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔 원계열)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134650999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 경제주체별 보유현황(평잔 원계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "relation_undetermined"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "outside",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "outside",
+           "coverage": [
+            "2001.12",
+            "2004.09"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "period",
+         "condition_id": null
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y009": {
+       "table_id": "DT_161Y009",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "mention",
+          "value_id": "13102852612ACC_ITEM.BBHS00",
+          "obj_id": "13101852612ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(평잔 계절조정계열) 1)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103852612999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 경제주체별 보유현황(평잔 계절조정계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "mention_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "평잔"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B1"
+        },
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_161Y011": {
+       "table_id": "DT_161Y011",
+       "entered_by": "family",
+       "with_evidence": true,
+       "indicator": {
+        "name": "M2",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "mention",
+          "value_id": "13102844600ACC_ITEM.BBGS00",
+          "obj_id": "13101844600ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2(말잔 계절조정계열) 1)"
+         },
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103844600999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "M2 경제주체별 보유현황(말잔 계절조정계열)"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "mention_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [
+           "title",
+           "path",
+           "value"
+          ],
+          "opposite_in_title": [],
+          "title_words": true,
+          "title_conflict": false
+         }
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "fail",
+         "status": "conflict",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": null,
+         "basis": {
+          "requested_in": [],
+          "opposite_in_title": [
+           "계절조정"
+          ],
+          "title_words": true,
+          "title_conflict": true
+         }
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "covered",
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "M",
+          "anchor": null,
+          "resolved_range": [
+           "2015-01",
+           null
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": false,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "basis",
+         "condition_id": "B2"
+        }
+       ],
+       "unproven": [],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      }
+     }
+    },
+    "covers_all": {
+     "m2기관별구성내역": {
+      "covers": [
+       {
+        "tables": [
+         "DT_161Y014"
+        ],
+        "score_sum": 45.57735
+       }
+      ],
+      "cut": false
+     },
+     "lf상품별구성내역": {
+      "covers": [
+       {
+        "tables": [
+         "DT_171Y002"
+        ],
+        "score_sum": 51.0
+       }
+      ],
+      "cut": false
+     },
+     "m2상품별구성내역": {
+      "covers": [
+       {
+        "tables": [
+         "DT_161Y008"
+        ],
+        "score_sum": 54.89056
+       }
+      ],
+      "cut": false
+     },
+     "m2경제주체별보유현황": {
+      "covers": [
+       {
+        "tables": [
+         "DT_161Y012"
+        ],
+        "score_sum": 54.834611
+       }
+      ],
+      "cut": false
+     }
+    },
+    "pool_cut": {
+     "caps": {
+      "channel:title": 0,
+      "channel:item": 6,
+      "pool": 0,
+      "term_tables": 0
+     },
+     "cut": 6,
+     "matched_count": 4,
+     "matched": [
+      {
+       "table_id": "DT_101Y009",
+       "methods": [
+        "exact_with_qualifier"
+       ]
+      },
+      {
+       "table_id": "DT_101Y011",
+       "methods": [
+        "exact_with_qualifier"
+       ]
+      },
+      {
+       "table_id": "DT_161Y015",
+       "methods": [
+        "exact_with_qualifier"
+       ]
+      },
+      {
+       "table_id": "DT_161Y017",
+       "methods": [
+        "exact_with_qualifier"
+       ]
+      }
+     ],
+     "restorable": 6,
+     "restored": [
+      "DT_101Y009",
+      "DT_101Y011",
+      "DT_161Y015",
+      "DT_161Y017",
+      "DT_101Y010",
+      "DT_161Y016"
+     ],
+     "left_out": 0,
+     "unchecked": 0,
+     "restoration_cut": false,
+     "pool_cut": false
+    },
+    "pruned": {
+     "records": [],
+     "options": 4,
+     "options_cut": false
+    },
+    "dimensions": {
+     "bundles": [
+      {
+       "table_ids": [
+        "DT_161Y008"
+       ],
+       "source": "current",
+       "score": 54.89056,
+       "complete": true,
+       "family": "m2상품별구성내역",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_161Y012"
+       ],
+       "source": "family",
+       "score": 54.834611,
+       "complete": true,
+       "family": "m2경제주체별보유현황",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_171Y002"
+       ],
+       "source": "family",
+       "score": 51.0,
+       "complete": true,
+       "family": "lf상품별구성내역",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_161Y014"
+       ],
+       "source": "family",
+       "score": 45.57735,
+       "complete": true,
+       "family": "m2기관별구성내역",
+       "value": null
+      }
+     ],
+     "dimensions": [
+      {
+       "dimension": "family",
+       "class": "family",
+       "kind": "family",
+       "values": [
+        "m2상품별구성내역",
+        "m2경제주체별보유현황",
+        "lf상품별구성내역",
+        "m2기관별구성내역"
+       ],
+       "gap": 0.055949
+      }
+     ],
+     "result": "ask",
+     "ask_reasons": [
+      "family_alternatives"
+     ],
+     "resolved_by": [],
+     "gap": 0.055949,
+     "set_would_drop": [
+      "B2"
+     ]
+    },
+    "decision_preview": {
+     "needs": {
+      "requirement_id": "r1",
+      "identity": {
+       "fragment_ids": [
+        "g1"
+       ],
+       "conditions": [
+        "basis:seasonal:원계열:+",
+        "basis:stock:말잔:+",
+        "frequency::M:+",
+        "period:::+:since:2015////:////:::"
+       ],
+       "key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::"
+      },
+      "certainty": {
+       "all": false,
+       "condition_ids": [],
+       "fragment_ids": [
+        "g1"
+       ],
+       "sources": [
+        {
+         "condition": "inexact_term",
+         "requirement_ids": [
+          "r1"
+         ],
+         "detail": "mixed_type:indicator",
+         "condition_ids": [],
+         "fragment_ids": [
+          "g1"
+         ]
+        }
+       ]
+      },
+      "filter": {
+       "negated": [],
+       "negated_fragment_ids": [],
+       "negated_settled": true,
+       "forbidden": []
+      },
+      "evidence": {
+       "indicator": {
+        "name": "M2",
+        "quote": "M2",
+        "path": "exact",
+        "fragment_id": "g1",
+        "settled": false,
+        "mapped": true
+       },
+       "targets": [],
+       "lower_items": [],
+       "conditions": [
+        {
+         "condition_id": "P1",
+         "kind": "period",
+         "axis": null,
+         "value": null,
+         "polarity": "+",
+         "byeol": false,
+         "settled": true
+        },
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "axis": "stock",
+         "value": "말잔",
+         "polarity": "+",
+         "byeol": false,
+         "settled": true
+        },
+        {
+         "condition_id": "B2",
+         "kind": "basis",
+         "axis": "seasonal",
+         "value": "원계열",
+         "polarity": "+",
+         "byeol": false,
+         "settled": true
+        },
+        {
+         "condition_id": "F1",
+         "kind": "frequency",
+         "axis": null,
+         "value": "M",
+         "polarity": "+",
+         "byeol": false,
+         "settled": true
+        }
+       ]
+      },
+      "set": [
+       {
+        "condition_id": "B1",
+        "kind": "basis",
+        "axis": "stock",
+        "value": "말잔"
+       },
+       {
+        "condition_id": "B2",
+        "kind": "basis",
+        "axis": "seasonal",
+        "value": "원계열"
+       },
+       {
+        "condition_id": "F1",
+        "kind": "frequency",
+        "axis": null,
+        "value": "M"
+       }
+      ],
+      "causes": [
+       {
+        "kind": "failed_source",
+        "condition": "inexact_term",
+        "requirement_ids": [
+         "r1"
+        ],
+        "detail": "mixed_type:indicator",
+        "condition_ids": [],
+        "fragment_ids": [
+         "g1"
+        ]
+       }
+      ]
+     },
+     "candidates": {
+      "pool": 28,
+      "restored": [
+       "DT_101Y009",
+       "DT_101Y011",
+       "DT_161Y015",
+       "DT_161Y017",
+       "DT_101Y010",
+       "DT_161Y016"
+      ],
+      "alive": 7,
+      "live": 7,
+      "editions": 7,
+      "tried": 0
+     },
+     "refutations": {
+      "tables": {
+       "DT_161Y013": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y013"
+        }
+       ],
+       "DT_101Y007": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1960.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y007"
+        }
+       ],
+       "DT_101Y008": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y008"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1986.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y008"
+        }
+       ],
+       "DT_111Y001": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_111Y001"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1986.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_111Y001"
+        }
+       ],
+       "DT_111Y003": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_111Y003"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_111Y003"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1986.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_111Y003"
+        }
+       ],
+       "DT_171Y001": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_171Y001"
+        }
+       ],
+       "DT_171Y003": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_171Y003"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_171Y003"
+        }
+       ],
+       "DT_171Y004": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_171Y004"
+        }
+       ],
+       "DT_161Y006": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y006"
+        }
+       ],
+       "DT_101Y002": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1960.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y002"
+        }
+       ],
+       "DT_101Y004": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y004"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1986.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y004"
+        }
+       ],
+       "DT_161Y010": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y010"
+        }
+       ],
+       "DT_111Y002": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1980.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_111Y002"
+        }
+       ],
+       "DT_111Y004": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_111Y004"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1986.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_111Y004"
+        }
+       ],
+       "DT_101Y001": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y001"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1970.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y001"
+        }
+       ],
+       "DT_101Y003": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y003"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y003"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "1986.01",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y003"
+        }
+       ],
+       "DT_161Y005": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y005"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y005"
+        }
+       ],
+       "DT_161Y007": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y007"
+        }
+       ],
+       "DT_101Y005": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y005"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "2001.12",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y005"
+        }
+       ],
+       "DT_101Y006": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y006"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y006"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "2001.12",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y006"
+        }
+       ],
+       "DT_101Y014": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "2001.12",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y014"
+        }
+       ],
+       "DT_101Y015": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y015"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "2001.12",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y015"
+        }
+       ],
+       "DT_161Y009": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "평잔"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y009"
+        },
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y009"
+        }
+       ],
+       "DT_161Y011": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "B2",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "basis",
+          "status": "conflict",
+          "source": "title",
+          "opposite_in_title": [
+           "계절조정"
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_161Y011"
+        }
+       ],
+       "DT_101Y009": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "2001.12",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y009"
+        }
+       ],
+       "DT_101Y011": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "2001.12",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y011"
+        }
+       ],
+       "DT_101Y010": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1#basis:seasonal:원계열:+|basis:stock:말잔:+|frequency::M:+|period:::+:since:2015////:////:::",
+         "condition_id": "P1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "period",
+          "status": "outside",
+          "by_frequency": [
+           {
+            "frequency": "M",
+            "status": "outside",
+            "coverage": [
+             "2001.12",
+             "2004.09"
+            ]
+           }
+          ]
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_101Y010"
+        }
+       ]
+      },
+      "cells": {}
+     },
+     "cells": 2,
+     "decision": {
+      "unit": "r1",
+      "requirement_ids": [
+       "r1"
+      ],
+      "alternatives": [
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y008"
+         ]
+        },
+        "tables": [
+         "DT_161Y008"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -54.89056,
+         -1.0,
+         "m2상품별구성내역",
+         [
+          11
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a1"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y012"
+         ]
+        },
+        "tables": [
+         "DT_161Y012"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -54.834611,
+         -1.0,
+         "m2경제주체별보유현황",
+         [
+          15
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a2"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_171Y002"
+         ]
+        },
+        "tables": [
+         "DT_171Y002"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [],
+        "label": "proven",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -51.0,
+         -1.0,
+         "lf상품별구성내역",
+         [
+          7
+         ]
+        ],
+        "indicator_relation": "component",
+        "id": "r1.a3"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y014"
+         ]
+        },
+        "tables": [
+         "DT_161Y014"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -45.57735,
+         -1.0,
+         "m2기관별구성내역",
+         [
+          1
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a4"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y017"
+         ]
+        },
+        "tables": [
+         "DT_161Y017"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -40.0,
+         -1.0,
+         "기타예금취급기관개관표",
+         [
+          31
+         ]
+        ],
+        "indicator_relation": "component",
+        "id": "r1.a5"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y015"
+         ]
+        },
+        "tables": [
+         "DT_161Y015"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -40.0,
+         -1.0,
+         "예금취급기관개관표",
+         [
+          30
+         ]
+        ],
+        "indicator_relation": "component",
+        "id": "r1.a6"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y016"
+         ]
+        },
+        "tables": [
+         "DT_161Y016"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -40.0,
+         -1.0,
+         "중앙은행개관표",
+         [
+          33
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a7"
+       }
+      ],
+      "dimensions": [
+       {
+        "name": "other",
+        "kind": "other",
+        "values": [
+         "axis_values",
+         "unexplained"
+        ],
+        "alternative_ids": [
+         "r1.a2",
+         "r1.a3",
+         "r1.a4"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "family",
+        "kind": "family",
+        "values": [],
+        "alternative_ids": [
+         "r1.a2",
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "relation",
+        "kind": "relation",
+        "values": [
+         "undetermined",
+         "component"
+        ],
+        "alternative_ids": [
+         "r1.a3",
+         "r1.a5",
+         "r1.a6"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "mixed_basis",
+        "kind": "mixed_basis",
+        "values": [
+         "seasonal",
+         "currency"
+        ],
+        "alternative_ids": [
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7"
+        ],
+        "set_by_question": true
+       }
+      ],
+      "cut": {
+       "pool_cut": false,
+       "cover_cut": false,
+       "decision_cut": false
+      },
+      "gaps": [],
+      "today": {
+       "tables": [
+        "DT_161Y008"
+       ],
+       "in_alternatives": true,
+       "first": true,
+       "alternative_id": "r1.a1",
+       "explained_by": []
+      }
+     },
+     "bundle": {
+      "unit": "r1",
+      "requirement_ids": [
+       "r1"
+      ],
+      "alternatives": [
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y008"
+         ]
+        },
+        "tables": [
+         "DT_161Y008"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -54.89056,
+         -1.0,
+         "m2상품별구성내역",
+         [
+          11
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a1"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y012"
+         ]
+        },
+        "tables": [
+         "DT_161Y012"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -54.834611,
+         -1.0,
+         "m2경제주체별보유현황",
+         [
+          15
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a2"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_171Y002"
+         ]
+        },
+        "tables": [
+         "DT_171Y002"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [],
+        "label": "proven",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -51.0,
+         -1.0,
+         "lf상품별구성내역",
+         [
+          7
+         ]
+        ],
+        "indicator_relation": "component",
+        "id": "r1.a3"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y014"
+         ]
+        },
+        "tables": [
+         "DT_161Y014"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -45.57735,
+         -1.0,
+         "m2기관별구성내역",
+         [
+          1
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a4"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y017"
+         ]
+        },
+        "tables": [
+         "DT_161Y017"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -40.0,
+         -1.0,
+         "기타예금취급기관개관표",
+         [
+          31
+         ]
+        ],
+        "indicator_relation": "component",
+        "id": "r1.a5"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y015"
+         ]
+        },
+        "tables": [
+         "DT_161Y015"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -40.0,
+         -1.0,
+         "예금취급기관개관표",
+         [
+          30
+         ]
+        ],
+        "indicator_relation": "component",
+        "id": "r1.a6"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_161Y016"
+         ]
+        },
+        "tables": [
+         "DT_161Y016"
+        ],
+        "complete": true,
+        "covered": 2,
+        "cells": 2,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -2,
+         1,
+         -40.0,
+         -1.0,
+         "중앙은행개관표",
+         [
+          33
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a7"
+       }
+      ],
+      "dimensions": [
+       {
+        "name": "other",
+        "kind": "other",
+        "values": [
+         "axis_values",
+         "unexplained"
+        ],
+        "alternative_ids": [
+         "r1.a2",
+         "r1.a3",
+         "r1.a4"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "family",
+        "kind": "family",
+        "values": [],
+        "alternative_ids": [
+         "r1.a2",
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "relation",
+        "kind": "relation",
+        "values": [
+         "undetermined",
+         "component"
+        ],
+        "alternative_ids": [
+         "r1.a3",
+         "r1.a5",
+         "r1.a6"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "mixed_basis",
+        "kind": "mixed_basis",
+        "values": [
+         "seasonal",
+         "currency"
+        ],
+        "alternative_ids": [
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7"
+        ],
+        "set_by_question": true
+       }
+      ],
+      "cut": {
+       "pool_cut": false,
+       "cover_cut": false,
+       "decision_cut": false
+      },
+      "gaps": [],
+      "today": {
+       "tables": [
+        "DT_161Y008"
+       ],
+       "in_alternatives": true,
+       "first": true,
+       "alternative_id": "r1.a1",
+       "explained_by": []
+      }
+     }
+    }
+   }
+  }
+ ],
+ "selection_groups": [
+  {
+   "requirement_ids": [
+    "r1"
+   ],
+   "table_ids": [
+    "DT_161Y008"
+   ]
+  }
+ ],
+ "selection_route": {
+  "kind": "ask_selection",
+  "requirement_ids": [
+   "r1"
+  ],
+  "options": [
+   {
+    "requirement_id": null,
+    "table_ids": [
+     "DT_161Y008"
+    ],
+    "tables": [
+     {
+      "table_id": "DT_161Y008",
+      "table_name": "M2 상품별 구성내역(말잔, 원계열)",
+      "values": []
+     }
+    ],
+    "default": true,
+    "source": "reading:interpretation"
+   },
+   {
+    "requirement_id": null,
+    "table_ids": [
+     "DT_161Y012"
+    ],
+    "tables": [
+     {
+      "table_id": "DT_161Y012",
+      "table_name": "M2 경제주체별 보유현황(말잔, 원계열)",
+      "values": []
+     }
+    ],
+    "default": false,
+    "source": "reading:P1:o1"
+   }
+  ],
+  "default": {
+   "reading": "interpretation"
+  },
+  "reasons": [
+   "inexact_term",
+   "readings_differ"
+  ],
+  "partial": false,
+  "confirm": true,
+  "questions": [
+   {
+    "requirement_ids": [
+     "r1"
+    ],
+    "dimension": "inexact_term+readings_differ",
+    "values": [],
+    "options": [
+     {
+      "value": [],
+      "table_ids": [
+       "DT_161Y008"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_161Y008",
+        "table_name": "M2 상품별 구성내역(말잔, 원계열)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": true,
+      "source": "reading:interpretation",
+      "label": "M2 상품별 구성내역(말잔, 원계열)",
+      "assignment": {},
+      "effect": {
+       "dimension": "inexact_term+readings_differ",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o1"
+     },
+     {
+      "value": [],
+      "table_ids": [
+       "DT_161Y012"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_161Y012",
+        "table_name": "M2 경제주체별 보유현황(말잔, 원계열)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "reading:P1:o1",
+      "label": "M2 경제주체별 보유현황(말잔, 원계열)",
+      "assignment": {},
+      "effect": {
+       "dimension": "inexact_term+readings_differ",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o2"
+     }
+    ],
+    "deferred": false,
+    "cause": "readings_differ",
+    "open": false,
+    "effect_kind": "change_reading",
+    "id": "q1",
+    "version": {
+     "analysis": "11e28d798a1e86ed",
+     "selection": "b88ee4eef013e074"
+    }
+   }
+  ]
+ },
+ "requirements": [
+  {
+   "scope_id": "r1",
+   "text": "2015년부터 M2 말잔 원계열을 월별로",
+   "a_status": "confirm",
+   "gaps": [],
+   "reason_codes": [
+    "interp:ok",
+    "select:family_alternatives",
+    "select:interpretation_undecided"
+   ],
+   "source": "A"
+  }
+ ],
+ "unresolved": [
+  {
+   "scope_id": "r1",
+   "kind": "requirement_not_met",
+   "detail": "confirm",
+   "from_node": "A"
+  }
+ ],
+ "selection": {
+  "tables": [
+   {
+    "org_id": "301",
+    "table_id": "DT_161Y008",
+    "table_name": "M2 상품별 구성내역(말잔, 원계열)"
+   }
+  ],
+  "backups": []
+ }
+}

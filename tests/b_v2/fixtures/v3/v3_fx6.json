@@ -1,0 +1,2876 @@
+{
+ "question": "기업대출 금액을 보여줘",
+ "as_of": "2026-10-20",
+ "analysis": {
+  "text": {
+   "raw": "기업대출 금액을 보여줘",
+   "norm": "기업대출 금액을 보여줘",
+   "nospace": "기업대출금액을보여줘",
+   "offsets": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  "conditions": [],
+  "fragments": [
+   {
+    "id": "g1",
+    "quote": "기업대출 금액을",
+    "span": [
+     0,
+     8
+    ],
+    "role": "core",
+    "protected_by": null,
+    "phrase": "item"
+   }
+  ],
+  "terms": [
+   {
+    "fragment_id": "g1",
+    "name": "기업대출",
+    "type": "indicator",
+    "table_ids": [
+     "DT_121Y006"
+    ],
+    "obj_id": "13101134553ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "기업대출 2)",
+    "type": "indicator",
+    "table_ids": [
+     "DT_121Y015"
+    ],
+    "obj_id": "13101134612ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "금액(십억원)",
+    "type": "basis",
+    "table_ids": [
+     "DT_105Y001"
+    ],
+    "obj_id": "13101134743GUBUN_CD",
+    "obj_name": "구분코드별",
+    "path": "lexical",
+    "status": "draft",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "금액",
+    "type": "basis",
+    "table_ids": [
+     "DT_303Y001",
+     "DT_303Y002",
+     "DT_303Y003",
+     "DT_303Y004",
+     "DT_303Y005",
+     "DT_303Y006",
+     "DT_602Y001",
+     "DT_602Y002",
+     "DT_603Y001",
+     "DT_603Y010"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   }
+  ],
+  "judgement": {
+   "pairs": [],
+   "requirement_draft": [
+    {
+     "id": "d1",
+     "fragment_ids": [
+      "g1"
+     ],
+     "indicator_fragment_id": "g1",
+     "indicator": "기업대출",
+     "context": null,
+     "targets": [],
+     "breakdown": [],
+     "condition_ids": [],
+     "status": "ok",
+     "broad": false
+    }
+   ],
+   "certain": false,
+   "failed_conditions": [
+    "inexact_term"
+   ],
+   "attribution": {},
+   "table_group_hint": [],
+   "calc_hints": [],
+   "negated": [],
+   "leftover": [],
+   "unused_names": [],
+   "structure": "{\"clauses\":1,\"conditions\":[],\"context\":false,\"drafts\":1,\"items\":[[1]],\"other_clauses\":0,\"phrases\":[],\"relation_operands\":[],\"rows\":[]}",
+   "failed_sources": [
+    {
+     "condition": "inexact_term",
+     "requirement_ids": [
+      "r1"
+     ],
+     "detail": "catalog_basis"
+    }
+   ],
+   "model_step": "pending"
+  },
+  "interpretation": {
+   "status": "ask",
+   "common_condition_ids": [],
+   "relations": [],
+   "display_condition_ids": [],
+   "requirements": [
+    {
+     "id": "r1",
+     "quote": "기업대출 금액을",
+     "span": [
+      0,
+      8
+     ],
+     "indicator": {
+      "quote": "기업대출",
+      "span": [
+       0,
+       4
+      ],
+      "fragment_id": "g1",
+      "name": "기업대출",
+      "path": "exact"
+     },
+     "measure_kind": null,
+     "targets": [],
+     "condition_ids": [],
+     "shared_condition_ids": [],
+     "ambiguous_condition_ids": [],
+     "status": "ok",
+     "reasons": [
+      "branch"
+     ],
+     "context": null,
+     "breakdown": []
+    }
+   ],
+   "reasons": [
+    "inexact_term"
+   ],
+   "table_group_hint": []
+  }
+ },
+ "selections": [
+  {
+   "requirement_id": "r1",
+   "tables": [
+    {
+     "table_id": "DT_141Y004",
+     "org_id": "301",
+     "table_name": "예금은행 지역별 기업대출(말잔)",
+     "covers": {
+      "targets": [],
+      "periods": [
+       "latest"
+      ],
+      "frequencies": [],
+      "basis": []
+     }
+    }
+   ],
+   "unspecified": [],
+   "status": "confirm",
+   "model_step": "pending",
+   "reasons": [
+    "family_alternatives",
+    "interpretation_undecided"
+   ],
+   "alternatives": [
+    [
+     "DT_141Y010"
+    ],
+    [
+     "DT_121Y015"
+    ],
+    [
+     "DT_403Y001"
+    ],
+    [
+     "DT_403Y003"
+    ],
+    [
+     "DT_105Y001"
+    ]
+   ],
+   "differences": [
+    {
+     "family": "table:DT_141Y004",
+     "table_ids": [
+      "DT_141Y004"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "예금은행",
+      "중소기업시설"
+     ]
+    },
+    {
+     "family": "table:DT_141Y010",
+     "table_ids": [
+      "DT_141Y010"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "기타",
+      "비은행금융기관",
+      "상호금융",
+      "상호저축은행",
+      "새마을금고",
+      "신용협동조합",
+      "중소기업대출금"
+     ]
+    },
+    {
+     "family": "예금은행대출금리",
+     "table_ids": [
+      "DT_121Y015"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "가계대출 2)",
+      "고정형 주택담보대출 5)",
+      "공공및기타부문대출",
+      "기업대출 2)",
+      "당좌대출 4)",
+      "대기업대출",
+      "변동형 주택담보대출 5)",
+      "보증대출"
+     ]
+    },
+    {
+     "family": "table:DT_403Y001",
+     "table_ids": [
+      "DT_403Y001"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "가정용냉장고및냉동고",
+      "강선",
+      "건설및광물처리기계",
+      "구조용금속제품및탱크",
+      "금속가구",
+      "금속제탱크및압력용기",
+      "기타고무제품",
+      "기타금속제품"
+     ]
+    },
+    {
+     "family": "table:DT_403Y003",
+     "table_ids": [
+      "DT_403Y003"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "TV",
+      "가금육",
+      "강화및재생목재",
+      "곡류",
+      "곡물및식량작물",
+      "과실및채소가공품",
+      "광산품",
+      "금속광물"
+     ]
+    },
+    {
+     "family": "table:DT_105Y001",
+     "table_ids": [
+      "DT_105Y001"
+     ],
+     "only_axes": [
+      "구분코드별",
+      "금액구분코드별"
+     ],
+     "only_values": [
+      "10억초과",
+      "1억이하",
+      "1억초과5억이하",
+      "5억초과10억이하",
+      "계좌수(천좌)",
+      "금액(십억원)",
+      "금전신탁",
+      "기업자유예금"
+     ]
+    }
+   ],
+   "signals": {
+    "pool": 25,
+    "with_evidence": 7,
+    "retried": false,
+    "cells": 1,
+    "covered": 1,
+    "alternatives": 6,
+    "queries": [
+     "기업대출",
+     "기업대출 금액"
+    ],
+    "term_tables": [],
+    "term_tables_truncated": false,
+    "conventions": [],
+    "score_gap": 0.101954,
+    "period_check": false,
+    "score_items": {
+     "DT_141Y004": [
+      {
+       "item": "title_word",
+       "value": 4.0,
+       "reason": "기업대출"
+      }
+     ]
+    },
+    "facts": {
+     "requirement": {
+      "identity": {
+       "fragment_ids": [
+        "g1"
+       ],
+       "conditions": [],
+       "key": "g1#"
+      },
+      "period_request": {
+       "requested": false,
+       "relative": false,
+       "frequencies": [],
+       "start": null,
+       "end": null
+      },
+      "period_anchor": []
+     },
+     "tables": {
+      "DT_141Y004": {
+       "table_id": "DT_141Y004",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "partial",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134654999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "예금은행 지역별 기업대출(말잔)"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": "13102134654ACC_ITEM.1A0000",
+          "obj_id": "13101134654ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "기업대출금"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102134654ACC_ITEM.X120000",
+          "obj_id": "13101134654ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "기업대출금"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "중소기업대출"
+         },
+         {
+          "field": "title",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         }
+        ],
+        "partial_count": 6,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2007.01",
+            "2026.06"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2007 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2007",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": []
+      },
+      "DT_141Y010": {
+       "table_id": "DT_141Y010",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "partial",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "subject_candidate",
+          "value_id": "13103134698999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "비은행금융기관 지역별 기업대출(말잔)"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": "13102134698ACC_ITEM.AEX10000",
+          "obj_id": "13101134698ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "기업대출금"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102134698ACC_ITEM.AEX12000",
+          "obj_id": "13101134698ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "기업대출금"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "중소기업대출금"
+         },
+         {
+          "field": "title",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         }
+        ],
+        "partial_count": 6,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2013.01",
+            "2026.06"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2013 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2013",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": []
+      },
+      "DT_121Y015": {
+       "table_id": "DT_121Y015",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "partial",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102134612ACC_ITEM.BECBLB0201",
+          "obj_id": "13101134612ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "총대출 1)",
+           "잔액 기준"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "기업대출 2)"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102134612ACC_ITEM.BECBLB020101",
+          "obj_id": "13101134612ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "기업대출 2)",
+           "총대출 1)",
+           "잔액 기준"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "대기업대출"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102134612ACC_ITEM.BECBLB020102",
+          "obj_id": "13101134612ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "기업대출 2)",
+           "총대출 1)",
+           "잔액 기준"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "중소기업대출"
+         },
+         {
+          "field": "item",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         }
+        ],
+        "partial_count": 3,
+        "weak": false,
+        "weak_reasons": []
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1996.01",
+            "2026.07"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "1996 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "1996",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": []
+      },
+      "DT_403Y001": {
+       "table_id": "DT_403Y001",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "partial",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         },
+         {
+          "field": "item",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1988.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "1988 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "1988",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": []
+      },
+      "DT_121Y006": {
+       "table_id": "DT_121Y006",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "partial",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "component",
+          "value_id": "13102134553ACC_ITEM.BECBLA02",
+          "obj_id": "13101134553ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "대출평균 1)",
+           "신규취급액 기준"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "기업대출"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102134553ACC_ITEM.BECBLA0201",
+          "obj_id": "13101134553ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "기업대출",
+           "대출평균 1)",
+           "신규취급액 기준"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "대기업대출"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102134553ACC_ITEM.BECBLA0202",
+          "obj_id": "13101134553ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "기업대출",
+           "대출평균 1)",
+           "신규취급액 기준"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "중소기업대출"
+         },
+         {
+          "field": "item",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         }
+        ],
+        "partial_count": 3,
+        "weak": false,
+        "weak_reasons": []
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1996.01",
+            "2026.07"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "1996 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "1996",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": []
+      },
+      "DT_101Y009": {
+       "table_id": "DT_101Y009",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2001.12",
+            "2004.09"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2001 4/4",
+            "2004 3/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2001",
+            "2003"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_101Y010": {
+       "table_id": "DT_101Y010",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2001.12",
+            "2004.09"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2001 4/4",
+            "2004 3/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2001",
+            "2003"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_101Y011": {
+       "table_id": "DT_101Y011",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2001.12",
+            "2004.09"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2001 4/4",
+            "2004 3/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2001",
+            "2003"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_103Y002": {
+       "table_id": "DT_103Y002",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1970.01",
+            "2026.07"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "1970 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "1961",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_161Y015": {
+       "table_id": "DT_161Y015",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2003 4/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2003",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_161Y016": {
+       "table_id": "DT_161Y016",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2003 4/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2003",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_403Y003": {
+       "table_id": "DT_403Y003",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "partial",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         },
+         {
+          "field": "item",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1988.01",
+            "2026.08"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "1988 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "1988",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": []
+      },
+      "DT_105Y001": {
+       "table_id": "DT_105Y001",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "partial",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         },
+         {
+          "field": "item",
+          "method": "partial_words",
+          "relation": "undetermined",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "indicator_check"
+         }
+        ],
+        "partial_count": 2,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "H",
+           "status": "covered",
+           "coverage": [
+            "2002 1/2",
+            "2025 2/2"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": []
+      },
+      "DT_131Y010": {
+       "table_id": "DT_131Y010",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2018 4/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2018",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_131Y018": {
+       "table_id": "DT_131Y018",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2021 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2021",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_104Y016": {
+       "table_id": "DT_104Y016",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "1960.01",
+            "2026.07"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "1960",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_131Y013": {
+       "table_id": "DT_131Y013",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2001 4/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "1998",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_161Y017": {
+       "table_id": "DT_161Y017",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "M",
+           "status": "covered",
+           "coverage": [
+            "2003.10",
+            "2026.07"
+           ]
+          },
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2003 4/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2003",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_131Y011": {
+       "table_id": "DT_131Y011",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2001 4/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "1998",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_131Y014": {
+       "table_id": "DT_131Y014",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2008 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2008",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_131Y015": {
+       "table_id": "DT_131Y015",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2008 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2008",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_131Y016": {
+       "table_id": "DT_131Y016",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2008 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2008",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_131Y017": {
+       "table_id": "DT_131Y017",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2008 1/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2008",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_132Y001": {
+       "table_id": "DT_132Y001",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2007 3/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2007",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      },
+      "DT_132Y003": {
+       "table_id": "DT_132Y003",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "기업대출",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ]
+       },
+       "conditions": [],
+       "cross": null,
+       "frequency": {
+        "verdict": "n/a",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "covered",
+           "coverage": [
+            "2007 3/4",
+            "2026 2/4"
+           ]
+          },
+          {
+           "frequency": "Y",
+           "status": "covered",
+           "coverage": [
+            "2007",
+            "2025"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": []
+      }
+     }
+    },
+    "covers_all": {
+     "table:DT_141Y004": {
+      "covers": [
+       {
+        "tables": [
+         "DT_141Y004"
+        ],
+        "score_sum": 10.943599
+       }
+      ],
+      "cut": false
+     },
+     "table:DT_141Y010": {
+      "covers": [
+       {
+        "tables": [
+         "DT_141Y010"
+        ],
+        "score_sum": 10.841645
+       }
+      ],
+      "cut": false
+     },
+     "예금은행대출금리": {
+      "covers": [
+       {
+        "tables": [
+         "DT_121Y015"
+        ],
+        "score_sum": 6.207625
+       },
+       {
+        "tables": [
+         "DT_121Y006"
+        ],
+        "score_sum": 5.827893
+       }
+      ],
+      "cut": false
+     },
+     "table:DT_403Y001": {
+      "covers": [
+       {
+        "tables": [
+         "DT_403Y001"
+        ],
+        "score_sum": 6.0
+       }
+      ],
+      "cut": false
+     },
+     "table:DT_403Y003": {
+      "covers": [
+       {
+        "tables": [
+         "DT_403Y003"
+        ],
+        "score_sum": 5.695304
+       }
+      ],
+      "cut": false
+     },
+     "table:DT_105Y001": {
+      "covers": [
+       {
+        "tables": [
+         "DT_105Y001"
+        ],
+        "score_sum": 5.662114
+       }
+      ],
+      "cut": false
+     }
+    },
+    "pool_cut": {
+     "caps": {
+      "channel:title": 138,
+      "channel:item": 174,
+      "pool": 0,
+      "term_tables": 0
+     },
+     "cut": 198,
+     "matched_count": 0,
+     "matched": [],
+     "pool_cut": false
+    },
+    "pruned": {
+     "records": [
+      {
+       "step": "undominated",
+       "table_ids": [
+        "DT_121Y006"
+       ],
+       "kept": [
+        "DT_121Y015"
+       ],
+       "reason": "score",
+       "family": "예금은행대출금리"
+      }
+     ],
+     "options": 6,
+     "options_cut": true
+    },
+    "dimensions": {
+     "bundles": [
+      {
+       "table_ids": [
+        "DT_141Y004"
+       ],
+       "source": "current",
+       "score": 10.943599,
+       "complete": true,
+       "family": "table:DT_141Y004",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_141Y010"
+       ],
+       "source": "family",
+       "score": 10.841645,
+       "complete": true,
+       "family": "table:DT_141Y010",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_121Y015"
+       ],
+       "source": "family",
+       "score": 6.207625,
+       "complete": true,
+       "family": "예금은행대출금리",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_403Y001"
+       ],
+       "source": "family",
+       "score": 6.0,
+       "complete": true,
+       "family": "table:DT_403Y001",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_403Y003"
+       ],
+       "source": "family",
+       "score": 5.695304,
+       "complete": true,
+       "family": "table:DT_403Y003",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_105Y001"
+       ],
+       "source": "family",
+       "score": 5.662114,
+       "complete": true,
+       "family": "table:DT_105Y001",
+       "value": null
+      }
+     ],
+     "dimensions": [
+      {
+       "dimension": "family",
+       "class": "family",
+       "kind": "family",
+       "values": [
+        "table:DT_141Y004",
+        "table:DT_141Y010",
+        "예금은행대출금리",
+        "table:DT_403Y001",
+        "table:DT_403Y003",
+        "table:DT_105Y001"
+       ],
+       "gap": 0.101954
+      }
+     ],
+     "result": "ask",
+     "ask_reasons": [
+      "family_alternatives"
+     ],
+     "resolved_by": [],
+     "gap": 0.101954,
+     "set_would_drop": []
+    }
+   }
+  }
+ ],
+ "selection_groups": [
+  {
+   "requirement_ids": [
+    "r1"
+   ],
+   "table_ids": [
+    "DT_141Y004"
+   ]
+  }
+ ],
+ "selection_route": {
+  "kind": "ask_selection",
+  "requirement_ids": [
+   "r1"
+  ],
+  "options": [
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_141Y004"
+    ],
+    "default": true,
+    "source": "current",
+    "tables": [
+     {
+      "table_id": "DT_141Y004",
+      "table_name": "예금은행 지역별 기업대출(말잔)",
+      "values": [
+       "기업대출금"
+      ]
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_141Y010"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_141Y010",
+      "table_name": "비은행금융기관 지역별 기업대출(말잔)",
+      "values": [
+       "기업대출금"
+      ]
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_121Y015"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_121Y015",
+      "table_name": "예금은행 대출금리(잔액 기준)",
+      "values": []
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_403Y001"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_403Y001",
+      "table_name": "수출금액지수",
+      "values": []
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_403Y003"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_403Y003",
+      "table_name": "수입금액지수",
+      "values": []
+     }
+    ]
+   }
+  ],
+  "default": {
+   "choices": {
+    "r1": [
+     "DT_141Y004"
+    ]
+   }
+  },
+  "reasons": [
+   "family_alternatives"
+  ],
+  "partial": false,
+  "confirm": true,
+  "questions": [
+   {
+    "requirement_ids": [
+     "r1"
+    ],
+    "dimension": "family",
+    "values": [
+     "table:DT_141Y004",
+     "table:DT_141Y010",
+     "예금은행대출금리",
+     "table:DT_403Y001",
+     "table:DT_403Y003",
+     "table:DT_105Y001"
+    ],
+    "options": [
+     {
+      "value": [],
+      "table_ids": [
+       "DT_141Y004"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_141Y004",
+        "table_name": "예금은행 지역별 기업대출(말잔)",
+        "values": [
+         "기업대출금"
+        ]
+       }
+      ],
+      "complete": true,
+      "default": true,
+      "source": "current",
+      "label": "예금은행 지역별 기업대출(말잔)",
+      "assignment": {
+       "r1": [
+        "DT_141Y004"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o1"
+     },
+     {
+      "value": [],
+      "table_ids": [
+       "DT_141Y010"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_141Y010",
+        "table_name": "비은행금융기관 지역별 기업대출(말잔)",
+        "values": [
+         "기업대출금"
+        ]
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "family",
+      "label": "비은행금융기관 지역별 기업대출(말잔)",
+      "assignment": {
+       "r1": [
+        "DT_141Y010"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o2"
+     },
+     {
+      "value": [],
+      "table_ids": [
+       "DT_121Y015"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_121Y015",
+        "table_name": "예금은행 대출금리(잔액 기준)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "family",
+      "label": "예금은행 대출금리(잔액 기준)",
+      "assignment": {
+       "r1": [
+        "DT_121Y015"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o3"
+     },
+     {
+      "value": [],
+      "table_ids": [
+       "DT_403Y001"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_403Y001",
+        "table_name": "수출금액지수",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "family",
+      "label": "수출금액지수",
+      "assignment": {
+       "r1": [
+        "DT_403Y001"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o4"
+     },
+     {
+      "value": [],
+      "table_ids": [
+       "DT_403Y003"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_403Y003",
+        "table_name": "수입금액지수",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "family",
+      "label": "수입금액지수",
+      "assignment": {
+       "r1": [
+        "DT_403Y003"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o5"
+     }
+    ],
+    "deferred": false,
+    "cause": "family_alternatives",
+    "open": false,
+    "effect_kind": "pick_assignment",
+    "id": "q1",
+    "version": {
+     "analysis": "ded8a76d9cc348ab",
+     "selection": "6fe6ba5c91dd2ccd"
+    }
+   }
+  ]
+ },
+ "requirements": [
+  {
+   "scope_id": "r1",
+   "text": "기업대출 금액을",
+   "a_status": "confirm",
+   "gaps": [],
+   "reason_codes": [
+    "interp:ok",
+    "branch",
+    "select:family_alternatives",
+    "select:interpretation_undecided"
+   ],
+   "source": "A"
+  }
+ ],
+ "unresolved": [
+  {
+   "scope_id": "r1",
+   "kind": "requirement_not_met",
+   "detail": "confirm",
+   "from_node": "A"
+  }
+ ],
+ "selection": {
+  "tables": [
+   {
+    "org_id": "301",
+    "table_id": "DT_141Y004",
+    "table_name": "예금은행 지역별 기업대출(말잔)"
+   }
+  ],
+  "backups": []
+ }
+}

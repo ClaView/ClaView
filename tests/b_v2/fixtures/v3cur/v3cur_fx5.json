@@ -1,0 +1,6320 @@
+{
+ "question": "최근 3년 가계신용을 업권별로 분기별로 보여줘",
+ "as_of": "2026-10-20",
+ "request_id": "fx5",
+ "analysis": {
+  "text": {
+   "raw": "최근 3년 가계신용을 업권별로 분기별로 보여줘",
+   "norm": "최근 3년 가계신용을 업권별로 분기별로 보여줘",
+   "nospace": "최근3년가계신용을업권별로분기별로보여줘",
+   "offsets": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24
+   ]
+  },
+  "conditions": [
+   {
+    "id": "P1",
+    "kind": "period",
+    "quote": "최근 3년",
+    "span": [
+     0,
+     5
+    ],
+    "value": null,
+    "attrs": {
+     "form": "recent",
+     "start_expr": null,
+     "end_expr": null,
+     "open_end": false,
+     "amount": 3,
+     "unit": "year",
+     "relative": true,
+     "invalid": false,
+     "extract_status": "explicit"
+    },
+    "status": "candidate"
+   },
+   {
+    "id": "B1",
+    "kind": "basis",
+    "quote": "업권별",
+    "span": [
+     12,
+     15
+    ],
+    "value": "업권별",
+    "attrs": {
+     "axis": "classification",
+     "value": "업권별",
+     "polarity": "+",
+     "origin": "dictionary"
+    },
+    "status": "candidate"
+   },
+   {
+    "id": "F1",
+    "kind": "frequency",
+    "quote": "분기별",
+    "span": [
+     17,
+     20
+    ],
+    "value": "Q",
+    "attrs": {
+     "value": "Q",
+     "anchor": null
+    },
+    "status": "candidate"
+   }
+  ],
+  "fragments": [
+   {
+    "id": "g1",
+    "quote": "가계신용을",
+    "span": [
+     6,
+     11
+    ],
+    "role": "core",
+    "protected_by": null,
+    "phrase": "item"
+   },
+   {
+    "id": "g2",
+    "quote": "업권별로",
+    "span": [
+     12,
+     16
+    ],
+    "role": "core",
+    "protected_by": null,
+    "phrase": "complement"
+   }
+  ],
+  "terms": [
+   {
+    "fragment_id": "g1",
+    "name": "가계신용",
+    "type": "series_name",
+    "table_ids": [
+     "DT_151Y001",
+     "DT_151Y004"
+    ],
+    "obj_id": null,
+    "obj_name": null,
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "가계신용",
+    "type": "target",
+    "table_ids": [
+     "DT_151Y001"
+    ],
+    "obj_id": "13101134771ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   },
+   {
+    "fragment_id": "g1",
+    "name": "가계신용",
+    "type": "indicator",
+    "table_ids": [
+     "DT_151Y004"
+    ],
+    "obj_id": "13101134772ACC_ITEM",
+    "obj_name": "계정항목별",
+    "path": "exact",
+    "status": "approved",
+    "score": null
+   }
+  ],
+  "judgement": {
+   "pairs": [
+    {
+     "left": "g1",
+     "right": "g2",
+     "row": 6,
+     "verdict": "split",
+     "relation": null
+    }
+   ],
+   "requirement_draft": [
+    {
+     "id": "d1",
+     "fragment_ids": [
+      "g1",
+      "g2"
+     ],
+     "indicator_fragment_id": "g1",
+     "indicator": "가계신용",
+     "context": null,
+     "targets": [],
+     "breakdown": [],
+     "condition_ids": [],
+     "status": "ok",
+     "broad": false,
+     "row": 6
+    }
+   ],
+   "certain": false,
+   "failed_conditions": [
+    "inexact_term"
+   ],
+   "attribution": {
+    "P1": "common",
+    "B1": "common",
+    "F1": "common"
+   },
+   "table_group_hint": [],
+   "calc_hints": [],
+   "negated": [],
+   "leftover": [],
+   "unused_names": [],
+   "structure": "{\"clauses\":1,\"conditions\":[\"basis.classification@in\",\"frequency@in\",\"period@in\"],\"context\":false,\"drafts\":1,\"items\":[[2]],\"other_clauses\":0,\"phrases\":[\"complement\"],\"relation_operands\":[],\"rows\":[6]}",
+   "failed_sources": [
+    {
+     "condition": "inexact_term",
+     "requirement_ids": [
+      "r1"
+     ],
+     "detail": "mixed_type:indicator",
+     "condition_ids": [],
+     "fragment_ids": [
+      "g1"
+     ]
+    }
+   ],
+   "model_step": "pending"
+  },
+  "interpretation": {
+   "status": "ask",
+   "common_condition_ids": [],
+   "relations": [],
+   "display_condition_ids": [],
+   "requirements": [
+    {
+     "id": "r1",
+     "quote": "업권별로 분기별로",
+     "span": [
+      12,
+      21
+     ],
+     "indicator": {
+      "quote": "가계신용",
+      "span": [
+       6,
+       10
+      ],
+      "fragment_id": "g1",
+      "name": "가계신용",
+      "path": "exact"
+     },
+     "measure_kind": null,
+     "targets": [],
+     "condition_ids": [
+      "P1",
+      "B1",
+      "F1"
+     ],
+     "shared_condition_ids": [],
+     "ambiguous_condition_ids": [],
+     "status": "ok",
+     "reasons": [
+      "row:6"
+     ],
+     "context": null,
+     "breakdown": []
+    }
+   ],
+   "reasons": [
+    "inexact_term"
+   ],
+   "table_group_hint": []
+  },
+  "segments": [
+   {
+    "segment_id": "s1",
+    "span": [
+     0,
+     5
+    ],
+    "quote": "최근 3년",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s2",
+    "span": [
+     5,
+     6
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s3",
+    "span": [
+     6,
+     10
+    ],
+    "quote": "가계신용",
+    "kind": "name"
+   },
+   {
+    "segment_id": "s4",
+    "span": [
+     10,
+     11
+    ],
+    "quote": "을",
+    "kind": "grammar"
+   },
+   {
+    "segment_id": "s5",
+    "span": [
+     11,
+     12
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s6",
+    "span": [
+     12,
+     15
+    ],
+    "quote": "업권별",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s7",
+    "span": [
+     15,
+     16
+    ],
+    "quote": "로",
+    "kind": "grammar"
+   },
+   {
+    "segment_id": "s8",
+    "span": [
+     16,
+     17
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s9",
+    "span": [
+     17,
+     20
+    ],
+    "quote": "분기별",
+    "kind": "condition"
+   },
+   {
+    "segment_id": "s10",
+    "span": [
+     20,
+     21
+    ],
+    "quote": "로",
+    "kind": "grammar"
+   },
+   {
+    "segment_id": "s11",
+    "span": [
+     21,
+     22
+    ],
+    "quote": " ",
+    "kind": "space"
+   },
+   {
+    "segment_id": "s12",
+    "span": [
+     22,
+     25
+    ],
+    "quote": "보여줘",
+    "kind": "request"
+   }
+  ],
+  "mentions": [
+   {
+    "mention_id": "m1",
+    "kind": "condition",
+    "segment_ids": [
+     "s1"
+    ],
+    "condition_ids": [
+     "P1"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m2",
+    "kind": "name",
+    "segment_ids": [
+     "s3"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [
+     {
+      "table_id": "DT_151Y001",
+      "obj_id": null,
+      "value_id": null,
+      "value_name": "가계신용",
+      "role": "table_name",
+      "path": "exact",
+      "type": "series_name"
+     },
+     {
+      "table_id": "DT_151Y001",
+      "obj_id": "13101134771ACC_ITEM",
+      "value_id": "13102134771ACC_ITEM.1000000",
+      "value_name": "가계신용",
+      "role": "target",
+      "path": "exact",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_151Y001",
+      "obj_id": "ITEM",
+      "value_id": "13103134771999",
+      "value_name": "가계신용(업권별 분기)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "item_row"
+     },
+     {
+      "table_id": "DT_151Y004",
+      "obj_id": null,
+      "value_id": null,
+      "value_name": "가계신용",
+      "role": "table_name",
+      "path": "exact",
+      "type": "series_name"
+     },
+     {
+      "table_id": "DT_151Y004",
+      "obj_id": "13101134772ACC_ITEM",
+      "value_id": "13102134772ACC_ITEM.1000000",
+      "value_name": "가계신용",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_151Y004",
+      "obj_id": "ITEM",
+      "value_id": "13103134772999",
+      "value_name": "가계신용(용도별 분기)",
+      "role": "indicator",
+      "path": "lexical",
+      "type": "item_row"
+     }
+    ],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m3",
+    "kind": "name",
+    "segment_ids": [
+     "s6"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [
+     {
+      "table_id": "DT_181Y001",
+      "obj_id": "13101852633ACC_ITEM",
+      "value_id": "13102852633ACC_ITEM.E",
+      "value_name": "업권별",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_181Y002",
+      "obj_id": "13101852635ACC_ITEM",
+      "value_id": "13102852635ACC_ITEM.E",
+      "value_name": "업권별",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_181Y011",
+      "obj_id": "13101852628ACC_ITEM",
+      "value_id": "13102852628ACC_ITEM.E",
+      "value_name": "업권별",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_181Y012",
+      "obj_id": "13101852632ACC_ITEM",
+      "value_id": "13102852632ACC_ITEM.E",
+      "value_name": "업권별",
+      "role": "target",
+      "path": "exact",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_181Y013",
+      "obj_id": "13101852625ACC_ITEM",
+      "value_id": "13102852625ACC_ITEM.E",
+      "value_name": "업권별",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_181Y014",
+      "obj_id": "13101852637ACC_ITEM",
+      "value_id": "13102852637ACC_ITEM.E",
+      "value_name": "업권별",
+      "role": "target",
+      "path": "exact",
+      "type": "target"
+     },
+     {
+      "table_id": "DT_181Y015",
+      "obj_id": "13101852639ACC_ITEM",
+      "value_id": "13102852639ACC_ITEM.E",
+      "value_name": "업권별",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     },
+     {
+      "table_id": "DT_181Y016",
+      "obj_id": "13101852640ACC_ITEM",
+      "value_id": "13102852640ACC_ITEM.E",
+      "value_name": "업권별",
+      "role": "indicator",
+      "path": "exact",
+      "type": "indicator"
+     }
+    ],
+    "overlaps": [
+     "m4"
+    ]
+   },
+   {
+    "mention_id": "m4",
+    "kind": "condition",
+    "segment_ids": [
+     "s6"
+    ],
+    "condition_ids": [
+     "B1"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": [
+     "m3"
+    ]
+   },
+   {
+    "mention_id": "m5",
+    "kind": "condition",
+    "segment_ids": [
+     "s9"
+    ],
+    "condition_ids": [
+     "F1"
+    ],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   },
+   {
+    "mention_id": "m6",
+    "kind": "request",
+    "segment_ids": [
+     "s12"
+    ],
+    "condition_ids": [],
+    "marker": null,
+    "candidates": [],
+    "overlaps": []
+   }
+  ],
+  "ref_map": {
+   "segment_mentions": {
+    "s1": [
+     "m1"
+    ],
+    "s2": [],
+    "s3": [
+     "m2"
+    ],
+    "s4": [],
+    "s5": [],
+    "s6": [
+     "m3",
+     "m4"
+    ],
+    "s7": [],
+    "s8": [],
+    "s9": [
+     "m5"
+    ],
+    "s10": [],
+    "s11": [],
+    "s12": [
+     "m6"
+    ]
+   },
+   "segment_fragments": {
+    "s1": [],
+    "s2": [],
+    "s3": [
+     "g1"
+    ],
+    "s4": [
+     "g1"
+    ],
+    "s5": [],
+    "s6": [
+     "g2"
+    ],
+    "s7": [
+     "g2"
+    ],
+    "s8": [],
+    "s9": [],
+    "s10": [],
+    "s11": [],
+    "s12": []
+   },
+   "fragment_segments": {
+    "g1": [
+     "s3",
+     "s4"
+    ],
+    "g2": [
+     "s6",
+     "s7"
+    ]
+   },
+   "mention_fragments": {
+    "m1": [],
+    "m2": [
+     "g1"
+    ],
+    "m3": [
+     "g2"
+    ],
+    "m4": [
+     "g2"
+    ],
+    "m5": [],
+    "m6": []
+   }
+  },
+  "decomposition": {
+   "requested_mode": "rules",
+   "execution_mode": null,
+   "applied_source": "rules",
+   "fallback_reason": null,
+   "error_class": null,
+   "as_of": "2026-10-20",
+   "reading_id": null,
+   "verify": null,
+   "bindings": [],
+   "requirement_ids": {},
+   "assumption_seeds": [],
+   "certainty": null,
+   "alternative": null,
+   "rule_diagnostics": {
+    "certain": false,
+    "failed_conditions": [
+     "inexact_term"
+    ],
+    "failed_sources": [
+     {
+      "condition": "inexact_term",
+      "requirement_ids": [
+       "r1"
+      ],
+      "detail": "mixed_type:indicator",
+      "condition_ids": [],
+      "fragment_ids": [
+       "g1"
+      ]
+     }
+    ],
+    "status": "ask"
+   },
+   "rule_checks": [],
+   "condition_fields": {
+    "P1": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null,
+     "period_diagnosis": "ok"
+    },
+    "B1": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null
+    },
+    "F1": {
+     "source": "question",
+     "confirmed": true,
+     "applied": null
+    }
+   },
+   "inferred": {
+    "r1": []
+   }
+  }
+ },
+ "selections": [
+  {
+   "requirement_id": "r1",
+   "tables": [
+    {
+     "table_id": "DT_151Y001",
+     "org_id": "301",
+     "table_name": "가계신용(업권별, 분기)",
+     "covers": {
+      "targets": [],
+      "periods": [
+       "2024-01~2026-06"
+      ],
+      "frequencies": [
+       "Q"
+      ],
+      "basis": []
+     }
+    }
+   ],
+   "unspecified": [],
+   "status": "confirm",
+   "model_step": "pending",
+   "reasons": [
+    "partial_cover",
+    "period_unknown",
+    "family_alternatives",
+    "interpretation_undecided"
+   ],
+   "alternatives": [
+    [
+     "DT_151Y002"
+    ],
+    [
+     "DT_151Y003"
+    ],
+    [
+     "DT_151Y006"
+    ]
+   ],
+   "differences": [
+    {
+     "family": "가계신용",
+     "table_ids": [
+      "DT_151Y001"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "가계대출",
+      "가계신용",
+      "공적금융기관",
+      "기타금융기관 등",
+      "기타금융중개회사",
+      "보험회사",
+      "여신전문기관",
+      "연금기금"
+     ]
+    },
+    {
+     "family": "예금취급기관가계대출",
+     "table_ids": [
+      "DT_151Y002"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "우체국예금 등"
+     ]
+    },
+    {
+     "family": "table:DT_151Y003",
+     "table_ids": [
+      "DT_151Y003"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "기타대출-예금은행",
+      "주택관련대출-예금은행"
+     ]
+    },
+    {
+     "family": "table:DT_151Y006",
+     "table_ids": [
+      "DT_151Y006"
+     ],
+     "only_axes": [],
+     "only_values": [
+      "기타대출",
+      "주택관련대출"
+     ]
+    }
+   ],
+   "signals": {
+    "pool": 24,
+    "with_evidence": 6,
+    "retried": false,
+    "cells": 2,
+    "covered": 1,
+    "alternatives": 4,
+    "queries": [
+     "가계신용"
+    ],
+    "term_tables": [],
+    "term_tables_truncated": false,
+    "conventions": [],
+    "score_gap": 20.685439,
+    "period_check": true,
+    "score_items": {
+     "DT_151Y001": [
+      {
+       "item": "title_word",
+       "value": 4.0,
+       "reason": "가계신용"
+      }
+     ]
+    },
+    "facts": {
+     "requirement": {
+      "identity": {
+       "fragment_ids": [
+        "g1",
+        "g2"
+       ],
+       "conditions": [
+        "basis:classification:업권별:+",
+        "frequency::Q:+",
+        "period:::+:recent:////:////:3:year:relative"
+       ],
+       "key": "g1,g2#basis:classification:업권별:+|frequency::Q:+|period:::+:recent:////:////:3:year:relative"
+      },
+      "period_request": {
+       "requested": true,
+       "relative": true,
+       "frequencies": [
+        "Q"
+       ],
+       "start": "2024",
+       "end": "2026"
+      },
+      "period_anchor": [
+       {
+        "frequency": "Q",
+        "anchor": "2026-06",
+        "resolved_range": [
+         "2023-07",
+         "2026-06"
+        ],
+        "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+        "relative": true,
+        "candidates": 6
+       }
+      ]
+     },
+     "tables": {
+      "DT_151Y001": {
+       "table_id": "DT_151Y001",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title_core"
+         },
+         {
+          "field": "path",
+          "method": "exact",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "path_leaf"
+         },
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "mention",
+          "value_id": "13102134771ACC_ITEM.1000000",
+          "obj_id": "13101134771ACC_ITEM",
+          "value_role": "target",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "가계신용"
+         },
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": "13103134771999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "가계신용(업권별 분기)"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": true,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2002 4/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_151Y004": {
+       "table_id": "DT_151Y004",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "title",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "title_core"
+         },
+         {
+          "field": "path",
+          "method": "exact",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "path_leaf"
+         },
+         {
+          "field": "value",
+          "method": "exact",
+          "relation": "subject_candidate",
+          "value_id": "13102134772ACC_ITEM.1000000",
+          "obj_id": "13101134772ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "가계신용"
+         },
+         {
+          "field": "value",
+          "method": "exact_with_qualifier",
+          "relation": "subject_candidate",
+          "value_id": "13103134772999",
+          "obj_id": "ITEM",
+          "value_role": "series_name",
+          "parents": [],
+          "anomaly": null,
+          "source": null,
+          "name": "가계신용(용도별 분기)"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2002 4/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_601Y003": {
+       "table_id": "DT_601Y003",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1997 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_104Y009": {
+       "table_id": "DT_104Y009",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "mention",
+          "value_id": "13102860880ACC_ITEM.1010000",
+          "obj_id": "13101860880ACC_ITEM",
+          "value_role": "target",
+          "parents": [
+           "총예금"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "mention",
+          "value_id": "13102860880ACC_ITEM.1040100",
+          "obj_id": "13101860880ACC_ITEM",
+          "value_role": "target",
+          "parents": [
+           "요구불예금",
+           "총예금"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "mention",
+          "value_id": "13102860880ACC_ITEM.1050100",
+          "obj_id": "13101860880ACC_ITEM",
+          "value_role": "target",
+          "parents": [
+           "저축성예금",
+           "총예금"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 3,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1975 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y101": {
+       "table_id": "DT_200Y101",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102136288ACC_ITEM.7010106",
+          "obj_id": "13101136288ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "제도부문별",
+           "총처분가능소득(GNDI)의분배",
+           "분배구조"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102136288ACC_ITEM.701040201",
+          "obj_id": "13101136288ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "제도부문별",
+           "총본원소득(GNI)의분배",
+           "분배구조"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         },
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102136288ACC_ITEM.701050101",
+          "obj_id": "13101136288ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "제도부문별",
+           "총조정처분가능소득의분배",
+           "분배구조"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 3,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "fail",
+        "status": "conflict"
+       },
+       "period": {
+        "table": {
+         "status": null,
+         "by_frequency": []
+        },
+        "notice": {
+         "snapshot_lag": false,
+         "period_unresolved": false
+        },
+        "anchor": [],
+        "by_anchor": null
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "frequency",
+         "condition_id": null
+        },
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "n/a"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y107": {
+       "table_id": "DT_200Y107",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102136276ACC_ITEM.1010111",
+          "obj_id": "13101136276ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "민간",
+           "최종소비지출"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 1,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y108": {
+       "table_id": "DT_200Y108",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102136297ACC_ITEM.1010111",
+          "obj_id": "13101136297ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "민간",
+           "최종소비지출"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 1,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y109": {
+       "table_id": "DT_200Y109",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102136270ACC_ITEM.1010111",
+          "obj_id": "13101136270ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "민간",
+           "최종소비지출"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 1,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y110": {
+       "table_id": "DT_200Y110",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102136261ACC_ITEM.1010111",
+          "obj_id": "13101136261ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "민간",
+           "최종소비지출"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 1,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y112": {
+       "table_id": "DT_200Y112",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "component",
+          "value_id": "13102136282ACC_ITEM.1010111",
+          "obj_id": "13101136282ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "민간",
+           "최종소비지출"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 1,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y125": {
+       "table_id": "DT_200Y125",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": "13102136303ACC_ITEM.1010111",
+          "obj_id": "13101136303ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "민간",
+           "최종소비지출"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 1,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_151Y003": {
+       "table_id": "DT_151Y003",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "path",
+          "method": "exact",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "path_leaf"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2003 4/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_151Y002": {
+       "table_id": "DT_151Y002",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "path",
+          "method": "exact",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "path_leaf"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "title",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": true,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2003 4/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_151Y005": {
+       "table_id": "DT_151Y005",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "path",
+          "method": "exact",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "path_leaf"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2003 4/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_151Y006": {
+       "table_id": "DT_151Y006",
+       "entered_by": "search",
+       "with_evidence": true,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "match",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "path",
+          "method": "exact",
+          "relation": "subject_candidate",
+          "value_id": null,
+          "obj_id": null,
+          "value_role": null,
+          "parents": [],
+          "anomaly": null,
+          "source": "path_leaf"
+         }
+        ],
+        "partial_count": 0,
+        "weak": false,
+        "weak_reasons": [],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2007 4/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_514Y002": {
+       "table_id": "DT_514Y002",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2002 1/4",
+            "2026 3/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_181Y016": {
+       "table_id": "DT_181Y016",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "item",
+         "role": "in_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": true,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2013 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_181Y002": {
+       "table_id": "DT_181Y002",
+       "entered_by": "search",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "pass",
+         "status": "match",
+         "source": "item",
+         "role": "in_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": true,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2013 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_104Y008": {
+       "table_id": "DT_104Y008",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1971 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_104Y015": {
+       "table_id": "DT_104Y015",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y102": {
+       "table_id": "DT_200Y102",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1960 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_200Y126": {
+       "table_id": "DT_200Y126",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [
+         {
+          "field": "value",
+          "method": "partial",
+          "relation": "undetermined",
+          "value_id": "13102136256ACC_ITEM.1010111",
+          "obj_id": "13101136256ACC_ITEM",
+          "value_role": "indicator",
+          "parents": [
+           "민간",
+           "최종소비지출"
+          ],
+          "anomaly": null,
+          "source": null,
+          "name": "가계"
+         }
+        ],
+        "partial_count": 1,
+        "weak": true,
+        "weak_reasons": [
+         "partial_only"
+        ],
+        "absent": false,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "1961 1/4",
+            "2026 2/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        },
+        "target": {
+         "complete": false,
+         "why": [
+          "pressed_axis"
+         ]
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_514Y001": {
+       "table_id": "DT_514Y001",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2002 1/4",
+            "2026 3/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      },
+      "DT_514Y003": {
+       "table_id": "DT_514Y003",
+       "entered_by": "family",
+       "with_evidence": false,
+       "indicator": {
+        "name": "가계신용",
+        "check": {
+         "available": true,
+         "result": "none",
+         "origin": "rule"
+        },
+        "occurrences": [],
+        "partial_count": 0,
+        "weak": true,
+        "weak_reasons": [
+         "no_occurrence"
+        ],
+        "absent": true,
+        "mention_only": false
+       },
+       "conditions": [
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "check": "basis",
+         "verdict": "n/a",
+         "status": "unknown",
+         "source": "none",
+         "role": "splits_table",
+         "counted": true,
+         "ambiguous": false,
+         "negation": null,
+         "byeol": {
+          "axis_mapping": false,
+          "title_proof": false,
+          "members": []
+         },
+         "basis": null
+        }
+       ],
+       "cross": null,
+       "frequency": {
+        "verdict": "pass",
+        "status": "match"
+       },
+       "period": {
+        "table": {
+         "status": "unknown",
+         "by_frequency": [
+          {
+           "frequency": "Q",
+           "status": "unknown",
+           "coverage": [
+            "2002 1/4",
+            "2026 3/4"
+           ]
+          }
+         ]
+        },
+        "notice": {
+         "snapshot_lag": true,
+         "period_unresolved": false
+        },
+        "anchor": [
+         {
+          "frequency": "Q",
+          "anchor": "2026-06",
+          "resolved_range": [
+           "2023-07",
+           "2026-06"
+          ],
+          "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+          "relative": true,
+          "candidates": 6
+         }
+        ],
+        "by_anchor": "covered"
+       },
+       "cells": {
+        "combinable": "n/a",
+        "pairs": []
+       },
+       "refuted": [
+        {
+         "check": "indicator",
+         "condition_id": null
+        }
+       ],
+       "unproven": [
+        {
+         "check": "basis",
+         "condition_id": "B1",
+         "why": "unknown"
+        },
+        {
+         "check": "period",
+         "condition_id": null,
+         "why": "unknown"
+        }
+       ],
+       "surface": {
+        "indicator": {
+         "complete": true,
+         "why": []
+        },
+        "target": {
+         "complete": true,
+         "why": []
+        }
+       },
+       "targets": [],
+       "lower_items": []
+      }
+     }
+    },
+    "covers_all": {
+     "가계신용": {
+      "covers": [],
+      "cut": false
+     },
+     "table:DT_151Y003": {
+      "covers": [],
+      "cut": false
+     },
+     "예금취급기관가계대출": {
+      "covers": [],
+      "cut": false
+     },
+     "table:DT_151Y006": {
+      "covers": [],
+      "cut": false
+     },
+     "mixed": {
+      "covers": [],
+      "cut": false
+     }
+    },
+    "pool_cut": {
+     "caps": {
+      "channel:title": 24,
+      "channel:item": 77,
+      "pool": 0,
+      "term_tables": 0
+     },
+     "cut": 87,
+     "matched_count": 0,
+     "matched": [],
+     "restorable": 0,
+     "restored": [],
+     "left_out": 87,
+     "unchecked": 0,
+     "restoration_cut": false,
+     "pool_cut": false
+    },
+    "pruned": {
+     "records": [
+      {
+       "step": "undominated",
+       "table_ids": [
+        "DT_151Y004"
+       ],
+       "kept": [
+        "DT_151Y001"
+       ],
+       "reason": "score",
+       "family": "가계신용"
+      },
+      {
+       "step": "undominated",
+       "table_ids": [
+        "DT_151Y005"
+       ],
+       "kept": [
+        "DT_151Y002"
+       ],
+       "reason": "score",
+       "family": "예금취급기관가계대출"
+      }
+     ],
+     "options": 4,
+     "options_cut": false
+    },
+    "dimensions": {
+     "bundles": [
+      {
+       "table_ids": [
+        "DT_151Y001"
+       ],
+       "source": "current",
+       "score": 51.0,
+       "complete": true,
+       "family": "가계신용",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_151Y002"
+       ],
+       "source": "family",
+       "score": 30.314561,
+       "complete": true,
+       "family": "예금취급기관가계대출",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_151Y003"
+       ],
+       "source": "family",
+       "score": 20.321026,
+       "complete": true,
+       "family": "table:DT_151Y003",
+       "value": null
+      },
+      {
+       "table_ids": [
+        "DT_151Y006"
+       ],
+       "source": "family",
+       "score": 20.303628,
+       "complete": true,
+       "family": "table:DT_151Y006",
+       "value": null
+      }
+     ],
+     "dimensions": [
+      {
+       "dimension": "family",
+       "class": "family",
+       "kind": "family",
+       "values": [
+        "가계신용",
+        "예금취급기관가계대출",
+        "table:DT_151Y003",
+        "table:DT_151Y006"
+       ],
+       "gap": 20.685439
+      }
+     ],
+     "result": "ask",
+     "ask_reasons": [
+      "family_alternatives"
+     ],
+     "resolved_by": [],
+     "gap": 20.685439,
+     "set_would_drop": [
+      "B1",
+      "B1"
+     ]
+    },
+    "decision_preview": {
+     "needs": {
+      "requirement_id": "r1",
+      "identity": {
+       "fragment_ids": [
+        "g1",
+        "g2"
+       ],
+       "conditions": [
+        "basis:classification:업권별:+",
+        "frequency::Q:+",
+        "period:::+:recent:////:////:3:year:relative"
+       ],
+       "key": "g1,g2#basis:classification:업권별:+|frequency::Q:+|period:::+:recent:////:////:3:year:relative"
+      },
+      "certainty": {
+       "all": false,
+       "condition_ids": [],
+       "fragment_ids": [
+        "g1"
+       ],
+       "sources": [
+        {
+         "condition": "inexact_term",
+         "requirement_ids": [
+          "r1"
+         ],
+         "detail": "mixed_type:indicator",
+         "condition_ids": [],
+         "fragment_ids": [
+          "g1"
+         ]
+        }
+       ]
+      },
+      "filter": {
+       "negated": [],
+       "negated_fragment_ids": [],
+       "negated_settled": true,
+       "forbidden": []
+      },
+      "evidence": {
+       "indicator": {
+        "name": "가계신용",
+        "quote": "가계신용",
+        "path": "exact",
+        "fragment_id": "g1",
+        "settled": false,
+        "mapped": true
+       },
+       "targets": [],
+       "lower_items": [],
+       "conditions": [
+        {
+         "condition_id": "P1",
+         "kind": "period",
+         "axis": null,
+         "value": null,
+         "polarity": "+",
+         "byeol": false,
+         "settled": true
+        },
+        {
+         "condition_id": "B1",
+         "kind": "basis",
+         "axis": "classification",
+         "value": "업권별",
+         "polarity": "+",
+         "byeol": true,
+         "settled": true
+        },
+        {
+         "condition_id": "F1",
+         "kind": "frequency",
+         "axis": null,
+         "value": "Q",
+         "polarity": "+",
+         "byeol": false,
+         "settled": true
+        }
+       ]
+      },
+      "set": [
+       {
+        "condition_id": "B1",
+        "kind": "basis",
+        "axis": "classification",
+        "value": "업권별"
+       },
+       {
+        "condition_id": "F1",
+        "kind": "frequency",
+        "axis": null,
+        "value": "Q"
+       }
+      ],
+      "causes": [
+       {
+        "kind": "failed_source",
+        "condition": "inexact_term",
+        "requirement_ids": [
+         "r1"
+        ],
+        "detail": "mixed_type:indicator",
+        "condition_ids": [],
+        "fragment_ids": [
+         "g1"
+        ]
+       }
+      ]
+     },
+     "candidates": {
+      "pool": 24,
+      "restored": [],
+      "alive": 23,
+      "live": 23,
+      "editions": 23,
+      "tried": 0
+     },
+     "refutations": {
+      "tables": {
+       "DT_200Y101": [
+        {
+         "code": "condition_conflict",
+         "requirement_key": "g1,g2#basis:classification:업권별:+|frequency::Q:+|period:::+:recent:////:////:3:year:relative",
+         "condition_id": "F1",
+         "fragment_id": null,
+         "cell": null,
+         "opposite_fact": {
+          "check": "frequency",
+          "status": "conflict"
+         },
+         "catalog_version": "2026-09-16:0ff158a8717c:b604e909d40f",
+         "scope": "table",
+         "table_id": "DT_200Y101"
+        }
+       ]
+      },
+      "cells": {}
+     },
+     "cells": 3,
+     "decision": {
+      "unit": "r1",
+      "requirement_ids": [
+       "r1"
+      ],
+      "alternatives": [
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y001"
+         ]
+        },
+        "tables": [
+         "DT_151Y001"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -51.0,
+         -1.0,
+         "가계신용",
+         [
+          0
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a1"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y004"
+         ]
+        },
+        "tables": [
+         "DT_151Y004"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -41.0,
+         -1.0,
+         "가계신용",
+         [
+          1
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a2"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y002"
+         ]
+        },
+        "tables": [
+         "DT_151Y002"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -30.314561,
+         -1.0,
+         "예금취급기관가계대출",
+         [
+          12
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a3"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y003"
+         ]
+        },
+        "tables": [
+         "DT_151Y003"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.321026,
+         -1.0,
+         "table:DT_151Y003",
+         [
+          11
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a4"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y005"
+         ]
+        },
+        "tables": [
+         "DT_151Y005"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.314561,
+         -1.0,
+         "예금취급기관가계대출",
+         [
+          13
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a5"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y006"
+         ]
+        },
+        "tables": [
+         "DT_151Y006"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.303628,
+         -1.0,
+         "table:DT_151Y006",
+         [
+          14
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a6"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_181Y016"
+         ]
+        },
+        "tables": [
+         "DT_181Y016"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.250719,
+         -0.0,
+         "table:DT_181Y016",
+         [
+          16
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a7"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_181Y002"
+         ]
+        },
+        "tables": [
+         "DT_181Y002"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.236784,
+         -0.0,
+         "table:DT_181Y002",
+         [
+          17
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a8"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_601Y003"
+         ]
+        },
+        "tables": [
+         "DT_601Y003"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.505376,
+         -0.0,
+         "table:DT_601Y003",
+         [
+          2
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a9"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y112"
+         ]
+        },
+        "tables": [
+         "DT_200Y112"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "table:DT_200Y112",
+         [
+          9
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a10"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y107"
+         ]
+        },
+        "tables": [
+         "DT_200Y107"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "국내총생산에대한지출",
+         [
+          5
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a11"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y108"
+         ]
+        },
+        "tables": [
+         "DT_200Y108"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "국내총생산에대한지출",
+         [
+          6
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a12"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y109"
+         ]
+        },
+        "tables": [
+         "DT_200Y109"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "국내총생산에대한지출",
+         [
+          7
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a13"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y110"
+         ]
+        },
+        "tables": [
+         "DT_200Y110"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "국내총생산에대한지출",
+         [
+          8
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a14"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_104Y009"
+         ]
+        },
+        "tables": [
+         "DT_104Y009"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "예금은행원화예금",
+         [
+          3
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a15"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y125"
+         ]
+        },
+        "tables": [
+         "DT_200Y125"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "지출항목별성장기여도",
+         [
+          10
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a16"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_514Y002"
+         ]
+        },
+        "tables": [
+         "DT_514Y002"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.276806,
+         -0.0,
+         "대출행태서베이",
+         [
+          15
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a17"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_514Y001"
+         ]
+        },
+        "tables": [
+         "DT_514Y001"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "대출행태서베이",
+         [
+          22
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a18"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_514Y003"
+         ]
+        },
+        "tables": [
+         "DT_514Y003"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "대출행태서베이",
+         [
+          23
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a19"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_104Y008"
+         ]
+        },
+        "tables": [
+         "DT_104Y008"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "예금은행원화예금",
+         [
+          18
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a20"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_104Y015"
+         ]
+        },
+        "tables": [
+         "DT_104Y015"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "예금은행원화예금",
+         [
+          19
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a21"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y102"
+         ]
+        },
+        "tables": [
+         "DT_200Y102"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "주요지표",
+         [
+          20
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a22"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y126"
+         ]
+        },
+        "tables": [
+         "DT_200Y126"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "지출항목별성장기여도",
+         [
+          21
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a23"
+       }
+      ],
+      "dimensions": [
+       {
+        "name": "other",
+        "kind": "other",
+        "values": [
+         "classification",
+         "업권별",
+         "axis_values",
+         "agency_values",
+         "예금주별",
+         "신용위험",
+         "대출태도",
+         "대출수요",
+         "종별"
+        ],
+        "alternative_ids": [
+         "r1.a2",
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18",
+         "r1.a19",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": true
+       },
+       {
+        "name": "frequency",
+        "kind": "frequency",
+        "values": [
+         "분기",
+         "월",
+         "frequencies",
+         "분기및연간",
+         "분기지표"
+        ],
+        "alternative_ids": [
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18",
+         "r1.a19",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": true
+       },
+       {
+        "name": "family",
+        "kind": "family",
+        "values": [],
+        "alternative_ids": [
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18",
+         "r1.a19",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "mixed_basis",
+        "kind": "mixed_basis",
+        "values": [
+         "stock",
+         "price",
+         "seasonal",
+         "currency"
+        ],
+        "alternative_ids": [
+         "r1.a4",
+         "r1.a6",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "relation",
+        "kind": "relation",
+        "values": [
+         "subject",
+         "undetermined"
+        ],
+        "alternative_ids": [
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18",
+         "r1.a19",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": false
+       }
+      ],
+      "cut": {
+       "pool_cut": false,
+       "cover_cut": false,
+       "decision_cut": false
+      },
+      "gaps": [],
+      "today": {
+       "tables": [
+        "DT_151Y001"
+       ],
+       "in_alternatives": true,
+       "first": true,
+       "alternative_id": "r1.a1",
+       "explained_by": []
+      }
+     },
+     "bundle": {
+      "unit": "r1",
+      "requirement_ids": [
+       "r1"
+      ],
+      "alternatives": [
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y001"
+         ]
+        },
+        "tables": [
+         "DT_151Y001"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -51.0,
+         -1.0,
+         "가계신용",
+         [
+          0
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a1"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y004"
+         ]
+        },
+        "tables": [
+         "DT_151Y004"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -41.0,
+         -1.0,
+         "가계신용",
+         [
+          1
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a2"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y002"
+         ]
+        },
+        "tables": [
+         "DT_151Y002"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -30.314561,
+         -1.0,
+         "예금취급기관가계대출",
+         [
+          12
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a3"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y003"
+         ]
+        },
+        "tables": [
+         "DT_151Y003"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.321026,
+         -1.0,
+         "table:DT_151Y003",
+         [
+          11
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a4"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y005"
+         ]
+        },
+        "tables": [
+         "DT_151Y005"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.314561,
+         -1.0,
+         "예금취급기관가계대출",
+         [
+          13
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a5"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_151Y006"
+         ]
+        },
+        "tables": [
+         "DT_151Y006"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.303628,
+         -1.0,
+         "table:DT_151Y006",
+         [
+          14
+         ]
+        ],
+        "indicator_relation": "subject",
+        "id": "r1.a6"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_181Y016"
+         ]
+        },
+        "tables": [
+         "DT_181Y016"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.250719,
+         -0.0,
+         "table:DT_181Y016",
+         [
+          16
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a7"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_181Y002"
+         ]
+        },
+        "tables": [
+         "DT_181Y002"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -20.236784,
+         -0.0,
+         "table:DT_181Y002",
+         [
+          17
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a8"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_601Y003"
+         ]
+        },
+        "tables": [
+         "DT_601Y003"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.505376,
+         -0.0,
+         "table:DT_601Y003",
+         [
+          2
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a9"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y112"
+         ]
+        },
+        "tables": [
+         "DT_200Y112"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "table:DT_200Y112",
+         [
+          9
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a10"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y107"
+         ]
+        },
+        "tables": [
+         "DT_200Y107"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "국내총생산에대한지출",
+         [
+          5
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a11"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y108"
+         ]
+        },
+        "tables": [
+         "DT_200Y108"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "국내총생산에대한지출",
+         [
+          6
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a12"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y109"
+         ]
+        },
+        "tables": [
+         "DT_200Y109"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "국내총생산에대한지출",
+         [
+          7
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a13"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y110"
+         ]
+        },
+        "tables": [
+         "DT_200Y110"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "국내총생산에대한지출",
+         [
+          8
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a14"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_104Y009"
+         ]
+        },
+        "tables": [
+         "DT_104Y009"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "예금은행원화예금",
+         [
+          3
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a15"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y125"
+         ]
+        },
+        "tables": [
+         "DT_200Y125"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.337428,
+         -0.0,
+         "지출항목별성장기여도",
+         [
+          10
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a16"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_514Y002"
+         ]
+        },
+        "tables": [
+         "DT_514Y002"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.276806,
+         -0.0,
+         "대출행태서베이",
+         [
+          15
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a17"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_514Y001"
+         ]
+        },
+        "tables": [
+         "DT_514Y001"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "대출행태서베이",
+         [
+          22
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a18"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_514Y003"
+         ]
+        },
+        "tables": [
+         "DT_514Y003"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "대출행태서베이",
+         [
+          23
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a19"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_104Y008"
+         ]
+        },
+        "tables": [
+         "DT_104Y008"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "예금은행원화예금",
+         [
+          18
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a20"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_104Y015"
+         ]
+        },
+        "tables": [
+         "DT_104Y015"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "예금은행원화예금",
+         [
+          19
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a21"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y102"
+         ]
+        },
+        "tables": [
+         "DT_200Y102"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "주요지표",
+         [
+          20
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a22"
+       },
+       {
+        "assignment": {
+         "r1": [
+          "DT_200Y126"
+         ]
+        },
+        "tables": [
+         "DT_200Y126"
+        ],
+        "complete": true,
+        "covered": 3,
+        "cells": 3,
+        "edition_links": [],
+        "gaps": [
+         "indicator_weak",
+         "unproven_condition",
+         "period_unknown"
+        ],
+        "label": "possible",
+        "order": [
+         false,
+         0,
+         -3,
+         1,
+         -10.0,
+         -0.0,
+         "지출항목별성장기여도",
+         [
+          21
+         ]
+        ],
+        "indicator_relation": "undetermined",
+        "id": "r1.a23"
+       }
+      ],
+      "dimensions": [
+       {
+        "name": "other",
+        "kind": "other",
+        "values": [
+         "classification",
+         "업권별",
+         "axis_values",
+         "agency_values",
+         "예금주별",
+         "신용위험",
+         "대출태도",
+         "대출수요",
+         "종별"
+        ],
+        "alternative_ids": [
+         "r1.a2",
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18",
+         "r1.a19",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": true
+       },
+       {
+        "name": "frequency",
+        "kind": "frequency",
+        "values": [
+         "분기",
+         "월",
+         "frequencies",
+         "분기및연간",
+         "분기지표"
+        ],
+        "alternative_ids": [
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18",
+         "r1.a19",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": true
+       },
+       {
+        "name": "family",
+        "kind": "family",
+        "values": [],
+        "alternative_ids": [
+         "r1.a3",
+         "r1.a4",
+         "r1.a5",
+         "r1.a6",
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18",
+         "r1.a19",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "mixed_basis",
+        "kind": "mixed_basis",
+        "values": [
+         "stock",
+         "price",
+         "seasonal",
+         "currency"
+        ],
+        "alternative_ids": [
+         "r1.a4",
+         "r1.a6",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": false
+       },
+       {
+        "name": "relation",
+        "kind": "relation",
+        "values": [
+         "subject",
+         "undetermined"
+        ],
+        "alternative_ids": [
+         "r1.a7",
+         "r1.a8",
+         "r1.a9",
+         "r1.a10",
+         "r1.a11",
+         "r1.a12",
+         "r1.a13",
+         "r1.a14",
+         "r1.a15",
+         "r1.a16",
+         "r1.a17",
+         "r1.a18",
+         "r1.a19",
+         "r1.a20",
+         "r1.a21",
+         "r1.a22",
+         "r1.a23"
+        ],
+        "set_by_question": false
+       }
+      ],
+      "cut": {
+       "pool_cut": false,
+       "cover_cut": false,
+       "decision_cut": false
+      },
+      "gaps": [],
+      "today": {
+       "tables": [
+        "DT_151Y001"
+       ],
+       "in_alternatives": true,
+       "first": true,
+       "alternative_id": "r1.a1",
+       "explained_by": []
+      }
+     }
+    }
+   }
+  }
+ ],
+ "selection_groups": [
+  {
+   "requirement_ids": [
+    "r1"
+   ],
+   "table_ids": [
+    "DT_151Y001"
+   ]
+  }
+ ],
+ "selection_route": {
+  "kind": "ask_selection",
+  "requirement_ids": [
+   "r1"
+  ],
+  "options": [
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_151Y001"
+    ],
+    "default": true,
+    "source": "current",
+    "tables": [
+     {
+      "table_id": "DT_151Y001",
+      "table_name": "가계신용(업권별, 분기)",
+      "values": [
+       "가계신용"
+      ]
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_151Y002"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_151Y002",
+      "table_name": "예금취급기관 가계대출(업권별, 월)",
+      "values": []
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_151Y003"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_151Y003",
+      "table_name": "예금은행 지역별 가계대출(말잔)",
+      "values": []
+     }
+    ]
+   },
+   {
+    "requirement_id": "r1",
+    "table_ids": [
+     "DT_151Y006"
+    ],
+    "default": false,
+    "source": "candidate",
+    "tables": [
+     {
+      "table_id": "DT_151Y006",
+      "table_name": "비은행금융기관 지역별 가계대출(말잔)",
+      "values": []
+     }
+    ]
+   }
+  ],
+  "default": {
+   "choices": {
+    "r1": [
+     "DT_151Y001"
+    ]
+   }
+  },
+  "reasons": [
+   "family_alternatives"
+  ],
+  "partial": false,
+  "confirm": true,
+  "questions": [
+   {
+    "requirement_ids": [
+     "r1"
+    ],
+    "dimension": "family",
+    "values": [
+     "가계신용",
+     "예금취급기관가계대출",
+     "table:DT_151Y003",
+     "table:DT_151Y006"
+    ],
+    "options": [
+     {
+      "value": [],
+      "table_ids": [
+       "DT_151Y001"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_151Y001",
+        "table_name": "가계신용(업권별, 분기)",
+        "values": [
+         "가계신용"
+        ]
+       }
+      ],
+      "complete": true,
+      "default": true,
+      "source": "current",
+      "label": "가계신용(업권별, 분기)",
+      "assignment": {
+       "r1": [
+        "DT_151Y001"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o1"
+     },
+     {
+      "value": [],
+      "table_ids": [
+       "DT_151Y002"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_151Y002",
+        "table_name": "예금취급기관 가계대출(업권별, 월)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "family",
+      "label": "예금취급기관 가계대출(업권별, 월)",
+      "assignment": {
+       "r1": [
+        "DT_151Y002"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o2"
+     },
+     {
+      "value": [],
+      "table_ids": [
+       "DT_151Y003"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_151Y003",
+        "table_name": "예금은행 지역별 가계대출(말잔)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "family",
+      "label": "예금은행 지역별 가계대출(말잔)",
+      "assignment": {
+       "r1": [
+        "DT_151Y003"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o3"
+     },
+     {
+      "value": [],
+      "table_ids": [
+       "DT_151Y006"
+      ],
+      "tables": [
+       {
+        "table_id": "DT_151Y006",
+        "table_name": "비은행금융기관 지역별 가계대출(말잔)",
+        "values": []
+       }
+      ],
+      "complete": true,
+      "default": false,
+      "source": "family",
+      "label": "비은행금융기관 지역별 가계대출(말잔)",
+      "assignment": {
+       "r1": [
+        "DT_151Y006"
+       ]
+      },
+      "effect": {
+       "dimension": "family",
+       "value": null,
+       "polarity": "+"
+      },
+      "id": "q1.o4"
+     }
+    ],
+    "deferred": false,
+    "cause": "family_alternatives",
+    "open": false,
+    "effect_kind": "pick_assignment",
+    "id": "q1",
+    "version": {
+     "analysis": "c1a5e00ced820338",
+     "selection": "5f6144bb8bce92a8"
+    }
+   }
+  ]
+ },
+ "requirements": [
+  {
+   "scope_id": "r1",
+   "text": "업권별로 분기별로",
+   "a_status": "confirm",
+   "gaps": [],
+   "reason_codes": [
+    "interp:ok",
+    "row:6",
+    "select:partial_cover",
+    "select:period_unknown",
+    "select:family_alternatives",
+    "select:interpretation_undecided"
+   ],
+   "source": "A"
+  }
+ ],
+ "unresolved": [
+  {
+   "scope_id": "r1",
+   "kind": "requirement_not_met",
+   "detail": "confirm",
+   "from_node": "A"
+  }
+ ],
+ "selection": {
+  "tables": [
+   {
+    "org_id": "301",
+    "table_id": "DT_151Y001",
+    "table_name": "가계신용(업권별, 분기)"
+   }
+  ],
+  "backups": []
+ }
+}

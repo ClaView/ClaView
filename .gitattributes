@@ -1,2 +1,18 @@
 * text=auto eol=lf
 *.csv -text whitespace=cr-at-eol,-blank-at-eof
+
+# Byte-identical copies of A (split completion-2 fixed copy) and B (b-1020).
+# Keep their bytes (mixed CRLF/LF) as copied so source hashes stay verifiable.
+/src/claview/** -text
+/src/claview_v3/** -text
+/tests/** -text
+/tests_v3/** -text
+/packages/claview-period/** -text
+/data/** -text
+/eval/** -text
+/reference/** -text
+/scripts/** -text
+/docs/B/** -text
+/docs/inputs/** -text
+/requirements-period.txt -text
+/uv.lock -text
