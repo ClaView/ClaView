@@ -243,7 +243,7 @@ def test_compiling_or_executing_old_source_is_refused(refusals):
 
 
 # A source file under a forbidden folder outside src/claview (the old eval/*.py modules were removed in plan 27).
-OLD_EVAL_SOURCE = ROOT / "scripts" / "run_flow.py"
+OLD_EVAL_SOURCE = ROOT / "scripts" / "pipeline" / "run_flow.py"
 
 
 def test_relative_paths_to_old_source_are_refused(refusals, monkeypatch):

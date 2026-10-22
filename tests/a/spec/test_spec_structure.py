@@ -50,7 +50,7 @@ def test_policy_file_sets_the_check(monkeypatch):
 
 
 def test_verified_list_is_the_signatures_of_the_certain_cases(layers, req_layers, monkeypatch):
-    """The list holds exactly the signatures of the cases expected certain (scripts/build_verified_structures.py)."""
+    """The list holds exactly the signatures of the cases expected certain (scripts/a/build_verified_structures.py)."""
     monkeypatch.setenv(structure.POLICY_ENV, "0")
     want = set()
     for c in tj.CASES:

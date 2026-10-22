@@ -28,7 +28,7 @@ The CSV files name tables by table ID and axes by axis name. They are linked to 
 no axis or to several axes gets no judgment and is listed in ``link_problems``. No table, case or question ID is
 written in this module; the per-table facts live in the data files.
 
-Rule helpers marked "Source:" are copied from scripts/eda_v3/roles.py (commit b118a64), outside the package
+Rule helpers marked "Source:" are copied from scripts/a/eda_v3/roles.py (commit b118a64), outside the package
 boundary, so that the computed layers can be compared with the EDA recount.
 """
 
@@ -49,19 +49,19 @@ from .text import bkey, clean_value, collapse, key, nfkc, strip_parens
 VALUE_TYPES = ("series_name", "indicator", "target", "basis", "total_header", "compound", "unknown")
 AXIS_ROLES = ("indicator", "target", "basis", "generic", "human", "unknown")
 
-# Source: scripts/eda_v3/roles.py:19 (commit b118a64); "지표" maps to indicator (EDA name: measure).
+# Source: scripts/a/eda_v3/roles.py:19 (commit b118a64); "지표" maps to indicator (EDA name: measure).
 LAYER1_ROLE = {"대상": "target", "기준": "basis", "지표": "indicator", "축마다 판정": "generic", "확인": "human"}
 CSV_ROLE = {"지표": "indicator", "대상": "target"}
 
-# Source: scripts/eda_v3/roles.py:22 (commit b118a64). Totals: kept out of the target dictionary and the ratios.
+# Source: scripts/a/eda_v3/roles.py:22 (commit b118a64). Totals: kept out of the target dictionary and the ratios.
 _TOTAL = re.compile(r"^(?:합계|총계|소계|계|전체|총액|합|.+총계|.+합계)$")
-# Source: scripts/eda_v3/roles.py:30 (commit b118a64). "2024년기준"
+# Source: scripts/a/eda_v3/roles.py:30 (commit b118a64). "2024년기준"
 _BASIS_EXTRA = re.compile(r"\d{4}년")
-# Source: scripts/eda_v3/roles.py:32 (commit b118a64), one change: after a Hangul (or closing parenthesis) and the
+# Source: scripts/a/eda_v3/roles.py:32 (commit b118a64), one change: after a Hangul (or closing parenthesis) and the
 # hyphen a digit may follow, so the draft's own example "정기예금-2%미만" is the "A-B" form. "Non-MMF부문" (no Hangul
 # next to the hyphen) stays one name. A value that merely contains a target word ("가계신용") is never compound.
 _COMBINED = re.compile(r"[가-힣)]\s*-\s*[가-힣A-Za-z0-9(]|[가-힣A-Za-z)]\s*-\s*[가-힣(]|\((?:사용|원천)\)\s*$")
-# Source: scripts/eda_v3/roles.py:33 (commit b118a64).
+# Source: scripts/a/eda_v3/roles.py:33 (commit b118a64).
 _AGE = re.compile(r"^\d{2}\s*(?:대|세)")
 _TARGET_DICT_SUFFIX_DROP = tuple(json.loads(paths.ROLE_WORDS.read_text(encoding="utf-8"))
                                  ["target_dictionary_suffix_drop"])  # plan 11 R1b: words in a data file
@@ -75,17 +75,17 @@ BOUNDARY = (0.3, 0.7)
 
 
 def base(name: str | None) -> str:
-    """Comparison key of a value (source: scripts/eda_v3/roles.py:39-42, commit b118a64)."""
+    """Comparison key of a value (source: scripts/a/eda_v3/roles.py:39-42, commit b118a64)."""
     return bkey(name)
 
 
 def is_total_key(k: str) -> bool:
-    # Source: scripts/eda_v3/roles.py:45-46 (commit b118a64).
+    # Source: scripts/a/eda_v3/roles.py:45-46 (commit b118a64).
     return bool(_TOTAL.match(k))
 
 
 def basis_only(k: str, vocab: set[str]) -> bool:
-    """True if the key is made only of basis words (source: scripts/eda_v3/roles.py:49-56, commit b118a64)."""
+    """True if the key is made only of basis words (source: scripts/a/eda_v3/roles.py:49-56, commit b118a64)."""
     if not k:
         return False
     rest = k
@@ -96,12 +96,12 @@ def basis_only(k: str, vocab: set[str]) -> bool:
 
 
 def is_combined(name: str | None) -> bool:
-    # Source: scripts/eda_v3/roles.py:59-60 (commit b118a64), with the regex change noted at _COMBINED.
+    # Source: scripts/a/eda_v3/roles.py:59-60 (commit b118a64), with the regex change noted at _COMBINED.
     return bool(_COMBINED.search(clean_value(name)))
 
 
 def _is_header(item: Item, k: str, has_child: set[str]) -> bool:
-    # Source: scripts/eda_v3/roles.py:146-147, 158 (commit b118a64).
+    # Source: scripts/a/eda_v3/roles.py:146-147, 158 (commit b118a64).
     return is_total_key(k) or (item.item_id in has_child and (k.startswith("총") or k.startswith("합계")))
 
 
@@ -471,7 +471,7 @@ class _Builder:
                             "subject": ov.subject, "value": ov.effective, "status": ov.effective_status,
                             "outcome": outcome, "reason": reason, **extra})
 
-    # ---- target dictionary (draft layer 2), source: scripts/eda_v3/roles.py:85-112 (commit b118a64)
+    # ---- target dictionary (draft layer 2), source: scripts/a/eda_v3/roles.py:85-112 (commit b118a64)
     def build_target_dict(self) -> None:
         src: dict[str, set[str]] = collections.defaultdict(set)
         dropped: collections.Counter = collections.Counter()
@@ -501,7 +501,7 @@ class _Builder:
         self.target_dict = TargetDictionary(dict(src), dropped, age_added)
 
     def build_basis_vocab(self) -> None:
-        # Source: scripts/eda_v3/roles.py:114-118 and 52 (commit b118a64).
+        # Source: scripts/a/eda_v3/roles.py:114-118 and 52 (commit b118a64).
         vocab = {key(w) for w in self.basis_words}
         for axis in self.named_axes():
             if self.layer1_of(axis) == "basis":
@@ -509,7 +509,7 @@ class _Builder:
         self.basis_vocab = vocab - {""}
 
     def target_ratio(self, items) -> tuple[float, int, int]:
-        # Source: scripts/eda_v3/roles.py:123-127 (commit b118a64).
+        # Source: scripts/a/eda_v3/roles.py:123-127 (commit b118a64).
         keys = [k for it in items if (k := base(it.name)) and not is_total_key(k)]
         hit = sum(1 for k in keys if k in self.target_dict)
         return (hit / len(keys) if keys else 0.0), hit, len(keys)
@@ -636,7 +636,7 @@ class _Builder:
                 self.values[k] = vr
 
     def _value_rule(self, it: Item, by_parent, has_child) -> tuple[str, str, bool]:
-        # Source: scripts/eda_v3/roles.py:153-168 (commit b118a64).
+        # Source: scripts/a/eda_v3/roles.py:153-168 (commit b118a64).
         k = base(it.name)
         if basis_only(k, self.basis_vocab):
             return "basis", "basis_words", False
@@ -654,7 +654,7 @@ class _Builder:
 
     # ---- layer 4
     def _detect(self, axis: Axis):
-        # Source: scripts/eda_v3/roles.py:174-205 (commit b118a64), returning item IDs per level.
+        # Source: scripts/a/eda_v3/roles.py:174-205 (commit b118a64), returning item IDs per level.
         names = {it.item_id: base(it.name) for it in axis.items}
         kids: dict[str, set[str]] = collections.defaultdict(set)
         for it in axis.items:
@@ -931,7 +931,7 @@ def _level_names(n: int) -> list[str]:
 
 
 def _level_role(target_ratio: float, basis_ratio: float) -> str:
-    # Source: scripts/eda_v3/roles.py:208-209 (commit b118a64).
+    # Source: scripts/a/eda_v3/roles.py:208-209 (commit b118a64).
     return "target" if target_ratio >= TARGET_RATIO else ("basis" if basis_ratio >= TARGET_RATIO else "indicator")
 
 

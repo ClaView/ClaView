@@ -35,7 +35,7 @@ B_PROMPT_HEAD = """질문과 공식 메타를 읽고 필요한 원자료 계열�
 같은 이름의 값이 여럿이면 under에 그 값을 구분하는 상위 이름이 적혀 있다.
 """
 
-# Kept as its own block so the live check (scripts/b_part/verify_expand_hcx.py --baseline)
+# Kept as its own block so the live check (scripts/b/b_part/verify_expand_hcx.py --baseline)
 # can drop it and compare against the pre-expand prompt.
 EXPAND_PROMPT = """expand는 축마다 none, children, leaves 중 하나이며 기본값은 none이다.
 질문이 값의 이름만 말하면(예: "공산품", "경상수지") 그 값을 그대로 선택하고 expand는 none으로 둔다.

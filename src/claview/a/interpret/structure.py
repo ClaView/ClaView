@@ -1,7 +1,7 @@
 """Structure signature of a question and the verified-structure check (certainty check 8, decision 10/18).
 
 A judgement that passes the seven checks of plan 04 2-3 is certain only when the structure of the question is one the
-specification cases have verified (``data/verified_structures.json``, built by scripts/build_verified_structures.py
+specification cases have verified (``data/verified_structures.json``, built by scripts/a/build_verified_structures.py
 from the cases expected certain; signatures only, no case ID or question). Otherwise the judgement fails with
 ``unverified_structure`` and stays undecided. The policy file ``data/certainty_policy.json`` turns the check on or
 off (off: the seven checks alone, as before); the environment variable ``CLAVIEW_V3_VERIFIED_STRUCTURES_ONLY``

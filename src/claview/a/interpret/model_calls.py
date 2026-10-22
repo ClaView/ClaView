@@ -1,6 +1,6 @@
 """Requests of the interpretation model run (plan 06, 5): disk cache, retries, request ledger and stop rules.
 
-``RunClient`` is the model client ``scripts/run_interp_model.py`` hands to ``interpret_question`` (it lives in the
+``RunClient`` is the model client ``scripts/a/run_interp_model.py`` hands to ``interpret_question`` (it lives in the
 package so that tests can drive it with a fake transport; the script only wires it):
 - disk cache (jsonl): key = sha256 of [node, prompt sha256, payload, schema]. A cached reply is returned without a
   request, so a run that stopped can be run again and resumes; ``replay`` mode reads the cache only (a missing reply

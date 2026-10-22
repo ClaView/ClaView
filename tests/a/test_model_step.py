@@ -33,7 +33,7 @@ from claview.a.interpret.text import normalize_text  # noqa: E402
 from claview.a.reused.model import HcxClient, ModelError, ModelReply  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / "scripts" / "run_interp_model.py"
+SCRIPT = ROOT / "scripts" / "a" / "run_interp_model.py"
 
 
 @pytest.fixture(autouse=True)

@@ -8,7 +8,7 @@ Two families of keys:
 - role keys (axis-role table, target dictionary): NFKC, lower case, spaces and punctuation removed, after the
   display cleanup; ``bkey`` also drops parenthesised parts ("비금융법인(사용)" -> 비금융법인).
 
-The role-key helpers are copied from scripts/eda_v3/common.py (commit b118a64) so that the four-layer rules give the
+The role-key helpers are copied from scripts/a/eda_v3/common.py (commit b118a64) so that the four-layer rules give the
 same numbers as the EDA recount; the scripts are outside the package boundary and are not imported.
 """
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 import re
 import unicodedata
 
-# ---------------------------------------------------------------- copied from scripts/eda_v3/common.py:32-36 (commit b118a64)
+# ---------------------------------------------------------------- copied from scripts/a/eda_v3/common.py:32-36 (commit b118a64)
 
 _PUNCT = re.compile(r"[\s·ㆍ・,()\[\]{}<>/\-_.:;'\"~]+")
 _FOOTNOTE = re.compile(r"(?:\s*\d{1,2}\))+\s*$")
@@ -27,23 +27,23 @@ _PAREN = re.compile(r"\s*[(\[][^()\[\]]*[)\]]")
 _SPACE = re.compile(r"\s+")
 
 
-# Source: scripts/eda_v3/common.py:39-40 (commit b118a64).
+# Source: scripts/a/eda_v3/common.py:39-40 (commit b118a64).
 def nfkc(text: str | None) -> str:
     return unicodedata.normalize("NFKC", text or "")
 
 
-# Source: scripts/eda_v3/common.py:43-44 (commit b118a64).
+# Source: scripts/a/eda_v3/common.py:43-44 (commit b118a64).
 def nospace(text: str) -> str:
     return _SPACE.sub("", text)
 
 
-# Source: scripts/eda_v3/common.py:47-49 (commit b118a64).
+# Source: scripts/a/eda_v3/common.py:47-49 (commit b118a64).
 def key(text: str | None) -> str:
     """Role key: NFKC, lower case, spaces and punctuation removed."""
     return _PUNCT.sub("", nfkc(text).lower())
 
 
-# Source: scripts/eda_v3/common.py:52-61 (commit b118a64).
+# Source: scripts/a/eda_v3/common.py:52-61 (commit b118a64).
 def clean_value(text: str | None) -> str:
     """Display-level cleanup of a value name: footnote marks, list numbering, industry code prefixes."""
     s = nfkc(text).strip()
@@ -56,13 +56,13 @@ def clean_value(text: str | None) -> str:
     return s.strip()
 
 
-# Source: scripts/eda_v3/common.py:68-70 (commit b118a64).
+# Source: scripts/a/eda_v3/common.py:68-70 (commit b118a64).
 def bkey(text: str | None) -> str:
     """Base key: cleaned value with every parenthesised part removed ("비금융법인(사용)" -> "비금융법인")."""
     return key(strip_parens(clean_value(text)))
 
 
-# Source: scripts/eda_v3/common.py:77-83 (commit b118a64).
+# Source: scripts/a/eda_v3/common.py:77-83 (commit b118a64).
 def strip_parens(text: str) -> str:
     prev = None
     s = text
@@ -72,7 +72,7 @@ def strip_parens(text: str) -> str:
     return s.strip()
 
 
-# Source: scripts/eda_v3/common.py:86-90 (commit b118a64).
+# Source: scripts/a/eda_v3/common.py:86-90 (commit b118a64).
 def paren_front(title: str) -> str:
     """Table name before its first parenthesis (the trailing qualifier)."""
     t = nfkc(title)

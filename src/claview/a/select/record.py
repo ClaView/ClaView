@@ -7,7 +7,7 @@ requirement's selection. A candidate of another requirement, or one without indi
 (it could not be selected for that requirement). ``touched``: at least one evidence candidate of the group fails.
 ``no_evidence``: the group has candidates but none with indicator evidence.
 
-Nothing here names a table, case or question; scripts/record_evidence.py runs it over the 417 questions.
+Nothing here names a table, case or question; scripts/a/record_evidence.py runs it over the 417 questions.
 """
 
 from __future__ import annotations
