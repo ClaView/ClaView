@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from claview_v3.development import main
+from claview.a.development import main
 
 if __name__ == "__main__":
     main()

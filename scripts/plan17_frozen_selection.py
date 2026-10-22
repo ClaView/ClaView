@@ -15,12 +15,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from claview_v3 import _guard
+from claview.a import _guard
 
 _guard.install_network_block()
 
-from claview_v3.catalog.layer import load_layer
-from claview_v3.select.graph import select_tables
+from claview.a.catalog.layer import load_layer
+from claview.a.select.graph import select_tables
 from plan15_baseline import selection_view
 
 

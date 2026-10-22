@@ -1,12 +1,12 @@
 * text=auto eol=lf
 *.csv -text whitespace=cr-at-eol,-blank-at-eof
 
-# Byte-identical copies of A (split completion-2 fixed copy) and B (b-1020).
-# Keep their bytes (mixed CRLF/LF) as copied so source hashes stay verifiable.
+# Copies of A (split completion-2 fixed copy) and B (b-1020). Keep their bytes (mixed CRLF/LF) as
+# copied. A moved to src/claview/a and tests/a, B tests to tests/b (plan 24 S1): covered by the
+# folder lines below. tests/pipeline is new integration code and keeps the default text handling.
 /src/claview/** -text
-/src/claview_v3/** -text
 /tests/** -text
-/tests_v3/** -text
+/tests/pipeline/** text=auto eol=lf
 /packages/claview-period/** -text
 /data/** -text
 /eval/** -text

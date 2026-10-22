@@ -8,7 +8,7 @@ Examples (repository root, `uv run --locked python -B -X utf8` in front of each)
 
 Network is blocked for the whole process. Without --synthetic-b no B port is built
 (A reports b_port_not_configured). --synthetic-b uses the SYNTHETIC B model and fetch
-client of tests_flow/synthetic_b.py: a wiring check, not model or value accuracy.
+client of tests/pipeline/synthetic_b.py: a wiring check, not model or value accuracy.
 Live HCX/KOSIS runs are not wired into this script.
 """
 
@@ -83,7 +83,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     sys.dont_write_bytecode = True
-    from claview_v3 import _guard
+    from claview.a import _guard
 
     _guard.install_network_block()
     from claview_flow import FlowSession, make_answer
@@ -92,7 +92,7 @@ def main(argv: list[str] | None = None) -> int:
     base = FlowSession.load()
     label = "offline, network blocked; live B (HCX/KOSIS) is not wired in this step"
     if args.synthetic_b:
-        sys.path.append(str(ROOT / "tests_flow"))
+        sys.path.append(str(ROOT / "tests" / "pipeline"))
         from synthetic_b import LABEL, SyntheticFetchClient, SyntheticSelectionModel
 
         label += f"; B model and fetch: {LABEL}"

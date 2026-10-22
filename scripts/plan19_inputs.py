@@ -63,23 +63,23 @@ def sha256_file(path: Path) -> str:
 
 def _dump(src: Path, out: Path) -> dict:
     sys.path.insert(0, str(src))
-    import claview_v3
+    import claview.a
 
-    package = Path(claview_v3.__file__).resolve().parent
+    package = Path(claview.a.__file__).resolve().parent
     if not package.is_relative_to(src.resolve()):
         raise RuntimeError("the package was not loaded from the given src folder")
-    from claview_v3 import _guard, paths
+    from claview.a import _guard, paths
 
     _guard.install_network_block()
-    from claview_v3.catalog.facets import catalog_version
-    from claview_v3.catalog.layer import load_layer
-    from claview_v3.catalog.text import index_key
-    from claview_v3.interpret.condition_rules import q4_rows
-    from claview_v3.interpret.decompose_payload import build_payload, is_input_limit, prompt_text
-    from claview_v3.interpret.decompose_schema import build_schema
-    from claview_v3.interpret.mentions import mention_spans
-    from claview_v3.interpret.pipeline import interpret_question
-    from claview_v3.reused.q_nodes import normalize
+    from claview.a.catalog.facets import catalog_version
+    from claview.a.catalog.layer import load_layer
+    from claview.a.catalog.text import index_key
+    from claview.a.interpret.condition_rules import q4_rows
+    from claview.a.interpret.decompose_payload import build_payload, is_input_limit, prompt_text
+    from claview.a.interpret.decompose_schema import build_schema
+    from claview.a.interpret.mentions import mention_spans
+    from claview.a.interpret.pipeline import interpret_question
+    from claview.a.reused.q_nodes import normalize
 
     def meanings(text: str, positive_only: bool = True) -> list[str]:
         return sorted({f"{r['axis']}:{index_key(str(r['value']))}" for r in q4_rows(normalize(text or "")["query"])

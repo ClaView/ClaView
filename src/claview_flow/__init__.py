@@ -1,7 +1,7 @@
-"""One flow over A (claview_v3) and B (claview): question -> A session -> B port -> fetch.
+"""One flow over A (claview.a) and B (claview): question -> A session -> B port -> fetch.
 
 This package only wires existing functions together. Table selection, waiting and
-resuming are A's (claview_v3.agent.session); series/period selection and the
+resuming are A's (claview.a.agent.session); series/period selection and the
 request/result contracts are B's (claview.b). Nothing here calls a model or KOSIS
 unless the caller passes clients built with `live_b_clients(allow_external=True)`.
 """

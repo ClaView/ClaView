@@ -4,7 +4,7 @@
 
 ```text
 질문
- └─ A 완료2 세션 (claview_v3.agent.session.run_session)
+ └─ A 완료2 세션 (claview.a.agent.session.run_session)
       intake → router → 해석 → 검증(V1) → 선택 → 검증(V2) → question_route
       ├─ ask        → 대기(awaiting_answer). B를 부르지 않는다. answer()로 재개하면 선택·V2만 다시 한다.
       ├─ no_result  → B를 부르지 않는다.
@@ -17,6 +17,8 @@
 노드별 설명과 판단이 어디에 있는지는 [통합 흐름](docs/통합흐름.md)에 있다.
 
 ## 1. 무엇을 합쳤나
+
+> **2026-10-23 S1 재배치**([계획 24](docs/plans/24_통합레포_재배치_S1.md)): A 패키지 `src/claview_v3/`를 `src/claview/a/`(import 이름 `claview.a`)로, A 시험 `tests_v3/`를 `tests/a/`로, B 시험 `tests/`를 `tests/b/`로, 통합 시험 `tests_flow/`를 `tests/pipeline/`으로 옮겼다. 판단·계약·정답은 바꾸지 않았고 import 이름·경로 값과 A 경계 규칙(아래 2절)만 바꿨다. 아래 1절의 표와 해시 기록은 1단계(옮기기 전) 기준이라 옮긴 파일의 현재 바이트와 다를 수 있다.
 
 | 경로 | 내용 | 출처 |
 |---|---|---|
@@ -52,18 +54,18 @@ Python 3.12와 uv를 쓴다. 저장소 루트에서 실행한다. API 키가 필
 ```powershell
 uv sync --offline --locked        # 캐시에 없으면 --offline을 빼고 uv sync --locked
 $env:PYTHONHASHSEED = "0"
-uv run --locked python -B -X utf8 -m pytest tests_v3 -q -p no:cacheprovider                       # A
-uv run --locked python -B -X utf8 -m pytest tests -q -p no:cacheprovider                          # B
+uv run --locked python -B -X utf8 -m pytest tests/a -q -p no:cacheprovider                        # A
+uv run --locked python -B -X utf8 -m pytest tests/b -q -p no:cacheprovider                        # B
 uv run --locked python -B -X utf8 -m pytest packages/claview-period/tests -q -p no:cacheprovider  # 공용 기간 패키지
-uv run --locked python -B -X utf8 -m pytest tests_flow -q -p no:cacheprovider                     # 통합
-uv run --locked ruff check src/claview_flow tests_flow scripts/run_flow.py
-uv run --locked ruff format --check src/claview_flow tests_flow scripts/run_flow.py
+uv run --locked python -B -X utf8 -m pytest tests/pipeline -q -p no:cacheprovider                 # 통합
+uv run --locked ruff check src/claview_flow tests/pipeline scripts/run_flow.py
+uv run --locked ruff format --check src/claview_flow tests/pipeline scripts/run_flow.py
 ```
 
-- 시험은 **따로 된 pytest 프로세스로** 돌린다. A의 `tests_v3/conftest.py`가 옛 패키지 `claview`(B 패키지와 이름이 같다)를 같은 프로세스에서 불러오지 못하게 막는 import 가드를 깔기 때문이다. `pytest tests tests_v3`처럼 한 번에 돌리지 않는다.
-- 모든 시험은 네트워크를 막고 돈다. A·통합 시험은 A의 `_guard.install_network_block()`, B 시험은 `tests/conftest.py`의 `block_network`를 쓴다.
+- 시험은 **따로 된 pytest 프로세스로** 돌린다. A의 `tests/a/conftest.py`가 `claview` 패키지 중 `claview.a` 밖의 모듈(B 모듈과 `claview.aflow` 등 옛 A 모듈)과 `src/claview/` 중 `src/claview/a/` 밖의 파일을 같은 프로세스에서 불러오지 못하게 막는 import 가드를 깔기 때문이다(상위 패키지 `claview`의 설명문뿐인 `__init__.py`만 허용). `pytest tests`처럼 한 번에 돌리지 않는다. 인자 없이 `pytest`를 돌리면 B(`tests/b`)만 돈다.
+- 모든 시험은 네트워크를 막고 돈다. A·통합 시험은 A의 `_guard.install_network_block()`, B 시험은 `tests/b/conftest.py`의 `block_network`를 쓴다.
 - 이 브랜치에서의 결과는 아래 "시험 결과"에 적었다.
-- 저장소 밖 자료를 읽는 A 시험이 있다. 417문항 묶음(`claview_v3/paths.py`의 `CORPUS_DIR`, 저장소 상위 폴더의 `clabi/...`)과 옛 작업 폴더의 `claview/src/claview/agent`(`tests_v3/agent/test_agent_common.py`)다. 없으면 기존 skip 조건대로 skip되거나 실패할 수 있다. 417문항은 저장소에 넣지 않는다.
+- 저장소 밖 자료를 읽는 A 시험이 있다. 417문항 묶음(`src/claview/a/paths.py`의 `CORPUS_DIR`, 저장소 상위 폴더의 `clabi/...`)과 옛 작업 폴더의 `claview/src/claview/agent`(`tests/a/agent/test_agent_common.py`)다. 없으면 기존 skip 조건대로 skip되거나 실패할 수 있다. 417문항은 저장소에 넣지 않는다.
 
 ### 시험 결과 (2026-10-22, 네트워크 차단)
 
@@ -74,6 +76,8 @@ uv run --locked ruff format --check src/claview_flow tests_flow scripts/run_flow
 | `packages/claview-period/tests` | 59 통과 | 59 |
 | 통합 `tests_flow` | 13 통과 | 신규 |
 | `scripts/run_flow.py --synthetic-b --synthetic-answer`, 고정 10문항(규칙 해석) | 10문항 모두 오류 없이 B까지 실행(`execution_status=completed`) | 연결 확인용. 표·값 정확도 아님 |
+
+2026-10-23 S1 재배치 후(같은 조건): A `tests/a` 3,949 통과·2 skip, B `tests/b` 1,344 통과·3 skip, 기간 59 통과, 통합 `tests/pipeline` 13 통과로 위와 같다.
 
 A의 차이는 환경에 따른 skip이다. 고정판에서 skip이던 loopback 공유·junction 시험 3개가 이 PC에서 실행돼 통과했고, Git 밖 EDA 결과(`runs/eda_v3`)가 없어 `test_catalog_real.py`의 숫자 대조 1개가 skip됐다. 남은 skip 하나는 고정판과 같은 파일 심볼릭 링크 권한 skip이다.
 
@@ -87,7 +91,7 @@ uv run --locked python -B -X utf8 scripts/run_flow.py --synthetic-b --synthetic-
 
 - 프로세스 전체에서 네트워크를 막는다. 출력: `status`(A 경로), `execution_status`, `b_status`/`b_reason`, 요구별 표, 건너뛴 이유. `--question`은 여러 번 줄 수 있다.
 - `--synthetic-b`가 없으면 B 포트를 만들지 않는다. A는 `b_port_not_configured`로 끝나고 B 선택을 지어내지 않는다.
-- `--synthetic-b`는 `tests_flow/synthetic_b.py`의 **합성** B 모델(메타의 첫 항목·각 분류의 첫 값·첫 주기)과 합성 조회 클라이언트(값 "1")를 쓴다. 연결·계약 확인일 뿐 모델·값의 정확도가 아니다.
+- `--synthetic-b`는 `tests/pipeline/synthetic_b.py`의 **합성** B 모델(메타의 첫 항목·각 분류의 첫 값·첫 주기)과 합성 조회 클라이언트(값 "1")를 쓴다. 연결·계약 확인일 뿐 모델·값의 정확도가 아니다.
 - `--synthetic-answer`는 대기 질문에 첫 선택지로 답하는 합성 사용자다.
 - `--out`은 저장소 밖이나 `runs/` 아래만 받는다.
 
@@ -126,11 +130,11 @@ if state["response"]["status"] == "awaiting_answer":
 
 | 경로 | 역할 |
 |---|---|
-| `src/claview_v3/` | A(완료2) |
-| `src/claview/` | B와 옛 A 모듈 |
+| `src/claview/a/` | A(완료2), 패키지 `claview.a` |
+| `src/claview/` (`a/` 밖) | B와 옛 A 모듈 |
 | `src/claview_flow/` | A→B 연결(새 코드) |
 | `packages/claview-period/` | 공용 기간 패키지 |
-| `tests_v3/`, `tests/`, `tests_flow/` | A, B, 통합 시험 |
+| `tests/a/`, `tests/b/`, `tests/pipeline/` | A, B, 통합 시험 |
 | `data/`, `reference/baseline-1006/data/` | 349표 카탈로그·메타(같은 바이트, 두 경로)와 B 매핑 |
 | `eval/` | A·B 평가 자료(정답·평가셋은 바꾸지 않음) |
 | `scripts/` | A·B 도구와 `run_flow.py` |

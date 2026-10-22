@@ -27,17 +27,17 @@ def write(path, value):
 
 
 def export(args):
-    from claview_v3 import _guard
+    from claview.a import _guard
     _guard.install_network_block()
-    from claview_v3.catalog.layer import load_layer
-    from claview_v3.catalog.facets import catalog_version
-    from claview_v3.contract.check import check_analysis, check_selections
-    from claview_v3.development_reverify import (MANIFEST, ARCHIVE, LIVE, FrozenSource, call_file,
+    from claview.a.catalog.layer import load_layer
+    from claview.a.catalog.facets import catalog_version
+    from claview.a.contract.check import check_analysis, check_selections
+    from claview.a.development_reverify import (MANIFEST, ARCHIVE, LIVE, FrozenSource, call_file,
         current_input, reverify_call, store_hashes)
-    from claview_v3.interpret.decompose_run import DecompositionConfig
-    from claview_v3.interpret.pipeline import interpret_question
-    from claview_v3.select.graph import select_tables
-    from claview_v3.select.readings import reading_candidates
+    from claview.a.interpret.decompose_run import DecompositionConfig
+    from claview.a.interpret.pipeline import interpret_question
+    from claview.a.select.graph import select_tables
+    from claview.a.select.readings import reading_candidates
 
     args.out.mkdir(parents=True, exist_ok=False)
     (args.out / "states").mkdir()
@@ -113,7 +113,7 @@ def b_check(args):
     # directory is selected explicitly, never the A checkout's legacy claview.
     sys.dont_write_bytecode = True  # the other owner's source folder stays read-only
     sys.path.insert(0, str(args.b_root / "src"))
-    from claview_v3 import _guard
+    from claview.a import _guard
     _guard.install_network_block()
     from claview.b.adapter_v3 import to_b_request
     from claview.b.contract import check_request, check_scope_result
@@ -124,7 +124,7 @@ def b_check(args):
     from claview.models import ScriptedModel
     from claview.services import Services
     from claview import stages
-    from claview_v3.select.periods import month, metadata_months
+    from claview.a.select.periods import month, metadata_months
 
     args.out.mkdir(parents=True, exist_ok=False)
     store = MetadataStore(args.b_root / "data/catalog/search_catalog.json", args.b_root / "data/raw/boK_meta_raw.jsonl")

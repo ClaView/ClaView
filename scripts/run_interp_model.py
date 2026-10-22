@@ -140,8 +140,8 @@ def dry(args, picked: list[dict], layer, prompt: str, prompt_sha: str, counts: d
 
 def calls(args, picked: list[dict], off: dict, layer, prompt_sha: str, counts: dict, key: str | None,
           interpret) -> dict:
-    from claview_v3.interpret.model_calls import RunClient
-    from claview_v3.reused.model import HcxClient
+    from claview.a.interpret.model_calls import RunClient
+    from claview.a.reused.model import HcxClient
 
     inner = HcxClient(api_key=key) if args.mode == "live" else None
     key = None  # the client keeps it; nothing else does
@@ -190,8 +190,8 @@ def calls(args, picked: list[dict], off: dict, layer, prompt_sha: str, counts: d
 def main(argv: list[str] | None = None) -> int:
     args = parse(argv)
     sys.path.insert(0, str(ROOT / "src"))
-    from claview_v3.interpret.model_calls import MAX_BILLED_CAP
-    from claview_v3.reused.model import usable_api_key
+    from claview.a.interpret.model_calls import MAX_BILLED_CAP
+    from claview.a.reused.model import usable_api_key
 
     if not 1 <= args.max_billed <= MAX_BILLED_CAP:
         print(f"--max-billed must be 1..{MAX_BILLED_CAP} (billed requests of every run over --out add up; nothing "
@@ -221,14 +221,14 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _run(args, key: str | None) -> int:
-    from claview_v3 import _guard
+    from claview.a import _guard
 
     if args.mode != "live":
         _guard.install_network_block()  # dry and replay make no request
-    from claview_v3.catalog.layer import load_layer
-    from claview_v3.interpret import model_step
-    from claview_v3.interpret.model_calls import estimate_tokens
-    from claview_v3.interpret.pipeline import interpret_question
+    from claview.a.catalog.layer import load_layer
+    from claview.a.interpret import model_step
+    from claview.a.interpret.model_calls import estimate_tokens
+    from claview.a.interpret.pipeline import interpret_question
 
     t0 = time.time()
     args.out.mkdir(parents=True, exist_ok=True)

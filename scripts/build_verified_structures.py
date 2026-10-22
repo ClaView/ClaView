@@ -27,11 +27,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "src"), str(ROOT / "tests_v3"), str(ROOT / "tests_v3" / "spec")]
 
-from claview_v3 import _guard  # noqa: E402
+from claview.a import _guard  # noqa: E402
 
 _guard.install_network_block()
 
-from claview_v3.interpret import structure  # noqa: E402
+from claview.a.interpret import structure  # noqa: E402
 
 os.environ[structure.POLICY_ENV] = "0"  # signatures and certainty without check 8
 
@@ -40,7 +40,7 @@ import test_spec_judgement as tj  # noqa: E402
 import test_spec_requirements as tr  # noqa: E402
 from spec_support import Layers  # noqa: E402
 
-from claview_v3.interpret.pipeline import interpret_question  # noqa: E402
+from claview.a.interpret.pipeline import interpret_question  # noqa: E402
 
 SOURCES = ("tests_v3/spec/test_spec_judgement.py", "tests_v3/spec/test_spec_requirements.py")
 

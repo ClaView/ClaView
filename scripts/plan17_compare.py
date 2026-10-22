@@ -13,11 +13,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from claview_v3 import _guard
+from claview.a import _guard
 
 _guard.install_network_block()
 
-from claview_v3.reused.table_sets import score_sets
+from claview.a.reused.table_sets import score_sets
 from score_selection import load_groups
 
 

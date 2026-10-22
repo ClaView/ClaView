@@ -38,14 +38,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from claview_v3 import _guard  # noqa: E402
+from claview.a import _guard  # noqa: E402
 
 _guard.install_network_block()  # transports blocked; old modules are checked after the run (no import of them)
 
-from claview_v3 import paths  # noqa: E402
-from claview_v3.agent.graph import build_outer_graph  # noqa: E402
-from claview_v3.catalog.layer import load_layer  # noqa: E402
-from claview_v3.reused.table_sets import score_sets  # noqa: E402
+from claview.a import paths  # noqa: E402
+from claview.a.agent.graph import build_outer_graph  # noqa: E402
+from claview.a.catalog.layer import load_layer  # noqa: E402
+from claview.a.reused.table_sets import score_sets  # noqa: E402
 
 SETS = ("dev_mini", "check_mini")
 VARIANTS = {"straight": "straight", "router": "router", "verify_central": "central", "verify_parts": "parts"}

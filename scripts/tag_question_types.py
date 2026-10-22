@@ -33,13 +33,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from claview_v3 import _guard  # noqa: E402
+from claview.a import _guard  # noqa: E402
 
 _guard.install_network_block()
 
-from claview_v3 import paths  # noqa: E402
-from claview_v3.catalog.layer import load_layer  # noqa: E402
-from claview_v3.reused import q_rules  # noqa: E402
+from claview.a import paths  # noqa: E402
+from claview.a.catalog.layer import load_layer  # noqa: E402
+from claview.a.reused import q_rules  # noqa: E402
 
 CAUSES = ("interpretation", "not_in_pool", "out_of_cards", "selection")
 DATASETS = ("golden", "development", "official")

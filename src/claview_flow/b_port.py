@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from claview.a.agent.assumptions import VERSION as A_ASSUMPTIONS_VERSION
+from claview.a.agent.b_connection import AdapterPort
 from claview.b.adapter_v3 import to_b_request
 from claview.b.contract import (
     A_ASSUMPTION_VERSIONS,
@@ -22,8 +24,6 @@ from claview.fetch import DataClient, build_api_request, fetch_data
 from claview.metadata import MetadataStore
 from claview.models import SelectionModel
 from claview.services import Services
-from claview_v3.agent.assumptions import VERSION as A_ASSUMPTIONS_VERSION
-from claview_v3.agent.b_connection import AdapterPort
 
 NOT_RUN_FETCH_REASON = "no_fetch_client"
 

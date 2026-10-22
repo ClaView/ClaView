@@ -12,7 +12,7 @@ def main(args):
     sys.dont_write_bytecode = True
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
     sys.path.insert(0, str(args.b_root / "src"))
-    from claview_v3 import _guard
+    from claview.a import _guard
     _guard.install_network_block()
     from claview.b.adapter_v3 import to_b_request
     from claview.b.contract import check_request

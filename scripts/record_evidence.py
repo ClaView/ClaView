@@ -32,9 +32,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import score_selection as S  # noqa: E402  (installs the network block first)
 
-from claview_v3 import _guard, paths  # noqa: E402
-from claview_v3.catalog.layer import load_layer  # noqa: E402
-from claview_v3.select.record import drop_record  # noqa: E402
+from claview.a import _guard, paths  # noqa: E402
+from claview.a.catalog.layer import load_layer  # noqa: E402
+from claview.a.select.record import drop_record  # noqa: E402
 
 DATASETS = ("golden", "development", "official")
 CHECKS = ("basis", "unit", "exclude", "frequency", "period", "region", "indicator", "cross_axis", "matched_items",

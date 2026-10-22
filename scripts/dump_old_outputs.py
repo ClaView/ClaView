@@ -183,7 +183,7 @@ def load_groups(path: Path) -> dict[str, list[list[str]]]:
 
 
 def _parse(argv):
-    from claview_v3 import paths
+    from claview.a import paths
 
     parser = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     parser.add_argument("--out-dir", type=Path, default=paths.V3_RUNS_DIR / "old_dump")

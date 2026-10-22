@@ -26,7 +26,7 @@ def main(args):
     sys.dont_write_bytecode = True
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
     sys.path.insert(0, str(args.b_root / "src"))
-    from claview_v3 import _guard
+    from claview.a import _guard
     _guard.install_network_block()
     from claview.b.adapter_v3 import to_b_request
     from claview.b.contract import (
@@ -43,10 +43,10 @@ def main(args):
     from claview.models import ScriptedModel
     from claview.services import Services
 
-    from claview_v3.agent.assumptions import VERSION
-    from claview_v3.agent.b_connection import AdapterPort, connect
-    from claview_v3.agent.session import resume_session
-    from claview_v3.catalog.layer import load_layer
+    from claview.a.agent.assumptions import VERSION
+    from claview.a.agent.b_connection import AdapterPort, connect
+    from claview.a.agent.session import resume_session
+    from claview.a.catalog.layer import load_layer
 
     assert VERSION in A_ASSUMPTION_VERSIONS
     args.out.mkdir(parents=True, exist_ok=False)
