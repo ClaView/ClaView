@@ -11,8 +11,8 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from claview.b.contracts import Config, StageFailure, Trace
-from claview.b.evaluation import scripted_answers
-from claview.b.fetch import KosisClient, build_api_request, normalize_rows
+from claview.b.evaluation import condition_counts, scripted_answers
+from claview.b.fetch import KosisClient, build_api_request, fetch_data, normalize_rows
 from claview.b.graphs import build_b_graph
 from claview.b.metadata import MetadataStore, periods_between
 from claview.b.models import HcxModel, ScriptedModel, object_schema
@@ -66,12 +66,6 @@ def test_depth_and_full_path_are_catalog_metadata(store):
     meta = store.get("301", "DT_401Y018")
     dim = meta["dimensions"]["objL1"]["values"]["13102134729ACC_CD.110AA"]
     assert dim["parent_code"] and len(dim["path"]) > 1
-
-
-
-
-
-
 
 
 @pytest.mark.parametrize("bad", ["missing_axis", "unknown_code", "duplicate", "extra_field"])
@@ -167,8 +161,6 @@ def test_unit_missing_and_conflicting(store):
         canonicalize_selections(plain, table, Config())
 
 
-
-
 def test_channel_union_protects_original_and_does_not_stack_expressions(store, monkeypatch):
     search = SearchIndex(store)
     ids = sorted(store.catalog)
@@ -193,12 +185,6 @@ def test_channel_union_protects_original_and_does_not_stack_expressions(store, m
     assert by_id[ids[0]]["score"] == round(1 / 61, 8)
     with pytest.raises(StageFailure, match="original_candidate_budget_exceeded"):
         search.retrieve_pool("original", [], 2, 2, 0)
-
-
-
-
-
-
 
 
 def synthetic_rows(selection):
@@ -258,8 +244,6 @@ class FakeData:
             result[0]["DT"] = "-"
         trace.add("data_response", mode="synthetic_numeric_fixture", rows=result)
         return result
-
-
 
 
 @pytest.mark.parametrize(
@@ -334,3 +318,25 @@ def test_kosis_parameters_and_non_list_error():
         client.fetch(params, trace)
     assert "test-key" not in json.dumps(trace.events)
     client.close()
+
+
+# B parts of two tests removed with old A in plan 26 (step 4); the old A halves were dropped.
+def test_b_function_and_subgraph_agree(store):
+    c = case()
+    a_result = c["expected"]["A"]
+    b = select_series(c["query"], a_result, services(store))
+    bg = build_b_graph(services(store)).invoke({"query": c["query"], "a_result": a_result})[
+        "stage_outcome"
+    ]
+    assert b["status"] == bg["status"] == "ok"
+    assert condition_counts(b["result"]) == condition_counts(c["expected"]["B"])
+    assert b["result"] == bg["result"]
+
+
+def test_fetch_of_golden_b_is_ok_and_an_empty_response_is_no_data(store):
+    c = case()
+    ok = fetch_data(c["expected"]["B"], store, FakeData(c["expected"]["B"]["selections"]), Trace())
+    assert ok["status"] == "ok"
+    result = fetch_data(c["expected"]["B"], store, FakeData([], empty=True), Trace())
+    assert result["status"] == "no_data"
+    assert result["result"]["series"]
