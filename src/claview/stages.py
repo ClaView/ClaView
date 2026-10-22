@@ -773,7 +773,7 @@ PICK_CORRECTION_REASONS = tuple(reason for _rule, reason in PICK_CORRECTIONS)
 
 
 def correct_to_named_value(
-    raw: Json, query: str, table: Json, table_key: str, *, structured: bool = False
+    raw: Json, query: str, table: Json, table_key: str
 ) -> tuple[Json, list[Json]]:
     """Reverse check: the model's pick against the names the question says.
 
@@ -782,11 +782,6 @@ def correct_to_named_value(
     axis only) the first matching rule wins: R1 `named_longer_value`, A `named_parent_value`,
     B `excluded_named_value`. Rows that become identical are merged; each change is reported
     as a notice with `applied: named_value`.
-
-    `structured`: the scope carries the interpretation's own structure (A plan 19). Rule B reads
-    an exclusion from the question's words alone, and the structure's negations are not
-    confirmed (no confirmed effect this round), so rule B changes nothing then (user decision
-    of 2026-10-21 05:57). R1 and A still apply.
     """
     notices: list[Json] = []
     rows: list[Json] = []
@@ -806,8 +801,6 @@ def correct_to_named_value(
                 continue
             values = table["dimensions"][axis]["values"]
             for rule, reason in PICK_CORRECTIONS:
-                if structured and rule is excluded_named_value:
-                    continue
                 target = rule(query, values, code)
                 if target is None:
                     continue
@@ -1273,9 +1266,6 @@ class BSteps:
             return {"stage_outcome": outcome("B", failure=exc)}
 
     def context(self, state: Json) -> Json:
-        plan = (state.get("period_plans") or {}).get(state["table_keys"][state["table_index"]])
-        if plan is not None:
-            return self._context_from_plan(state, plan)
         s = self.s
         key = state["table_keys"][state["table_index"]]
         try:
@@ -1362,62 +1352,6 @@ class BSteps:
         except StageFailure as exc:
             return {"stage_outcome": outcome("B", failure=exc)}
 
-    def _context_from_plan(self, state: Json, plan: Json) -> Json:
-        """`context` when the shared resolver already gave this table's frequency and period.
-
-        The plan comes from `claview.b.period_resolver.resolve_period_for_table` on the question
-        interpretation's conditions (plan 04). The question text is not read again for the period;
-        everything after the period (pruning, model table, schema, size checks) is as above.
-        """
-        s = self.s
-        key = state["table_keys"][state["table_index"]]
-        try:
-            if plan["status"] != "ok":
-                raise StageFailure(plan["issue"]["code"], "unresolved")
-            query = state["query"]
-            resolved_period = dict(plan["applied"])
-            notices = state.get("period_notices", {})
-            if plan.get("notice"):
-                notices = {**notices, key: {"table": key, **plan["notice"]}}
-            alternatives = state.get("frequency_alternatives", {})
-            if plan.get("alternatives"):
-                found = [
-                    {"frequency": a["frequency"], "period": a["applied"]}
-                    for a in plan["alternatives"]
-                ]
-                alternatives = {**alternatives, key: found}
-            # Same policy as above: the model sees a relative or open-ended period only (CV-AB-04).
-            shown_period = resolved_period if plan.get("show_period") else None
-            table = build_b_context(query, state["table_metadata"][key], s.config)
-            shown = (
-                model_table(table, state["table_metadata"][key])
-                if s.config.compact_model_context
-                else table
-            )
-            context = {
-                "query": query,
-                "selected_tables": state["a_result"]["tables"],
-                "table_metadata": shown,
-                "as_of": s.config.as_of,
-                "period_policy": s.config.period_policy,
-                "resolved_period": shown_period,
-            }
-            b_bounded(context, s.config)
-            expand_enabled = asks_for_breakdown(query)
-            schema = build_b_schema(table, s.config, with_expand=expand_enabled)
-            b_bounded({"context": context, "schema": schema}, s.config)
-            return {
-                "active_table": key,
-                "selection_context": context,
-                "model_schema": schema,
-                "expand_enabled": expand_enabled,
-                "resolved_period": resolved_period,
-                "period_notices": notices,
-                "frequency_alternatives": alternatives,
-            }
-        except StageFailure as exc:
-            return {"stage_outcome": outcome("B", failure=exc)}
-
     def select(self, state: Json) -> Json:
         s = self.s
         try:
@@ -1443,9 +1377,7 @@ class BSteps:
             check_output(state["model_output"], state["model_schema"])
             table_meta = state["table_metadata"][key]
             raw = with_default_expand(normalize_model_periods(state["model_output"]))
-            raw, corrected = correct_to_named_value(
-                raw, state["query"], table_meta, key, structured=bool(state.get("structured"))
-            )
+            raw, corrected = correct_to_named_value(raw, state["query"], table_meta, key)
             guarded, lowered_by_guard = apply_expand_guard(raw, state["query"], key)
             guarded, on_leaves = lower_expand_on_leaves(guarded, table_meta, key)
             guarded, named = select_named_children(guarded, state["query"], table_meta, key)
@@ -1465,10 +1397,6 @@ class BSteps:
                         "retries": tries + 1,
                     }
                 raise
-            if state.get("period_plans") and not expanded["selections"]:
-                # With the period settled in code, an empty answer means the table holds nothing
-                # the question asks for (plan 04): the table selection should try another table.
-                raise StageFailure("table_unsuitable", "unresolved")
             rows = canonicalize_selections(
                 expanded,
                 state["table_metadata"][key],

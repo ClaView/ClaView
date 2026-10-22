@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import time
-import unicodedata
 from datetime import UTC, datetime
 from decimal import Decimal, InvalidOperation
 from typing import Protocol
@@ -186,8 +185,7 @@ def normalize_rows(selection: Json, rows: list[Json], snapshot: str) -> tuple[Js
             raise StageFailure("duplicate_response_period")
         unit = row.get("UNIT_NM") or None
         if unit:
-            # KOSIS sends full-width forms (e.g. "2020＝100") where metadata has "2020=100".
-            units.add(unicodedata.normalize("NFKC", unit))
+            units.add(unit)
         raw = row.get("DT")
         if raw is None or str(raw).strip() in {"", "-", "..", "...", "…", "X", "x"}:
             value = None
@@ -211,9 +209,7 @@ def normalize_rows(selection: Json, rows: list[Json], snapshot: str) -> tuple[Js
             "value_status": status,
         }
     if len(units) > 1 or (
-        units
-        and selection["unit"] is not None
-        and unicodedata.normalize("NFKC", selection["unit"]) not in units
+        units and selection["unit"] is not None and selection["unit"] not in units
     ):
         raise StageFailure("response_unit_conflict")
     missing = [x for x in expected if x not in points]

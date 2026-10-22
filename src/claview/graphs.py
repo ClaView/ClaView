@@ -38,11 +38,6 @@ class BState(TypedDict, total=False):
     frequency_alternatives: Json
     selections_by_table: Json
     stage_outcome: Json
-    # table key -> resolve_period_for_table result; absent = the question text is read as before
-    period_plans: Json
-    # the scope carries the interpretation's own structure (`hints.structure`): the question-word
-    # exclusion rule (`stages.excluded_named_value`) is off; absent = as before
-    structured: bool
 
 
 class PipelineState(TypedDict, total=False):

@@ -1475,21 +1475,6 @@ def test_excluded_value_picks_the_matching_except_value():
     ]
 
 
-def test_excluded_value_rule_is_off_under_an_interpretation_structure():
-    """User decision of 2026-10-21 05:57: with the interpretation's own structure the question
-    words alone never change a value (the structure's negations are not confirmed); the old path
-    is unchanged (the test above), and the other name rules still apply."""
-    raw = {"selections": [row("F1"), row("D2")]}
-    query = "신선식품과 신선식품을 뺀 물가 비교"
-    fixed, notices = correct_to_named_value(raw, query, make_group_table(), "T", structured=True)
-    assert codes(fixed) == ["F1", "D2"] and notices == []
-    raw = {"selections": [row("R1")]}
-    fixed, notices = correct_to_named_value(
-        raw, "원재료 물가 추이", make_group_table(), "T", structured=True
-    )
-    assert codes(fixed) == ["R"]  # the named-parent rule is not the exclusion rule
-
-
 @pytest.mark.parametrize(
     "query, chosen",
     [
