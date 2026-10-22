@@ -86,16 +86,20 @@ A의 차이는 환경에 따른 skip이다. 고정판에서 skip이던 loopback 
 ## 3. 질문 돌리기
 
 ```powershell
-uv run --locked python -B -X utf8 scripts/run_flow.py --question "GDP 2023년 보여줘"
-uv run --locked python -B -X utf8 scripts/run_flow.py --synthetic-b --question "GDP 2023년 보여줘"
-uv run --locked python -B -X utf8 scripts/run_flow.py --synthetic-b --synthetic-answer --question "총고정자본형성 2023년" --out runs/flow-demo
+uv run --locked python -B -X utf8 -m claview.pipeline run --question "GDP 2023년 보여줘"
+uv run --locked python -B -X utf8 -m claview.pipeline run --synthetic-b --question "GDP 2023년 보여줘"
+uv run --locked python -B -X utf8 -m claview.pipeline run --synthetic-b --synthetic-answer --question "총고정자본형성 2023년" --out runs/flow-demo
+uv run --locked python -B -X utf8 -m claview.pipeline evaluate --as-of 2026-10-22 --out runs/pipeline-golden
 ```
+
+- `claview-pipeline`(같은 명령의 진입점)과 `scripts/run_flow.py`(`run`과 같음)로도 실행할 수 있다.
 
 - 프로세스 전체에서 네트워크를 막는다. 출력: `status`(A 경로), `execution_status`, `b_status`/`b_reason`, 요구별 표, 건너뛴 이유. `--question`은 여러 번 줄 수 있다.
 - `--synthetic-b`가 없으면 B 포트를 만들지 않는다. A는 `b_port_not_configured`로 끝나고 B 선택을 지어내지 않는다.
-- `--synthetic-b`는 `tests/pipeline/synthetic_b.py`의 **합성** B 모델(메타의 첫 항목·각 분류의 첫 값·첫 주기)과 합성 조회 클라이언트(값 "1")를 쓴다. 연결·계약 확인일 뿐 모델·값의 정확도가 아니다.
+- `--synthetic-b`는 `claview.pipeline.synthetic`의 **합성** B 모델(메타의 첫 항목·각 분류의 첫 값·첫 주기)과 합성 조회 클라이언트(값 "1")를 쓴다. 연결·계약 확인일 뿐 모델·값의 정확도가 아니다.
 - `--synthetic-answer`는 대기 질문에 첫 선택지로 답하는 합성 사용자다.
 - `--out`은 저장소 밖이나 `runs/` 아래만 받는다.
+- `evaluate`는 골든 22문항을 새 A 세션(규칙, 모델 호출 없음) → 포트 → B(저장된 골든 B 답 재생) → 합성 조회로 끝까지 돌리고 표 일치·B 성공·`execution_status`를 센다. 개발 기준선이다(골든 22는 개선에 반복해 쓴 자료라 독립 평가가 아니고, B 답은 재생, 값은 합성). 2026-10-23 기준선(as_of 2026-10-22): 표 일치 17/22, B 성공 17/22, completed 17/22([계획 26](docs/plans/26_옛A_새A교체.md)).
 
 코드에서 쓸 때:
 

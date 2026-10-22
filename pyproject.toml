@@ -20,6 +20,7 @@ claview-period = { path = "packages/claview-period", editable = true }
 
 [project.scripts]
 claview = "claview.b.cli:main"
+claview-pipeline = "claview.pipeline.cli:main"
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "ruff>=0.12,<1"]

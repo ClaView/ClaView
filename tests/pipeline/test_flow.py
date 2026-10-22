@@ -16,7 +16,6 @@ from synthetic_b import SyntheticFetchClient, SyntheticSelectionModel
 
 from claview.a import _guard
 from claview.a.agent.b_connection import connect
-from claview.b.ab_pipeline import B_TABLE_FIELDS
 from claview.b.contracts import StageFailure
 from claview.pipeline import (
     NOT_RUN_FETCH_REASON,
@@ -26,6 +25,7 @@ from claview.pipeline import (
     make_answer,
     to_table_request,
 )
+from claview.pipeline.b_port import B_TABLE_FIELDS
 from claview.pipeline.live import LiveNotAllowed
 
 AS_OF = "2026-10-22"
