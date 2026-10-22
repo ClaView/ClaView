@@ -17,6 +17,11 @@ import json
 import sys
 from pathlib import Path
 
+from claview.a import _guard
+
+# Before any A, B or flow module is imported by this command line (the package __init__ is lazy).
+_guard.install_network_block()
+
 ROOT = Path(__file__).resolve().parents[3]
 GOLDEN = ROOT / "eval" / "cases" / "golden_set_v1.json"
 
@@ -150,9 +155,6 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     sys.dont_write_bytecode = True
-    from claview.a import _guard
-
-    _guard.install_network_block()
     code = _run(args, _guard) if args.command == "run" else _evaluate(args, _guard)
     if _guard.NETWORK_ATTEMPTS:
         print("[pipeline] network attempts were refused", file=sys.stderr)

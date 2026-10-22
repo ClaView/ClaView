@@ -8,9 +8,20 @@ independent test set, B answers are replayed and fetch values are synthetic).
 from __future__ import annotations
 
 import json
+import os
+import subprocess
+import sys
+from pathlib import Path
 
 from claview.pipeline import cli
-from claview.pipeline.evaluate import ANSWER_POLICIES, SCOPE, evaluate, load_cases
+from claview.pipeline.evaluate import (
+    ANSWER_POLICIES,
+    SCOPE,
+    _b_envelope,
+    _b_success,
+    evaluate,
+    load_cases,
+)
 
 AS_OF = "2026-10-22"
 ROW_KEYS = {
@@ -53,6 +64,8 @@ def test_golden_replay_runs_every_case_to_the_end(base):
             assert r["b_status"] == "ok" and set(r["fetch_statuses"]) == {"ok"}
         if r["b_status"] == "not_run":
             assert r["fetch_calls"] == 0
+        # first_option answers every pending question: no case is left waiting.
+        assert r["execution_status"] != "awaiting_answer", r["case_id"]
 
 
 def test_command_line_run_and_evaluate_write_their_outputs(tmp_path, capsys):
@@ -85,3 +98,51 @@ def test_command_line_run_and_evaluate_write_their_outputs(tmp_path, capsys):
     report = json.loads((out / "golden_eval.json").read_text(encoding="utf-8"))
     assert report["summary"]["cases"] == 2 and report["network_attempts"] == 0
     assert "[pipeline evaluate]" in capsys.readouterr().out
+
+
+def _req(status, selections=None, resolved=None, returned=True):
+    if not returned:
+        return {"status": "connection_error"}
+    result = {"selections": selections or []}
+    if resolved is not None:
+        result["resolved_period"] = resolved
+    return {
+        "status": "returned",
+        "result": {"b_outcome": {"stage": "B", "status": status, "result": result}},
+    }
+
+
+def test_b_envelope_counts_every_requirement_and_ignores_order():
+    """A failed or missing requirement is never hidden by a successful one, in either order."""
+    golden = json.loads(cli.GOLDEN.read_text(encoding="utf-8-sig"))["cases"][0]["expected"]["B"]
+    rows = golden["selections"]
+    period = rows[0]["period"]
+    ok = _req("ok", rows)
+    assert _b_success(_b_envelope([ok]), golden)
+    for pair in ([ok, _req("ok", returned=False)], [_req("ok", returned=False), ok]):
+        assert _b_envelope(pair)["status"] == "connection_error"
+        assert not _b_success(_b_envelope(pair), golden)
+    asked = _req("needs_confirmation", resolved=period)
+    for pair in ([asked, _req("error")], [_req("error"), asked], [ok, asked], [asked, ok]):
+        assert _b_envelope(pair)["status"] == "mixed"
+        assert not _b_success(_b_envelope(pair), golden)
+    assert _b_envelope([]) is None and not _b_success(None, golden)
+
+
+def test_command_line_blocks_the_network_before_loading_the_flow():
+    code = (
+        "import sys\n"
+        "import claview.pipeline.cli\n"
+        "from claview.a import _guard\n"
+        "loaded = [m for m in sys.modules if m.startswith(('claview.b', 'claview.pipeline.'))"
+        " and m != 'claview.pipeline.cli']\n"
+        "print(_guard.installed()['network'], loaded)\n"
+    )
+    src = str(Path(cli.__file__).resolve().parents[2])
+    env = {k: v for k, v in os.environ.items() if not any(s in k.upper() for s in ("KEY", "TOKEN"))}
+    env["PYTHONPATH"] = src
+    done = subprocess.run(
+        [sys.executable, "-B", "-c", code], capture_output=True, text=True, env=env
+    )
+    assert done.returncode == 0, done.stderr[-2000:]
+    assert done.stdout.strip() == "True []"

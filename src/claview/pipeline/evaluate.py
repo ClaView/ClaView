@@ -47,21 +47,35 @@ def _tables(state: dict) -> list[list[str]]:
 
 
 def _b_envelope(requirements: list[dict]) -> dict | None:
-    """One B envelope over all returned requirements (selections concatenated), for B's metrics."""
-    outcomes = [
-        (r.get("result") or {}).get("b_outcome")
-        for r in requirements
-        if r.get("status") == "returned"
-    ]
-    outcomes = [o for o in outcomes if o]
-    if not outcomes:
+    """One B envelope over every A requirement sent to B, for B's metrics; None when none was.
+
+    A requirement that did not return (connection error) or carries no B outcome makes the
+    envelope fail. One requirement keeps B's own envelope (so `needs_confirmation` and its
+    resolved period are judged as B judges them). Several requirements count only when every
+    one is `ok` (selections concatenated); otherwise the status is the single shared status or
+    "mixed", which never counts as success.
+    """
+    if not requirements:
         return None
-    status = next((o["status"] for o in outcomes if o["status"] != "ok"), "ok")
+    outcomes = [
+        (r.get("result") or {}).get("b_outcome") if r.get("status") == "returned" else None
+        for r in requirements
+    ]
+    if any(o is None for o in outcomes):
+        return {"status": "connection_error", "result": None}
+    if len(outcomes) == 1:
+        return outcomes[0]
+    statuses = {o["status"] for o in outcomes}
+    if statuses != {"ok"}:
+        return {"status": statuses.pop() if len(statuses) == 1 else "mixed", "result": None}
     selections = [s for o in outcomes for s in ((o.get("result") or {}).get("selections") or [])]
-    resolved = next(
-        ((o.get("result") or {}).get("resolved_period") for o in outcomes if o.get("result")), None
-    )
-    return {"status": status, "result": {"selections": selections, "resolved_period": resolved}}
+    return {"status": "ok", "result": {"selections": selections}}
+
+
+def _b_success(envelope: dict | None, expected_b: dict) -> bool:
+    if envelope is None or envelope["result"] is None:
+        return False
+    return b_success(envelope, expected_b)
 
 
 def evaluate_case(base: FlowSession, case: dict, *, as_of: str | None, answer_policy: str) -> dict:
@@ -100,9 +114,10 @@ def evaluate_case(base: FlowSession, case: dict, *, as_of: str | None, answer_po
         "table_exact": bool(chosen) and sorted(chosen) == sorted(golden),
         "table_recall": len({tuple(t) for t in chosen} & {tuple(t) for t in golden}) / len(golden),
         "b_status": envelope["status"] if envelope else "not_run",
-        "b_success": bool(envelope) and b_success(envelope, expected["B"]),
+        "b_success": _b_success(envelope, expected["B"]),
         "b_exact": bool(envelope)
         and envelope["status"] == "ok"
+        and envelope["result"] is not None
         and condition_counts(envelope["result"]) == condition_counts(expected["B"]),
         "fetch_statuses": fetches,
         "fetch_calls": len(client.calls),
