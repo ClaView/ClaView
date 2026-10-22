@@ -16,9 +16,16 @@ from synthetic_b import SyntheticFetchClient, SyntheticSelectionModel
 
 from claview.a import _guard
 from claview.a.agent.b_connection import connect
-from claview.b.adapter_v3 import to_b_request
-from claview.b.contract import B_CONTRACT_VERSION, STRUCTURE_VERSIONS, check_request
-from claview_flow import NOT_RUN_FETCH_REASON, FlowSession, live_b_clients, make_answer
+from claview.ab_pipeline import B_TABLE_FIELDS
+from claview.contracts import StageFailure
+from claview_flow import (
+    NOT_RUN_FETCH_REASON,
+    TABLE_LIST_CONTRACT,
+    FlowSession,
+    live_b_clients,
+    make_answer,
+    to_table_request,
+)
 from claview_flow.live import LiveNotAllowed
 
 AS_OF = "2026-10-22"
@@ -58,7 +65,7 @@ def test_rules_question_runs_real_b_and_synthetic_fetch(base):
     assert all(f["status"] == "ok" and f["result"]["series"] for f in fetches)
     assert response["execution_status"] == "completed"
     assert model.calls and client.calls
-    assert session.port().contract_version == B_CONTRACT_VERSION
+    assert session.port().contract_version == TABLE_LIST_CONTRACT
 
 
 def test_price_question_waits_then_answer_runs_b_once(base):
@@ -91,68 +98,6 @@ def test_no_result_never_calls_b(base):
     assert state["response"]["b"]["reason"] == "no_executable_requirements"
     assert state["response"]["execution_status"] == "not_executed"
     assert model.calls == [] and client.calls == []
-
-
-def _fake_proposal(payload: dict, schema: dict) -> dict:
-    """A fake model proposal built from the payload's own IDs (indicator + every condition)."""
-    indicator = next(r for r in payload["candidate_summary"] if r["role"] == "indicator")
-    requirement = {
-        "id": "r1",
-        "indicator": {
-            "segment_ids": indicator["segment_ids"],
-            "subquote": None,
-            "sense_id": indicator["sense_id"],
-        },
-        "targets": [],
-        "basis_refs": [],
-        "context": None,
-        "breakdowns": [],
-    }
-    bindings = [
-        {"condition_id": c["id"], "scope": "question", "requirement_ids": [], "name_refs": []}
-        for c in payload["conditions"]
-    ]
-    requests = [
-        {"segment_ids": [s["id"]], "subquote": None, "sense_id": None}
-        for s in payload["segments"]
-        if s["kind"] == "request"
-    ]
-    reading = {
-        "requirements": [requirement],
-        "condition_bindings": bindings,
-        "relations": [],
-        "polarity_links": [],
-        "request_refs": requests,
-        "unused_refs": [],
-    }
-    return {"primary": reading, "alternative": None, "ambiguities": []}
-
-
-def test_fake_model_structure_is_accepted_by_b(base):
-    session, model, client = flow(base)
-    proposals = []
-
-    def source(payload, schema):
-        proposals.append(payload)
-        return _fake_proposal(payload, schema)
-
-    decomposition = {"mode": "gpt", "execution_mode": "fake", "proposal_source": source}
-    state = session.run_question(PROCEED_Q, as_of=AS_OF, decomposition=decomposition)
-    record = state["analysis"]["decomposition"]
-    assert len(proposals) == 1
-    assert record["applied_source"] == "model"
-    assert record["structure"]["version"] in STRUCTURE_VERSIONS
-    # The real B adapter carries the structure and finds no contract error.
-    request = to_b_request(state, a_assumptions=state["response"]["assumptions"])
-    assert check_request(request) == [] and not request.get("input_errors")
-    hints = [scope["hints"].get("structure") for scope in request["scopes"]]
-    assert hints and all(h and h["version"] in STRUCTURE_VERSIONS for h in hints)
-    response = state["response"]
-    assert all(r["status"] == "returned" for r in response["b"]["requirements"])
-    assert not [s for s in response["b"]["skipped"] if s["reason"] == "connection_error"]
-    assert set(scope_statuses(state)) == {"ok"}
-    assert response["execution_status"] == "completed"
-    assert response["decomposition"]["real_calls"] == 0
 
 
 def test_reconnecting_the_same_state_does_not_call_b_again(base):
@@ -212,3 +157,77 @@ def test_network_is_blocked_in_this_suite():
         socket.create_connection(("127.0.0.1", 9))
     assert len(_guard.NETWORK_ATTEMPTS) > before
     del _guard.NETWORK_ATTEMPTS[before:]
+
+
+def test_b_receives_the_question_and_a_tables_only(base):
+    """The port hands B the original question and A's chosen tables as `{"tables": [...]}`."""
+    session, model, _ = flow(base)
+    port = session.port()
+    requests = []
+
+    def recording(payload, *, a_assumptions):
+        request = to_table_request(payload, a_assumptions=a_assumptions)
+        requests.append((payload, request))
+        return request
+
+    port.adapter = recording
+    state = session.run_question(PROCEED_Q, as_of=AS_OF)
+    assert requests and state["response"]["execution_status"] == "completed"
+    for payload, request in requests:
+        chosen = [(t["org_id"], t["table_id"]) for s in payload["selections"] for t in s["tables"]]
+        tables = request["a_result"]["tables"]
+        assert request["query"] == PROCEED_Q == state["question"]
+        assert list(request["a_result"]) == ["tables"] and tables
+        assert all(list(t) == list(B_TABLE_FIELDS) for t in tables)
+        assert [(t["org_id"], t["table_id"]) for t in tables] == list(dict.fromkeys(chosen))
+    assert set(model.calls) == {
+        f"B:{t['org_id']}:{t['table_id']}" for _, r in requests for t in r["a_result"]["tables"]
+    }
+
+
+def test_no_tables_or_a_waiting_never_calls_b(base):
+    session, model, client = flow(base)
+    state = session.run_question(PROCEED_Q, as_of=AS_OF)
+    calls = (len(model.calls), len(client.calls))
+    # A payload whose selections carry no table is refused before B runs.
+    payload = {
+        "question": PROCEED_Q,
+        "selections": [{"requirement_id": "r1", "tables": []}],
+        "a_assumptions": state["response"]["assumptions"],
+        "requirement_keys": [{"reading_id": "x", "requirement_id": "r1"}],
+    }
+    with pytest.raises(ValueError):
+        session.port()(payload)
+    # A question that waits for the user never reaches B.
+    waiting = session.run_question(WAIT_Q, as_of=AS_OF)
+    assert waiting["response"]["b"]["reason"] == "awaiting_answer"
+    assert (len(model.calls), len(client.calls)) == calls
+
+
+class _FailingModel:
+    """B's selection model that always fails (stands for a failed B selection)."""
+
+    def __init__(self):
+        self.calls = []
+
+    def complete(self, task, system, context, schema, max_tokens, trace):
+        self.calls.append(task)
+        raise StageFailure("synthetic_model_failure")
+
+
+def test_b_graph_failure_stays_a_stage_failure(base):
+    model, client = _FailingModel(), SyntheticFetchClient()
+    session = FlowSession.load(
+        b_model=model, fetch_client=client, layer=base.layer, store=base.store
+    )
+    state = session.run_question(PROCEED_Q, as_of=AS_OF)
+    response = state["response"]
+    assert model.calls and client.calls == []
+    requirements = response["b"]["requirements"]
+    assert requirements and all(r["status"] == "returned" for r in requirements)
+    for r in requirements:
+        b_outcome = r["result"]["b_outcome"]
+        assert b_outcome["stage"] == "B" and b_outcome["status"] != "ok" and b_outcome["issues"]
+        assert {s["status"] for s in r["result"]["scopes"]} == {b_outcome["status"]}
+        assert r["result"]["selections"] == [] and r["result"]["fetch"] is None
+    assert response["execution_status"] != "completed"
