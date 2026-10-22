@@ -1,22 +1,10 @@
-"""B selection and period policy from the supplied 2026-10-02 B bundle.
-
-A exports remain as compatibility aliases; their implementation is in a_stages.
-"""
+"""B selection and period policy from the supplied 2026-10-02 B bundle."""
 
 from __future__ import annotations
 
 import json
 import re
 
-from .a_stages import A_PROMPT as A_PROMPT
-from .a_stages import PLAN_PROMPT as PLAN_PROMPT
-from .a_stages import ROUTE_PROMPT as ROUTE_PROMPT
-from .a_stages import ASteps as ASteps
-from .a_stages import a_search_scope as a_search_scope
-from .a_stages import checked_query_plan as checked_query_plan
-from .a_stages import query_plan_schema as query_plan_schema
-from .a_stages import select_tables as select_tables
-from .a_stages import validate_a_conditions as validate_a_conditions
 from .contracts import Config, Json, StageFailure, outcome
 from .metadata import WIDTHS, period_number, selected_unit
 from .models import check_output, object_schema

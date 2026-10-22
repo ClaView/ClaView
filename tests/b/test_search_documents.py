@@ -1,20 +1,16 @@
 """Document provenance, hybrid retrieval and bounded graph integration without APIs."""
 
-import copy
 import json
 from pathlib import Path
 
 import httpx
 import pytest
 
-from claview.b.contracts import Config, StageFailure, Trace
+from claview.b.contracts import StageFailure
 from claview.b.embeddings import NcpEmbedder, VectorIndex, build_vector_index, unit_vector
-from claview.b.graphs import build_a_graph
 from claview.b.metadata import MetadataStore
-from claview.b.models import ScriptedModel
 from claview.b.search import SearchIndex
 from claview.b.search_documents import build_search_documents, chunks, filter_note
-from claview.b.stages import Services, select_tables
 
 
 def test_contact_filter_preserves_statistical_notes():
@@ -186,39 +182,6 @@ def test_hybrid_fallback_records_failure_without_losing_lexical_candidates(store
     assert index.last_retrieval["warning"] == "synthetic_unavailable"
 
 
-def test_hybrid_hierarchy_keeps_global_results_and_matches_plain_function(store, tmp_path):
-    corpus = build_search_documents(store)
-    provider = SyntheticEmbedder()
-    path = tmp_path / "index.json"
-    build_vector_index(corpus, provider, path)
-    index = SearchIndex(
-        store, corpus=corpus, vectors=VectorIndex(corpus, json.loads(path.read_text()), provider)
-    )
-    question = "소비자물가"
-    global_ids = [r["doc_id"] for r in index.retrieve(question)]
-    chosen = global_ids[0]
-    route_id = index.route_options(index.roots)[0]["node_id"]
-    responses = {
-        "route": [{"selected_node_ids": [route_id]}],
-        "A": [{"selected_doc_ids": [chosen]}],
-    }
-    config = Config(hierarchy=True, max_route_rounds=1)
-
-    def service():
-        return Services(store, index, ScriptedModel(copy.deepcopy(responses)), config, Trace())
-
-    svc = service()
-    state = build_a_graph(svc).invoke({"query": question})
-    assert state["stage_outcome"]["status"] == "ok"
-    assert set(global_ids) <= {r["doc_id"] for r in state["merged_candidates"]}
-    assert state["route_round"] <= 1
-    assert state["stage_outcome"]["result"] == select_tables(question, service())["result"]
-    assert "retrieval_diagnostics" in state
-    request = next(
-        e for e in svc.trace.events if e.get("task") == "A" and e["event"] == "model_request"
-    )
-    assert any(c["search_documents"] for c in request["context"]["candidates"])
-    assert "expected" not in request["context"]
 
 
 def test_embedding_http_contract_and_invalid_vectors():

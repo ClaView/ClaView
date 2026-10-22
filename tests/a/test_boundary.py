@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SRC = ROOT / "src"
 PKG = SRC / "claview" / "a"
 TESTS_A = Path(__file__).resolve().parent
-OLD_SOURCE = SRC / "claview" / "b" / "aflow" / "rules.py"
+OLD_SOURCE = SRC / "claview" / "b" / "stages.py"
 
 # ---------------------------------------------------------------- static scan
 
@@ -280,7 +280,7 @@ def test_relative_paths_after_chdir_are_refused(refusals, monkeypatch):
             exec(code, {})
     monkeypatch.chdir(ROOT / "src")
     with pytest.raises(ForbiddenImportError):
-        open(os.path.join("claview", "b", "aflow", "rules.py"), "rb")
+        open(os.path.join("claview", "b", "stages.py"), "rb")
     assert {"open old source", "compile old source", "exec old source"} <= set(refusals.violations())
 
 

@@ -11,20 +11,17 @@ import pytest
 from jsonschema import Draft202012Validator
 
 from claview.b.contracts import Config, StageFailure, Trace
-from claview.b.evaluation import condition_counts, scripted_answers
-from claview.b.fetch import KosisClient, build_api_request, fetch_data, normalize_rows
-from claview.b.graphs import build_a_graph, build_b_graph, invoke_pipeline
+from claview.b.evaluation import scripted_answers
+from claview.b.fetch import KosisClient, build_api_request, normalize_rows
+from claview.b.graphs import build_b_graph
 from claview.b.metadata import MetadataStore, periods_between
 from claview.b.models import HcxModel, ScriptedModel, object_schema
 from claview.b.search import SearchIndex
 from claview.b.stages import (
     Services,
     canonicalize_selections,
-    checked_query_plan,
     expand_selections,
     select_series,
-    select_tables,
-    validate_a_conditions,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -71,38 +68,10 @@ def test_depth_and_full_path_are_catalog_metadata(store):
     assert dim["parent_code"] and len(dim["path"]) > 1
 
 
-def test_independent_functions_and_subgraphs_agree(store):
-    c = case()
-    a = select_tables(c["query"], services(store))
-    ag = build_a_graph(services(store)).invoke({"query": c["query"]})["stage_outcome"]
-    assert a["result"] == ag["result"] == c["expected"]["A"]
-    b = select_series(c["query"], a["result"], services(store))
-    bg = build_b_graph(services(store)).invoke({"query": c["query"], "a_result": a["result"]})[
-        "stage_outcome"
-    ]
-    assert b["status"] == bg["status"] == "ok"
-    assert condition_counts(b["result"]) == condition_counts(c["expected"]["B"])
-    assert b["result"] == bg["result"]
 
 
-def test_parent_state_keeps_outcomes_and_does_not_expose_expected(store):
-    svc = services(store)
-    state = invoke_pipeline(case()["query"], svc, selection_mode="legacy")
-    assert state["completed_stage"] == "B"
-    assert set(state["stage_outcomes"]) == {"A", "B"}
-    assert "model_output" not in state and "table_metadata" not in state
-    for event in svc.trace.events:
-        if event["event"] == "model_request":
-            assert "expected" not in event["context"] and "case_id" not in event["context"]
-    assert "decision" not in state["a_result"] and "decision" not in state["b_result"]
 
 
-def test_invalid_a_stops_before_b(store):
-    svc = services(store, responses={"A": [{"selected_doc_ids": ["301:INVALID"]}]})
-    state = invoke_pipeline(case()["query"], svc, selection_mode="legacy")
-    assert state["response"]["status"] == "error"
-    assert set(state["stage_outcomes"]) == {"A"}
-    assert not any(e.get("task", "").startswith("B:") for e in svc.trace.events)
 
 
 @pytest.mark.parametrize("bad", ["missing_axis", "unknown_code", "duplicate", "extra_field"])
@@ -198,22 +167,6 @@ def test_unit_missing_and_conflicting(store):
         canonicalize_selections(plain, table, Config())
 
 
-def test_routing_budget_and_global_fallback(store):
-    config = Config(hierarchy=True, max_route_rounds=2, stop_table_count=0)
-    responses = scripted_answers(case())
-    path = store.catalog["301:DT_401Y018"]["path_ids"]
-    responses["route"] = [{"selected_node_ids": [path[1]]}, {"selected_node_ids": [path[2]]}]
-    svc = services(store, config=config, responses=responses)
-    state = build_a_graph(svc).invoke({"query": case()["query"]})
-    assert state["stage_outcome"]["status"] == "ok" and state["route_round"] == 2
-    assert {c["doc_id"] for c in state["global_candidates"]} <= {
-        c["doc_id"] for c in state["merged_candidates"]
-    }
-    responses = scripted_answers(case())
-    responses["route"] = [{"selected_node_ids": ["INVALID"]}]
-    svc = services(store, config=config, responses=responses)
-    state = build_a_graph(svc).invoke({"query": case()["query"]})
-    assert state["stage_outcome"]["status"] == "ok" and state["route_failed"]
 
 
 def test_channel_union_protects_original_and_does_not_stack_expressions(store, monkeypatch):
@@ -242,125 +195,10 @@ def test_channel_union_protects_original_and_does_not_stack_expressions(store, m
         search.retrieve_pool("original", [], 2, 2, 0)
 
 
-def test_structured_plan_grounding_and_fallback_preserve_query(store):
-    query = "2024년 전산업 매출 대비 영업이익 비율을 연도별로 보여줘"
-    plan = {
-        "indicators": [{"source_quote": "매출 대비 영업이익 비율", "term": "매출대비영업이익비율"}],
-        "subjects": [{"source_quote": "전산업", "term": "전산업"}],
-        "statistical_basis": [],
-        "explicit_conditions": [{"source_quote": "2024년", "term": "2024년"}],
-        "search_queries": ["매출대비영업이익비율"],
-        "ambiguities": [],
-    }
-    checked = checked_query_plan(query, plan)
-    assert checked["original_query"] == query
-    assert checked["additional_expressions"] == [query + " 매출대비영업이익비율"]
-    bad = copy.deepcopy(plan)
-    bad["subjects"][0]["term"] = "가계"
-    with pytest.raises(StageFailure, match="query_plan_changed_condition"):
-        checked_query_plan(query, bad)
-    with pytest.raises(StageFailure, match="query_plan_unverified_term"):
-        checked_query_plan(
-            "GDP 성장률",
-            {
-                **plan,
-                "indicators": [{"source_quote": "GDP 성장률", "term": "GDP 디플레이터"}],
-                "subjects": [],
-                "explicit_conditions": [],
-                "search_queries": ["GDP 디플레이터"],
-            },
-        )
-    alias_plan = copy.deepcopy(plan)
-    alias_plan["indicators"][0]["term"] = "매출액영업이익률"
-    alias_plan["search_queries"] = ["매출액영업이익률"]
-    assert checked_query_plan(query, alias_plan, {("매출 대비 영업이익 비율", "매출액영업이익률")})[
-        "additional_expressions"
-    ]
-    bad = copy.deepcopy(plan)
-    bad["indicators"][0]["term"] = "실질 매출액영업이익률"
-    with pytest.raises(StageFailure, match="query_plan_changed_condition"):
-        checked_query_plan(query, bad)
-    config = Config(structure_query=True)
-    svc = services(store, config=config, responses=scripted_answers(case()))
-    result = select_tables(case()["query"], svc)
-    assert result["status"] == "ok"
-    assert any(e["event"] == "a_query_plan_fallback" for e in svc.trace.events)
-    assert (
-        next(e for e in svc.trace.events if e["event"] == "a_search")["query_plan"][
-            "original_query"
-        ]
-        == case()["query"]
-    )
-    grounded = {
-        "indicators": [{"source_quote": "물가 흐름", "term": "물가흐름"}],
-        "subjects": [],
-        "statistical_basis": [],
-        "explicit_conditions": [],
-        "search_queries": ["물가흐름"],
-        "ambiguities": [],
-    }
-    responses = scripted_answers(case())
-    responses["A:plan"] = [grounded]
-    structured = services(store, config=config, responses=responses)
-    assert select_tables(case()["query"], structured)["status"] == "ok"
-    assert next(e for e in structured.trace.events if e["event"] == "a_query_plan")["plan"][
-        "additional_expressions"
-    ]
 
 
-def test_a_modes_budget_conditions_and_function_graph_parity(store):
-    c = case()
-    path = store.catalog["301:DT_401Y018"]["path_ids"]
-    responses = scripted_answers(c)
-    responses["route"] = [{"selected_node_ids": [path[1]]}]
-    config = Config(search_scope="hierarchy", max_route_rounds=1)
-    function = select_tables(c["query"], services(store, config=config, responses=responses))
-    graph = build_a_graph(services(store, config=config, responses=responses)).invoke(
-        {"query": c["query"]}
-    )
-    assert function["status"] == graph["stage_outcome"]["status"]
-    assert function["result"] == graph["stage_outcome"]["result"]
-    assert graph["global_candidates"] == []
-    assert graph["route_round"] == 1
-
-    responses["route"] = [{"selected_node_ids": ["INVALID"]}]
-    fallback = build_a_graph(services(store, config=config, responses=responses)).invoke(
-        {"query": c["query"]}
-    )
-    assert fallback["route_failed"] and fallback["stage_outcome"]["status"] == "ok"
-
-    limited = services(store, config=Config(model_candidate_limit=1))
-    stopped = select_tables(c["query"], limited)
-    assert stopped["status"] == "unresolved"
-    assert stopped["issues"][0]["code"] == "model_candidate_budget_exceeded"
-    assert any(e["event"] == "a_input_refused" for e in limited.trace.events)
-
-    unsupported_period = select_tables(
-        "2030년 수입물가지수 월별 자료", services(store, responses=scripted_answers(c))
-    )
-    assert unsupported_period["status"] == "unresolved"
-    assert unsupported_period["issues"][0]["code"] == "metadata_refresh_required"
 
 
-def test_a_condition_unknown_metadata_and_negative_frequency(store, monkeypatch):
-    search = SearchIndex(store)
-    doc_id = "301:DT_401Y018"
-    original_get = store.get
-    table = copy.deepcopy(original_get("301", "DT_401Y018"))
-    table["periods"] = {"Y": table["periods"]["Y"]}
-    monkeypatch.setattr(
-        store, "get", lambda org, tid: table if tid == "DT_401Y018" else original_get(org, tid)
-    )
-    validate_a_conditions("2024년 연도별 수입물가, 월별 자료는 제외", [doc_id], search)
-
-    def missing(org, tid):
-        if tid == "DT_401Y018":
-            raise StageFailure("metadata_missing", "unresolved")
-        return original_get(org, tid)
-
-    monkeypatch.setattr(store, "get", missing)
-    with pytest.raises(StageFailure, match="a_metadata_incomplete"):
-        validate_a_conditions("2024년 월별 수입물가", [doc_id], search)
 
 
 def synthetic_rows(selection):
@@ -422,30 +260,6 @@ class FakeData:
         return result
 
 
-def test_full_connection_and_partial_blocks_c(store):
-    c = case()
-    client = FakeData(c["expected"]["B"]["selections"])
-    svc = services(store)
-    state = invoke_pipeline(
-        c["query"], svc, data_client=client, through="fetch", selection_mode="legacy"
-    )
-    assert state["completed_stage"] == "fetch"
-    assert state["stage_outcomes"]["fetch"]["status"] == "ok"
-    called = []
-    client.drop = True
-    result = invoke_pipeline(
-        c["query"],
-        services(store),
-        selection_mode="legacy",
-        data_client=client,
-        renderer=lambda *_: called.append(True),
-        through="C",
-    )
-    assert result["response"]["status"] == "partial"
-    assert not called and result["completed_stage"] == "B"
-    result = fetch_data(c["expected"]["B"], store, FakeData([], empty=True), Trace())
-    assert result["status"] == "no_data"
-    assert result["result"]["series"]
 
 
 @pytest.mark.parametrize(

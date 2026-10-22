@@ -8,8 +8,6 @@ from pathlib import Path
 
 import pytest
 
-from claview.b.a_discovery import TableDiscovery
-from claview.b.candidate_store import CandidateStore
 from claview.b.contracts import StageFailure
 from claview.b.mappings import VERSION, MappingDictionary, ingest_proposals, mentions
 from claview.b.metadata import MetadataStore
@@ -296,16 +294,3 @@ def test_expansion_scope_rejects_only_explicit_title_conflicts(
     assert bool(result["trace"][0]["scope_conflicts"]) != allowed
 
 
-def test_dictionary_policy_is_part_of_candidate_snapshot_and_no_confirmation(store, tmp_path):
-    path = save(tmp_path, payload(store))
-    corpus = build_search_documents(store, path)
-    repository = CandidateStore(tmp_path / "candidates.sqlite3")
-    on = TableDiscovery(SearchIndex(store, path, corpus), repository)
-    off = TableDiscovery(SearchIndex(store, path, corpus, mapping_policy="off"), repository)
-    assert on.snapshots["index"] != off.snapshots["index"]
-    context = {"session_id": "s", "request_id": "r", "query_revision": 1}
-    waiting = on.search_tables("TOKEN 원화 월별", context)
-    bundle = repository.get(waiting["interaction"]["candidate_set_id"], context)
-    assert bundle["status"] == "awaiting_user" and bundle["a_outcome"] is None
-    assert not bundle["b_attempts"]
-    assert bundle["diagnostics"]["mapping_resolution"]["trace"][0]["action"] == "applied"

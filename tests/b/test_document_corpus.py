@@ -6,9 +6,6 @@ from pathlib import Path
 
 import pytest
 
-from claview.b.a_discovery import TableDiscovery
-from claview.b.a_eval_predict import predict_case
-from claview.b.candidate_store import CandidateStore
 from claview.b.contracts import StageFailure
 from claview.b.document_corpus import (
     audit_catalog,
@@ -202,96 +199,5 @@ def test_model_evidence_budget_includes_citations_and_reports_every_omission(sto
         select_model_evidence(corpus, "수입", ids, max_chars=1)
 
 
-def test_document_profile_waits_for_user_without_b(store, tmp_path):
-    discovery = TableDiscovery(
-        SearchIndex(store, corpus=build_document_corpus(store)),
-        CandidateStore(tmp_path / "a.sqlite3"),
-    )
-    result = predict_case(
-        {
-            "case_id": "wiring",
-            "query": "수입물가 원화 월별",
-            "query_revision": 1,
-            "prior_turns": [],
-        },
-        discovery,
-    )
-    assert result["decision"] == "display_candidates"
-    assert result["trace"]["status"] == "awaiting_user"
-    assert result["usage"]["b_calls"] == result["usage"]["model_calls"] == 0
 
 
-@pytest.mark.parametrize("broken", [None, "profile", "content", "source"])
-def test_prediction_process_loads_prebuilt_document_hash_contract(
-    store, tmp_path, monkeypatch, broken
-):
-    from claview.b.a_eval_predict import main
-
-    mappings = tmp_path / "mappings.json"
-    definitions = tmp_path / "definitions.json"
-    mappings.write_text('{"mappings": []}', encoding="utf-8")
-    definitions.write_text('{"definitions": []}', encoding="utf-8")
-    corpus = build_document_corpus(store, mappings, definitions, profile="D2")
-    if broken == "profile":
-        corpus["manifest"]["document_profile"] = "D1"
-    elif broken == "content":
-        corpus["documents"][0]["text"] += "changed"
-    elif broken == "source":
-        from claview.b.search_documents import digest
-
-        chunk = next(d for d in corpus["documents"] if d["layer"] == "semantic")
-        chunk["source_refs"][0]["value_hash"] = "0" * 64
-        corpus["corpus_id"] = digest([corpus["manifest"], corpus["documents"]])
-    source = tmp_path / "corpus.json"
-    source.write_text(json.dumps(corpus, ensure_ascii=False), encoding="utf-8")
-    inputs = tmp_path / "inputs.json"
-    inputs.write_text(
-        json.dumps(
-            {
-                "schema_version": "claview-a-eval/1",
-                "dataset_id": "synthetic",
-                "split": "dev",
-                "cases": [
-                    {
-                        "case_id": "fixture",
-                        "query": "수입물가",
-                        "query_revision": 1,
-                        "prior_turns": [],
-                    }
-                ],
-            }
-        ),
-        encoding="utf-8",
-    )
-    output = tmp_path / "prediction"
-    monkeypatch.setattr(
-        "sys.argv",
-        [
-            "predict",
-            "--inputs",
-            str(inputs),
-            "--catalog",
-            str(FIXTURES / "catalog.json"),
-            "--metadata",
-            str(FIXTURES / "metadata.jsonl"),
-            "--mappings",
-            str(mappings),
-            "--definitions",
-            str(definitions),
-            "--document-profile",
-            "D2",
-            "--corpus",
-            str(source),
-            "--output-dir",
-            str(output),
-        ],
-    )
-    if broken:
-        with pytest.raises(ValueError, match="prebuilt_document_.*_mismatch"):
-            main()
-    else:
-        main()
-        prediction = json.loads((output / "predictions.json").read_text(encoding="utf-8"))
-        assert prediction["run"]["document_corpus_id"] == corpus["corpus_id"]
-        assert prediction["run"]["mapping_policy"] == "off"
-        assert prediction["cases"][0]["decision"] == "display_candidates"
