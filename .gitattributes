@@ -12,5 +12,6 @@
 /data/** -text
 /eval/** -text
 /scripts/** -text
-/docs/B/** -text
+/docs/b/** -text
+/docs/records/** -text
 /uv.lock -text

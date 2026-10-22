@@ -16,6 +16,6 @@
 
 ## 통합 브랜치(integrated-router) 추가 원칙
 
-- `src/claview_v3/`·`tests_v3/`(A)와 `src/claview/`·`tests/`·`packages/claview-period/`(B) 등 복사한 파일은 출처 바이트 그대로 둡니다. 출처와 해시는 `docs/통합_출처_해시.json`에 있습니다. 동작을 바꿀 때는 해당 파트 담당과 합의합니다.
-- A·B 연결 코드는 `src/claview_flow/`에만 둡니다. 합성 B 모델·조회는 `tests_flow/`에만 두고 정확도 근거로 쓰지 않습니다.
-- 시험은 A(`tests_v3`), B(`tests`), 기간 패키지, 통합(`tests_flow`)을 각각 다른 pytest 프로세스로 돌립니다(README 2절).
+- A는 `src/claview/a/`(패키지 `claview.a`)·`tests/a/`, B는 `src/claview/b/`(`claview.b`, 10/16 compact 판 + `fetch.py` 단위 표기 수정)·`tests/b/`, 공용 기간 패키지는 `packages/claview-period/`입니다. 복사해 온 A·B 코드는 계획 24~27에서 바꾼 것(import 이름·경로 값, 옛 A 삭제, 위 B 판본) 외에는 출처 그대로 둡니다. 1단계 출처와 해시는 `docs/records/통합_출처_해시.json`에 있습니다. 동작을 바꿀 때는 해당 파트 담당과 합의합니다.
+- A·B 연결 코드(A→B 포트, 끝까지 도는 평가·명령)는 `src/claview/pipeline/`에만 두고, B 안에서 A를 부르지 않습니다. 합성 B 모델·조회(`claview.pipeline.synthetic`)는 연결 확인용이며 정확도 근거로 쓰지 않습니다.
+- 시험은 A(`tests/a`), B(`tests/b`), 기간 패키지, 연결(`tests/pipeline`)을 각각 다른 pytest 프로세스로 돌립니다(README 2절).

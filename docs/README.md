@@ -2,6 +2,14 @@
 
 설치·실행 방법은 `guides/`, 구현 기준은 `design/`, 조사·시험 기록은 `research/`에서 찾습니다. 일정과 담당자는 팀 노션에서 관리합니다.
 
+## 현재 구조와 계약
+
+- [구조(ARCHITECTURE)](ARCHITECTURE.md): 흐름, 폴더, 의존 방향, A·B 경계
+- [계약](contracts/README.md): A→B 표 목록, B 결과(b_result), 조회 결과(data_result)
+- [계획](plans/): 통합 레포 계획 24~27(재배치, B 10/16 판, 옛 A 교체, 폴더 정리)
+- [기록](records/README.md): 지난 단계의 문서·해시·옛 A 문서
+- [B 문서](b/README.md): B 담당 설계·계획·조사. `b/guides/`의 `공통_개발환경.md`, `용어_매핑_작성과_검수.md`는 아래 `guides/`의 같은 이름 문서와 내용이 다르다(B판). 둘을 합치지 않았다.
+
 ## 사용 안내
 
 - [공통 개발환경](guides/공통_개발환경.md)
@@ -28,4 +36,4 @@
 - [NCP 초기 호출 검증 결과](research/NCP_초기호출_검증결과.md)
 - [NCP 비용과 이용한도](research/NCP_비용과_이용한도.md)
 
-공유 데이터 파일은 [데이터 안내](../data/README.md), 질문·정답 초안은 [평가 사례](../eval/cases/골든셋_초안_5건.md)에서 확인합니다.
+공유 데이터 파일은 [데이터 안내](../data/README.md), 질문·정답 초안은 [평가 사례](../eval/cases/golden/골든셋_초안_5건.md)에서 확인합니다.

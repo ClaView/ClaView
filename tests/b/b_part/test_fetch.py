@@ -7,7 +7,7 @@ KOSIS uses two different code sets for the two directions:
   response `PRD_SE`: A / S / Q / M  -- English-initial (Annual/Semiannual/...)
 
 Only Q and M coincide. History (both rounds confirmed against the live API
-with scripts/verify_periods_kosis.py and scripts/probe_prdse.py, run by the
+with scripts/b/b_part/verify_periods_kosis.py and scripts/b/b_part/probe_prdse.py, run by the
 user with a real key):
 
 1. 2026-10-02: normalize_rows compared the response's PRD_SE ("S"/"A") to the

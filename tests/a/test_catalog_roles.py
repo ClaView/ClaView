@@ -1,6 +1,6 @@
 """Axis-role table on a synthetic catalog: four layers, compound rule, target dictionary, CSV links, overrides.
 
-Rules: docs/inputs/axis-roles-20261016/지표축_나누기_초안_20261016.md (user draft). No network, no question file.
+Rules: data/a/axis-roles-20261016/지표축_나누기_초안_20261016.md (user draft). No network, no question file.
 """
 
 from __future__ import annotations

@@ -1,12 +1,12 @@
 """Replays the three "axis 3" evidence sets (2026-10-06) -- 30 cases that widen
 the period axis around golden_set_v1's five human-labeled "최근 N년" cases:
 
-  eval/cases/golden_set_v1_axis3_h_recent_years.json   (8)  반기, N sweep, H1 vs H2 anchor
-  eval/cases/golden_set_v1_axis3_cross_frequency.json  (12) same table + same N, frequency varies
-  eval/cases/golden_set_v1_axis3_qm_controls.json      (10) 분기/월 re-asked with other N/anchors
+  eval/cases/b/period/golden_set_v1_axis3_h_recent_years.json   (8)  반기, N sweep, H1 vs H2 anchor
+  eval/cases/b/period/golden_set_v1_axis3_cross_frequency.json  (12) same table + same N, frequency varies
+  eval/cases/b/period/golden_set_v1_axis3_qm_controls.json      (10) 분기/월 re-asked with other N/anchors
 
-See scripts/build_axis3_period_sets.py for how each case was derived and
-scripts/axis3_evidence_report.py for the evidence matrix. Every case's
+See scripts/b/b_part/build_axis3_period_sets.py for how each case was derived and
+scripts/b/b_part/axis3_evidence_report.py for the evidence matrix. Every case's
 `expected` period is what the code does, pinned by the team's decisions of
 2026-10-06: "최근 N년" is one sliding-window rule for every frequency (N years =
 N * periods-per-year periods counted back from the table's own latest period;

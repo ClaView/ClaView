@@ -40,9 +40,9 @@ testpaths = ["tests/b"]
 [tool.ruff]
 target-version = "py312"
 line-length = 100
-# Copied code keeps its own style: A v1 (N5) inside B (src/claview/b/aflow), and A completion-2 (src/claview/a, tests/a,
-# its scripts and reference data) copied from the fixed copy. New integration code is linted.
-extend-exclude = ["src/claview/b/aflow", "src/claview/a", "tests/a", "reference"]
+# Copied A code keeps its own style: A completion-2 (src/claview/a, tests/a) copied from the fixed copy.
+# New integration code is linted.
+extend-exclude = ["src/claview/a", "tests/a"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]

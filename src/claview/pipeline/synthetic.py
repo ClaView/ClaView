@@ -6,8 +6,8 @@ the first period frequency in the table metadata (the pattern of A's former offl
 probe of B). Its answer passes through B's ScriptedModel so
 B's own trace events and schema trimming apply. The synthetic fetch client returns
 the value "1" for each requested period. Used by tests/pipeline, by
-`claview-pipeline run --synthetic-b` (and `scripts/pipeline/run_flow.py`), and as the fetch client of
-the golden replay (`claview.pipeline.evaluate`).
+`claview run --synthetic-b` (and `scripts/pipeline/run_flow.py`), and as the fetch
+client of the golden replay (`claview.pipeline.evaluate`).
 """
 
 from __future__ import annotations

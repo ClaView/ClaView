@@ -1,6 +1,6 @@
 """Axis-role table: the four layers of the user's draft, the target-value dictionary and the draft overrides.
 
-Rule source: docs/inputs/axis-roles-20261016/지표축_나누기_초안_20261016.md (paths.AXIS_ROLES_DRAFT).
+Rule source: data/a/axis-roles-20261016/지표축_나누기_초안_20261016.md (paths.AXIS_ROLES_DRAFT).
 
 - Layer 1: axis name -> role, read from ``축이름_역할_초안.csv`` (target / basis / indicator / per-axis / human).
 - Layer 2: generic axes (계정항목별 등). An axis is a target axis if half or more of its non-total values are in the

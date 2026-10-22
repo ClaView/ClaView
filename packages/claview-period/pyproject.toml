@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "claview-period"
 version = "0.2.0"
-description = "ClaView shared period/frequency resolver, period policy and contract (used by A and B)"
+description = "ClaView shared period/frequency resolver, period policy and contract (used by A; the current B, 10/16 compact, does not import it)"
 requires-python = ">=3.12,<3.13"
 dependencies = []
 

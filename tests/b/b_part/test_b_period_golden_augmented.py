@@ -1,8 +1,8 @@
-"""Replays eval/cases/golden_set_v1_period_augmented.json -- 13 new cases
+"""Replays eval/cases/b/period/golden_set_v1_period_augmented.json -- 13 new cases
 added 2026-10-02 to probe claview.b.stages.resolve_relative_period on
 combinations golden_set_v1's original 22 cases never exercised with real
 data: H(반기) frequency, "올해"/"작년" on every frequency, and direct
-same-unit "최근 N<분기|반기>" counts. See scripts/build_period_augmented_cases.py
+same-unit "최근 N<분기|반기>" counts. See scripts/b/b_part/build_period_augmented_cases.py
 for how each case's table/item/period was derived (real catalog data, hand
 -- never model -- authored) and README_기간증강.md for the full writeup.
 
