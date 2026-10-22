@@ -16,13 +16,13 @@ from typing import Any
 from claview.a.agent import session as a_session
 from claview.a.agent.b_connection import AdapterPort
 from claview.a.catalog.layer import load_layer
-from claview.fetch import DataClient
-from claview.metadata import MetadataStore
-from claview.models import SelectionModel
+from claview.b.fetch import DataClient
+from claview.b.metadata import MetadataStore
+from claview.b.models import SelectionModel
 
 from .b_port import make_b_port
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 # B's copy of the 349-table catalog (same bytes as A's reference/baseline-1006/data).
 B_CATALOG = ROOT / "data" / "catalog" / "search_catalog.json"
 B_METADATA = ROOT / "data" / "raw" / "boK_meta_raw.jsonl"

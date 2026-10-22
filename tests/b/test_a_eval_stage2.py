@@ -11,8 +11,8 @@ from pathlib import Path
 import pytest
 from jsonschema import ValidationError
 
-from claview.a_discovery import TableDiscovery
-from claview.a_eval_contracts import (
+from claview.b.a_discovery import TableDiscovery
+from claview.b.a_eval_contracts import (
     VERSION,
     digest,
     inputs_from_gold,
@@ -21,14 +21,14 @@ from claview.a_eval_contracts import (
     validate_gold,
     validate_splits,
 )
-from claview.a_eval_predict import main as predict_main
-from claview.a_eval_predict import predict_case
-from claview.a_eval_score import retrieval_metrics, score
-from claview.candidate_store import CandidateStore
-from claview.contracts import StageFailure
-from claview.metadata import MetadataStore
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
+from claview.b.a_eval_predict import main as predict_main
+from claview.b.a_eval_predict import predict_case
+from claview.b.a_eval_score import retrieval_metrics, score
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import StageFailure
+from claview.b.metadata import MetadataStore
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
 
 ROOT = Path(__file__).resolve().parents[2]
 A, B, C, X = "301:A", "301:B", "301:C", "301:X"
@@ -384,7 +384,7 @@ def test_runner_sanitizes_unexpected_exceptions(discovery, monkeypatch):
 
 
 def test_locked_test_cli_refuses_before_creating_results(tmp_path, monkeypatch):
-    from claview.a_eval_contracts import write_new
+    from claview.b.a_eval_contracts import write_new
 
     inputs = inputs_from_gold(gold([case()]))
     inputs["split"] = "test_family"

@@ -1,7 +1,7 @@
 """A's AdapterPort bound to B's table-list entry (plan 25 step 2).
 
 B takes what its own A -> B pipeline gives it: the original question and the tables A
-chose, `{"tables": [{org_id, table_id, table_name}]}` (`claview.ab_pipeline.B_TABLE_FIELDS`).
+chose, `{"tables": [{org_id, table_id, table_name}]}` (`claview.b.ab_pipeline.B_TABLE_FIELDS`).
 The port runs B's graph (`build_b_graph`) on that, then `fetch_data`. A's port shape is kept:
 the request and result echo A's assumptions and carry one scope per A requirement; B itself
 does not read them. The B selection model and the KOSIS client are injected.
@@ -14,13 +14,13 @@ from typing import Any
 
 from claview.a.agent.assumptions import VERSION as A_ASSUMPTIONS_VERSION
 from claview.a.agent.b_connection import AdapterPort
-from claview.ab_pipeline import B_TABLE_FIELDS
-from claview.contracts import Config, StageFailure, Trace, outcome
-from claview.fetch import DataClient, build_api_request, fetch_data
-from claview.graphs import build_b_graph
-from claview.metadata import MetadataStore
-from claview.models import SelectionModel
-from claview.services import Services
+from claview.b.ab_pipeline import B_TABLE_FIELDS
+from claview.b.contracts import Config, StageFailure, Trace, outcome
+from claview.b.fetch import DataClient, build_api_request, fetch_data
+from claview.b.graphs import build_b_graph
+from claview.b.metadata import MetadataStore
+from claview.b.models import SelectionModel
+from claview.b.services import Services
 
 # The port's own request/result shape (not a B contract version).
 TABLE_LIST_CONTRACT = "flow-table-list/2026-10-23.1"

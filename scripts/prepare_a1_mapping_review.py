@@ -6,8 +6,8 @@ import argparse
 import json
 from pathlib import Path
 
-from claview.a1_mappings import write_review
-from claview.metadata import MetadataStore
+from claview.b.a1_mappings import write_review
+from claview.b.metadata import MetadataStore
 
 
 def main():

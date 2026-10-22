@@ -7,14 +7,14 @@ from pathlib import Path
 import httpx
 import pytest
 
-from claview.contracts import Config, StageFailure, Trace
-from claview.embeddings import NcpEmbedder, VectorIndex, build_vector_index, unit_vector
-from claview.graphs import build_a_graph
-from claview.metadata import MetadataStore
-from claview.models import ScriptedModel
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents, chunks, filter_note
-from claview.stages import Services, select_tables
+from claview.b.contracts import Config, StageFailure, Trace
+from claview.b.embeddings import NcpEmbedder, VectorIndex, build_vector_index, unit_vector
+from claview.b.graphs import build_a_graph
+from claview.b.metadata import MetadataStore
+from claview.b.models import ScriptedModel
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents, chunks, filter_note
+from claview.b.stages import Services, select_tables
 
 
 def test_contact_filter_preserves_statistical_notes():

@@ -4,8 +4,8 @@ import subprocess
 import sys
 from datetime import date
 
-from claview import contracts
-from claview.contracts import Config, today_iso
+from claview.b import contracts
+from claview.b.contracts import Config, today_iso
 
 
 def test_default_as_of_is_the_query_date(monkeypatch):
@@ -28,7 +28,7 @@ def test_explicit_as_of_is_kept(monkeypatch):
 
 def test_unpinned_default_is_the_system_date():
     # A fresh interpreter does not load the suite's pin, so this is the real default.
-    code = "from claview.contracts import Config; print(Config().as_of)"
+    code = "from claview.b.contracts import Config; print(Config().as_of)"
     before = date.today().isoformat()
     out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)
     after = date.today().isoformat()

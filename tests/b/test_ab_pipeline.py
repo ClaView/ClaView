@@ -1,4 +1,4 @@
-"""A v1 (claview.aflow) -> B v6 connection over the existing A.tables schema. Offline only."""
+"""A v1 (claview.b.aflow) -> B v6 connection over the existing A.tables schema. Offline only."""
 
 from __future__ import annotations
 
@@ -7,14 +7,14 @@ from pathlib import Path
 
 import pytest
 
-from claview.ab_pipeline import B_TABLE_FIELDS, load_a_catalog, run_ab, to_b_a_result
-from claview.aflow import ARunConfig
-from claview.contracts import Config, Trace
-from claview.evaluation import scripted_answers
-from claview.metadata import MetadataStore, periods_between
-from claview.models import ScriptedModel
-from claview.search import SearchIndex
-from claview.services import Services
+from claview.b.ab_pipeline import B_TABLE_FIELDS, load_a_catalog, run_ab, to_b_a_result
+from claview.b.aflow import ARunConfig
+from claview.b.contracts import Config, Trace
+from claview.b.evaluation import scripted_answers
+from claview.b.metadata import MetadataStore, periods_between
+from claview.b.models import ScriptedModel
+from claview.b.search import SearchIndex
+from claview.b.services import Services
 
 ROOT = Path(__file__).resolve().parents[2]
 GOLD = {

@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from claview.contracts import Config
-from claview.metadata import MetadataStore
-from claview.search import SearchIndex
+from claview.b.contracts import Config
+from claview.b.metadata import MetadataStore
+from claview.b.search import SearchIndex
 
 ROOT = Path(__file__).resolve().parents[3]
 CATALOG_PATH = ROOT / "data" / "catalog" / "search_catalog.json"

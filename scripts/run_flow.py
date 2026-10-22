@@ -86,7 +86,7 @@ def main(argv: list[str] | None = None) -> int:
     from claview.a import _guard
 
     _guard.install_network_block()
-    from claview_flow import FlowSession, make_answer
+    from claview.pipeline import FlowSession, make_answer
 
     target = out_dir(args.out)
     base = FlowSession.load()

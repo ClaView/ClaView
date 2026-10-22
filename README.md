@@ -9,8 +9,8 @@
       ├─ ask        → 대기(awaiting_answer). B를 부르지 않는다. answer()로 재개하면 선택·V2만 다시 한다.
       ├─ no_result  → B를 부르지 않는다.
       └─ proceed / assume / partial
-           └─ AdapterPort (claview_flow.make_b_port, 실제 B 함수)
-                to_b_request → check_request → run_b_request(B 모델) → check_b_result·check_scope_result
+           └─ AdapterPort (claview.pipeline.make_b_port, A의 포트 모양)
+                to_table_request(원질문 + A가 고른 표 목록) → build_b_graph(B 모델) → B 단계 결과
                 └─ fetch_data(조회 클라이언트) → 응답(response.b, execution_status)
 ```
 
@@ -19,6 +19,8 @@
 ## 1. 무엇을 합쳤나
 
 > **2026-10-23 S1 재배치**([계획 24](docs/plans/24_통합레포_재배치_S1.md)): A 패키지 `src/claview_v3/`를 `src/claview/a/`(import 이름 `claview.a`)로, A 시험 `tests_v3/`를 `tests/a/`로, B 시험 `tests/`를 `tests/b/`로, 통합 시험 `tests_flow/`를 `tests/pipeline/`으로 옮겼다. 판단·계약·정답은 바꾸지 않았고 import 이름·경로 값과 A 경계 규칙(아래 2절)만 바꿨다. 아래 1절의 표와 해시 기록은 1단계(옮기기 전) 기준이라 옮긴 파일의 현재 바이트와 다를 수 있다.
+
+> **2026-10-23 S2**([계획 25](docs/plans/25_통합레포_재배치_S2.md)): B를 10/16 compact 판(C 공유본 `vendor/b`)의 바이트로 되돌리고 `fetch.py`의 KOSIS 전각 단위 수정(NFKC, 6줄)만 유지했다(사용자 승인). b-1020에만 있던 `claview.b`(어댑터·계약·기간 해석기·실행)와 그 시험은 뺐다. B와 옛 A 모듈은 `src/claview/b/`(import `claview.b.*`, 진입점 `claview.b.cli:main`)로, 연결 코드는 `src/claview/pipeline/`(import `claview.pipeline`)로 옮겼다. A→B 연결은 B 자체의 A→B 입력처럼 원질문과 A가 고른 표 목록(`{"tables": [{org_id, table_id, table_name}]}`)을 넘긴다. 아래 1절의 B 계약·어댑터 설명은 1단계 기록이다.
 
 | 경로 | 내용 | 출처 |
 |---|---|---|
@@ -58,11 +60,11 @@ uv run --locked python -B -X utf8 -m pytest tests/a -q -p no:cacheprovider      
 uv run --locked python -B -X utf8 -m pytest tests/b -q -p no:cacheprovider                        # B
 uv run --locked python -B -X utf8 -m pytest packages/claview-period/tests -q -p no:cacheprovider  # 공용 기간 패키지
 uv run --locked python -B -X utf8 -m pytest tests/pipeline -q -p no:cacheprovider                 # 통합
-uv run --locked ruff check src/claview_flow tests/pipeline scripts/run_flow.py
-uv run --locked ruff format --check src/claview_flow tests/pipeline scripts/run_flow.py
+uv run --locked ruff check src/claview/pipeline tests/pipeline scripts/run_flow.py
+uv run --locked ruff format --check src/claview/pipeline tests/pipeline scripts/run_flow.py
 ```
 
-- 시험은 **따로 된 pytest 프로세스로** 돌린다. A의 `tests/a/conftest.py`가 `claview` 패키지 중 `claview.a` 밖의 모듈(B 모듈과 `claview.aflow` 등 옛 A 모듈)과 `src/claview/` 중 `src/claview/a/` 밖의 파일을 같은 프로세스에서 불러오지 못하게 막는 import 가드를 깔기 때문이다(상위 패키지 `claview`의 설명문뿐인 `__init__.py`만 허용). `pytest tests`처럼 한 번에 돌리지 않는다. 인자 없이 `pytest`를 돌리면 B(`tests/b`)만 돈다.
+- 시험은 **따로 된 pytest 프로세스로** 돌린다. A의 `tests/a/conftest.py`가 `claview` 패키지 중 `claview.a` 밖의 모듈(`claview.b`의 B·옛 A 모듈과 `claview.pipeline`)과 `src/claview/` 중 `src/claview/a/` 밖의 파일을 같은 프로세스에서 불러오지 못하게 막는 import 가드를 깔기 때문이다(상위 패키지 `claview`의 설명문뿐인 `__init__.py`만 허용). `pytest tests`처럼 한 번에 돌리지 않는다. 인자 없이 `pytest`를 돌리면 B(`tests/b`)만 돈다.
 - 모든 시험은 네트워크를 막고 돈다. A·통합 시험은 A의 `_guard.install_network_block()`, B 시험은 `tests/b/conftest.py`의 `block_network`를 쓴다.
 - 이 브랜치에서의 결과는 아래 "시험 결과"에 적었다.
 - 저장소 밖 자료를 읽는 A 시험이 있다. 417문항 묶음(`src/claview/a/paths.py`의 `CORPUS_DIR`, 저장소 상위 폴더의 `clabi/...`)과 옛 작업 폴더의 `claview/src/claview/agent`(`tests/a/agent/test_agent_common.py`)다. 없으면 기존 skip 조건대로 skip되거나 실패할 수 있다. 417문항은 저장소에 넣지 않는다.
@@ -98,7 +100,7 @@ uv run --locked python -B -X utf8 scripts/run_flow.py --synthetic-b --synthetic-
 코드에서 쓸 때:
 
 ```python
-from claview_flow import FlowSession, make_answer
+from claview.pipeline import FlowSession, make_answer
 
 session = FlowSession.load(b_model=..., fetch_client=...)  # b_model이 없으면 B 미실행
 state = session.run_question("질문", as_of="2026-10-22")
@@ -112,27 +114,27 @@ if state["response"]["status"] == "awaiting_answer":
 |---|---|
 | A 해석·선택·검증·질문 경로·대기·재개 | 실제 A 코드, 규칙 경로(모델 끔). 모델 경로는 시험에서 가짜 `proposal_source`로만 |
 | 카탈로그(349표 메타) | 실제 저장 자료(2026-10-06 기준 사본) |
-| B 어댑터·계약 검사·실행 그래프·결과 검사·조회 요청 생성·응답 정규화 | 실제 B 코드 |
+| B 실행 그래프·조회 요청 생성·응답 정규화 | 실제 B 코드(10/16 판 + 단위 수정) |
 | B 선택 모델(HCX) | **합성**(`--synthetic-b`, 시험) 또는 없음 |
 | KOSIS 조회 | **합성**(값 "1") 또는 미실행(`fetch.status = "not_run"`, `reason = "no_fetch_client"`. 이때 `execution_status`는 `completed`가 되지 않는다) |
 
-실제 HCX·KOSIS 클라이언트는 `claview_flow.live_b_clients(allow_external=True)`로만 만든다. 읽는 환경변수 이름은 `CLOVASTUDIO_API_KEY`, `KOSIS_API_KEY`다. 이 단계에서는 `run_flow.py`에 연결하지 않았고 실행하지 않았다. 실호출은 호출 수와 비용을 밝히고 승인받은 뒤에만 한다.
+실제 HCX·KOSIS 클라이언트는 `claview.pipeline.live_b_clients(allow_external=True)`로만 만든다. 읽는 환경변수 이름은 `CLOVASTUDIO_API_KEY`, `KOSIS_API_KEY`다. 이 단계에서는 `run_flow.py`에 연결하지 않았고 실행하지 않았다. 실호출은 호출 수와 비용을 밝히고 승인받은 뒤에만 한다.
 
 ## 5. 알려진 한계
 
 - 실제 KOSIS·HCX로는 이 통합본을 확인하지 않았다. 합성 응답으로 확인한 것은 연결과 계약뿐이다.
 - 공유된 최신 30건 결과(`.4` 입력 범위 사본, 구조 `structure-2026-10-22.1`)는 다른 A 판본의 결과다. 이 브랜치의 A는 split 완료2 고정판이고 `.4`의 입력·선택 보완이 없다.
 - 2단계(별도 승인): A를 `.4` 계열(구조 `structure-2026-10-22.1`)로 올리고, B가 새 구조 판본을 지원하는 변경을 함께 맞춘다. B 쪽 변경은 B 담당과 합의한 뒤에 한다.
-- `claview_flow`의 포트는 한 번에 한 요청만 처리한다(요청마다 B 서비스 객체를 새로 만들고 마지막 것을 보관한다). 동시 처리는 고려하지 않았다.
-- `src/claview/`의 `a1_*`·`a2_*`·`a_*`·`aflow/`는 B에 딸린 옛 A 모듈이다. 새 흐름은 쓰지 않으며, 정리는 B 담당과 정한다.
+- `claview.pipeline`의 포트는 한 번에 한 요청만 처리한다(요청마다 B 서비스 객체를 새로 만들고 마지막 것을 보관한다). 동시 처리는 고려하지 않았다.
+- `src/claview/b/`의 `a1_*`·`a2_*`·`a_*`·`aflow/`·`ab_pipeline` 등은 B에 딸린 옛 A 모듈이다. 새 흐름은 쓰지 않는다. B의 골든 재생(`evaluation.py`의 통합 구간)이 옛 A 파이프라인(`graphs.invoke_pipeline`)을 써서 계획 25에서 지우지 않았다. 정리는 B 담당과 정한다.
 
 ## 6. 폴더
 
 | 경로 | 역할 |
 |---|---|
 | `src/claview/a/` | A(완료2), 패키지 `claview.a` |
-| `src/claview/` (`a/` 밖) | B와 옛 A 모듈 |
-| `src/claview_flow/` | A→B 연결(새 코드) |
+| `src/claview/b/` | B(10/16 판)와 옛 A 모듈, 패키지 `claview.b` |
+| `src/claview/pipeline/` | A→B 연결(새 코드), 패키지 `claview.pipeline` |
 | `packages/claview-period/` | 공용 기간 패키지 |
 | `tests/a/`, `tests/b/`, `tests/pipeline/` | A, B, 통합 시험 |
 | `data/`, `reference/baseline-1006/data/` | 349표 카탈로그·메타(같은 바이트, 두 경로)와 B 매핑 |

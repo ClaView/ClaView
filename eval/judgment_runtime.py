@@ -13,7 +13,7 @@ from pathlib import Path
 import threading
 import time
 
-from claview.aflow.model import ModelError, ModelReply
+from claview.b.aflow.model import ModelError, ModelReply
 
 POLICY = {"version": "lock2_transport_v1", "token_version": "q6g_tokens_v2",
           "q6g_max_tokens": 1536, "max_attempts": 2, "min_interval_seconds": 3.0,

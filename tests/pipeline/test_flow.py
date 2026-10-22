@@ -16,9 +16,9 @@ from synthetic_b import SyntheticFetchClient, SyntheticSelectionModel
 
 from claview.a import _guard
 from claview.a.agent.b_connection import connect
-from claview.ab_pipeline import B_TABLE_FIELDS
-from claview.contracts import StageFailure
-from claview_flow import (
+from claview.b.ab_pipeline import B_TABLE_FIELDS
+from claview.b.contracts import StageFailure
+from claview.pipeline import (
     NOT_RUN_FETCH_REASON,
     TABLE_LIST_CONTRACT,
     FlowSession,
@@ -26,7 +26,7 @@ from claview_flow import (
     make_answer,
     to_table_request,
 )
-from claview_flow.live import LiveNotAllowed
+from claview.pipeline.live import LiveNotAllowed
 
 AS_OF = "2026-10-22"
 PROCEED_Q = "GDP 2023년 보여줘"

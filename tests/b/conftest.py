@@ -5,7 +5,7 @@ from datetime import date
 
 import pytest
 
-from claview import contracts
+from claview.b import contracts
 
 # Config().as_of defaults to the query date. The suite pins that "today" so period expectations
 # built around 2026-10-01 stay reproducible; tests that need another date pass `as_of`.

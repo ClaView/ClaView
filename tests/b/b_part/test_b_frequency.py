@@ -13,11 +13,11 @@ import copy
 
 import pytest
 
-from claview.contracts import StageFailure, Trace
-from claview.evaluation import scripted_answers
-from claview.graphs import build_b_graph
-from claview.models import ScriptedModel
-from claview.stages import (
+from claview.b.contracts import StageFailure, Trace
+from claview.b.evaluation import scripted_answers
+from claview.b.graphs import build_b_graph
+from claview.b.models import ScriptedModel
+from claview.b.stages import (
     Services,
     decide_frequency,
     resolve_explicit_period,
@@ -204,7 +204,7 @@ def test_every_golden_case_still_matches_its_golden_series(golden_cases, store, 
 
 def _model_context(case, store, config):
     """The context B hands to the model for the first table of a golden case."""
-    from claview.stages import BSteps
+    from claview.b.stages import BSteps
 
     steps = BSteps(
         Services(store, search=None, model=ScriptedModel({}), config=config, trace=Trace())

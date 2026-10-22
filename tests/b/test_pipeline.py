@@ -10,14 +10,14 @@ import httpx
 import pytest
 from jsonschema import Draft202012Validator
 
-from claview.contracts import Config, StageFailure, Trace
-from claview.evaluation import condition_counts, scripted_answers
-from claview.fetch import KosisClient, build_api_request, fetch_data, normalize_rows
-from claview.graphs import build_a_graph, build_b_graph, invoke_pipeline
-from claview.metadata import MetadataStore, periods_between
-from claview.models import HcxModel, ScriptedModel, object_schema
-from claview.search import SearchIndex
-from claview.stages import (
+from claview.b.contracts import Config, StageFailure, Trace
+from claview.b.evaluation import condition_counts, scripted_answers
+from claview.b.fetch import KosisClient, build_api_request, fetch_data, normalize_rows
+from claview.b.graphs import build_a_graph, build_b_graph, invoke_pipeline
+from claview.b.metadata import MetadataStore, periods_between
+from claview.b.models import HcxModel, ScriptedModel, object_schema
+from claview.b.search import SearchIndex
+from claview.b.stages import (
     Services,
     canonicalize_selections,
     checked_query_plan,
@@ -474,7 +474,7 @@ def test_hcx_truncation_and_schema_payload(finish, expected):
 
 
 def test_http_retry_boundaries_and_safe_errors(monkeypatch):
-    monkeypatch.setattr("claview.models.time.sleep", lambda _: None)
+    monkeypatch.setattr("claview.b.models.time.sleep", lambda _: None)
     calls = []
 
     def handler(request):

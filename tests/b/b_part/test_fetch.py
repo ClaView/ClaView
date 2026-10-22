@@ -1,4 +1,4 @@
-"""Regression tests for how claview.fetch talks to the real KOSIS
+"""Regression tests for how claview.b.fetch talks to the real KOSIS
 statisticsParameterData.do API about the data cycle (반기/연간/분기/월).
 
 KOSIS uses two different code sets for the two directions:
@@ -25,8 +25,8 @@ See claview/fetch.py's _RESPONSE_PRD_SE comment.
 
 from __future__ import annotations
 
-from claview.contracts import StageFailure, Trace
-from claview.fetch import _RESPONSE_PRD_SE, KosisClient, build_api_request, normalize_rows
+from claview.b.contracts import StageFailure, Trace
+from claview.b.fetch import _RESPONSE_PRD_SE, KosisClient, build_api_request, normalize_rows
 
 
 def _selection(freq: str, start: str, end: str) -> dict:

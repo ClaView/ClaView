@@ -51,8 +51,8 @@ sys.path.insert(
     0, str(ROOT / "src")
 )  # allow running as `python scripts/b_part/verify_periods_kosis.py`
 
-from claview.contracts import StageFailure, Trace  # noqa: E402
-from claview.fetch import KosisClient, build_api_request, normalize_rows  # noqa: E402
+from claview.b.contracts import StageFailure, Trace  # noqa: E402
+from claview.b.fetch import KosisClient, build_api_request, normalize_rows  # noqa: E402
 
 CASES_PATH = ROOT / "eval" / "cases" / "b_period" / "golden_set_v1_period_augmented.json"
 

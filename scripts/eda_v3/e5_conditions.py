@@ -18,7 +18,7 @@ import unicodedata
 from common import OUT, ROOT, load_questions, write_csv, write_json
 
 sys.path.insert(0, str(ROOT / "src"))
-from claview.aflow import rules  # noqa: E402  (old rules, read only)
+from claview.b.aflow import rules  # noqa: E402  (old rules, read only)
 
 DIR = OUT / "5_conditions"
 

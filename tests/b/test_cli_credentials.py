@@ -8,9 +8,9 @@ from pathlib import Path
 import httpx
 import pytest
 
-from claview import cli, discovery_cli
-from claview.contracts import StageFailure, Trace
-from claview.models import HcxModel, object_schema
+from claview.b import cli, discovery_cli
+from claview.b.contracts import StageFailure, Trace
+from claview.b.models import HcxModel, object_schema
 
 FIXTURES = Path(__file__).parent / "fixtures"
 SYNTHETIC_KEY = "fixture-credential-must-not-appear-in-output"

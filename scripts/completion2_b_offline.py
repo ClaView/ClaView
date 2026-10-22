@@ -37,11 +37,11 @@ def main(args):
         check_scope_result,
     )
     from claview.b.run import run_b_request
-    from claview.contracts import Config, Trace
-    from claview.fetch import _RESPONSE_PRD_SE, fetch_data
-    from claview.metadata import MetadataStore, periods_between
-    from claview.models import ScriptedModel
-    from claview.services import Services
+    from claview.b.contracts import Config, Trace
+    from claview.b.fetch import _RESPONSE_PRD_SE, fetch_data
+    from claview.b.metadata import MetadataStore, periods_between
+    from claview.b.models import ScriptedModel
+    from claview.b.services import Services
 
     from claview.a.agent.assumptions import VERSION
     from claview.a.agent.b_connection import AdapterPort, connect

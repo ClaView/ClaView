@@ -118,12 +118,12 @@ def b_check(args):
     from claview.b.adapter_v3 import to_b_request
     from claview.b.contract import check_request, check_scope_result
     from claview.b.run import run_b_request, period_plans
-    from claview.contracts import Config, Trace
-    from claview.fetch import fetch_data, _RESPONSE_PRD_SE
-    from claview.metadata import MetadataStore, periods_between
-    from claview.models import ScriptedModel
-    from claview.services import Services
-    from claview import stages
+    from claview.b.contracts import Config, Trace
+    from claview.b.fetch import fetch_data, _RESPONSE_PRD_SE
+    from claview.b.metadata import MetadataStore, periods_between
+    from claview.b.models import ScriptedModel
+    from claview.b.services import Services
+    from claview.b import stages
     from claview.a.select.periods import month, metadata_months
 
     args.out.mkdir(parents=True, exist_ok=False)

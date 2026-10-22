@@ -26,7 +26,7 @@ definition, independent of any specific expected number:
     window on every quarterly table tried, not just the one golden table --
     one rule for every frequency, no Q-specific exception (2026-10-06)
   - MoM/YoY baseline extension's exact per-frequency offset
-    ({Y:1,H:2,Q:4,M:12}, claview.stages.detect_baseline_extension) is
+    ({Y:1,H:2,Q:4,M:12}, claview.b.stages.detect_baseline_extension) is
     exercised against real Q/Y/H tables too, not just M -- golden only
     ever covers M (CV-AB-18/20)
 
@@ -42,9 +42,9 @@ from __future__ import annotations
 
 import pytest
 
-from claview.contracts import Config, StageFailure
-from claview.metadata import period_number
-from claview.stages import _year_start, resolve_relative_period, validate_period
+from claview.b.contracts import Config, StageFailure
+from claview.b.metadata import period_number
+from claview.b.stages import _year_start, resolve_relative_period, validate_period
 
 # Deterministic, small samples per frequency (sorted catalog order), not an
 # exhaustive sweep of all ~340 tables -- keeps the suite fast and
@@ -158,7 +158,7 @@ def test_quarterly_recent_years_is_always_the_plain_sliding_window(tables_by_fre
 
 @pytest.mark.parametrize("freq", ["Y", "M", "Q", "H"])
 def test_baseline_extension_accepted_only_with_correct_offset(tables_by_freq, freq):
-    """MoM/YoY baseline extension (claview.stages.detect_baseline_extension
+    """MoM/YoY baseline extension (claview.b.stages.detect_baseline_extension
     + validate_period's baseline_extension param) is golden-verified only
     for frequency M (CV-AB-18/20). This reproduces the same accept/reject
     shape -- a YoY-extended period is accepted with the right per-frequency

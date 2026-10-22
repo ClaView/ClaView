@@ -11,10 +11,10 @@ the value "1" for each requested period. Used by tests/pipeline and by
 
 from __future__ import annotations
 
-from claview.contracts import StageFailure, Trace
-from claview.fetch import _RESPONSE_PRD_SE
-from claview.metadata import MetadataStore, periods_between
-from claview.models import ScriptedModel
+from claview.b.contracts import StageFailure, Trace
+from claview.b.fetch import _RESPONSE_PRD_SE
+from claview.b.metadata import MetadataStore, periods_between
+from claview.b.models import ScriptedModel
 
 LABEL = "synthetic wiring check (not model or value accuracy)"
 

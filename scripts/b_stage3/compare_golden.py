@@ -6,7 +6,7 @@ sys.stdout.reconfigure(encoding="utf-8")
 root = Path(sys.argv[1])
 sys.path.insert(0, str(root / "src"))
 from claview.b.period_resolver import resolve_period_for_table  # noqa: E402
-from claview.metadata import MetadataStore  # noqa: E402
+from claview.b.metadata import MetadataStore  # noqa: E402
 
 store = MetadataStore(
     root / "data/catalog/search_catalog.json", root / "data/raw/boK_meta_raw.jsonl"

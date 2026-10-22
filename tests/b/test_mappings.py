@@ -8,13 +8,13 @@ from pathlib import Path
 
 import pytest
 
-from claview.a_discovery import TableDiscovery
-from claview.candidate_store import CandidateStore
-from claview.contracts import StageFailure
-from claview.mappings import VERSION, MappingDictionary, ingest_proposals, mentions
-from claview.metadata import MetadataStore
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
+from claview.b.a_discovery import TableDiscovery
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import StageFailure
+from claview.b.mappings import VERSION, MappingDictionary, ingest_proposals, mentions
+from claview.b.metadata import MetadataStore
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
 
 ROOT = Path(__file__).resolve().parents[2]
 

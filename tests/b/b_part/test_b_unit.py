@@ -1,4 +1,4 @@
-"""Direct unit tests for B's deterministic validation logic (claview.stages),
+"""Direct unit tests for B's deterministic validation logic (claview.b.stages),
 using a small hand-built table instead of the full 349-table catalog.
 
 golden_set_v1.json only exercises the "happy path" plus two documented
@@ -12,9 +12,9 @@ from __future__ import annotations
 
 import pytest
 
-from claview.contracts import Config, StageFailure
-from claview.metadata import normalize_period, period_number, periods_between
-from claview.stages import (
+from claview.b.contracts import Config, StageFailure
+from claview.b.metadata import normalize_period, period_number, periods_between
+from claview.b.stages import (
     build_b_context,
     build_b_schema,
     canonicalize_selections,

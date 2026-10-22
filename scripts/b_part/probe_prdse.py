@@ -33,8 +33,8 @@ from pathlib import Path
 import httpx
 import verify_periods_kosis as v  # noqa: E402 -- also puts the project root on sys.path
 
-from claview.contracts import StageFailure, Trace  # noqa: E402
-from claview.fetch import KosisClient, build_api_request  # noqa: E402
+from claview.b.contracts import StageFailure, Trace  # noqa: E402
+from claview.b.fetch import KosisClient, build_api_request  # noqa: E402
 
 # Request codes worth trying per internal frequency: the internal letter first
 # (what the code sent before 2026-10-02), then the letter KOSIS's responses

@@ -7,10 +7,10 @@ root = Path(sys.argv[1])
 sys.path.insert(0, str(root / "src"))
 from claview.b.adapter_v3 import to_b_request  # noqa: E402
 from claview.b.run import run_b_request  # noqa: E402
-from claview.contracts import Config, Trace  # noqa: E402
-from claview.metadata import MetadataStore  # noqa: E402
-from claview.models import ScriptedModel  # noqa: E402
-from claview.services import Services  # noqa: E402
+from claview.b.contracts import Config, Trace  # noqa: E402
+from claview.b.metadata import MetadataStore  # noqa: E402
+from claview.b.models import ScriptedModel  # noqa: E402
+from claview.b.services import Services  # noqa: E402
 
 store = MetadataStore(
     root / "data/catalog/search_catalog.json", root / "data/raw/boK_meta_raw.jsonl"

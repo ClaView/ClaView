@@ -21,9 +21,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from claview.aflow import ARunConfig, EvalCase, run_a  # noqa: E402
-from claview.aflow.catalog import default_catalog  # noqa: E402
-from claview.aflow.contract import GAP_READS, GAP_WRITES  # noqa: E402
+from claview.b.aflow import ARunConfig, EvalCase, run_a  # noqa: E402
+from claview.b.aflow.catalog import default_catalog  # noqa: E402
+from claview.b.aflow.contract import GAP_READS, GAP_WRITES  # noqa: E402
 
 GOLDEN = ROOT / "reference" / "baseline-1006" / "eval" / "cases" / "golden_set_v1.json"
 BASELINE = ROOT.parent / "clabi" / "claview-runs" / "kosis-api-eda-20261008" / "result_search.json"

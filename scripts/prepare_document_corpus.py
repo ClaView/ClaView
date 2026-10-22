@@ -7,14 +7,14 @@ import json
 import time
 from pathlib import Path
 
-from claview.a_eval_contracts import write_new
-from claview.document_corpus import (
+from claview.b.a_eval_contracts import write_new
+from claview.b.document_corpus import (
     PROFILES,
     audit_catalog,
     build_document_corpus,
     verify_information,
 )
-from claview.metadata import MetadataStore
+from claview.b.metadata import MetadataStore
 
 
 def main():

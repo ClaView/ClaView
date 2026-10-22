@@ -35,15 +35,15 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 
-from claview.ab_pipeline import load_a_catalog, run_ab  # noqa: E402
-from claview.aflow import ARunConfig  # noqa: E402
-from claview.aflow.model import HcxClient, ModelError, ModelReply  # noqa: E402
-from claview.contracts import Config, StageFailure, Trace, today_iso  # noqa: E402
-from claview.fetch import KosisClient  # noqa: E402
-from claview.metadata import MetadataStore  # noqa: E402
-from claview.models import HcxModel  # noqa: E402
-from claview.search import SearchIndex  # noqa: E402
-from claview.services import Services  # noqa: E402
+from claview.b.ab_pipeline import load_a_catalog, run_ab  # noqa: E402
+from claview.b.aflow import ARunConfig  # noqa: E402
+from claview.b.aflow.model import HcxClient, ModelError, ModelReply  # noqa: E402
+from claview.b.contracts import Config, StageFailure, Trace, today_iso  # noqa: E402
+from claview.b.fetch import KosisClient  # noqa: E402
+from claview.b.metadata import MetadataStore  # noqa: E402
+from claview.b.models import HcxModel  # noqa: E402
+from claview.b.search import SearchIndex  # noqa: E402
+from claview.b.services import Services  # noqa: E402
 
 GOLDEN = ROOT / "eval/cases/golden_set_v1.json"
 # N5 judgment transport (lock2_transport_v1): Q6G output cap 1536, 2 attempts, >=3 s apart.
@@ -301,8 +301,8 @@ def build_components(mode: str, cache: DiskCache, counts: Counts, case: dict | N
         sys.path.insert(0, str(ROOT / "tests"))
         from test_ab_pipeline import SyntheticDataClient
 
-        from claview.evaluation import scripted_answers
-        from claview.models import ScriptedModel
+        from claview.b.evaluation import scripted_answers
+        from claview.b.models import ScriptedModel
 
         answers = {k: v for k, v in scripted_answers(case).items() if k != "A"}
         return (

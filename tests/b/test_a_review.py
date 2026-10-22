@@ -7,14 +7,14 @@ from pathlib import Path
 import httpx
 import pytest
 
-from claview.a_conditions import assess_candidate, query_constraints, validate_selected
-from claview.a_evaluation import evaluate_a
-from claview.contracts import Config, StageFailure, Trace
-from claview.graphs import build_a_graph
-from claview.metadata import MetadataStore
-from claview.models import HcxModel, ScriptedModel, object_schema
-from claview.search import SearchIndex
-from claview.stages import Services, checked_query_plan
+from claview.b.a_conditions import assess_candidate, query_constraints, validate_selected
+from claview.b.a_evaluation import evaluate_a
+from claview.b.contracts import Config, StageFailure, Trace
+from claview.b.graphs import build_a_graph
+from claview.b.metadata import MetadataStore
+from claview.b.models import HcxModel, ScriptedModel, object_schema
+from claview.b.search import SearchIndex
+from claview.b.stages import Services, checked_query_plan
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -142,7 +142,7 @@ def test_rate_limit_respects_reset_and_preserves_safe_diagnostics(
     monkeypatch, seconds, expected_calls
 ):
     waits, calls = [], []
-    monkeypatch.setattr("claview.models.time.sleep", waits.append)
+    monkeypatch.setattr("claview.b.models.time.sleep", waits.append)
 
     def handler(request):
         calls.append(1)
@@ -183,13 +183,13 @@ def test_rate_limit_respects_reset_and_preserves_safe_diagnostics(
 
 def test_hcx_paces_successive_requests(monkeypatch):
     now, waits = [0.0], []
-    monkeypatch.setattr("claview.models.time.monotonic", lambda: now[0])
+    monkeypatch.setattr("claview.b.models.time.monotonic", lambda: now[0])
 
     def sleep(seconds):
         waits.append(seconds)
         now[0] += seconds
 
-    monkeypatch.setattr("claview.models.time.sleep", sleep)
+    monkeypatch.setattr("claview.b.models.time.sleep", sleep)
 
     def handler(request):
         return httpx.Response(

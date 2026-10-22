@@ -4,15 +4,15 @@ import json
 
 import pytest
 
-from claview.a1_query import prepare_question
-from claview.a2_selection import verify_set
-from claview.a_discovery import TableDiscovery
-from claview.candidate_store import CandidateStore
-from claview.contracts import StageFailure
-from claview.graphs import build_discovery_graph
-from claview.metadata import MetadataStore
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
+from claview.b.a1_query import prepare_question
+from claview.b.a2_selection import verify_set
+from claview.b.a_discovery import TableDiscovery
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import StageFailure
+from claview.b.graphs import build_discovery_graph
+from claview.b.metadata import MetadataStore
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
 
 CTX = {"session_id": "stage4", "request_id": "one", "query_revision": 1}
 

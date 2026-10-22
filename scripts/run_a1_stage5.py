@@ -10,10 +10,10 @@ import time
 from decimal import Decimal
 from pathlib import Path
 
-from claview.a1_interpreter import VERSION, QueryInterpretation, interpretation_gate
-from claview.a1_query import prepare_question
-from claview.a_discovery import TableDiscovery
-from claview.a_model_contracts import (
+from claview.b.a1_interpreter import VERSION, QueryInterpretation, interpretation_gate
+from claview.b.a1_query import prepare_question
+from claview.b.a_discovery import TableDiscovery
+from claview.b.a_model_contracts import (
     BASE_PROMPT,
     PROMPTS,
     canonical,
@@ -21,15 +21,15 @@ from claview.a_model_contracts import (
     make_packet,
     role_schema,
 )
-from claview.a_model_experiment import ExperimentLedger, read, save_new, seal
-from claview.a_model_providers import AProvider
-from claview.a_model_runtime import AdviceCache, Limits, Price, RoleRuntime
-from claview.candidate_store import CandidateStore
-from claview.contracts import Config
-from claview.contracts import fingerprint as file_hash
-from claview.metadata import MetadataStore
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
+from claview.b.a_model_experiment import ExperimentLedger, read, save_new, seal
+from claview.b.a_model_providers import AProvider
+from claview.b.a_model_runtime import AdviceCache, Limits, Price, RoleRuntime
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import Config
+from claview.b.contracts import fingerprint as file_hash
+from claview.b.metadata import MetadataStore
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
 
 CASES = ("CV-AB-01", "CV-AB-02", "CV-AB-04", "CV-AB-06", "CV-AB-09", "CV-AB-19", "CV-AB-22")
 PATHS = {

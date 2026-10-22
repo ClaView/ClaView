@@ -51,11 +51,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # verify_expand_hcx lives next to this
 from verify_expand_hcx import CATALOG, GOLDEN, METADATA, judge, run_b  # noqa: E402
 
-from claview.contracts import Config, StageFailure, today_iso  # noqa: E402
-from claview.evaluation import scripted_answers, write_json  # noqa: E402
-from claview.metadata import MetadataStore  # noqa: E402
-from claview.models import HcxModel, ScriptedModel  # noqa: E402
-from claview.stages import build_b_context, model_table  # noqa: E402
+from claview.b.contracts import Config, StageFailure, today_iso  # noqa: E402
+from claview.b.evaluation import scripted_answers, write_json  # noqa: E402
+from claview.b.metadata import MetadataStore  # noqa: E402
+from claview.b.models import HcxModel, ScriptedModel  # noqa: E402
+from claview.b.stages import build_b_context, model_table  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "eval" / "results" / "context_format_experiment.json"

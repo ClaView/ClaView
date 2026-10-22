@@ -211,10 +211,10 @@ def main(argv=None) -> int:
         print(f"dump_old_outputs: replay corpus unavailable ({len(missing_inputs)} path(s) missing)")
         return 3
 
-    from claview.aflow import model as old_model
-    from claview.aflow.catalog import default_catalog
-    from claview.aflow.graph import build_graph
-    from claview.aflow.run import run_a_v1_state
+    from claview.b.aflow import model as old_model
+    from claview.b.aflow.catalog import default_catalog
+    from claview.b.aflow.graph import build_graph
+    from claview.b.aflow.run import run_a_v1_state
     from judgment_runtime import POLICY, digest
     from table_sets import score_sets
 

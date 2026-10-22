@@ -9,9 +9,9 @@ from pathlib import Path
 repo, out = Path(sys.argv[1]).resolve(), Path(sys.argv[2])
 sys.path[:0] = [str(repo / "src"), str(repo / "eval"), str(repo / "tests/contracts")]
 import test_a_v1_frozen as F  # noqa: E402
-from claview.aflow.catalog import default_catalog  # noqa: E402
-from claview.aflow.graph import build_graph  # noqa: E402
-from claview.aflow.run import run_a_v1_state  # noqa: E402
+from claview.b.aflow.catalog import default_catalog  # noqa: E402
+from claview.b.aflow.graph import build_graph  # noqa: E402
+from claview.b.aflow.run import run_a_v1_state  # noqa: E402
 from aflow_support import blocked_transports  # noqa: E402
 from table_sets import score_sets  # noqa: E402
 
@@ -21,7 +21,7 @@ groups = collections.defaultdict(dict)
 for line in (F.CORPUS / "data/Q_candidate_group.jsonl").read_text("utf8").splitlines():
     r = json.loads(line); groups[r["case_id"]][r["group_index"]] = r["allowed_tables"]
 catalog, client, rows, tot = default_catalog(repo), F._Replay(), {}, collections.Counter()
-import claview.aflow.contract as C  # noqa: E402
+import claview.b.aflow.contract as C  # noqa: E402
 boundary = []
 if hasattr(C, "HANDOFF_FIELDS"):  # split code: selection reads must stay inside handoff + its own fields
     own = frozenset(C.STATE_FIELDS) - C.HANDOFF_FIELDS

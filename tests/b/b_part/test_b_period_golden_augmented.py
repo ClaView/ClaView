@@ -1,5 +1,5 @@
 """Replays eval/cases/golden_set_v1_period_augmented.json -- 13 new cases
-added 2026-10-02 to probe claview.stages.resolve_relative_period on
+added 2026-10-02 to probe claview.b.stages.resolve_relative_period on
 combinations golden_set_v1's original 22 cases never exercised with real
 data: H(반기) frequency, "올해"/"작년" on every frequency, and direct
 same-unit "최근 N<분기|반기>" counts. See scripts/build_period_augmented_cases.py
@@ -49,11 +49,11 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from claview.contracts import Trace
-from claview.evaluation import scripted_answers
-from claview.graphs import build_b_graph
-from claview.models import ScriptedModel
-from claview.stages import Services, resolve_relative_period, selection_key
+from claview.b.contracts import Trace
+from claview.b.evaluation import scripted_answers
+from claview.b.graphs import build_b_graph
+from claview.b.models import ScriptedModel
+from claview.b.stages import Services, resolve_relative_period, selection_key
 
 # Read once at import time (pytest needs parametrize ids at collection
 # time, before fixtures run) so the two id lists below can never drift

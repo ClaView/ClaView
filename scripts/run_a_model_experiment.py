@@ -8,7 +8,7 @@ import json
 import os
 from pathlib import Path
 
-from claview.a_model_experiment import (
+from claview.b.a_model_experiment import (
     ExperimentLedger,
     inside,
     prepare_plan,
@@ -18,8 +18,8 @@ from claview.a_model_experiment import (
     validate_grant,
     verify_plan,
 )
-from claview.a_model_providers import AProvider, ModelFault
-from claview.a_model_runtime import Limits, Price, RoleRuntime
+from claview.b.a_model_providers import AProvider, ModelFault
+from claview.b.a_model_runtime import Limits, Price, RoleRuntime
 
 ROOT = Path(__file__).resolve().parents[1]
 

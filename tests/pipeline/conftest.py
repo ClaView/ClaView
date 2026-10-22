@@ -19,7 +19,7 @@ if HERE not in sys.path:
 
 import pytest  # noqa: E402
 
-from claview_flow import FlowSession  # noqa: E402
+from claview.pipeline import FlowSession  # noqa: E402
 
 
 @pytest.fixture(autouse=True)

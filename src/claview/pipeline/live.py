@@ -25,8 +25,8 @@ def live_b_clients(allow_external: bool = False, *, hcx_min_interval: float = 0)
     missing = [name for name in (HCX_KEY_ENV, KOSIS_KEY_ENV) if not os.environ.get(name)]
     if missing:
         raise RuntimeError("missing environment variables: " + ", ".join(missing))
-    from claview.fetch import KosisClient
-    from claview.models import HcxModel
+    from claview.b.fetch import KosisClient
+    from claview.b.models import HcxModel
 
     # KosisClient puts the key in the query string; httpx logs full request URLs at INFO.
     logging.getLogger("httpx").setLevel(logging.WARNING)

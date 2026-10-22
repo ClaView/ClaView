@@ -21,9 +21,9 @@ from pathlib import Path
 
 from build_axis3_period_sets import PER_YEAR, candidates, is_final_anchor
 
-from claview.contracts import Config
-from claview.metadata import MetadataStore
-from claview.stages import resolve_relative_period
+from claview.b.contracts import Config
+from claview.b.metadata import MetadataStore
+from claview.b.stages import resolve_relative_period
 
 ROOT = Path(__file__).resolve().parents[2]
 CASES_DIR = ROOT / "eval" / "cases" / "b_period"

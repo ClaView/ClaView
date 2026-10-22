@@ -30,12 +30,12 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from claview.contracts import Trace
-from claview.evaluation import scripted_answers
-from claview.graphs import build_b_graph
-from claview.metadata import period_number
-from claview.models import ScriptedModel
-from claview.stages import (
+from claview.b.contracts import Trace
+from claview.b.evaluation import scripted_answers
+from claview.b.graphs import build_b_graph
+from claview.b.metadata import period_number
+from claview.b.models import ScriptedModel
+from claview.b.stages import (
     Services,
     _as_of_period,
     _index_to_period,

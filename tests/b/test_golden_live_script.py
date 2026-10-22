@@ -7,10 +7,10 @@ from pathlib import Path
 
 import pytest
 
-from claview.aflow.model import HcxClient, ModelError, ModelReply
-from claview.contracts import StageFailure, Trace
-from claview.fetch import KosisClient
-from claview.models import HcxModel, ScriptedModel
+from claview.b.aflow.model import HcxClient, ModelError, ModelReply
+from claview.b.contracts import StageFailure, Trace
+from claview.b.fetch import KosisClient
+from claview.b.models import HcxModel, ScriptedModel
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "scripts/ab/run_golden_live.py"

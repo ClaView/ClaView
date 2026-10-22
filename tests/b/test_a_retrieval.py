@@ -7,16 +7,16 @@ from types import SimpleNamespace
 
 import pytest
 
-from claview.a_discovery import TableDiscovery
-from claview.a_eval_predict import predict_case
-from claview.a_retrieval import RetrievalOrchestrator, finalize_pool, load_metadata_corpus
-from claview.a_semantics import BasisEvidence, explicit_conditions
-from claview.candidate_store import CandidateStore
-from claview.contracts import Config, StageFailure
-from claview.document_corpus import build_document_corpus
-from claview.metadata import MetadataStore
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents, digest
+from claview.b.a_discovery import TableDiscovery
+from claview.b.a_eval_predict import predict_case
+from claview.b.a_retrieval import RetrievalOrchestrator, finalize_pool, load_metadata_corpus
+from claview.b.a_semantics import BasisEvidence, explicit_conditions
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import Config, StageFailure
+from claview.b.document_corpus import build_document_corpus
+from claview.b.metadata import MetadataStore
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents, digest
 
 FIXTURES = Path(__file__).parent / "fixtures"
 CTX = {"session_id": "session", "request_id": "request", "query_revision": 1}

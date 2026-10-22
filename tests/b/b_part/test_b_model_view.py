@@ -14,9 +14,9 @@ import json
 
 import pytest
 
-from claview.contracts import Config, Trace
-from claview.models import ScriptedModel
-from claview.stages import (
+from claview.b.contracts import Config, Trace
+from claview.b.models import ScriptedModel
+from claview.b.stages import (
     B_PROMPT,
     EXPAND_PROMPT,
     BSteps,

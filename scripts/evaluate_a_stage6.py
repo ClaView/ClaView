@@ -9,14 +9,14 @@ import time
 from collections import Counter
 from pathlib import Path
 
-from claview.a1_mappings import load_experiment
-from claview.a_discovery import TableDiscovery
-from claview.candidate_store import CandidateStore
-from claview.contracts import Config, fingerprint
-from claview.discovery_evaluation import evaluate_search
-from claview.metadata import MetadataStore
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
+from claview.b.a1_mappings import load_experiment
+from claview.b.a_discovery import TableDiscovery
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import Config, fingerprint
+from claview.b.discovery_evaluation import evaluate_search
+from claview.b.metadata import MetadataStore
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
 
 VARIANTS = {
     "baseline": ("off", False, "off", "off"),

@@ -7,8 +7,8 @@ import json
 import httpx
 import pytest
 
-from claview.a_model_contracts import make_packet
-from claview.a_model_experiment import (
+from claview.b.a_model_contracts import make_packet
+from claview.b.a_model_experiment import (
     VERSION,
     ExperimentLedger,
     inside,
@@ -17,9 +17,9 @@ from claview.a_model_experiment import (
     validate_grant,
     verify_plan,
 )
-from claview.a_model_providers import AProvider, ModelFault
-from claview.a_model_runtime import Limits, Price, RoleRuntime
-from claview.contracts import fingerprint as file_hash
+from claview.b.a_model_providers import AProvider, ModelFault
+from claview.b.a_model_runtime import Limits, Price, RoleRuntime
+from claview.b.contracts import fingerprint as file_hash
 
 RUNNER = None
 PRICE = Price("KRW", "1250", "5000", "2026-10-05", "https://example.com/test-price")

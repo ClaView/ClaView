@@ -59,9 +59,9 @@ from pathlib import Path
 
 from build_period_augmented_cases import carry_over_verification, selection, table_ref
 
-from claview.contracts import Config
-from claview.metadata import MetadataStore, period_number
-from claview.stages import _index_to_period, _year_start, resolve_relative_period
+from claview.b.contracts import Config
+from claview.b.metadata import MetadataStore, period_number
+from claview.b.stages import _index_to_period, _year_start, resolve_relative_period
 
 ROOT = Path(__file__).resolve().parents[2]
 # Pinned like build_period_augmented_cases.py: the generated cases store this date.

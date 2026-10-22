@@ -19,13 +19,13 @@ sys.path.insert(0, str(ROOT / "tests"))
 
 from test_ab_pipeline import GOLD, SyntheticDataClient  # noqa: E402
 
-from claview.ab_pipeline import load_a_catalog, run_ab  # noqa: E402
-from claview.contracts import Config, Trace, today_iso  # noqa: E402
-from claview.evaluation import scripted_answers  # noqa: E402
-from claview.metadata import MetadataStore  # noqa: E402
-from claview.models import ScriptedModel  # noqa: E402
-from claview.search import SearchIndex  # noqa: E402
-from claview.services import Services  # noqa: E402
+from claview.b.ab_pipeline import load_a_catalog, run_ab  # noqa: E402
+from claview.b.contracts import Config, Trace, today_iso  # noqa: E402
+from claview.b.evaluation import scripted_answers  # noqa: E402
+from claview.b.metadata import MetadataStore  # noqa: E402
+from claview.b.models import ScriptedModel  # noqa: E402
+from claview.b.search import SearchIndex  # noqa: E402
+from claview.b.services import Services  # noqa: E402
 
 
 def main() -> int:

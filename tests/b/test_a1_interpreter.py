@@ -8,19 +8,19 @@ from pathlib import Path
 import httpx
 import pytest
 
-from claview.a1_interpreter import QueryInterpretation, interpretation_gate, validate_interpretation
-from claview.a1_query import prepare_question
-from claview.a_agent import AAgent
-from claview.a_discovery import TableDiscovery
-from claview.a_model_contracts import make_packet
-from claview.a_model_experiment import ExperimentLedger
-from claview.a_model_providers import AProvider, ModelFault
-from claview.a_model_runtime import AdviceCache, Limits, Price, RoleRuntime
-from claview.candidate_store import CandidateStore
-from claview.contracts import StageFailure
-from claview.metadata import MetadataStore
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
+from claview.b.a1_interpreter import QueryInterpretation, interpretation_gate, validate_interpretation
+from claview.b.a1_query import prepare_question
+from claview.b.a_agent import AAgent
+from claview.b.a_discovery import TableDiscovery
+from claview.b.a_model_contracts import make_packet
+from claview.b.a_model_experiment import ExperimentLedger
+from claview.b.a_model_providers import AProvider, ModelFault
+from claview.b.a_model_runtime import AdviceCache, Limits, Price, RoleRuntime
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import StageFailure
+from claview.b.metadata import MetadataStore
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
 
 VERSIONS = {k: "test/1" for k in ("dictionary", "catalog", "metadata", "policy")}
 PRICE = Price("KRW", "1250", "5000", "2026-10-05", "fixture-not-a-price-source")

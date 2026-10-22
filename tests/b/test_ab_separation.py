@@ -6,16 +6,16 @@ from pathlib import Path
 import httpx
 import pytest
 
-from claview import a_graphs, a_stages, graphs, services, stages
-from claview.a_discovery import TableDiscovery
-from claview.candidate_store import CandidateStore
-from claview.contracts import StageFailure, Trace
-from claview.evaluation import scripted_answers
-from claview.fetch import KosisClient
-from claview.metadata import MetadataStore, periods_between
-from claview.models import ScriptedModel
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
+from claview.b import a_graphs, a_stages, graphs, services, stages
+from claview.b.a_discovery import TableDiscovery
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import StageFailure, Trace
+from claview.b.evaluation import scripted_answers
+from claview.b.fetch import KosisClient
+from claview.b.metadata import MetadataStore, periods_between
+from claview.b.models import ScriptedModel
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
 
 FIXTURES = Path(__file__).parent / "fixtures"
 GOLD = json.loads(
@@ -29,8 +29,8 @@ def test_legacy_imports_share_one_implementation():
     assert stages.Services is services.Services
     assert graphs.build_a_graph is a_graphs.build_a_graph
     assert graphs.build_discovery_graph is a_graphs.build_discovery_graph
-    assert stages.ASteps.__module__ == "claview.a_stages"
-    assert stages.BSteps.__module__ == "claview.stages"
+    assert stages.ASteps.__module__ == "claview.b.a_stages"
+    assert stages.BSteps.__module__ == "claview.b.stages"
 
 
 class _MonthlyClient:

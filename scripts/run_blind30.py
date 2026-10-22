@@ -24,11 +24,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "src"), str(ROOT / "eval")]
 
-from claview.aflow.catalog import default_catalog  # noqa: E402
-from claview.aflow.contract import COND_ALL  # noqa: E402
-from claview.aflow.graph import build_graph  # noqa: E402
-from claview.aflow.model import ModelError, ModelReply  # noqa: E402
-from claview.aflow.run import run_a_v1_state  # noqa: E402
+from claview.b.aflow.catalog import default_catalog  # noqa: E402
+from claview.b.aflow.contract import COND_ALL  # noqa: E402
+from claview.b.aflow.graph import build_graph  # noqa: E402
+from claview.b.aflow.model import ModelError, ModelReply  # noqa: E402
+from claview.b.aflow.run import run_a_v1_state  # noqa: E402
 from judgment_runtime import POLICY, AttemptGate, JudgmentClient, digest  # noqa: E402
 
 HCX_HOST = "clovastudio.stream.ntruss.com"
@@ -96,7 +96,7 @@ def main(argv=None) -> dict:
     args.cache.mkdir(parents=True, exist_ok=True)
     gate = None
     if args.live:
-        from claview.aflow.model import HcxClient
+        from claview.b.aflow.model import HcxClient
         _network_guard((HCX_HOST,))
         gate = AttemptGate(args.out_dir / "ledger_live.jsonl", args.cap, mode="live")
         client = JudgmentClient(HcxClient(min_interval=0.0, token_version=POLICY["token_version"]), gate, args.cache)

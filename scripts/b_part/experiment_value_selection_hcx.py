@@ -69,11 +69,11 @@ from verify_expand_hcx import (  # noqa: E402
     run_b,
 )
 
-from claview.contracts import Config, StageFailure, today_iso  # noqa: E402
-from claview.evaluation import scripted_answers, write_json  # noqa: E402
-from claview.metadata import MetadataStore  # noqa: E402
-from claview.models import HcxModel, ScriptedModel, check_output  # noqa: E402
-from claview.stages import grams, normalized, query_terms, term_score  # noqa: E402
+from claview.b.contracts import Config, StageFailure, today_iso  # noqa: E402
+from claview.b.evaluation import scripted_answers, write_json  # noqa: E402
+from claview.b.metadata import MetadataStore  # noqa: E402
+from claview.b.models import HcxModel, ScriptedModel, check_output  # noqa: E402
+from claview.b.stages import grams, normalized, query_terms, term_score  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "eval" / "results" / "value_selection_experiment.json"

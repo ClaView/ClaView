@@ -15,16 +15,16 @@ import pytest
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.types import Command
 
-from claview.a_discovery import TableDiscovery, assess_candidates, display_order, field_grams, run_b
-from claview.candidate_store import CandidateStore
-from claview.contracts import StageFailure, Trace, outcome
-from claview.evaluation import scripted_answers
-from claview.graphs import build_discovery_graph, invoke_pipeline
-from claview.metadata import MetadataStore
-from claview.models import ScriptedModel
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
-from claview.stages import Services
+from claview.b.a_discovery import TableDiscovery, assess_candidates, display_order, field_grams, run_b
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import StageFailure, Trace, outcome
+from claview.b.evaluation import scripted_answers
+from claview.b.graphs import build_discovery_graph, invoke_pipeline
+from claview.b.metadata import MetadataStore
+from claview.b.models import ScriptedModel
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
+from claview.b.stages import Services
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "tests/b/fixtures"
@@ -454,9 +454,9 @@ def test_vector_failure_keeps_lexical_and_document_channels(discovery):
 
 
 def test_live_cli_requires_explicit_opt_in_before_loading_data(monkeypatch, capsys):
-    from claview.discovery_cli import main
+    from claview.b.discovery_cli import main
 
-    monkeypatch.setattr("claview.discovery_cli.getpass.getpass", forbid)
+    monkeypatch.setattr("claview.b.discovery_cli.getpass.getpass", forbid)
     with pytest.raises(SystemExit) as exc:
         main(["run-b", "--b-mode", "live"])
     assert exc.value.code == 2
@@ -480,7 +480,7 @@ def test_cli_fresh_process_search_page_confirm_status_b_retry(tmp_path):
 
     def call(command, *args):
         proc = subprocess.run(
-            [sys.executable, "-m", "claview.discovery_cli", command, *common, *args],
+            [sys.executable, "-m", "claview.b.discovery_cli", command, *common, *args],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -514,7 +514,7 @@ def test_diagrams_cli_uses_user_selection_a_by_default(tmp_path):
         [
             sys.executable,
             "-m",
-            "claview.cli",
+            "claview.b.cli",
             "diagrams",
             "--catalog",
             str(FIXTURES / "catalog.json"),

@@ -10,10 +10,10 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-from claview.a_eval_contracts import read_json, write_new
-from claview.contracts import fingerprint
-from claview.mappings import SCHEMA, VERSION, official_fields, text_key
-from claview.metadata import MetadataStore
+from claview.b.a_eval_contracts import read_json, write_new
+from claview.b.contracts import fingerprint
+from claview.b.mappings import SCHEMA, VERSION, official_fields, text_key
+from claview.b.metadata import MetadataStore
 
 ROOT = Path(__file__).resolve().parents[1]
 

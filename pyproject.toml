@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "claview"
 version = "0.1.0"
-description = "KOSIS statistics agent: A table selection (claview.a), B series/period selection (claview), one flow (claview_flow)"
+description = "KOSIS statistics agent: A table selection (claview.a), B series/period selection (claview.b), one flow (claview.pipeline)"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "httpx>=0.28,<1",
@@ -19,7 +19,7 @@ dependencies = [
 claview-period = { path = "packages/claview-period", editable = true }
 
 [project.scripts]
-claview = "claview.cli:main"
+claview = "claview.b.cli:main"
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "ruff>=0.12,<1"]
@@ -30,16 +30,16 @@ sources = ["src"]
 
 [tool.pytest.ini_options]
 # Run the suites as separate pytest processes (README): tests/a installs an import guard
-# that refuses the B modules of `claview`, so A and B tests cannot share one process.
+# that refuses `claview.b` and `claview.pipeline`, so A and B tests cannot share one process.
 # A bare `pytest` runs the B suite only (as before the move).
 testpaths = ["tests/b"]
 
 [tool.ruff]
 target-version = "py312"
 line-length = 100
-# Copied code keeps its own style: A v1 (N5) inside B, and A completion-2 (src/claview/a, tests/a,
+# Copied code keeps its own style: A v1 (N5) inside B (src/claview/b/aflow), and A completion-2 (src/claview/a, tests/a,
 # its scripts and reference data) copied from the fixed copy. New integration code is linted.
-extend-exclude = ["src/claview/aflow", "src/claview/a", "tests/a", "reference"]
+extend-exclude = ["src/claview/b/aflow", "src/claview/a", "tests/a", "reference"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]

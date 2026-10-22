@@ -2,8 +2,8 @@
 
 Each case's `expected.A` is fed straight into the B subgraph (bypassing
 real A/search), paired with a ScriptedModel preloaded with the case's own
-`expected.B.selections` (via claview.evaluation.scripted_answers). This is
-"replay" mode exactly as claview.evaluation.evaluate() defines it: it
+`expected.B.selections` (via claview.b.evaluation.scripted_answers). This is
+"replay" mode exactly as claview.b.evaluation.evaluate() defines it: it
 proves B's own deterministic code (schema building, axis pruning, period
 resolution/validation, canonicalization, unit resolution, series_id
 assignment) reproduces the golden answer when the model gives the right
@@ -18,10 +18,10 @@ relative-period or comparison-baseline query" behavior:
   - relative-period wording ("최근/이후/올해/작년") is now resolved in code
     against the table's own metadata coverage, then surfaced to the user as
     a confirmation step (status=needs_confirmation) rather than refused
-    outright -- see claview.stages.resolve_relative_period.
+    outright -- see claview.b.stages.resolve_relative_period.
   - MoM/YoY comparison wording ("전월대비", "전년보다", "가장 크게 변") now
     auto-extends the selection's start before the literally stated period
-    -- see claview.stages.detect_baseline_extension.
+    -- see claview.b.stages.detect_baseline_extension.
   - "기여도"/"연쇄가중" (contribution / chain-weighted figures) remain
     refused: those are methodology questions, not a baseline period the
     code can mechanically extend.
@@ -34,14 +34,14 @@ from collections import Counter
 import pytest
 from jsonschema import Draft202012Validator
 
-from claview.contracts import Trace
-from claview.evaluation import scripted_answers
-from claview.graphs import build_b_graph
-from claview.models import ScriptedModel
-from claview.stages import Services, selection_key
+from claview.b.contracts import Trace
+from claview.b.evaluation import scripted_answers
+from claview.b.graphs import build_b_graph
+from claview.b.models import ScriptedModel
+from claview.b.stages import Services, selection_key
 
 # The 8 cases with "최근/이후/올해/작년" wording. All resolve deterministically
-# (claview.stages.resolve_relative_period) and, as of 2026-10-01, all of them
+# (claview.b.stages.resolve_relative_period) and, as of 2026-10-01, all of them
 # have a table whose latest recorded period lags behind what "오늘" would
 # literally imply. Until 2026-10-06 that stopped B at needs_confirmation; since
 # the 2026-10-06 flow change B records the notice (period_notices, status

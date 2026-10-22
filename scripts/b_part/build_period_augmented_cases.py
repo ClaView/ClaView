@@ -19,9 +19,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from claview.contracts import Config, StageFailure
-from claview.metadata import MetadataStore, period_number, selected_unit
-from claview.stages import _index_to_period, _year_start, resolve_relative_period
+from claview.b.contracts import Config, StageFailure
+from claview.b.metadata import MetadataStore, period_number, selected_unit
+from claview.b.stages import _index_to_period, _year_start, resolve_relative_period
 
 ROOT = Path(__file__).resolve().parents[2]
 # The generated case file stores this date in every case, so regeneration is pinned to the date

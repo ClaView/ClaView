@@ -45,11 +45,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))  # 패키지 설치 없이 실행
 
-from claview.contracts import Config, Trace  # noqa: E402
-from claview.evaluation import write_json  # noqa: E402
-from claview.metadata import MetadataStore  # noqa: E402
-from claview.models import HcxModel  # noqa: E402
-from claview.stages import BSteps, Services, object_schema  # noqa: E402
+from claview.b.contracts import Config, Trace  # noqa: E402
+from claview.b.evaluation import write_json  # noqa: E402
+from claview.b.metadata import MetadataStore  # noqa: E402
+from claview.b.models import HcxModel  # noqa: E402
+from claview.b.stages import BSteps, Services, object_schema  # noqa: E402
 
 CATALOG = ROOT / "data" / "catalog" / "search_catalog.json"
 METADATA = ROOT / "data" / "raw" / "boK_meta_raw.jsonl"

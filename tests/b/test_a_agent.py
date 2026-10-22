@@ -12,17 +12,17 @@ import pytest
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.types import Command
 
-from claview.a_agent import AAgent, AgentConfig
-from claview.a_discovery import TableDiscovery, run_b
-from claview.a_model_providers import AProvider
-from claview.candidate_store import CandidateStore
-from claview.contracts import StageFailure, Trace, outcome
-from claview.graphs import build_discovery_graph, invoke_pipeline
-from claview.metadata import MetadataStore
-from claview.models import ScriptedModel
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents
-from claview.stages import Services
+from claview.b.a_agent import AAgent, AgentConfig
+from claview.b.a_discovery import TableDiscovery, run_b
+from claview.b.a_model_providers import AProvider
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import StageFailure, Trace, outcome
+from claview.b.graphs import build_discovery_graph, invoke_pipeline
+from claview.b.metadata import MetadataStore
+from claview.b.models import ScriptedModel
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents
+from claview.b.stages import Services
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "tests/b/fixtures"
@@ -475,7 +475,7 @@ def test_cli_fresh_process_clarification_confirm_and_no_b(tmp_path, factory):
                 "-X",
                 "utf8",
                 "-m",
-                "claview.discovery_cli",
+                "claview.b.discovery_cli",
                 command,
                 *common,
                 *args,

@@ -9,23 +9,23 @@ from pathlib import Path
 import httpx
 import pytest
 
-from claview.a_discovery import TableDiscovery
-from claview.a_model_contracts import (
+from claview.b.a_discovery import TableDiscovery
+from claview.b.a_model_contracts import (
     ACTIONS,
     clarification_template,
     make_packet,
     role_schema,
     validate_grounding,
 )
-from claview.a_model_providers import AProvider
-from claview.a_model_runtime import AdviceCache, Limits, Price, RoleRuntime
-from claview.candidate_store import CandidateStore
-from claview.contracts import StageFailure
-from claview.document_corpus import source_entry
-from claview.metadata import MetadataStore
-from claview.models import check_output
-from claview.search import SearchIndex
-from claview.search_documents import build_search_documents, digest
+from claview.b.a_model_providers import AProvider
+from claview.b.a_model_runtime import AdviceCache, Limits, Price, RoleRuntime
+from claview.b.candidate_store import CandidateStore
+from claview.b.contracts import StageFailure
+from claview.b.document_corpus import source_entry
+from claview.b.metadata import MetadataStore
+from claview.b.models import check_output
+from claview.b.search import SearchIndex
+from claview.b.search_documents import build_search_documents, digest
 
 FIXTURES = Path(__file__).parent / "fixtures"
 VERSIONS = {k: "fixture/1" for k in ("dictionary", "metadata", "catalog", "policy")}

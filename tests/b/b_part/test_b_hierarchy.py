@@ -13,11 +13,11 @@ from collections import defaultdict
 
 import pytest
 
-from claview.contracts import Config, StageFailure, Trace
-from claview.evaluation import scripted_answers
-from claview.graphs import build_b_graph
-from claview.models import ScriptedModel
-from claview.stages import (
+from claview.b.contracts import Config, StageFailure, Trace
+from claview.b.evaluation import scripted_answers
+from claview.b.graphs import build_b_graph
+from claview.b.models import ScriptedModel
+from claview.b.stages import (
     B_PROMPT,
     B_PROMPT_PLAIN,
     EXPAND_MODES,
@@ -118,7 +118,7 @@ def test_model_schema_has_expand_modes_per_axis_but_plain_schema_does_not():
 
 def test_row_without_expand_is_rejected():
     table = make_tree_table()
-    from claview.models import check_output
+    from claview.b.models import check_output
 
     raw = {"selections": [{k: v for k, v in row("A").items() if k != "expand"}]}
     with pytest.raises(StageFailure) as exc:
@@ -461,7 +461,7 @@ def test_golden_cases_rebuild_identically_from_compressed_expand_rows(golden_cas
 
 
 def test_prompt_contains_expand_block_and_default_none_rule():
-    from claview.stages import B_PROMPT, EXPAND_PROMPT
+    from claview.b.stages import B_PROMPT, EXPAND_PROMPT
 
     assert EXPAND_PROMPT in B_PROMPT
     assert "기본값은 none" in EXPAND_PROMPT and "is_leaf" in EXPAND_PROMPT
@@ -691,7 +691,7 @@ def _wide_table(n_distractors=150):
 
 
 def test_question_words_keep_the_named_value_when_pruning():
-    from claview.stages import build_b_context
+    from claview.b.stages import build_b_context
 
     table = _wide_table()
     config = Config(max_b_context_chars=1000, max_axis_candidates=80)
@@ -702,7 +702,7 @@ def test_question_words_keep_the_named_value_when_pruning():
 
 
 def test_term_score_ignores_particles_and_year_tokens():
-    from claview.stages import query_terms, term_score
+    from claview.b.stages import query_terms, term_score
 
     assert query_terms("2005~2025년 연간 경상수지와 상품·서비스") == [
         "연간",
@@ -717,7 +717,7 @@ def test_term_score_ignores_particles_and_year_tokens():
 
 
 def test_b_limit_default_and_shared_limit_still_applies():
-    from claview.stages import b_limit
+    from claview.b.stages import b_limit
 
     assert Config().max_b_context_chars == 120000 and Config().max_context_chars == 160000
     assert b_limit(Config()) == 120000
@@ -729,7 +729,7 @@ def test_b_limit_default_and_shared_limit_still_applies():
 def test_large_golden_tables_are_pruned_under_the_default_limit(golden_cases, store, config):
     """DT_301Y013 (~131k chars, HTTP 429 in live runs) is shortened and still keeps every
     golden code; DT_402Y014 (~110k chars, answered fine) is sent whole."""
-    from claview.stages import build_b_context
+    from claview.b.stages import build_b_context
 
     for case_id, pruned in (("CV-AB-04", True), ("CV-AB-05", True), ("CV-AB-20", False)):
         case = next(c for c in golden_cases if c["case_id"] == case_id)
@@ -742,7 +742,7 @@ def test_large_golden_tables_are_pruned_under_the_default_limit(golden_cases, st
 
 
 def test_prompt_tells_the_model_to_pick_named_children_explicitly():
-    from claview.stages import EXPAND_PROMPT
+    from claview.b.stages import EXPAND_PROMPT
 
     assert "이름으로 하나씩" in EXPAND_PROMPT
     assert "전부 펼치지 않는다" in EXPAND_PROMPT

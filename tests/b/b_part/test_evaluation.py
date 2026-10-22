@@ -1,4 +1,4 @@
-"""Tests for claview.evaluation's `b_success` metric (added 2026-10-02).
+"""Tests for claview.b.evaluation's `b_success` metric (added 2026-10-02).
 
 Before this, `evaluate()`'s only pass/fail signal for B
 (`b_conditions_exact`) only ever counted `status == "ok"`, so the 8 cases
@@ -13,7 +13,7 @@ accounting gets caught here.
 
 from __future__ import annotations
 
-from claview.evaluation import b_success, evaluate
+from claview.b.evaluation import b_success, evaluate
 
 
 def _selection(item_id: str, period: dict) -> dict:

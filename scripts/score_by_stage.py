@@ -52,9 +52,9 @@ def main(out_dir: Path, subset: str | None = None) -> dict:
     sys.path[:0] = [str(ROOT / "src"), str(ROOT / "eval"), str(ROOT / "tests/contracts")]
     import test_a_v1_frozen as F
     from aflow_support import blocked_transports
-    from claview.aflow.catalog import default_catalog
-    from claview.aflow.graph import build_graph
-    from claview.aflow.run import run_a_v1_state
+    from claview.b.aflow.catalog import default_catalog
+    from claview.b.aflow.graph import build_graph
+    from claview.b.aflow.run import run_a_v1_state
     from table_sets import load_case_roles, score_sets
 
     cases = json.loads((F.CORPUS / "data/questions_417.json").read_text("utf8"))

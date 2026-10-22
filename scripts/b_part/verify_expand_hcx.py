@@ -66,11 +66,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))  # allow running without installing the package
 
-from claview.contracts import Config, StageFailure, Trace, today_iso  # noqa: E402
-from claview.evaluation import scripted_answers, write_json  # noqa: E402
-from claview.metadata import MetadataStore  # noqa: E402
-from claview.models import HcxModel, ScriptedModel, check_output  # noqa: E402
-from claview.stages import (  # noqa: E402
+from claview.b.contracts import Config, StageFailure, Trace, today_iso  # noqa: E402
+from claview.b.evaluation import scripted_answers, write_json  # noqa: E402
+from claview.b.metadata import MetadataStore  # noqa: E402
+from claview.b.models import HcxModel, ScriptedModel, check_output  # noqa: E402
+from claview.b.stages import (  # noqa: E402
     EXPAND_PROMPT,
     PICK_CORRECTION_REASONS,
     BSteps,
