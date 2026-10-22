@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib
 import json
 import os
 import subprocess
@@ -61,25 +62,34 @@ def sha256_file(path: Path) -> str:
 # ---------------------------------------------------------------- dump (runs inside the package of one src folder)
 
 
+def _a_package(src: Path) -> str:
+    """Import name of the A package in one src folder: claview.a (plan 24 layout) or claview_v3 (older snapshots)."""
+    return "claview.a" if (src / "claview" / "a" / "__init__.py").is_file() else "claview_v3"
+
+
 def _dump(src: Path, out: Path) -> dict:
     sys.path.insert(0, str(src))
-    import claview.a
+    name = _a_package(src)
 
-    package = Path(claview.a.__file__).resolve().parent
+    def mod(sub: str = ""):
+        return importlib.import_module(f"{name}.{sub}" if sub else name)
+
+    package = Path(mod().__file__).resolve().parent
     if not package.is_relative_to(src.resolve()):
         raise RuntimeError("the package was not loaded from the given src folder")
-    from claview.a import _guard, paths
+    _guard, paths = mod("_guard"), mod("paths")
 
     _guard.install_network_block()
-    from claview.a.catalog.facets import catalog_version
-    from claview.a.catalog.layer import load_layer
-    from claview.a.catalog.text import index_key
-    from claview.a.interpret.condition_rules import q4_rows
-    from claview.a.interpret.decompose_payload import build_payload, is_input_limit, prompt_text
-    from claview.a.interpret.decompose_schema import build_schema
-    from claview.a.interpret.mentions import mention_spans
-    from claview.a.interpret.pipeline import interpret_question
-    from claview.a.reused.q_nodes import normalize
+    catalog_version = mod("catalog.facets").catalog_version
+    load_layer = mod("catalog.layer").load_layer
+    index_key = mod("catalog.text").index_key
+    q4_rows = mod("interpret.condition_rules").q4_rows
+    payload_mod = mod("interpret.decompose_payload")
+    build_payload, is_input_limit, prompt_text = payload_mod.build_payload, payload_mod.is_input_limit, payload_mod.prompt_text
+    build_schema = mod("interpret.decompose_schema").build_schema
+    mention_spans = mod("interpret.mentions").mention_spans
+    interpret_question = mod("interpret.pipeline").interpret_question
+    normalize = mod("reused.q_nodes").normalize
 
     def meanings(text: str, positive_only: bool = True) -> list[str]:
         return sorted({f"{r['axis']}:{index_key(str(r['value']))}" for r in q4_rows(normalize(text or "")["query"])
@@ -341,7 +351,7 @@ def compare(before_path: Path, after_path: Path, again_path: Path, manifest_path
     branch = None
     if branch_manifest is not None and branch_manifest.is_file():
         hashes = {x["p"].replace("\\", "/").lstrip("/"): x["h"].lower() for x in read(branch_manifest)}
-        branch = {side: {f: hashes.get(f"src/claview_v3/{f}") == h for f, h in dump["input_files"].items()}
+        branch = {side: {f: (hashes.get(f"src/claview/a/{f}") or hashes.get(f"src/claview_v3/{f}")) == h for f, h in dump["input_files"].items()}
                   for side, dump in (("before", before), ("after", after))}
     summary = {
         "stage": "plan19_inputs_stage45", "real_calls": 0,

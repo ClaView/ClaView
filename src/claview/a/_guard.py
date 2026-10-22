@@ -158,6 +158,9 @@ def _bases(dirs) -> list[str]:
 
 
 _EXEMPT_BASES: list[str] = []
+# Cached bytecode names of the parent's __init__ for this interpreter (plain and optimised levels), case-normalised.
+_PARENT_CACHE_NAMES = frozenset(os.path.normcase(f"__init__.{sys.implementation.cache_tag}{opt}.pyc")
+                                for opt in ("", ".opt-1", ".opt-2"))
 
 
 def _exempt(p: str) -> bool:
@@ -172,9 +175,19 @@ def _exempt(p: str) -> bool:
         return True
     if p in (parent, os.path.join(parent, "__init__.py")):
         return True
-    if os.path.dirname(p) == os.path.join(parent, "__pycache__") and os.path.basename(p).startswith("__init__."):
+    if os.path.dirname(p) == os.path.join(parent, "__pycache__") and os.path.basename(p) in _PARENT_CACHE_NAMES:
         return True
-    return p.startswith(_UNC) and _under_by_identity(p, [own])
+    if not p.startswith(_UNC):
+        return False
+    # A UNC alias is compared by file identity: the parent's entry, __init__ and cached __init__, or inside OWN_DIR.
+    ident = _identity(p)
+    if ident is not None and ident in {_identity(parent), _identity(os.path.join(parent, "__init__.py"))}:
+        return True
+    if os.path.basename(p) in _PARENT_CACHE_NAMES:
+        folder = _identity(os.path.dirname(p))
+        if folder is not None and folder == _identity(os.path.join(parent, "__pycache__")):
+            return True
+    return _under_by_identity(p, [own])
 
 
 def is_under(path, dirs=FORBIDDEN_DIRS) -> bool:

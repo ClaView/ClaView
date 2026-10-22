@@ -171,6 +171,10 @@ def test_forbidden_dirs_are_component_wise():
     assert _guard.is_under(SRC / "claview" / "fetch.py") and _guard.is_under(SRC / "claview" / "b" / "x.py")
     assert _guard.is_under(SRC / "claview" / "aflow") and _guard.is_under(SRC / "claview" / "ab_pipeline.py")
     assert not _guard.is_under(SRC / "claview") and not _guard.is_under(SRC / "claview" / "__init__.py")
+    cache = SRC / "claview" / "__pycache__"  # only the parent __init__'s own bytecode names are exempt
+    assert not _guard.is_under(cache / f"__init__.{sys.implementation.cache_tag}.pyc")
+    assert _guard.is_forbidden_source(cache / "__init__.probe.py") and _guard.is_forbidden_source(cache / "__init__.x.pyw")
+    assert _guard.is_forbidden_source(cache / f"fetch.{sys.implementation.cache_tag}.pyc")
     assert not _guard.is_under(PKG) and not _guard.is_under(PKG / "reused" / "x.py")
     assert not any(_guard.is_forbidden_name(n) for n in ("claview", "claview.a", "claview.a.x", "claview.a.reused.x"))
     assert all(_guard.is_forbidden_name(n) for n in ("claview.fetch", "claview.b", "claview.aflow", "claview.ab_pipeline",
@@ -337,6 +341,10 @@ def test_unc_loopback_share_to_old_source_is_refused(refusals):
     if not reachable:
         pytest.skip("loopback administrative share not reachable here")
     _assert_all_refused(unc, refusals)
+    # The same share keeps the parent package's own entry and this package allowed, B refused (file identity).
+    parent_unc = "\\\\?\\UNC\\localhost\\" + drive[0] + "$" + os.path.splitdrive(str(SRC / "claview"))[1]
+    assert not _guard.is_under(parent_unc) and not _guard.is_under(parent_unc + "\\__init__.py")
+    assert not _guard.is_under(parent_unc + "\\a\\paths.py") and _guard.is_under(parent_unc + "\\fetch.py")
 
 
 def _make_dir_link(link: Path, target: Path) -> str | None:

@@ -25,7 +25,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT / "src"), str(ROOT / "tests_v3"), str(ROOT / "tests_v3" / "spec")]
+sys.path[:0] = [str(ROOT / "src"), str(ROOT / "tests" / "a"), str(ROOT / "tests" / "a" / "spec")]
 
 from claview.a import _guard  # noqa: E402
 
@@ -42,7 +42,7 @@ from spec_support import Layers  # noqa: E402
 
 from claview.a.interpret.pipeline import interpret_question  # noqa: E402
 
-SOURCES = ("tests_v3/spec/test_spec_judgement.py", "tests_v3/spec/test_spec_requirements.py")
+SOURCES = ("tests/a/spec/test_spec_judgement.py", "tests/a/spec/test_spec_requirements.py")
 
 
 class _Factory:

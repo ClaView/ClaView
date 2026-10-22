@@ -28,7 +28,7 @@ def digest(value):
 
 def code_hashes():
     return {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in sorted((ROOT / "src" / "claview_v3").rglob("*"))
+            for p in sorted((ROOT / "src" / "claview" / "a").rglob("*"))
             if p.is_file() and p.suffix in (".py", ".json", ".jsonl", ".md")}
 
 
