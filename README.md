@@ -49,10 +49,10 @@ uv run --locked ruff format --check src/claview/pipeline tests/pipeline scripts/
 | 묶음 | 결과 | skip 사유 |
 |---|---|---|
 | A `tests/a` | 4,008 통과, 2 skip(기간 패키지 59 포함) | 파일 심볼릭 링크 권한, Git 밖 EDA 결과(`runs/eda_v3`) 없음 |
-| B `tests/b` | 512 통과, 2 skip | B 골든 시험의 사례 목록이 비어 있음(2) |
+| B `tests/b` | 548 통과, 2 skip | B 골든 시험의 사례 목록이 비어 있음(2) |
 | 연결 `tests/pipeline` | 19 통과 | |
 
-B 시험 수는 b-1020 판(1,344)에서 b-1020 전용 기능(515, 계획 25)과 옛 A 시험(325, 계획 26)을 빼고 B 전용 검사 8개를 되살린 수다.
+B 시험 수는 b-1020 판(1,344)에서 b-1020 전용 기능(515, 계획 25)과 옛 A 시험(325, 계획 26)을 빼고 B 전용 검사 8개를 되살린 뒤(512), B-1023의 GPT 모델 시험 36개를 더한 수다(계획 28).
 
 ## 3. 실행
 
@@ -79,6 +79,7 @@ uv run --locked claview-b evaluate --mode replay --as-of 2026-10-22 --output run
 | [25](docs/plans/25_통합레포_재배치_S2.md) | B를 10/16 compact 판(+ 단위 표기 수정)으로, 연결을 표 목록+원질문 방식으로, B·연결을 `claview.b`·`claview.pipeline`으로 |
 | [26](docs/plans/26_옛A_새A교체.md) | 끝까지 도는 평가·명령을 pipeline으로, 옛 A와 그 시험·스크립트 삭제 |
 | [27](docs/plans/27_폴더정리.md) | data·eval·scripts·docs 정리, 기간 패키지를 A 안(`claview.a.period_core`)으로 |
+| [28](docs/plans/28_B_1023_교체.md) | B-1023 수정분 반영: GPT 모델 어댑터(`OpenAIModel`), 측정 도구, 신규 10문항, 통계어사전 v1.3 |
 
 ## 5. 알려진 한계
 
