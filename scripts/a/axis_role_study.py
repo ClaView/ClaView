@@ -1,6 +1,6 @@
 """Offline study: how to split the values of the indicator axes (계정항목별 etc.) into roles.
 
-Inputs (no network, no model): the stored BOK/KOSIS meta snapshot (reference/baseline-1006/data/raw/boK_meta_raw.jsonl)
+Inputs (no network, no model): the stored BOK/KOSIS meta snapshot (data/raw/boK_meta_raw.jsonl)
 and the development questions only (golden + development of the 417 corpus; new200 and the blind set are not opened).
 
 Steps

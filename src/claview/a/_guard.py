@@ -191,7 +191,7 @@ def _exempt(p: str) -> bool:
 
 
 def is_under(path, dirs=FORBIDDEN_DIRS) -> bool:
-    """True if path is one of dirs or inside one (component-wise, so src/claview_flow is not src/claview), and is
+    """True if path is one of dirs or inside one (component-wise, so a sibling such as src/claview_x is not src/claview), and is
     not exempt (``_exempt``: this package and the parent package's own entry).
 
     Both sides are resolved the same way (``_norm``). A path that is still a UNC path after resolution is also

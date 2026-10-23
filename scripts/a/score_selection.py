@@ -1,6 +1,6 @@
 """Table-selection scores of the new interpretation + new selection on a reduced set (plan 04, 7-3; no model, no call).
 
-Runs claview_v3 only (2.1-2.7 then select_tables; the network is blocked and no old module is loaded) on one
+Runs claview.a only (2.1-2.7 then select_tables; the network is blocked and no old module is loaded) on one
 reduced set (eval/cases/a/mini_sets_v1.json) and scores:
 - set_exact: the old evaluation's set scoring (reused/table_sets.score_sets: every answer group matched one to one
   by a different output table, no extra table, as many tables as groups), output = the tables of every requirement
@@ -57,7 +57,7 @@ def load_questions(ids: set[str] | None = None) -> dict[str, dict]:
 
 
 def load_groups(ids: set[str] | None = None) -> dict[str, list[list[str]]]:
-    """Answer groups (same source file as scripts/score_by_stage.py, read only)."""
+    """Answer groups (same source file as scripts/score_by_stage.py (removed in plan 26), read only)."""
     groups: dict[str, dict[int, list[str]]] = collections.defaultdict(dict)
     for line in paths.ANSWER_GROUPS.read_text(encoding="utf8").splitlines():
         if not line.strip():

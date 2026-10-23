@@ -3,11 +3,11 @@
 This is a generator script, not a one-off hand-typed file, because every
 case needs a real item_id/dimension code pulled from the actual 349-table
 catalog (never invented) and the item's real unit resolved through
-claview.metadata.selected_unit the same way the runtime does. The period
+claview.b.metadata.selected_unit the same way the runtime does. The period
 for each case is computed independently here with the project's own pure
 period-arithmetic helpers (period_number / _year_start / _index_to_period
 -- mechanical date math, not a business-rule judgment call), and then
-cross-checked against what claview.stages.resolve_relative_period actually
+cross-checked against what claview.b.stages.resolve_relative_period actually
 returns today, so any mismatch between "what the math says" and "what the
 code does" is caught at generation time instead of silently baked in.
 

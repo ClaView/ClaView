@@ -1,6 +1,6 @@
 """The four outer-graph variants on a reduced set, with the real nodes (plan 04, 1-2 and 7-3; no model, no call).
 
-Runs claview_v3 only (the network is blocked and no old module is loaded; checked after the run): the outer graph
+Runs claview.a only (the network is blocked and no old module is loaded; checked after the run): the outer graph
 ``agent.graph.build_outer_graph(variant)`` with the real interpretation (2.1-2.7) and selection (3.1-3.8) nodes, the
 model slot off and jev off. Per case it records
 - interpretation: requirement count, certain, interpretation status, V1 status;

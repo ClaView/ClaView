@@ -178,7 +178,7 @@ def main() -> None:
 
     clean_abbr = [r for r in abbr_rows if not r["잡음 표시"]]
     lines = ["# 1. 용어 목록 (대략치, 승인 전)", "",
-             "- 자료: `reference/baseline-1006/data/raw/boK_meta_raw.jsonl`(349표), `.../catalog/search_catalog.json`(349 documents). 호출 0회.",
+             "- 자료: `data/raw/boK_meta_raw.jsonl`(349표), `.../catalog/search_catalog.json`(349 documents). 호출 0회.",
              "- 표 이름은 카탈로그 title(쉼표 포함)과 메타 name(쉼표 없음)을 따로 셌다. 분류값은 ITEM 행을 뺀 값 행이다.",
              "- 정규화 단계: NFKC → 공백 제거 → 괄호 떼기(괄호 묶음 전부 제거). 단계별 고유 이름 수가 줄어든 만큼이 겹침이다.", "",
              "## 종류별 개수", "",

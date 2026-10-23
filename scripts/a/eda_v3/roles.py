@@ -1,4 +1,4 @@
-"""Four-layer axis role rules of the user's draft (docs/inputs/axis-roles-20261016/지표축_나누기_초안_20261016.md).
+"""Four-layer axis role rules of the user's draft (data/a/axis-roles-20261016/지표축_나누기_초안_20261016.md).
 
 Layer 1: axis name -> role (read from the draft CSV).
 Layer 2: generic axes (계정항목별 등) -> target if half or more of the non-total values are in the target dictionary.

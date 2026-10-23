@@ -1,15 +1,15 @@
 """Tag the 417 old-pipeline results with rule-based question types (plan 04, section 7-1, M0).
 
-Purpose: attach question-type columns to the per-case stage scores written by scripts/score_by_stage.py, and
+Purpose: attach question-type columns to the per-case stage scores written by scripts/score_by_stage.py (removed in plan 26), and
 count correct cases and wrong cases by cause for every type value. Types are computed from the question text
 only (catalog names, period/frequency rules, basis words, fixed word lists); the answer files are not read.
 Types are rule-made suspicion marks, not judgements.
 
 Input:
-- cases_csv (default runs/m0_score_by_stage/cases.csv): output of scripts/score_by_stage.py. If a
+- cases_csv (default runs/m0_score_by_stage/cases.csv): output of scripts/score_by_stage.py (removed in plan 26). If a
   summary.json sits next to it, the totals are checked against it.
-- claview_v3.paths.QUESTIONS_417 (question text, joined on case_id).
-- the catalog through claview_v3.catalog.layer.load_layer (no external synonyms, no overrides).
+- claview.a.paths.QUESTIONS_417 (question text, joined on case_id).
+- the catalog through claview.a.catalog.layer.load_layer (no external synonyms, no overrides).
 
 Output (out_dir, default runs/m0_question_types):
 - cases_typed.csv: input columns plus the type columns (utf-8-sig).

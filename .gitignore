@@ -25,7 +25,7 @@ node_modules/
 
 # Generated data and outputs
 /data/raw/*
-# Catalog metadata snapshot read by B and claview_flow (same bytes as reference/baseline-1006/data/raw).
+# Catalog metadata snapshot read by A, B and claview.pipeline.
 !/data/raw/boK_meta_raw.jsonl
 /data/processed/*
 /data/indexes/*

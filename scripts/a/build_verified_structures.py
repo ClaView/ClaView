@@ -1,8 +1,8 @@
-"""Build src/claview_v3/data/verified_structures.json: the structure signatures the specification cases verified
+"""Build src/claview/a/data/verified_structures.json: the structure signatures the specification cases verified
 (certainty check 8, decision 10/18; no model, no call).
 
-Sources: the cases of tests_v3/spec/test_spec_judgement.py expected certain (``certain: True``) and the cases of
-tests_v3/spec/test_spec_requirements.py whose judgement is expected certain. Each case runs 2.1-2.7 on its synthetic
+Sources: the cases of tests/a/spec/test_spec_judgement.py expected certain (``certain: True``) and the cases of
+tests/a/spec/test_spec_requirements.py whose judgement is expected certain. Each case runs 2.1-2.7 on its synthetic
 catalog with check 8 off; a case expected certain that is not certain without check 8 stops the build (the
 specification would be broken). Only signatures are written (general features, ``interpret.structure``), with the
 number of cases behind each; no case ID and no question text.

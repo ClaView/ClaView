@@ -1,15 +1,15 @@
 """Record mode of the evidence checks (plan 04, 4-2 and decision 3; no model, no call).
 
-Runs claview_v3 only (2.1-2.7, then select_tables with every check in record mode, data/evidence_filters.json) on
+Runs claview.a only (2.1-2.7, then select_tables with every check in record mode, data/evidence_filters.json) on
 the 417 questions and counts, per check, the answer groups the check would drop if it filtered, per requirement
-(claview_v3.select.record.drop_record):
+(claview.a.select.record.drop_record):
 - a group is in the pool when one of its allowed tables is a candidate with indicator evidence of some requirement;
 - a check drops a group when, for some requirement holding such candidates of the group, every one of them fails
   the check (a candidate of another requirement, or one without indicator evidence, is no survival); ``touched``
   when at least one of them fails;
 - ``no_evidence`` counts the groups with candidates but none with indicator evidence (the indicator check itself
   can then drop nothing: a candidate whose indicator fails has no evidence).
-Answer groups come from the same source file as scripts/score_by_stage.py (read only).
+Answer groups come from the same source file as scripts/score_by_stage.py (removed in plan 26) (read only).
 
 new200 (dataset "official") is counted only: no question, case ID or table of it is printed or written. The per-case
 CSV holds golden and development cases. The checks with no dropped answer group are listed; adopting any of them

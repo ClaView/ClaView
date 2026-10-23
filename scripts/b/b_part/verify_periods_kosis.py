@@ -7,7 +7,7 @@ every period in the range. Metadata coverage bounds can overstate what is
 actually populated (embargoed recent periods, revisions, provisional gaps),
 which matters most exactly for the "최근/올해/작년" cases this file checks.
 
-This reuses claview.fetch's own request-building and response-parsing
+This reuses claview.b.fetch's own request-building and response-parsing
 (build_api_request / KosisClient / normalize_rows) rather than a separate
 ad hoc HTTP call, so this script walks the exact same code path the real
 pipeline's fetch stage would -- a period this script says is clean is a
@@ -58,7 +58,7 @@ CASES_PATH = ROOT / "eval" / "cases" / "b" / "period" / "golden_set_v1_period_au
 
 
 def _probe_selection(case: dict, period: dict) -> dict:
-    """A selection dict shaped like claview.stages.canonicalize_selections'
+    """A selection dict shaped like claview.b.stages.canonicalize_selections'
     output, built from the case's own recorded expected selection but with
     `period` swapped in -- so the same table/item/dimensions/unit the case
     already uses gets checked against each of its period_candidates."""

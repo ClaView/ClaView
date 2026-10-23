@@ -1,6 +1,6 @@
 """EDA v3 item 2: recount the user's four-layer axis role draft and build the confirmation sheet.
 
-Rules: docs/inputs/axis-roles-20261016/지표축_나누기_초안_20261016.md (implemented in roles.py).
+Rules: data/a/axis-roles-20261016/지표축_나누기_초안_20261016.md (implemented in roles.py).
 Compares each layer with the draft numbers and the draft CSVs, then writes confirm_sheet.csv with the five items of
 draft section 5 (decision column left empty for the user).
 
@@ -198,7 +198,7 @@ def main() -> None:
 
     l1_diff = [r for r in l1_rows if r["차이"]]
     lines = ["# 2. 축 역할 네 층 재계산 (대략치, 승인 전)", "",
-             "- 규칙: `docs/inputs/axis-roles-20261016/지표축_나누기_초안_20261016.md`를 `scripts/a/eda_v3/roles.py`로 구현. 1층 역할은 초안 CSV `축이름_역할_초안.csv`를 그대로 읽었다.",
+             "- 규칙: `data/a/axis-roles-20261016/지표축_나누기_초안_20261016.md`를 `scripts/a/eda_v3/roles.py`로 구현. 1층 역할은 초안 CSV `축이름_역할_초안.csv`를 그대로 읽었다.",
              "- 값 비교 열쇠: NFKC·소문자·공백/구두점 제거, 꼬리 각주(\"1)\")·앞 번호(\"(1)\", \"A-1.\")·업종 코드(\"C10 \") 제거, 괄호 묶음 제거(\"비금융법인(사용)\"→비금융법인).",
              "- 합계(합계·총계·계·전체·총액·\"…합계/…총계\")는 사전과 비율 분모에서 뺐다. 이름 없는 축 1개(" + ", ".join(unnamed) + ")는 29개 밖이라 뺐다.",
              "- 기준어 목록(3층): 1층 기준 축의 값 + 고정 목록(`roles.BASIS_WORDS`). \"2024년기준\"처럼 연도+기준어도 기준.",

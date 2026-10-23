@@ -17,7 +17,7 @@ The set is a jsonl file of {id, template, question} rows (other fields are not r
   refused without echoing it; an exception around the calls is shown by its class name only). Requests go through
   ``RunClient`` (disk cache, 429 deferred, transient retries, ledger, stop rules; billed requests and stop rules
   carry over between runs of one --out, a stopped folder needs --resume-after-stop; see
-  claview_v3/interpret/model_calls). A question deferred by 429 keeps ``model_step: pending`` (note
+  src/claview/a/interpret/model_calls). A question deferred by 429 keeps ``model_step: pending`` (note
   ``deferred_429``) and is sent again by a later run.
 replay and live write ``analyses_off.jsonl`` and ``analyses_on.jsonl`` (id, question, full analysis), ``cases.jsonl``
 and ``summary.json``. The questions of the set were used to tune the rules: results are not an independent test.

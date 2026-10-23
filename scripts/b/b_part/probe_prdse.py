@@ -8,7 +8,7 @@ every 반기(H) and 연간(Y) request to a table that declares MORE THAN ONE cyc
 않습니다", while 반기/연간 requests to single-cycle tables (DT_105Y001 = H only,
 DT_301Y015 = Y only) succeeded. Running this probe confirmed why: KOSIS wants
 prdSe = "H"/"Y" in the REQUEST (a single-cycle table simply ignores a wrong
-one), while its responses tag rows PRD_SE = "S"/"A". claview.fetch had been
+one), while its responses tag rows PRD_SE = "S"/"A". claview.b.fetch had been
 sending the response-side codes; see its _RESPONSE_PRD_SE comment. Kept as a
 diagnostic for any future "data does not exist" that smells like a code mix-up.
 

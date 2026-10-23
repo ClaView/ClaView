@@ -1,10 +1,10 @@
 """Requirement draft counts of the new question interpretation on a reduced set (plan 04, 7-2; no model, no call).
 
-Runs 2.1-2.7 of claview_v3 (new modules only: the import guard refuses the old pipeline, the network is blocked) on
+Runs 2.1-2.7 of claview.a (new modules only: the import guard refuses the old pipeline, the network is blocked) on
 the questions of one reduced set and compares the requirement draft count with:
 - (다) the confirmed requirement expectation (eval/cases/a/requirement_expect_dev_mini.json, approved by the user):
   the main measure;
-- (가) proxy 1: the number of answer groups (the definition of scripts/score_by_stage.py, same source file);
+- (가) proxy 1: the number of answer groups (the definition of scripts/score_by_stage.py (removed in plan 26), same source file);
 - (나) proxy 2: answer groups that differ only by family, year range or frequency counted as one (family = table
   names without their bracket parts);
 - the old pipeline's requirement count from its stored-response replay (runs/m0_score_by_stage/cases.csv).
@@ -91,7 +91,7 @@ def set_questions(ids: set[str]) -> dict[str, dict]:
 
 
 def answer_groups(ids: set[str]) -> dict[str, list[list[str]]]:
-    """Answer groups of the set only (same source file as scripts/score_by_stage.py, read only)."""
+    """Answer groups of the set only (same source file as scripts/score_by_stage.py (removed in plan 26), read only)."""
     groups: dict[str, dict[int, list[str]]] = collections.defaultdict(dict)
     for line in paths.ANSWER_GROUPS.read_text(encoding="utf8").splitlines():
         m = _CASE_ID.search(line)
