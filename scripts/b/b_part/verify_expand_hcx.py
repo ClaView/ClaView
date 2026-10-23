@@ -38,6 +38,21 @@ Setup (Windows PowerShell, from the project root):
     $env:CLOVASTUDIO_API_KEY = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
         [Runtime.InteropServices.Marshal]::SecureStringToBSTR($sec))
 
+Other models (--model openai): any OpenAI-compatible Chat Completions endpoint, same
+cases, same prompts, same judging. The key comes only from an environment variable
+(default OPENAI_API_KEY, change with --api-key-env):
+
+    $sec = Read-Host "OpenAI API key" -AsSecureString
+    $env:OPENAI_API_KEY = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
+        [Runtime.InteropServices.Marshal]::SecureStringToBSTR($sec))
+    python scripts/b/b_part/verify_expand_hcx.py --allow-external --model openai `
+        --model-name <model id> --reasoning-effort low --max-output-tokens 16000 `
+        --output eval/results/expand_<model>.json @all
+
+Output goes to eval/results/expand_<model-name>_verify.json unless --output is given. With
+--schema-mode json_object the schema is appended to the prompt instead of strict mode (for
+endpoints or tables that refuse strict mode, e.g. very large enum lists).
+
 Usage:
 
     # no key, no network: checks the script itself
@@ -47,6 +62,18 @@ Usage:
     python scripts/b/b_part/verify_expand_hcx.py --allow-external CV-AB-08 CV-AB-17 --repeat 3
     # same cases with expand switched off for every question (also CV-AB-08, 10)
     python scripts/b/b_part/verify_expand_hcx.py --allow-external --baseline
+
+Latency, tokens and cost (live runs): every answered call is timed (request sent ->
+response received; `--delay` pauses and 429 back-offs are NOT counted) and its token
+counts are stored per call. The summary prints per-call mean / median / p95 / max and
+tokens per call. Pass both `--price-in` and `--price-out` (price per 1,000,000 tokens,
+one currency, taken from your own price sheet -- nothing is built in) to also get cost
+per call and per question:
+    python scripts/b/b_part/verify_expand_hcx.py --allow-external @all --repeat 3 `
+        --price-in 1.0 --price-out 4.0 --currency USD
+Prices can also be applied afterwards: scripts/b/b_part/compare_runs.py.
+Latency depends on the time of day and server load; for a fair comparison run the two
+models back to back (alternating), not hours apart.
 
 Default cases: CV-AB-04, 05 (parent + children), 08 (leaves), 10, 17, 20
 (children), and CV-AB-01, 16 as plain controls. One HCX call per table per
@@ -66,10 +93,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "src"))  # allow running without installing the package
 
+from run_metrics import money, seconds, summarize  # noqa: E402
+
 from claview.b.contracts import Config, StageFailure, Trace, today_iso  # noqa: E402
 from claview.b.evaluation import scripted_answers, write_json  # noqa: E402
 from claview.b.metadata import MetadataStore  # noqa: E402
-from claview.b.models import HcxModel, ScriptedModel, check_output  # noqa: E402
+from claview.b.models import HcxModel, OpenAIModel, ScriptedModel, check_output  # noqa: E402
 from claview.b.stages import (  # noqa: E402
     EXPAND_PROMPT,
     PICK_CORRECTION_REASONS,
@@ -105,6 +134,10 @@ class BaselineModel:
     def __init__(self, inner):
         self.inner = inner
 
+    @property
+    def last_metrics(self):
+        return getattr(self.inner, "last_metrics", None)
+
     def complete(self, task, system, context, schema, max_tokens, trace):
         plain = copy.deepcopy(schema)
         row = plain["properties"]["selections"]["items"]
@@ -137,6 +170,9 @@ class RecordingModel:
             "schema_ok": None,
             "error": None,
             "expand_offered": offered,
+            # latency / tokens of the call that produced this answer (None when unmeasured)
+            "metrics": None,
+            "rate_limit_waits": 0,
         }
         self.calls.append(record)
         if self.delay:
@@ -145,9 +181,13 @@ class RecordingModel:
         while True:
             try:
                 raw = self.inner.complete(task, system, context, schema, max_tokens, trace)
+                record["metrics"] = getattr(self.inner, "last_metrics", None)
                 break
             except StageFailure as exc:
-                if exc.code == "hcx_http_429" and waits:
+                # a call that was answered but unusable (e.g. truncated) was still billed
+                record["metrics"] = getattr(self.inner, "last_metrics", None)
+                if exc.code in ("hcx_http_429", "openai_http_429") and waits:
+                    record["rate_limit_waits"] += 1
                     wait = waits.pop(0)
                     print(f"        (HTTP 429 - waiting {wait}s and retrying)")
                     time.sleep(wait)
@@ -208,6 +248,18 @@ def extra_notes(result):
     return notes
 
 
+def timing_note(result):
+    """' time=1.82s tokens=6400+110' for a measured run, else ''."""
+    if result["latency_ms"] is None:
+        return ""
+    note = f" time={seconds(result['latency_ms'])}"
+    if result["prompt_tokens"] is not None and result["completion_tokens"] is not None:
+        note += f" tokens={result['prompt_tokens']}+{result['completion_tokens']}"
+    if result["rate_limit_waits"]:
+        note += f" (429 waits: {result['rate_limit_waits']})"
+    return note
+
+
 def notice_count(outcome, reason):
     """Notices with this reason (a tuple of reasons counts any of them)."""
     if outcome["status"] != "ok":
@@ -230,6 +282,22 @@ def model_rows(calls):
                 + (f" expand={modes}" if modes else "")
             )
     return lines
+
+
+def run_totals(calls):
+    """Latency (ms) and tokens summed over one run's calls; None when nothing was measured."""
+    measured = [c["metrics"] for c in calls if c.get("metrics")]
+
+    def total(key):
+        values = [m[key] for m in measured if m.get(key) is not None]
+        return sum(values) if values else None
+
+    return {
+        "latency_ms": total("latency_ms"),
+        "prompt_tokens": total("prompt_tokens"),
+        "completion_tokens": total("completion_tokens"),
+        "rate_limit_waits": sum(c.get("rate_limit_waits", 0) for c in calls),
+    }
 
 
 def judge(case, outcome, calls):
@@ -255,6 +323,8 @@ def judge(case, outcome, calls):
         ),
         "errors": [c["error"] for c in calls if c["error"]],
         "model_calls": len(calls),
+        **run_totals(calls),
+        "call_metrics": [c["metrics"] for c in calls],
         "expand_used": used,
         # whether the model was shown the expand schema/prompt (only for breakdown questions)
         "expand_offered": any(c["expand_offered"] for c in calls),
@@ -306,6 +376,23 @@ def main():
         "--delay", type=float, default=3.0, help="seconds to wait before each HCX call (default 3)"
     )
     p.add_argument(
+        "--price-in",
+        type=float,
+        default=None,
+        help="price per 1,000,000 INPUT tokens, in any one currency (with --price-out: "
+        "adds cost per call / per question to the summary). Nothing is built in -- "
+        "use the numbers from your own price sheet",
+    )
+    p.add_argument(
+        "--price-out",
+        type=float,
+        default=None,
+        help="price per 1,000,000 OUTPUT tokens, same currency as --price-in",
+    )
+    p.add_argument(
+        "--currency", default="", help="label printed next to costs (e.g. KRW, USD); no conversion"
+    )
+    p.add_argument(
         "--max-context-chars",
         type=int,
         default=None,
@@ -319,16 +406,84 @@ def main():
         help="send the table as stored (with `path`) instead of the slimmed copy, to compare "
         "the old request format against the new one (Config.compact_model_context=False)",
     )
-    p.add_argument("--output", type=Path, default=OUTPUT)
+    p.add_argument(
+        "--model",
+        choices=["hcx", "openai"],
+        default="hcx",
+        help="which model answers B (default hcx). 'openai' uses an OpenAI-compatible "
+        "Chat Completions endpoint and needs --model-name",
+    )
+    p.add_argument(
+        "--model-name", default=None, help="model id sent to the endpoint (--model openai)"
+    )
+    p.add_argument(
+        "--base-url",
+        default=None,
+        help="OpenAI-compatible base URL, e.g. https://api.openai.com/v1 (default) "
+        "or another provider",
+    )
+    p.add_argument(
+        "--api-key-env",
+        default="OPENAI_API_KEY",
+        help="name of the environment variable that holds the key (default OPENAI_API_KEY)",
+    )
+    p.add_argument(
+        "--schema-mode",
+        choices=["strict", "json_object"],
+        default="strict",
+        help="strict: json_schema with strict=true; json_object: schema appended to the prompt",
+    )
+    p.add_argument("--reasoning-effort", default=None, help="sent as reasoning_effort when set")
+    p.add_argument("--temperature", type=float, default=None, help="sent only when set")
+    p.add_argument(
+        "--max-output-tokens",
+        type=int,
+        default=None,
+        help="override Config.max_b_output_tokens (reasoning models count thinking tokens too)",
+    )
+    p.add_argument(
+        "--golden",
+        type=Path,
+        default=GOLDEN,
+        help="golden-set JSON to read the cases from (default eval/cases/golden/golden_set_v1.json; "
+        "new questions: eval/cases/b/golden_set_v2_new10.json)",
+    )
+    p.add_argument("--output", type=Path, default=None)
     args = p.parse_args()
+    if args.output is None:
+        args.output = (
+            OUTPUT
+            if args.model == "hcx"
+            else OUTPUT.with_name(
+                f"expand_{args.model_name or 'openai'}_verify.json".replace("/", "_")
+            )
+        )
+
+    if (args.price_in is None) != (args.price_out is None):
+        p.error("--price-in and --price-out go together (price per 1,000,000 tokens)")
+    for name in ("price_in", "price_out"):
+        value = getattr(args, name)
+        if value is not None and not (value >= 0 and value < float("inf")):
+            p.error(f"--{name.replace('_', '-')} must be a non-negative number")
 
     if not args.dry_run:
         if not args.allow_external:
             p.error("Real HCX calls require --allow-external (or use --dry-run)")
-        if not os.environ.get("CLOVASTUDIO_API_KEY"):
+        if args.model == "hcx" and not os.environ.get("CLOVASTUDIO_API_KEY"):
             p.error("CLOVASTUDIO_API_KEY is not set. See this script's docstring for setup steps.")
+        if args.model == "openai":
+            if not args.model_name:
+                p.error("--model openai requires --model-name")
+            if not os.environ.get(args.api_key_env):
+                p.error(
+                    f"{args.api_key_env} is not set. See this script's docstring for setup steps."
+                )
+    cases = {
+        c["case_id"]: c for c in json.loads(args.golden.read_text(encoding="utf-8-sig"))["cases"]
+    }
     ids = args.cases or DEFAULT_CASES
-    cases = {c["case_id"]: c for c in json.loads(GOLDEN.read_text(encoding="utf-8-sig"))["cases"]}
+    if ids == ["@all"]:
+        ids = list(cases)
     unknown = [i for i in ids if i not in cases]
     if unknown:
         p.error("Unknown case id(s): " + ", ".join(unknown))
@@ -338,11 +493,33 @@ def main():
     options = {"compact_model_context": not args.full_context}
     if args.max_context_chars:
         options["max_b_context_chars"] = args.max_context_chars
+    if args.max_output_tokens:
+        options["max_b_output_tokens"] = args.max_output_tokens
     config = Config(as_of=as_of, **options)
-    model = None if args.dry_run else HcxModel(os.environ["CLOVASTUDIO_API_KEY"])
+    if args.dry_run:
+        model = None
+    elif args.model == "openai":
+        model = OpenAIModel(
+            os.environ[args.api_key_env],
+            args.model_name,
+            base_url=args.base_url,
+            schema_mode=args.schema_mode,
+            temperature=args.temperature,
+            reasoning_effort=args.reasoning_effort,
+        )
+    else:
+        model = HcxModel(os.environ["CLOVASTUDIO_API_KEY"])
     results = []
     try:
-        mode_label = "dry-run (replay)" if args.dry_run else "LIVE HCX-007"
+        mode_label = (
+            "dry-run (replay)"
+            if args.dry_run
+            else (
+                f"LIVE {args.model_name} ({args.schema_mode})"
+                if args.model == "openai"
+                else "LIVE HCX-007"
+            )
+        )
         mode_label += " [BASELINE: no expand]" if args.baseline else ""
         mode_label += " [FULL CONTEXT: table as stored]" if args.full_context else ""
         print(f"{mode_label}: {len(ids)} case(s) x {args.repeat} run(s)")
@@ -365,7 +542,14 @@ def main():
                     f"schema_ok={result['schema_ok']} expand_used={result['expand_used'] or '-'}"
                     f"{extra_notes(result)}"
                     f"{' RETRIED' if result['retried'] else ''}"
+                    f"{timing_note(result)}"
                 )
+                if result["errors"] and getattr(model, "last_error", None):
+                    detail = model.last_error
+                    print(
+                        f"        endpoint said: HTTP {detail.get('http_status')} "
+                        f"{detail.get('type')} - {detail.get('message')}"
+                    )
                 if not result["pass"]:
                     for line in model_rows(calls)[:6]:
                         print(f"        model: {line}")
@@ -376,6 +560,9 @@ def main():
                         print(f"        {tag}: ... +{len(result[tag]) - 5} more")
     except StageFailure as exc:
         print("Stopped:", exc.code)
+        detail = getattr(model, "last_error", None)
+        if detail:
+            print("   endpoint said:", detail.get("type"), "-", detail.get("message"))
         sys.exit(2)
     finally:
         if model:
@@ -383,7 +570,11 @@ def main():
 
     passed = sum(r["pass"] for r in results)
     summary = {
-        "mode": ("dry_run" if args.dry_run else "live_hcx_007")
+        "mode": (
+            "dry_run"
+            if args.dry_run
+            else (f"live_{args.model_name}" if args.model == "openai" else "live_hcx_007")
+        )
         + ("_baseline" if args.baseline else "")
         + ("_full_context" if args.full_context else ""),
         "runs": len(results),
@@ -400,6 +591,59 @@ def main():
         "named_value_runs": sum(bool(r["named_value"]) for r in results),
         "retried_runs": sum(r["retried"] for r in results),
     }
+    metrics = summarize(results, args.price_in, args.price_out)
+    if metrics["calls_measured"]:
+        summary["latency_ms_per_call"] = metrics["latency_ms_per_call"]
+        summary["latency_ms_per_run"] = metrics["latency_ms_per_run"]
+        summary["tokens"] = {
+            k: metrics[k]
+            for k in (
+                "calls_with_tokens",
+                "prompt_tokens",
+                "completion_tokens",
+                "reasoning_tokens",
+                "prompt_tokens_per_call",
+                "completion_tokens_per_call",
+            )
+        }
+        # same shape as before, now also filled for HCX
+        summary["token_usage"] = {
+            "calls": metrics["calls_with_tokens"],
+            "prompt_tokens": metrics["prompt_tokens"],
+            "completion_tokens": metrics["completion_tokens"],
+        }
+        if "cost" in metrics:
+            summary["cost"] = {**metrics["cost"], "currency": args.currency}
+        per_call, per_run = metrics["latency_ms_per_call"], metrics["latency_ms_per_run"]
+        print(
+            f"latency per call (excl. --delay and 429 waits): n={per_call['n']} "
+            f"mean={seconds(per_call['mean'])} median={seconds(per_call['median'])} "
+            f"p95={seconds(per_call['p95'])} max={seconds(per_call['max'])}; "
+            f"per question: mean={seconds(per_run['mean'])} p95={seconds(per_run['p95'])}"
+        )
+        if metrics["calls_with_tokens"]:
+            print(
+                f"tokens: {metrics['calls_with_tokens']} calls, prompt "
+                f"{metrics['prompt_tokens']:,}, completion {metrics['completion_tokens']:,}"
+                f" (reasoning inside completion: {metrics['reasoning_tokens']:,}); "
+                f"per call {metrics['prompt_tokens_per_call']} in / "
+                f"{metrics['completion_tokens_per_call']} out"
+            )
+        if metrics["calls_with_tokens"] < metrics["calls_measured"]:
+            print(
+                f"  note: {metrics['calls_measured'] - metrics['calls_with_tokens']} call(s) "
+                "had no token counts in the response; tokens and cost cover the rest only"
+            )
+        cost = summary.get("cost")
+        if cost:
+            cur = args.currency
+            print(
+                f"cost (in {args.price_in:g} / out {args.price_out:g} per 1M tokens): "
+                f"total {money(cost['total'], cur)}, per call {money(cost['per_call'], cur)}, "
+                f"per question {money(cost['per_run'], cur)}"
+            )
+    elif not args.dry_run:
+        print("latency/tokens: not reported by the endpoint for any call")
     print(
         f"\n{passed}/{len(results)} passed; schema violations: {summary['schema_violations']}; "
         f"runs without an answer: {summary['no_answer_runs']}; "
