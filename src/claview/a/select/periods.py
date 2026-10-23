@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import copy
 
-import claview_period
 
+from .. import period_core
 from ..period import package_identity
 from ..interpret.condition_fields import fields_of
 from ..reused.q_rules import stamp_months
@@ -42,7 +42,7 @@ def table_meta(view) -> dict:
 def metadata_months(frequency: str, stamp: str | None) -> tuple[int, int] | None:
     if not stamp:
         return None
-    per_year = claview_period.default_policy().periods_per_year[frequency]
+    per_year = period_core.default_policy().periods_per_year[frequency]
     if stamp.isdigit() and len(stamp) == 6:
         sub = int(stamp[4:])
         if not 1 <= sub <= per_year:
@@ -56,7 +56,7 @@ def metadata_stamp(frequency: str, stamp: str | None) -> str | None:
     bounds = metadata_months(frequency, stamp)
     if bounds is None:
         return stamp  # let the shared contract report malformed metadata
-    per_year = claview_period.default_policy().periods_per_year[frequency]
+    per_year = period_core.default_policy().periods_per_year[frequency]
     year, m = divmod(bounds[0], 12)
     return f"{year:04d}" if per_year == 1 else f"{year:04d}{m // (12 // per_year) + 1:02d}"
 
@@ -76,10 +76,10 @@ def period_input(analysis: dict, rid: str, as_of: str | None) -> dict:
 
 
 def resolve(inp: dict, view, *, context: dict | None = None, assignment: list | None = None) -> dict:
-    result = claview_period.resolve_period_for_table(
+    result = period_core.resolve_period_for_table(
         inp["conditions"], table_meta(view), inp["as_of"], inferred=inp["inferred"],
         condition_fields=inp["condition_fields"], context=context, assignment=assignment)
-    problems = claview_period.check_result(result)
+    problems = period_core.check_result(result)
     if problems:
         raise ValueError("shared period result violates the pinned contract")
     return result
@@ -150,6 +150,6 @@ def continuous_assignment(spans: list[tuple[int, int]]) -> list[dict]:
         else:
             merged.append((a, b))
     result = [{"start": month_text(a), "end": month_text(b)} for a, b in merged]
-    if claview_period.check_assignment(result):
+    if period_core.check_assignment(result):
         raise ValueError("one continuous assignment per table required")
     return result

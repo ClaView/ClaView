@@ -1257,19 +1257,19 @@ def _bundle_problems(bundle, table_ids: set, path: str) -> list[str]:
     shared period package (no rule copied), the bundle ID of the context, and assigned tables among the selection's."""
     if not isinstance(bundle, dict):
         return []
-    import claview_period  # the shared period package (as period.py reads it)
+    from .. import period_core  # the shared period package (as period.py reads it)
 
     out: list[str] = []
     context = bundle.get("context")
     if isinstance(context, dict):
-        out += [f"{path}.{x}" for x in claview_period.check_context(context)]
+        out += [f"{path}.{x}" for x in period_core.check_context(context)]
         if context.get("bundle_id") != bundle.get("bundle_id"):
             out.append(f"{path}.bundle_id: differs from context.bundle_id")
     assignments = bundle.get("assignments")
     for table_id, segments in (assignments.items() if isinstance(assignments, dict) else []):
         if table_id not in table_ids:
             out.append(f"{path}.assignments.{table_id}: not a table of the selection")
-        out += [f"{path}.assignments.{table_id}.{x}" for x in claview_period.check_assignment(segments)]
+        out += [f"{path}.assignments.{table_id}.{x}" for x in period_core.check_assignment(segments)]
     return out
 
 

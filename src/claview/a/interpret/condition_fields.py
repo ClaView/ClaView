@@ -9,7 +9,7 @@ and requirements of the rule path are left as they were (existing expectations c
   conditions a later answer sets). Not ``attrs.source`` (the extraction method).
 - ``confirmed`` (``data/decompose_policy.json`` ``condition_fields``): the attribution is settled (own, shared or
   common of some requirement and ambiguous nowhere), no failed source names the condition, and its kind passes its
-  check: a period the shared ``claview_period`` resolver supports with a reference-date probe;
+  check: a period the shared period resolver (``claview.a.period_core``) supports with a reference-date probe;
   a frequency code; a basis value with a polarity; a unit value; a breakdown over a name mention
   with catalog candidates; an exclusion text. Calculation, relation, function and display conditions are never
   confirmed by their position. ``confirmed`` is no table lookup and no query result.

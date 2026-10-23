@@ -8,7 +8,6 @@
 /tests/** -text
 /tests/pipeline/** text=auto eol=lf
 /src/claview/pipeline/** text=auto eol=lf
-/packages/claview-period/** -text
 /data/** -text
 /eval/** -text
 /scripts/** -text

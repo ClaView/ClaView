@@ -88,7 +88,6 @@ name = "claview"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "claview-period" },
     { name = "httpx" },
     { name = "jsonschema" },
     { name = "langgraph" },
@@ -102,7 +101,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "claview-period", editable = "packages/claview-period" },
     { name = "httpx", specifier = ">=0.28,<1" },
     { name = "jsonschema", specifier = ">=4.23,<5" },
     { name = "langgraph", specifier = ">=1.2,<2" },
@@ -113,11 +111,6 @@ dev = [
     { name = "pytest", specifier = ">=8,<10" },
     { name = "ruff", specifier = ">=0.12,<1" },
 ]
-
-[[package]]
-name = "claview-period"
-version = "0.2.0"
-source = { editable = "packages/claview-period" }
 
 [[package]]
 name = "colorama"

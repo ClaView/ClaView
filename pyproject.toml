@@ -11,12 +11,7 @@ dependencies = [
     "httpx>=0.28,<1",
     "jsonschema>=4.23,<5",
     "langgraph>=1.2,<2",
-    "claview-period==0.2.0",
 ]
-
-[tool.uv.sources]
-# The shared period package (resolver, policy file, contract) lives in this repository.
-claview-period = { path = "packages/claview-period", editable = true }
 
 [project.scripts]
 # `claview` is the A -> B flow; `claview-b` is B alone (and its search tools).

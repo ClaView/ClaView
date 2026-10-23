@@ -24,12 +24,11 @@
 
 | 경로 | 내용 |
 |---|---|
-| `src/claview/a/` | A(표 선택). 패키지 `claview.a`. 자료 위치는 `paths.py` 한 곳 |
+| `src/claview/a/` | A(표 선택). 패키지 `claview.a`. 자료 위치는 `paths.py` 한 곳. 기간 해석 패키지 `period_core/`(0.2.0, A만 씀, 바이트 그대로 둔다) |
 | `src/claview/b/` | B(계열·기간 선택, 조회, B 검색 도구). 패키지 `claview.b`. 10/16 compact 판 + `fetch.py` 단위 표기 수정(NFKC) |
 | `src/claview/pipeline/` | A→B 연결, 골든 통합 평가, 명령(`claview`, `claview-pipeline`), 합성 B(시험·연결 확인용) |
 | `src/claview/__init__.py` | 상위 패키지. 설명문만 둔다(A가 import할 때 먼저 불린다) |
-| `packages/claview-period/` | 공용 기간 해석 패키지(`claview_period` 0.2.0). 현재 A만 쓴다 |
-| `tests/a`, `tests/b`, `tests/pipeline` | A, B, 연결 시험. 묶음마다 별도 pytest 프로세스로 돌린다 |
+| `tests/a`, `tests/b`, `tests/pipeline` | A(기간 패키지 시험 `tests/a/period_core` 포함), B, 연결 시험. 묶음마다 별도 pytest 프로세스로 돌린다 |
 | `data/` | 349표 카탈로그·원메타(`catalog/`, `raw/`, A·B 공용), B 검색 매핑(`mappings/`), 표본(`samples/`), A 입력(`a/axis-roles-20261016/`) |
 | `eval/cases/` | `golden/`(골든 22, A·B·연결 공용), `a/`(A 사례), `b/`(B 기간·검색 사례), `legacy/`(옛 A 사례, 보관) |
 | `scripts/` | `a/`(A 연구·평가 도구), `b/`(B 도구), `pipeline/run_flow.py` |
@@ -41,7 +40,7 @@
 ```text
 claview.pipeline ──→ claview.a      (A 세션, AdapterPort)
        │          └─→ claview.b      (build_b_graph, fetch_data, 기본 타입)
-claview.a ──→ claview_period        (공용 기간 패키지)
+claview.a ──→ claview.a.period_core (기간 해석 패키지, A 안)
 claview.b ──→ (A를 부르지 않는다)
 ```
 

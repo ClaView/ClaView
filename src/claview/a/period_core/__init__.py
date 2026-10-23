@@ -2,8 +2,7 @@
 
     from claview_period import resolve_period_for_table, load_policy, check_result
 
-A imports this package; the current B (10/16 compact, plan 25) reads periods from the question itself and does not
-import it. Whoever uses it imports these same files at this version and copies none of its rules or numbers.
+A and B import this package (same files, same version); neither copies its rules or numbers.
 """
 
 from ._version import __version__

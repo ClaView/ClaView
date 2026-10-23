@@ -1,4 +1,4 @@
-"""claview_period: policy file, input/output contract, and the stage-3 rules (plan 05).
+"""claview.a.period_core (the shared period package): policy file, input/output contract, and the stage-3 rules (plan 05).
 
 All inputs are synthetic; no network, no model.
 """
@@ -9,7 +9,7 @@ import copy
 import json
 
 import pytest
-from claview_period import (
+from claview.a.period_core import (
     CONTRACT_VERSION,
     PolicyError,
     check_assignment,

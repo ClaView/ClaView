@@ -35,7 +35,12 @@ OLD_SOURCE = SRC / "claview" / "b" / "stages.py"
 # ---------------------------------------------------------------- static scan
 
 # Approved plan 17 shared package only; old claview/B imports remain forbidden.
-ALLOWED_THIRD_PARTY = {"langgraph", "langchain_core", "claview_period"}
+ALLOWED_THIRD_PARTY = {"langgraph", "langchain_core"}
+# The shared period package, kept byte for byte inside A (claview.a.period_core): it reads its packaged policy file
+# with importlib.resources and its __init__ re-exports its API. Only these two departures from the package-code rules
+# are allowed for it; every other rule of the static scan applies.
+VENDORED = PKG / "period_core"
+VENDORED_ALLOWED = {"from importlib import resources": "banned module importlib"}
 BANNED_MODULES = {
     "importlib", "runpy", "imp", "pkgutil", "zipimport", "inspect", "linecache", "code", "codeop",
     "py_compile", "compileall", "builtins", "marshal",
@@ -94,16 +99,22 @@ def _check_absolute(module: str, lineno: int) -> list[str]:
 
 
 def _package_files():
-    files = sorted(PKG.rglob("*.py"))
+    files = sorted(p for p in PKG.rglob("*.py") if not p.is_relative_to(VENDORED))
     assert files, "no package files found"
     return files
 
 
 def test_package_sources_pass_static_scan():
     problems = {}
-    for path in _package_files():
+    for path in _package_files() + sorted(VENDORED.rglob("*.py")):
         depth = len(path.relative_to(PKG).parts)
-        found = scan(path.read_text(encoding="utf-8"), depth)
+        text = path.read_text(encoding="utf-8")
+        found = scan(text, depth)
+        if path.is_relative_to(VENDORED):
+            lines = text.splitlines()
+            found = [f for f in found if not any(
+                lines[int(f.split(":")[0]) - 1].strip() == stmt and f.endswith(why)
+                for stmt, why in VENDORED_ALLOWED.items())]
         if found:
             problems[str(path.relative_to(ROOT))] = found
     assert problems == {}

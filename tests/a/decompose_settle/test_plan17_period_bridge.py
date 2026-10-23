@@ -3,11 +3,10 @@
 import copy
 
 import pytest
-import claview_period
 
 from test_plan15_settle import P, layer
 from test_plan15_step5 import simple
-from claview.a import period
+from claview.a import period, period_core
 from claview.a.agent.graph import run_outer
 from claview.a.contract.check import check_analysis
 from claview.a.development import runtime_versions
@@ -25,7 +24,7 @@ def analysis_of(text, layer):
 
 
 def resolve(analysis, **kwargs):
-    return claview_period.resolve_period_for_table(
+    return period_core.resolve_period_for_table(
         analysis["conditions"], META, AS_OF, inferred=[],
         condition_fields=analysis["decomposition"]["condition_fields"], **kwargs)
 
@@ -41,7 +40,7 @@ def test_installed_dependency_contract_policy_and_provenance_are_pinned():
 
 
 def test_unreviewed_dependency_version_is_an_error_not_a_rules_fallback(monkeypatch):
-    monkeypatch.setattr(claview_period, "__version__", "unreviewed")
+    monkeypatch.setattr(period_core, "__version__", "unreviewed")
     with pytest.raises(RuntimeError, match="pinned dependency"):
         period_diagnosis({}, AS_OF)
 
@@ -64,7 +63,7 @@ def test_four_current_a_shapes_are_supported_and_keep_b_table_anchor(layer, text
     baseline = interpret_question("가상대출금 " + text + " 보여줘", layer)
     assert {k: v for k, v in analysis.items() if k != "decomposition"} == baseline
     result = resolve(analysis)
-    assert claview_period.check_result(result) == []
+    assert period_core.check_result(result) == []
     assert result["status"] == "ok" and result["frequency"] == "M"
     assert result["applied"] == {"frequency": "M", "start": start, "end": end}
     assert result["anchor"]["period"] == "202608"  # real metadata, not the diagnostic probe / request date

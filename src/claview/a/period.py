@@ -13,20 +13,19 @@ import json
 from datetime import date
 from pathlib import Path
 
-import claview_period
 
-from . import paths
+from . import paths, period_core
 
 _EXPECTED = json.loads((paths.PACKAGE_DATA_DIR / "period_dependency.json").read_text(encoding="utf-8"))
 
 
 def package_identity() -> dict:
-    policy = claview_period.default_policy()
-    identity = {"package": claview_period.__version__, "contract": claview_period.CONTRACT_VERSION,
+    policy = period_core.default_policy()
+    identity = {"package": period_core.__version__, "contract": period_core.CONTRACT_VERSION,
                 "policy": policy.version, "policy_sha256": policy.sha256}
     if identity != _EXPECTED:
         raise RuntimeError("shared period package/contract/policy differs from the pinned dependency")
-    folder = Path(claview_period.__file__).resolve().parent
+    folder = Path(period_core.__file__).resolve().parent
     identity["files"] = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                          for p in sorted(folder.iterdir()) if p.suffix in (".py", ".json")}
     if identity["files"].get("period_policy.json") != identity["policy_sha256"]:
@@ -38,7 +37,7 @@ def diagnose_period(attrs: dict, as_of: str) -> str:
     """Only expression support, not table coverage, actual period or attribution."""
     package_identity()
     anchor = date.fromisoformat(as_of).strftime("%Y-%m")
-    result = claview_period.resolve_period_for_table(
+    result = period_core.resolve_period_for_table(
         [{"id": "period_probe", "kind": "period", "attrs": attrs}],
         {"periods": {"M": {"start": "000101", "end": "999912"}}}, as_of,
         inferred=[], context={"bundle_id": "support_probe", "anchor_source": "bundle_common", "anchor": anchor})

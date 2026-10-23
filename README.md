@@ -16,10 +16,9 @@
 
 | 경로 | 역할 |
 |---|---|
-| `src/claview/a/` | A(표 선택, split 완료2 판). 패키지 `claview.a`, 자료 위치는 `paths.py` |
+| `src/claview/a/` | A(표 선택, split 완료2 판). 패키지 `claview.a`, 자료 위치는 `paths.py`. 기간 해석 패키지는 `period_core/`(`claview.a.period_core` 0.2.0, A만 씀, 바이트 그대로) |
 | `src/claview/b/` | B(계열·기간 선택, 조회, B 검색 도구). 패키지 `claview.b`. 10/16 compact 판 + `fetch.py` 단위 표기 수정(NFKC) |
 | `src/claview/pipeline/` | A→B 연결, 골든 통합 평가, 명령, 합성 B(연결 확인용) |
-| `packages/claview-period/` | 공용 기간 해석 패키지 `claview_period` 0.2.0(현재 A만 씀) |
 | `tests/a/`, `tests/b/`, `tests/pipeline/` | A, B, 연결 시험(묶음별 별도 프로세스) |
 | `data/` | 349표 카탈로그·원메타(`catalog/`, `raw/`, A·B 공용), B 검색 매핑, 표본, A 입력(`a/axis-roles-20261016/`) |
 | `eval/cases/` | `golden/`(골든 22), `a/`(A 사례), `b/`(B 기간·검색 사례), `legacy/`(옛 A 사례, 보관). 정답·평가셋 내용은 바꾸지 않는다 |
@@ -34,9 +33,8 @@ Python 3.12와 uv를 쓴다. 저장소 루트에서 실행한다. API 키가 필
 ```powershell
 uv sync --offline --locked        # 캐시에 없으면 --offline을 빼고 uv sync --locked
 $env:PYTHONHASHSEED = "0"
-uv run --locked python -B -X utf8 -m pytest tests/a -q -p no:cacheprovider                        # A
+uv run --locked python -B -X utf8 -m pytest tests/a -q -p no:cacheprovider                        # A(기간 패키지 시험 포함)
 uv run --locked python -B -X utf8 -m pytest tests/b -q -p no:cacheprovider                        # B
-uv run --locked python -B -X utf8 -m pytest packages/claview-period/tests -q -p no:cacheprovider  # 공용 기간 패키지
 uv run --locked python -B -X utf8 -m pytest tests/pipeline -q -p no:cacheprovider                 # 연결
 uv run --locked ruff check src/claview/pipeline tests/pipeline scripts/pipeline/run_flow.py
 uv run --locked ruff format --check src/claview/pipeline tests/pipeline scripts/pipeline/run_flow.py
@@ -50,9 +48,8 @@ uv run --locked ruff format --check src/claview/pipeline tests/pipeline scripts/
 
 | 묶음 | 결과 | skip 사유 |
 |---|---|---|
-| A `tests/a` | 3,949 통과, 2 skip | 파일 심볼릭 링크 권한, Git 밖 EDA 결과(`runs/eda_v3`) 없음 |
+| A `tests/a` | 4,008 통과, 2 skip(기간 패키지 59 포함) | 파일 심볼릭 링크 권한, Git 밖 EDA 결과(`runs/eda_v3`) 없음 |
 | B `tests/b` | 512 통과, 2 skip | B 골든 시험의 사례 목록이 비어 있음(2) |
-| `packages/claview-period/tests` | 59 통과 | |
 | 연결 `tests/pipeline` | 19 통과 | |
 
 B 시험 수는 b-1020 판(1,344)에서 b-1020 전용 기능(515, 계획 25)과 옛 A 시험(325, 계획 26)을 빼고 B 전용 검사 8개를 되살린 수다.
@@ -81,7 +78,7 @@ uv run --locked claview-b evaluate --mode replay --as-of 2026-10-22 --output run
 | [24](docs/plans/24_통합레포_재배치_S1.md) | A를 `claview.a`로, 시험을 `tests/{a,b,pipeline}`로 |
 | [25](docs/plans/25_통합레포_재배치_S2.md) | B를 10/16 compact 판(+ 단위 표기 수정)으로, 연결을 표 목록+원질문 방식으로, B·연결을 `claview.b`·`claview.pipeline`으로 |
 | [26](docs/plans/26_옛A_새A교체.md) | 끝까지 도는 평가·명령을 pipeline으로, 옛 A와 그 시험·스크립트 삭제 |
-| [27](docs/plans/27_폴더정리.md) | data·eval·scripts·docs 정리 |
+| [27](docs/plans/27_폴더정리.md) | data·eval·scripts·docs 정리, 기간 패키지를 A 안(`claview.a.period_core`)으로 |
 
 ## 5. 알려진 한계
 

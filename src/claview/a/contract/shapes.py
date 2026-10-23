@@ -1062,7 +1062,7 @@ class Unspecified(TypedDict):
 
 class SelectionBundle(TypedDict):
     """Plan 19 contract joint item 6 (agreed with B, 10/21): the period bundle of one selection, handed to B as is.
-    ``context`` and every ``assignments`` entry follow the shared period package (``claview_period.check_context`` /
+    ``context`` and every ``assignments`` entry follow the shared period package (``period_core.check_context`` /
     ``check_assignment``: no rule of it is copied here); ``bundle_id`` equals ``context.bundle_id``; ``assignments``:
     table ID (one of the selection's tables) -> its one continuous segment [{start, end}] (a table not named: the whole
     request)."""
