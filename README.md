@@ -1,6 +1,6 @@
 # ClaView 통합 레포 (A 표 선택 → B 계열·기간 선택 → 조회)
 
-자연어 질문을 받아 KOSIS 한국은행 소관 통계표 349개 중 필요한 표를 고르고(A), 표의 항목·분류·기간·주기를 정해 KOSIS Open API로 값을 가져오는(B) 에이전트 PoC다. A와 B를 한 저장소·한 가상환경에서 하나의 흐름(`claview.pipeline`)으로 돌린다. 표·그래프 표현(C)은 아직 없다.
+자연어 질문을 받아 KOSIS 한국은행 소관 통계표 349개 중 필요한 표를 고르고(A), 표의 항목·분류·기간·주기를 정해 KOSIS Open API로 값을 가져오는(B) 에이전트 PoC다. A와 B를 한 저장소·한 가상환경에서 하나의 흐름(`claview.pipeline`)으로 돌린다. 표·그래프 표현(C)은 팀 공유본을 `src/claview/c/`에 보관만 했고 아직 연결하지 않았다([29](docs/plans/29_C_레포보관.md)).
 
 ```text
 질문 → A 세션(claview.a) ── 대기(ask)·no_result면 B를 부르지 않음
@@ -19,11 +19,12 @@
 | `src/claview/a/` | A(표 선택, split 완료2 판). 패키지 `claview.a`, 자료 위치는 `paths.py`. 기간 해석 패키지는 `period_core/`(`claview.a.period_core` 0.2.0, A만 씀, 바이트 그대로) |
 | `src/claview/b/` | B(계열·기간 선택, 조회, B 검색 도구). 패키지 `claview.b`. 10/16 compact 판 + `fetch.py` 단위 표기 수정(NFKC) |
 | `src/claview/pipeline/` | A→B 연결, 골든 통합 평가, 명령, 합성 B(연결 확인용) |
+| `src/claview/c/` | C 공유본 보관(바이트 그대로, 미연결·레포 안에서 실행 안 됨). [README](src/claview/c/README.md) |
 | `tests/a/`, `tests/b/`, `tests/pipeline/` | A, B, 연결 시험(묶음별 별도 프로세스) |
 | `data/` | 349표 카탈로그·원메타(`catalog/`, `raw/`, A·B 공용), B 검색 매핑, 표본, A 입력(`a/axis-roles-20261016/`) |
 | `eval/cases/` | `golden/`(골든 22), `a/`(A 사례), `b/`(B 기간·검색 사례), `legacy/`(옛 A 사례, 보관). 정답·평가셋 내용은 바꾸지 않는다 |
-| `scripts/` | `a/`(A 연구·평가 도구), `b/`(B 도구), `pipeline/run_flow.py` |
-| `docs/` | `ARCHITECTURE.md`, `contracts/`, `plans/`(계획 24~27), `records/`(지난 기록), `b/`(B 문서), `design`·`guides`·`research`(팀 공용) |
+| `scripts/` | `a/`(A 연구·평가 도구), `b/`(B 도구), `pipeline/run_flow.py`, `c/team_bundle/`(C 공유본 실행 파일 사본, 레포 안에서는 안 돎) |
+| `docs/` | `ARCHITECTURE.md`, `contracts/`, `plans/`(계획 24~29), `records/`(지난 기록), `b/`(B 문서), `c/`(C 공유본 안내·검수·외부 구성요소), `design`·`guides`·`research`(팀 공용) |
 | `runs/` | 실행 산출물. Git에 넣지 않는다 |
 
 ## 2. 설치와 시험
@@ -80,6 +81,7 @@ uv run --locked claview-b evaluate --mode replay --as-of 2026-10-22 --output run
 | [26](docs/plans/26_옛A_새A교체.md) | 끝까지 도는 평가·명령을 pipeline으로, 옛 A와 그 시험·스크립트 삭제 |
 | [27](docs/plans/27_폴더정리.md) | data·eval·scripts·docs 정리, 기간 패키지를 A 안(`claview.a.period_core`)으로 |
 | [28](docs/plans/28_B_1023_교체.md) | B-1023 수정분 반영: GPT 모델 어댑터(`OpenAIModel`), 측정 도구, 신규 10문항, 통계어사전 v1.3 |
+| [29](docs/plans/29_C_레포보관.md) | C 공유본을 `src/claview/c`에 바이트 그대로 보관(연결은 팀원 확인 뒤 계획 30) |
 
 ## 5. 알려진 한계
 

@@ -1,6 +1,6 @@
 # ClaView 구조
 
-자연어 질문 → 표 선택(A) → 계열·기간 선택(B) → KOSIS 조회 → 표·그래프(C, 아직 없음). 이 문서는 현재 코드 기준의 흐름, 폴더, 의존 방향, 경계를 적는다. 바뀐 경위는 [계획 24~27](plans/)에 있다.
+자연어 질문 → 표 선택(A) → 계열·기간 선택(B) → KOSIS 조회 → 표·그래프(C, `src/claview/c`에 보관만 함, 미연결). 이 문서는 현재 코드 기준의 흐름, 폴더, 의존 방향, 경계를 적는다. 바뀐 경위는 [계획 24~29](plans/)에 있다.
 
 ## 흐름
 
@@ -14,7 +14,7 @@
                 원질문 + A가 고른 표 목록 {"tables":[{org_id, table_id, table_name}]}
                 └─ B 그래프 (claview.b.graphs.build_b_graph: load → context → select → validate)
                      └─ b_result(선택 계열·기간) → 조회 (claview.b.fetch.fetch_data) → data_result
-                          └─ (C: data_result를 표·그래프로. 아직 없음)
+                          └─ (C: data_result를 표·그래프로. 공유본 보관만, 미연결)
 ```
 
 - A의 답(`response`)에는 `b`(요구별 B 결과·조회 결과)와 `execution_status`가 붙는다. `completed`는 B가 보낸 모든 요구가 `ok`이고 조회가 `ok`일 때만이다.
@@ -27,12 +27,13 @@
 | `src/claview/a/` | A(표 선택). 패키지 `claview.a`. 자료 위치는 `paths.py` 한 곳. 기간 해석 패키지 `period_core/`(0.2.0, A만 씀, 바이트 그대로 둔다) |
 | `src/claview/b/` | B(계열·기간 선택, 조회, B 검색 도구). 패키지 `claview.b`. 10/16 compact 판 + `fetch.py` 단위 표기 수정(NFKC) |
 | `src/claview/pipeline/` | A→B 연결, 골든 통합 평가, 명령(`claview`, `claview-pipeline`), 합성 B(시험·연결 확인용) |
+| `src/claview/c/` | C 팀 공유본 보관(바이트 그대로). 공유본의 옛 A·B 사본(vendor)을 전제로 한 평면 import라 레포 안에서는 실행되지 않고, 레포 코드가 import하지 않는다. [README](../src/claview/c/README.md) |
 | `src/claview/__init__.py` | 상위 패키지. 설명문만 둔다(A가 import할 때 먼저 불린다) |
 | `tests/a`, `tests/b`, `tests/pipeline` | A(기간 패키지 시험 `tests/a/period_core` 포함), B, 연결 시험. 묶음마다 별도 pytest 프로세스로 돌린다 |
 | `data/` | 349표 카탈로그·원메타(`catalog/`, `raw/`, A·B 공용), B 검색 매핑(`mappings/`), 표본(`samples/`), A 입력(`a/axis-roles-20261016/`) |
 | `eval/cases/` | `golden/`(골든 22, A·B·연결 공용), `a/`(A 사례), `b/`(B 기간·검색 사례), `legacy/`(옛 A 사례, 보관) |
-| `scripts/` | `a/`(A 연구·평가 도구), `b/`(B 도구), `pipeline/run_flow.py` |
-| `docs/` | 이 문서, `contracts/`, `plans/`(통합 계획 24~), `records/`(지난 기록), `b/`(B 문서), `design`·`guides`·`research`(팀 공용 문서) |
+| `scripts/` | `a/`(A 연구·평가 도구), `b/`(B 도구), `pipeline/run_flow.py`, `c/team_bundle/`(C 공유본 실행 파일 사본) |
+| `docs/` | 이 문서, `contracts/`, `plans/`(통합 계획 24~), `records/`(지난 기록), `b/`(B 문서), `c/`(C 공유본 문서), `design`·`guides`·`research`(팀 공용 문서) |
 | `runs/` | 실행 산출물. Git에 넣지 않는다 |
 
 ## 의존 방향과 경계
