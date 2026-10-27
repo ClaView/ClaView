@@ -21,7 +21,7 @@ test-a:         ; PYTHONPATH=modules/a $(PY) -B -X utf8 -m pytest modules/a/test
 test-b:         ; PYTHONPATH=common:modules/b $(PY) -B -X utf8 -m pytest modules/b/tests -q -p no:cacheprovider
 test-c:         ; PYTHONPATH=common:modules/c $(PY) -B -X utf8 -m pytest modules/c/tests -q -p no:cacheprovider
 test-pipeline:  ; PYTHONPATH=common:modules/a:modules/b:modules/c:pipeline $(PY) -B -X utf8 -m pytest pipeline/tests -q -p no:cacheprovider
-test-api:       ; PYTHONPATH=common:modules/a:modules/b:modules/c:pipeline $(PY) -B -X utf8 -m pytest common/tests modules/a/tests_api pipeline/tests_api -q -p no:cacheprovider
+test-api:       ; PYTHONPATH=common:modules/a:modules/b:modules/c:pipeline $(PY) -B -X utf8 -m pytest common/tests modules/a/tests_api modules/b/tests_api pipeline/tests_api -q -p no:cacheprovider
 lint:           ; $(PY) -m ruff check common modules/*/claview_*_api pipeline/claview_pipeline/api.py && PYTHONPATH=common:modules/a:modules/b:modules/c:pipeline lint-imports
 
 eval-pipeline: env ; $(COMPOSE_EVAL) run --rm eval-pipeline
