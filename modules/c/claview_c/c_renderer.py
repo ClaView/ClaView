@@ -2,7 +2,7 @@
 
 읽는 순서: renderer → prepare → 기간/값 검사 → views·table·source → 결과 봉투.
 실제 파이프라인에는 renderer(query, data_result)를 주입하면 된다.
-live_pipeline.py가 fetch의 ok·partial을 이 함수로 보내고 response.chart_result로 연결한다.
+서비스 흐름(pipeline/claview_pipeline/staged.py)이 조회 ok·partial 결과를 정렬한 뒤 claview_c_api.service.present로 이 함수에 보낸다.
 """
 from __future__ import annotations
 
@@ -58,12 +58,15 @@ def prepare(query: str, data_result: dict) -> dict:
         if not sid or sid in identifiers or sid != selection.get("series_id"):
             raise ValueError("계열 ID가 없거나 중복되거나 selection과 다릅니다.")
         identifiers.add(sid)
-        frequency, period = item.get("frequency"), selection.get("period", {})
+        # 정렬(claview_b.align)로 주기·기간이 바뀐 계열은 aligned_period가 기준이다.
+        frequency = item.get("frequency")
+        period = item.get("aligned_period") or selection.get("period", {})
         if frequency != period.get("frequency"):
             raise ValueError("조회 결과와 선택 조건의 주기가 다릅니다.")
         # 단위가 없으면 % 등을 만들어 붙이지 않는다. 응답 단위와 메타 단위 충돌은 중단한다.
         unit = item.get("unit")
-        if unit is not None and selection.get("unit") is not None and unit != selection["unit"]:
+        converted = bool(item.get("source_unit"))  # 같은 통화의 배율 환산(원값은 source_unit과 함께 보존)
+        if unit is not None and selection.get("unit") is not None and unit != selection["unit"] and not converted:
             raise ValueError("조회 결과와 선택 조건의 단위가 다릅니다.")
         if unit is None:
             unit = selection.get("unit")
@@ -139,7 +142,9 @@ def prepare(query: str, data_result: dict) -> dict:
                         "table_id": selection["table_id"], "item_id": selection["item_id"],
                         "dimensions": copy.deepcopy(selection.get("dimensions", {})),
                         "period": copy.deepcopy(period), "unit": unit,
-                        "provenance": copy.deepcopy(item.get("provenance", {}))})
+                        "provenance": copy.deepcopy(item.get("provenance", {})),
+                        **({"source_unit": item["source_unit"]} if converted else {}),
+                        **({"source_frequency": item["source_frequency"]} if item.get("source_frequency") else {})})
     relations = copy.deepcopy(data_result.get("relations", []))
     for relation in relations:
         if (relation.get("ancestor_series_id") not in identifiers or
@@ -158,6 +163,24 @@ def prepare(query: str, data_result: dict) -> dict:
             raise ValueError("혼합 주기에는 단일 requested_period를 적용할 수 없습니다.")
         if any(not set(requested_values) <= g["periods"] for g in groups.values()):
             raise ValueError("요청 표시 기간이 조회된 기간 밖에 있습니다.")
+    # 이중 축: 정렬 결과(alignment.axes)가 단위 2종·단일 주기를 확인한 경우에만 만든다.
+    alignment = data_result.get("alignment") or {}
+    if alignment.get("status") == "needs_choice":
+        raise ValueError("주기를 어떻게 맞출지 선택이 필요한 자료입니다.")
+    axes = copy.deepcopy(alignment.get("axes"))
+    if axes is not None:
+        axis_series = [i for axis in axes for i in axis.get("series_ids", [])]
+        if sorted(axis_series) != sorted(identifiers):
+            raise ValueError("축 정보가 조회 결과의 계열과 일치하지 않습니다.")
+        if any(axis.get("side") not in {"left", "right"} for axis in axes):
+            raise ValueError("축 위치는 left 또는 right여야 합니다.")
+    dual = bool(axes) and len(axes) == 2 and len({g["frequency"] for g in groups.values()}) == 1
+    if dual:
+        if re.search(r"꺾은선|선그래프|선\s*그래프|라인", query) and "막대" not in query:
+            for axis in axes:
+                axis["draw"] = "line"
+        elif "막대" in query:
+            axes[0]["draw"], axes[1]["draw"] = "column", "line"
     if data_result.get("_synthetic"):
         warnings.append({"code": "synthetic_fixture", "message": "결측 처리용 합성 시험 자료입니다. 실제 경제 상황을 해석하지 마세요."})
     group_list = []
@@ -165,7 +188,8 @@ def prepare(query: str, data_result: dict) -> dict:
         group["periods"] = sorted(group["periods"])
         group_list.append(group)
     spec = {"groups": group_list, "series": datasets, "requested_period": requested,
-            "relations": relations, "connect_nulls": False, "display_max_decimals": 1}
+            "relations": relations, "connect_nulls": False, "display_max_decimals": 1,
+            "axes": axes if dual else None}
     # 템플릿은 질문만 보지 않고 실제 시점 수·항목 수를 함께 확인한다.
     # 표시 기간이 따로 있으면 기준 계산용으로 조회한 시점은 선택 판단에서 제외한다.
     displayed = lambda g: [p for p in g["periods"] if not requested or requested["start"] <= p <= requested["end"]]
@@ -183,17 +207,28 @@ def prepare(query: str, data_result: dict) -> dict:
               "표시 시점이 하나이므로 막대로 항목별 값을 비교합니다.")
     if default == "small_multiples":
         reason += f" 항목이 {len(datasets)}개라 겹치지 않도록 항목별로 나눠 보여줍니다."
-    choices = [("line", "선그래프", "line", has_trend),
-               ("bar", "묶음막대", "bar", bool(datasets)),
+    choices = [("dual_axis", "이중 축", "dual", dual and has_trend),
+               ("line", "선그래프", "line", has_trend and not dual),
+               ("bar", "묶음막대", "bar", bool(datasets) and not dual),
                ("small_multiples", "항목별 나눠 보기", "bar" if base == "bar" else "line", len(datasets) >= 2 and has_trend),
-               ("horizontal", "한 시점 가로막대", "horizontal", has_comparison),
+               ("horizontal", "한 시점 가로막대", "horizontal", has_comparison and not dual),
                ("table", "수치표", "table", True)]
     views = [{"view_id": kind, "kind": kind, "title": title, "chart_kind": chart_kind, "spec": spec}
              for kind, title, chart_kind, allowed in choices if allowed]
     blocked = [{"kind": "stacked", "title": "누적막대", "reason": blocked_reason},
                {"kind": "percent_stacked", "title": "100% 누적막대", "reason":
                 "비중을 구하려면 서로 겹치지 않는 구성 항목과 전체의 범위가 확인되어야 합니다. 현재 입력에는 그 근거가 없습니다."}]
-    if not has_trend:
+    if dual:
+        unit_text = " · ".join(str(a["unit"] or "단위 미제공") for a in axes)
+        why = f"단위가 서로 달라({unit_text}) 한 축에 그릴 수 없습니다. 이중 축 보기를 사용하세요."
+        blocked += [{"kind": "line", "title": "선그래프", "reason": why},
+                    {"kind": "bar", "title": "묶음막대", "reason": why}]
+        default = "table" if base == "table" or not has_trend else "dual_axis"
+        reason = (
+            f"단위가 서로 다른 지표({unit_text})를 왼쪽·오른쪽 축에 나눠 함께 보여줍니다. 축 눈금이 달라 높이를 직접 비교할 수 없습니다."
+            if has_trend else
+            "표시 시점이 하나여서 이중 축 그래프 대신 수치표를 먼저 보여줍니다.")
+    elif not has_trend:
         blocked.append({"kind": "line", "title": "선그래프", "reason": "시간 변화를 그리려면 표시 시점이 두 개 이상 필요합니다."})
     if not has_comparison:
         blocked.append({"kind": "horizontal", "title": "한 시점 가로막대", "reason": "같은 주기·단위의 비교 항목이 두 개 이상 필요합니다."})

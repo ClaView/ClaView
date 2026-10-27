@@ -376,7 +376,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
     return p.slice(0, 4) + '.' + p.slice(4);
   };
   CV.fileSafe = function (s) { return String(s).replace(/[\\/:*?"<>|]/g, '_').replace(/\s+/g, '_'); };
-  var KIND_NAME = { line:'선그래프', horizontal:'한 시점 가로막대', small_multiples:'항목별 나눠 보기', stacked: '누적막대', percent_stacked: '100% 누적막대' };
+  var KIND_NAME = { line:'선그래프', bar:'묶음막대', dual_axis:'이중 축', table:'수치표', horizontal:'한 시점 가로막대', small_multiples:'항목별 나눠 보기', stacked: '누적막대', percent_stacked: '100% 누적막대' };
 
   /* ---------- theme ---------- */
   CV.theme = function () {
@@ -509,7 +509,7 @@ CV.visualSwatch = function (index, line) {
       sel.forEach(function (s) {
         var host = el('div', { class: 'sm-chart' });
         grid.append(el('div', { class: 'sm-cell' }, host));
-        mk(host, { type: c.smallType === 'bar' ? 'bar' : 'line', small: true, title: s.name, series: [{ name: s.name, color: colorOf(s), pattern: CV.visualStyle(c.series.indexOf(s)), data: s.values.map(function (v) { return v == null ? null : +v; }) }] });
+        mk(host, { type: c.smallType === 'bar' ? 'bar' : 'line', small: true, title: s.name, unit: s.unit || c.unit, series: [{ name: s.name, color: colorOf(s), pattern: CV.visualStyle(c.series.indexOf(s)), data: s.values.map(function (v) { return v == null ? null : +v; }) }] });
       });
       handle.cols = 3; return handle;
     }
@@ -522,6 +522,13 @@ CV.visualSwatch = function (index, line) {
       bar.append(sl); box.append(bar);
       var host2 = el('div', { class: 'main-chart', style: 'height:' + (70 + sel.length * 34) + 'px' }); box.append(host2);
       mk(host2, { type: 'horizontal', periodLabel: c.labels[idx], cats: sel.map(function (s) { return s.name; }), vals: sel.map(function (s) { return s.values[idx] == null ? null : +s.values[idx]; }), colors: sel.map(colorOf) });
+      return handle;
+    }
+    if (st.kind === 'dual_axis' && c.axes) {
+      var hostD = el('div', { class: 'main-chart' }); box.append(hostD);
+      mk(hostD, { type: 'dual', small: false, legend: false, axes: c.axes, series: sel.map(function (s) {
+        return { name: s.name, color: colorOf(s), unit: s.unit, axis: s.axis || 0, data: s.values.map(function (v) { return v == null ? null : +v; }) };
+      }) });
       return handle;
     }
     var host3 = el('div', { class: 'main-chart' }); box.append(host3);
@@ -553,6 +560,7 @@ CV.visualSwatch = function (index, line) {
       };
       guides.stacked='막대 전체 높이는 M2 규모, 색별 높이는 상품별 금액입니다. 항목을 숨기면 보이는 합계는 전체가 아닙니다.';
       guides.percent_stacked='해당 시점의 공식 M2 전체 대비 비중입니다. 항목을 숨겨도 분모를 바꾸지 않습니다. CSV도 현재 비중값(%)으로 저장합니다.';
+      guides.dual_axis='단위가 서로 다른 두 지표를 왼쪽·오른쪽 축에 나눠 그렸습니다. 축마다 눈금이 달라 막대와 선의 높이를 직접 비교하지 말고, 각 축의 단위를 확인하며 방향을 비교하세요.';
       guide.textContent = (guides[st.kind] || '') + (st.kind==='table'?'':' 키보드: Tab으로 차트에 들어가 방향키로 값을 살피고, Tab으로 다음 영역에 이동할 수 있습니다.') + (c.derived?(st.kind==='horizontal'?' 계산값은 %입니다. 0선 오른쪽은 상승, 왼쪽은 하락입니다.':' 계산값은 %입니다. 양수는 상승, 음수는 하락입니다.'):'') + ' 단위: ' + CV.currentData(c,st.kind).unit + ' · 주기: '+c.freqName;
     }
     r.parts.guide = function () { updateGuide(); return guide; };
@@ -1199,7 +1207,8 @@ CV.visualSwatch = function (index, line) {
   }
   function confirmationEl(m) {
     var spec=m.confirmation, box=el('section',{class:'confirmation-box','aria-label':'후보 표 확인'});
-    box.append(el('h3',{text:'어떤 통계표로 조회할까요?'}), el('p',{text:'아래는 데이터를 가져올 통계표 후보입니다. 표를 확인하면 항목과 기간을 정해 조회합니다. 같은 주기·단위의 여러 항목은 한 그래프에 함께 표시합니다.'}));
+    var aligning=spec.kind==='alignment';
+    box.append(el('h3',{text:aligning?'주기를 어떻게 맞출까요?':'어떤 통계표로 조회할까요?'}), el('p',{text:aligning?'함께 요청한 지표의 주기가 서로 달라 한 그래프로 보여주려면 값을 바꿔야 합니다. 방법을 고르면 이미 조회한 값으로 바로 이어서 표시하며 새로 조회하지 않습니다. 원래 값은 보존됩니다.':'아래는 데이터를 가져올 통계표 후보입니다. 표를 확인하면 항목과 기간을 정해 조회합니다. 같은 주기·단위의 여러 항목은 한 그래프에 함께 표시합니다.'}));
     var draft=m.confirmationDraft||(m.confirmationDraft={choices:{},interpretation_confirmed:false});
     var form=el('form'), controls=[];
     if(spec.conditions.length) box.append(el('p',{class:'stage-note',text:'질문에서 읽은 조건: '+spec.conditions.map(function(c){return c.quote;}).join(' · ')}));
@@ -1216,6 +1225,7 @@ CV.visualSwatch = function (index, line) {
         radio.checked=draft.choices[g.requirement_id]===option.option_id; controls.push(radio);
         option.tables.forEach(function(t){
           description.append(el('strong',{text:t.table_name}));
+          if(aligning&&!t.table_id)return;
           var facts=el('dl',{class:'candidate-facts'});
           function fact(k,v){facts.append(el('div',{},el('dt',{text:k}),el('dd',{text:v})));}
           fact('구분 기준',t.different_axes.length?t.different_axes.join(' · '):'차이 정보 미제공 · 표 이름과 수록 항목 참고');
@@ -1239,14 +1249,14 @@ CV.visualSwatch = function (index, line) {
       ackLabel.append(ack,el('span',{text:'위 질문 해석과 내가 선택한 표로 조회하는 데 동의합니다.'}));
       ack.addEventListener('change',function(){draft.interpretation_confirmed=ack.checked; saveStore(); refresh();}); form.append(ackLabel);
     }
-    var button=el('button',{type:'submit',class:'continue-button',text:'선택한 표로 계속 실행'}), hint=el('p',{class:'stage-note'});
+    var button=el('button',{type:'submit',class:'continue-button',text:aligning?'선택한 방법으로 계속':'선택한 표로 계속 실행'}), hint=el('p',{class:'stage-note'});
     function refresh(){
       var used=!!m.resumedJobId, busy=!!S.running;
       controls.forEach(function(c){c.disabled=used||busy;});
       var complete=spec.groups.every(function(g){return !!draft.choices[g.requirement_id];})&&(!spec.requires_interpretation_ack||draft.interpretation_confirmed);
       button.disabled=used||busy||!complete;
       hint.textContent=used?'선택을 전달했습니다. 아래 이어 실행 결과를 확인해 주세요.':busy?'현재 실행이 끝나면 선택할 수 있습니다.':
-        complete?'버튼을 누르면 선택한 표로 실제 조회를 시작합니다.':'각 요구의 후보를 선택해 주세요.'+(spec.requires_interpretation_ack?' 질문 해석 확인도 필요합니다.':'');
+        complete?(aligning?'버튼을 누르면 선택한 방법으로 이미 조회한 값을 맞춰 그래프를 만듭니다.':'버튼을 누르면 선택한 표로 실제 조회를 시작합니다.'):'각 요구의 후보를 선택해 주세요.'+(spec.requires_interpretation_ack?' 질문 해석 확인도 필요합니다.':'');
     }
     form.addEventListener('submit',function(e){
       e.preventDefault(); if(button.disabled)return;
@@ -1262,8 +1272,8 @@ CV.visualSwatch = function (index, line) {
     var questionExample=exampleForQuery(m.inputText);
     if(questionExample&&questionExample.note)body.append(exampleNotice(questionExample));
     if(questionExample&&questionExample.note&&m.kind==='result'&&m.cases&&!m.cases.some(function(c){return c.analysisVersion;}))body.append(el('p',{class:'stage-note',text:'이 이력은 C 보완 전 저장 결과입니다. 최신 계산·누적 화면은 22건 검수 결과에서 확인하거나 새로 실행해 주세요.'}));
-    if(m.parentRunId) body.append(el('p',{class:'stage-note',text:m.resumeKind==='b_conditions'?(m.kind==='result'?'수정한 조회 조건으로 이어 실행한 결과입니다. 원래 질문과 이전 기록은 위에 남아 있습니다.':'수정한 조회 조건을 전달했습니다. 아래에서 진행 상태를 확인하세요.'):'선택한 표로 이어 실행합니다. 아래에서 조회 조건·데이터 조회·그래프 결과를 확인하세요.'}));
-    else if(m.resumedJobId) body.append(el('p',{class:'stage-note',text:'이 확인에서 선택한 표를 전달했습니다. 아래에 이어 실행 결과가 있습니다.'}));
+    if(m.parentRunId) body.append(el('p',{class:'stage-note',text:m.resumeKind==='b_conditions'?(m.kind==='result'?'수정한 조회 조건으로 이어 실행한 결과입니다. 원래 질문과 이전 기록은 위에 남아 있습니다.':'수정한 조회 조건을 전달했습니다. 아래에서 진행 상태를 확인하세요.'):(m.resumeKind==='alignment'?'선택한 방법으로 주기를 맞춰 이어 실행합니다. 이미 조회한 값을 사용하며 새로 조회하지 않습니다.':'선택한 표로 이어 실행합니다. 아래에서 조회 조건·데이터 조회·그래프 결과를 확인하세요.')}));
+    else if(m.resumedJobId) body.append(el('p',{class:'stage-note',text:'이 확인에서 선택한 항목을 전달했습니다. 아래에 이어 실행 결과가 있습니다.'}));
     var progress=CV.ux.simplifyProgress(stepsEl(m)); progress.querySelector('details.steps').open=!complete&&!m.resumedJobId;
     if(complete){
       progress.classList.add('completed-progress');
@@ -1564,6 +1574,57 @@ CV.adapters.highcharts = {
           data: cfg.vals.map(function (v, i) { return { y: v, color: cfg.colors[i] }; })
         }]
       });
+    } else if (cfg.type === 'dual') {
+      // 이중 축: 계열마다 단위·축 번호를 받는다. 막대(column)는 뒤에, 선은 앞에 그린다.
+      options = Object.assign(base, {
+        xAxis: {
+          categories: cfg.labels, lineColor: th.grid, tickColor: th.grid,
+          labels: { style: style(th.text2, 11), rotation: 0, autoRotation: false, overflow: 'justify' },
+          tickInterval: Math.ceil(cfg.labels.length / 6)
+        },
+        yAxis: cfg.axes.map(function (axis, i) {
+          return {
+            title: {
+              text: axis.unit, align: 'high', rotation: 0, y: -14, x: i ? 4 : -4,
+              textAlign: i ? 'right' : 'left', style: style(th.text2, 11)
+            },
+            opposite: axis.side === 'right', gridLineColor: th.grid, gridLineWidth: i ? 0 : 1,
+            labels: {
+              style: style(th.text2, 11),
+              formatter: function () { return CV.num(this.value, Math.abs(this.value) < 100 ? 1 : 0); }
+            }
+          };
+        }),
+        tooltip: {
+          shared: true, useHTML: false,
+          formatter: function () {
+            var point = this.points && this.points[0];
+            if (!point) return false;
+            var index = point.point.index;
+            var lines = [escapeText(cfg.full[index])];
+            cfg.series.forEach(function (s) {
+              var value = s.data[index];
+              lines.push('<span style="color:' + s.color + '">●</span> ' + escapeText(s.name) +
+                ': <b>' + (value == null ? '자료 없음' : fmt(value) + ' ' + escapeText(s.unit)) + '</b>');
+            });
+            return lines.join('<br/>');
+          }
+        },
+        accessibility: Object.assign({}, base.accessibility, {
+          point: { descriptionFormatter: function (p) {
+            var s = cfg.series[p.series.index] || { unit: '' };
+            return cfg.full[p.index] + ' · ' + p.series.name + ' · ' + (p.y == null ? '자료 없음' : fmt(p.y) + ' ' + s.unit);
+          } }
+        }),
+        plotOptions: {
+          series: { animation: false, connectNulls: false, marker: { enabled: cfg.labels.length <= 30, radius: 3 } },
+          column: { pointPadding: 0.08, groupPadding: 0.1, borderWidth: 0 }
+        },
+        series: cfg.series.map(function (s) {
+          var draw = cfg.axes[s.axis].draw === 'column' ? 'column' : 'line';
+          return { name: s.name, type: draw, yAxis: s.axis, color: s.color, data: s.data, zIndex: draw === 'line' ? 3 : 1 };
+        })
+      });
     } else {
       // 선·묶음막대·항목별 나눠 보기: 같은 cfg를 Highcharts 설정으로 옮긴다.
       options = Object.assign(base, {
@@ -1751,6 +1812,7 @@ CV.adapters.highcharts = {
   }
   CV.ux={text:text,period:period,
     confirmationReason:function(spec,g){
+      if(spec.kind==='alignment')return '주기 확인 필요: 함께 요청한 지표의 주기가 달라 한 그래프로 맞추려면 값을 바꿔야 합니다. 방법을 고르면 이미 조회한 값으로 바로 이어서 표시하며, 원래 값은 보존됩니다.';
       if(spec.requires_interpretation_ack)return '질문 확인 필요: 프로그램이 읽은 대상이나 조건을 아직 확정하지 못했습니다. 아래 해석이 의도와 맞는지 확인해 주세요. 질문이 반드시 잘못됐다는 뜻은 아닙니다.';
       return g.options.length>1?'표 확인 필요: 관련 통계표 후보가 '+g.options.length+'개 남았지만, 자동 선택 기준을 통과한 표를 확정하지 못했습니다. 아래 표의 기준·주기·수록 기간을 비교해 골라 주세요. 모든 후보가 같은 뜻이라는 의미는 아닙니다.':
         '표 확인 필요: 후보는 찾았지만 질문의 조건과 충분히 일치하는지 자동으로 확정하지 못했습니다. 후보가 하나여도 정답으로 단정하지 않고 확인받습니다.';

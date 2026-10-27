@@ -8,9 +8,10 @@ import unicodedata
 
 VERSION = "chart-policy/2026-10-21-v1"
 TITLES = {"line":"선그래프","bar":"묶음막대","horizontal":"한 시점 가로막대",
-          "small_multiples":"항목별 나눠 보기","table":"수치표","stacked":"누적막대","percent_stacked":"100% 누적막대"}
+          "small_multiples":"항목별 나눠 보기","dual_axis":"이중 축","table":"수치표","stacked":"누적막대","percent_stacked":"100% 누적막대"}
 PATTERNS = [
     ("percent_stacked",r"(?:100%|100퍼센트)(?:누적(?:막대)?(?:그래프|차트)?)?|구성비|비중누적"),
+    ("dual_axis",r"이중축|양축|듀얼축|보조축|좌우축"),
     ("small_multiples",r"항목별나눠보기|각각나눠(?:보기)?|분할(?:그래프|차트)"),
     ("horizontal",r"가로막대(?:그래프|차트)?|수평막대(?:그래프|차트)?"),
     ("stacked",r"누적(?:막대)?(?:그래프|차트)?"),
@@ -42,7 +43,10 @@ def requests(query):
 
 def choose(query, available, *, periods, series_count, composition=False, fallback=None):
     available=set(available);wanted=requests(query);notices=[]
-    fallback=fallback or ("line" if periods>=2 else "bar")
+    if not fallback:
+        fallback = "line" if periods >= 2 else "bar"
+        if "dual_axis" in available:
+            fallback = "dual_axis"
     if fallback not in available:fallback="bar" if "bar" in available else "table"
     chosen=fallback
     for item in wanted:
@@ -60,6 +64,8 @@ def choose(query, available, *, periods, series_count, composition=False, fallba
             reason="항목을 합산해 전체로 볼 수 있다는 검증된 근거가 없습니다. 금리·지수 또는 확인되지 않은 구성은 쌓거나 100%로 만들지 않습니다."
         elif kind=="line" and periods<2:reason="표시 시점이 하나여서 선으로 이어 시간 변화를 표현할 수 없습니다."
         elif kind=="horizontal" and periods>1:reason="한 시점 가로막대는 선택한 시점만 보여줍니다. 전체 기간을 임의로 합산하거나 마지막 시점만 남기지 않고, 우선 전체 기간의 흐름을 표시합니다. 원하면 가로막대에서 시점을 선택하세요."
+        elif kind == "dual_axis" and kind not in available:
+            reason = "이중 축은 단위가 서로 다른 지표 두 종류를 같은 주기로 함께 볼 때만 제공합니다."  # noqa: E501
         elif kind not in available:reason="현재 시점 수·항목 수로는 이 표현을 제공할 수 없습니다."
         if reason:
             notices.append({"code":"chart_request_not_available","message":f"요청한 {TITLES[kind]} 대신 가능한 표현을 보여줍니다. {reason}"})
@@ -68,6 +74,8 @@ def choose(query, available, *, periods, series_count, composition=False, fallba
         break
     if selected_request:
         reason="질문에서 요청한 "+TITLES[chosen]+"를 먼저 보여줍니다."
+    elif chosen == "dual_axis":
+        reason = "단위가 서로 다른 두 지표를 왼쪽·오른쪽 축에 나눠 함께 보여줍니다. 축 눈금이 달라 높이를 직접 비교할 수 없습니다."  # noqa: E501
     elif chosen=="line":reason="종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다."
     elif chosen=="bar":reason="표시 시점이 하나이거나 변화량의 크기를 비교하므로 막대그래프를 먼저 보여줍니다."
     else:reason="현재 입력에서 안전하게 제공할 수 있는 수치표를 먼저 보여줍니다."
