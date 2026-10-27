@@ -130,6 +130,80 @@ def test_query_confirm_resume_over_http(make_pipeline):
         server.server_close()
 
 
+def test_frequency_question_over_http_resumes_without_new_calls(make_pipeline, monkeypatch):
+    from tests.c.test_c_alignment import crafted, make_series
+
+    pipeline = make_pipeline()
+    crafted(
+        monkeypatch,
+        pipeline,
+        make_series("S1", "십억원", freq="M", start="202401", end="202406", label="월 지표"),
+        make_series(
+            "S2",
+            "십억원",
+            freq="Q",
+            start="202401",
+            end="202402",
+            label="분기 지표",
+            values=["10", "20"],
+            table="DT_Q",
+        ),
+    )
+    server = make_server(pipeline, 0)
+    try:
+        token = call(server, "GET", "/api/info")[1]["token"]
+        _, started = call(server, "POST", "/api/query", {"query": "GDP 2023년 보여줘"}, token)
+        job = wait(server, token, started["job_id"])
+        assert job["result"]["status"] == "needs_confirmation"
+        confirmation = job["result"]["confirmation"]
+        assert confirmation["kind"] == "alignment"
+        group = confirmation["groups"][0]
+        assert "render_jobs" not in job["result"]  # the fetched data stays on the server
+        calls_before = (len(pipeline.model.calls), len(pipeline.client.calls))
+        bad = {
+            "choices": [{"requirement_id": group["requirement_id"], "option_id": "freq_magic"}],
+            "interpretation_confirmed": False,
+        }
+        assert (
+            call(
+                server,
+                "POST",
+                "/api/resume",
+                {"job_id": started["job_id"], "confirmation": bad},
+                token,
+            )[0]
+            == 400
+        )
+        good = {
+            "choices": [{"requirement_id": group["requirement_id"], "option_id": "freq_last"}],
+            "interpretation_confirmed": False,
+        }
+        status, resumed = call(
+            server,
+            "POST",
+            "/api/resume",
+            {"job_id": started["job_id"], "confirmation": good},
+            token,
+        )
+        assert status == 202
+        done = wait(server, token, resumed["job_id"])
+        assert done["result"]["status"] == "ok" and done["result"]["resume_kind"] == "alignment"
+        assert done["result"]["ui_cases"][0]["freq"] == "Q"
+        assert (len(pipeline.model.calls), len(pipeline.client.calls)) == calls_before
+        assert (
+            call(
+                server,
+                "POST",
+                "/api/resume",
+                {"job_id": started["job_id"], "confirmation": good},
+                token,
+            )[0]
+            == 409
+        )
+    finally:
+        server.server_close()
+
+
 def test_requests_without_token_or_with_key_text_are_refused(make_pipeline):
     server = make_server(make_pipeline(), 0)
     try:

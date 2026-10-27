@@ -13,14 +13,15 @@ A의 `connect`가 `question_route`가 `proceed`·`assume`·`partial`이고 실�
   "contract_version": "flow-table-list/2026-10-23.1",
   "query": <A가 받은 원질문>,
   "as_of": <기준일 YYYY-MM-DD | None>,
-  "a_result": {"tables": [{"org_id", "table_id", "table_name"}, ...]},   # B가 읽는 것은 이것과 query뿐
+  "a_result": {"tables": [{"org_id", "table_id", "table_name", "focus"?}, ...]},   # B가 읽는 것은 이것과 query뿐
   "a_assumptions": <A 공개 가정 봉투, 그대로 되돌려 준다>,
   "scopes": [{"scope_id": <A 요구 ID>}, ...]                              # 보낸 요구마다 하나
 }
 ```
 
-- 표는 보낸 요구들의 선택 표를 A 순서대로, (org_id, table_id) 중복 없이 모은다. 필드는 `B_TABLE_FIELDS = ("org_id", "table_id", "table_name")`뿐이다(B 자체의 A→B 입력과 같다).
-- `check_table_request`가 막는 것: 원질문 없음, 표 0개, 표 필드가 다르거나 org_id·table_id 빈 값, scope ID가 없거나 중복. 막히면 A는 그 요구를 `connection_error`로 남기고 B를 부르지 않는다.
+- 표는 보낸 요구들의 선택 표를 A 순서대로, (org_id, table_id) 중복 없이 모은다. 필수 필드는 `B_TABLE_FIELDS = ("org_id", "table_id", "table_name")`이고(B 자체의 A→B 입력과 같다) 선택 필드 `OPTIONAL_TABLE_FIELDS = ("focus",)`가 하나 있다.
+- `focus`(선택, 제안 단계: [계획 32](../plans/32_A_B_표별_지표_focus_제안.md)): 질문 중 그 표가 맡은 지표 문구. 비어 있지 않은 문자열이며 100자 이내. 같은 표가 요구 여럿에 걸리면 지표를 ` / `로 이어 중복 없이 하나로 합친다. 있으면 B가 그 표의 모델 호출에만 `table_focus` 입력과 프롬프트 한 문장을 더한다. 없으면 기존과 같이 동작한다. 판본 상수는 아직 올리지 않았다(A 담당 협의 뒤 결정).
+- `check_table_request`가 막는 것: 원질문 없음, 표 0개, 표 필드가 다르거나(필수 필드 누락, 필수·선택 밖의 필드) org_id·table_id 빈 값(`table_fields`), `focus`가 문자열이 아니거나 비어 있음(`table_focus`), scope ID가 없거나 중복. 막히면 A는 그 요구를 `connection_error`로 남기고 B를 부르지 않는다. B 자신은 `focus`가 100자를 넘으면 `invalid_a_result`로 멈춘다.
 
 ## 결과 (`run_b`)
 

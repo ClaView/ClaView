@@ -30,7 +30,7 @@ pipeline은 module-a/b/c 컨테이너를 부르지 않는다. 그래서 모듈 A
 | `pipeline/claview_pipeline/` | 메인 파이프라인(단계 진행·확인 질문·재개), 프론트가 부르는 API, 골든 통합 평가 | 취합 |
 | `common/claview_common/` | 공동 소유: 계약(Pydantic), FastAPI 공통(`/health`, `/info`), 설정, 시험 도구 | 전원 |
 | `common/fixtures/` | 단계별 계약 샘플(골든 22에서 생성). 앞 모듈 없이 내 모듈을 시험할 때 쓴다 | 전원 |
-| `data/`, `eval/cases/` | 349표 카탈로그·원메타·매핑, 평가셋(골든 22 등) | A·B |
+| `data/`, `eval/cases/` | 349표 카탈로그·원메타·매핑, 평가셋(골든 22, 다중 표·이중 축 초안 5 `golden_set_v3_multi_table.json` 등) | A·B |
 | `research/` | 서비스 코드가 아닌 보관·실험물(옛 C 로컬 서버·실행 파일 등) | 각자 |
 | `docs/` | 구조, 계약, 파트별 문서(`modules/b`, `modules/c`), 지난 계획·기록 | 각자 |
 

@@ -23,9 +23,10 @@
   "relations": [...],                            # 같은 표 안 상·하위 계열 관계
   "period_notices": [...],                       # 있을 때만: 조회 가능 기간 안내(진행은 막지 않음)
   "frequency_alternatives": [{"table", "frequency", "period", "selections"}],  # 있을 때만
-  "expand_notices": [...]                        # 있을 때만: 하위 펼침 변경 안내
+  "expand_notices": [...]                        # 있을 때만: 하위 펼침 변경·반복 행 제거 안내(`repeated_row_dropped`)
 }
 ```
 
 - 기간 주기 글자는 B 내부와 KOSIS 요청이 같은 `Y/H/Q/M`이다(응답의 `PRD_SE`는 `A/S/Q/M`, `fetch.py`가 대조).
 - `fetch.validate_b_result`가 조회 전에 다시 검사한다: 필드 집합, series_id 중복, 메타데이터와 이름·단위 일치, 같은 계열 중복.
+- 모델이 항목·분류·펼치기·기간까지 완전히 같은 행을 반복하면 B가 첫 행만 남기고 `expand_notices`에 `repeated_row_dropped`를 남긴다. 기간 등이 달라 같은 계열이 되는 중복은 이전처럼 `duplicate_selection`으로 멈춘다.
