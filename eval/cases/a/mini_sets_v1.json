@@ -1,0 +1,1569 @@
+{
+ "version": 1,
+ "source": "417 stored-response replay, baseline 324/417 (split code, commit 13bebbc)",
+ "selection": "deterministic sha256(case_id) order; one correct case per twin group in dev_mini",
+ "dev_mini": [
+  {
+   "case_id": "CV-AB-01",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y101"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-02",
+   "dataset": "golden",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y101"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "CV-AB-03",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y101"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-04",
+   "dataset": "golden",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_301Y015",
+     "DT_200Y118"
+    ],
+    "interpretation": "over",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "CV-AB-05",
+   "dataset": "golden",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_301Y013"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "CV-AB-06",
+   "dataset": "golden",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_151Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "CV-AB-08",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_151Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-09",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_161Y008"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-10",
+   "dataset": "golden",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_303Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "CV-AB-11",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y102"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-12",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_311Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-13",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_104Y016"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-14",
+   "dataset": "golden",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_501Y006"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "CV-AB-15",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_513Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-17",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_404Y015"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-18",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_404Y016"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-19",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_401Y018"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-21",
+   "dataset": "golden",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_405Y006"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "CV-AB-22",
+   "dataset": "golden",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_405Y007"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-10",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_200Y101"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-17",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_501Y018"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-21",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_161Y008"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-25",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_181Y002"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "PC:EQ-26",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_181Y012"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-28",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_303Y001"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-30",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_200Y102"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-42",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_301Y017"
+    ],
+    "interpretation": "under",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "A:CX-Q028",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_405Y006"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "A:CX-Q052",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_181Y002"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "A:CX-Q054",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_181Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q075",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_281Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q085",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_200Y106",
+     "DT_200Y101"
+    ],
+    "interpretation": "over",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q093",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "not_in_pool",
+    "tables": [
+     "DT_200Y118"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-18",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_501Y007"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-19",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_501Y005"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-31",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_512Y019"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-33",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "not_in_pool",
+    "tables": [
+     "DT_200Y118"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "PC:EQ-34",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_512Y017"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "A:CX-Q062",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_281Y006"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q017",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_181Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q018",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_181Y002"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q023",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_171Y002",
+     "DT_161Y008",
+     "DT_161Y007"
+    ],
+    "interpretation": "over",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q088",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_181Y005",
+     "DT_181Y001",
+     "DT_181Y006",
+     "DT_151Y003"
+    ],
+    "interpretation": "over",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q089",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_121Y015"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q091",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "not_in_pool",
+    "tables": [
+     "DT_303Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q094",
+   "dataset": "development",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_512Y015"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "A:CX-Q075",
+   "dataset": "development",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_511Y002"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q007",
+   "dataset": "development",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y136"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q056",
+   "dataset": "development",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_501Y008"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q001",
+   "dataset": "development",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y104"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "A:CX-Q001",
+   "dataset": "development",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y115"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "A:CX-Q063",
+   "dataset": "development",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_282Y002",
+     "DT_282Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "A:CX-Q040",
+   "dataset": "development",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_304Y102"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q078",
+   "dataset": "development",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_512Y013",
+     "DT_512Y014"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "B:CX-Q036",
+   "dataset": "development",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_401Y016"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "B:CX-Q041",
+   "dataset": "development",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_403Y001",
+     "DT_403Y002"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "B:CX-Q059",
+   "dataset": "development",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_501Y023"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "B:CX-Q048",
+   "dataset": "development",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_311Y006"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "A:CX-Q004",
+   "dataset": "development",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y162"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "B:CX-Q043",
+   "dataset": "development",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_301Y014"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  }
+ ],
+ "check_mini": [
+  {
+   "case_id": "V2-W1-049",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_151Y004"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-024",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_501Y002"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S1-006",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_200Y101"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W2-018",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_311Y001"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-009",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_513Y001"
+    ],
+    "interpretation": "under",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "V2-W1-015",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_200Y161",
+     "DT_200Y102"
+    ],
+    "interpretation": "over",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S2-017",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "interpretation",
+    "tables": [
+     "DT_511Y002"
+    ],
+    "interpretation": "under",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S2-022",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "not_in_pool",
+    "tables": [
+     "DT_311Y001",
+     "DT_200Y102"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W1-042",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "not_in_pool",
+    "tables": [
+     "DT_161Y016",
+     "DT_301Y013"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W1-045",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "not_in_pool",
+    "tables": [
+     "DT_284Y001",
+     "DT_151Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W1-052",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "out_of_cards",
+    "tables": [
+     "DT_282Y005"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-T1-005",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "out_of_cards",
+    "tables": [
+     "DT_121Y013"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-T2-002",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_401Y016"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S1-008",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_141Y008"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S4-009",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_304Y101"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-004",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_511Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S1-007",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_200Y122",
+     "DT_284Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-054",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_501Y017",
+     "DT_121Y015"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S1-012",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_171Y002",
+     "DT_161Y012"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W1-051",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_121Y015"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S4-002",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_501Y015"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W1-035",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_200Y124"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S4-011",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_633Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W3-039",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_181Y002"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-060",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_105Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W2-030",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_405Y007"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S4-004",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_501Y086",
+     "DT_284Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-005",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_511Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S4-005",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_501Y005",
+     "DT_284Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W2-013",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_301Y014"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S2-015",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_511Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S1-002",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_200Y101"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-002",
+   "dataset": "official",
+   "role": "wrong",
+   "baseline": {
+    "set_exact": false,
+    "cause": "selection",
+    "tables": [
+     "DT_511Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-045",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_501Y006"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W2-006",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_301Y013"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W1-041",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_281Y002"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S1-020",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_311Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W2-033",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_404Y014"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W4-042",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_501Y007"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W1-050",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_281Y002"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W3-044",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_141Y004"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S4-020",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_281Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-W2-005",
+   "dataset": "official",
+   "role": "fragile",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_301Y014"
+    ],
+    "interpretation": "ok",
+    "fragile": true
+   }
+  },
+  {
+   "case_id": "V2-S1-016",
+   "dataset": "official",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_301Y013"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "V2-W4-008",
+   "dataset": "official",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_513Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "V2-W1-017",
+   "dataset": "official",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_200Y101"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "V2-W3-057",
+   "dataset": "official",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_514Y001"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "V2-S2-002",
+   "dataset": "official",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_404Y014"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "V2-S3-013",
+   "dataset": "official",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_121Y010",
+     "DT_514Y003"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  },
+  {
+   "case_id": "V2-S3-008",
+   "dataset": "official",
+   "role": "stable",
+   "baseline": {
+    "set_exact": true,
+    "cause": null,
+    "tables": [
+     "DT_121Y006"
+    ],
+    "interpretation": "ok",
+    "fragile": false
+   }
+  }
+ ]
+}

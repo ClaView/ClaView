@@ -1,0 +1,26 @@
+{
+  "import_date": "2026-10-01",
+  "scope": "saved metadata; no numeric verification",
+  "files": [
+    {
+      "source_name": "catalog-349.json",
+      "destination": "data/catalog/search_catalog.json",
+      "sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+    },
+    {
+      "source_name": "boK_meta_raw.jsonl",
+      "destination": "data/raw/boK_meta_raw.jsonl",
+      "sha256": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e"
+    },
+    {
+      "source_name": "golden_set_v1.json",
+      "destination": "eval/cases/golden_set_v1.json",
+      "sha256": "2e27b49701636e1f51739d51bd7ccaef4c23d43c7c1ae66960e8bd671e80e5c5"
+    },
+    {
+      "source_name": "golden_set_v1.schema.json",
+      "destination": "eval/cases/golden_set_v1.schema.json",
+      "sha256": "1e6aec4613490c09a6eb0ffc176495c08a44834ee200ba881abd109a1ed71175"
+    }
+  ]
+}

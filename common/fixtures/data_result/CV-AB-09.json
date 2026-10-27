@@ -1,0 +1,85 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "M2 상품별 구성내역(말잔 원계열) / M2 (말잔원계열)",
+     "org_id": "301",
+     "table_id": "DT_161Y008",
+     "item_id": "13103844599999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102844599ACC_ITEM.BBGA00",
+       "name": "M2 (말잔원계열)"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2021",
+      "end": "2025"
+     },
+     "unit": "십억원"
+    },
+    "frequency": "Y",
+    "unit": "십억원",
+    "points": [
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 5,
+     "returned": 5,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_161Y008",
+      "itmId": "13103844599999",
+      "objL1": "13102844599ACC_ITEM.BBGA00",
+      "prdSe": "Y",
+      "startPrdDe": "2021",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.573118+00:00",
+     "raw_response_ref": "296e23565448409080bc3aac291a1b17"
+    }
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "296e23565448409080bc3aac291a1b17"
+}

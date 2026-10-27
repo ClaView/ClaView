@@ -1,0 +1,34 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "org_id": "301",
+    "table_id": "DT_401Y018",
+    "item_id": "13103134729999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134729ACC_CD.*AA",
+      "name": "총지수"
+     },
+     "objL2": {
+      "code": "13102134729CRR_CTRT_CD.W",
+      "name": "원화기준"
+     }
+    },
+    "period": {
+     "frequency": "M",
+     "start": "202401",
+     "end": "202412"
+    },
+    "unit": "2020=100"
+   }
+  ],
+  "relations": []
+ },
+ "issues": [],
+ "trace_ref": "e38fda1ffefa4c75a89641b551f6f1b4"
+}

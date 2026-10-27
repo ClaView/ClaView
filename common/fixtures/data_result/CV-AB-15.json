@@ -1,0 +1,213 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "경제심리지수 / 경제심리지수(원계열)",
+     "org_id": "301",
+     "table_id": "DT_513Y001",
+     "item_id": "13103134473999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134473ACC_CD.E1000",
+       "name": "경제심리지수(원계열)"
+      }
+     },
+     "period": {
+      "frequency": "M",
+      "start": "202409",
+      "end": "202608"
+     },
+     "unit": null
+    },
+    "frequency": "M",
+    "unit": null,
+    "points": [
+     {
+      "period": "202409",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202410",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202411",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202412",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202501",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202502",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202503",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202504",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202505",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202506",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202507",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202508",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202509",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202510",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202511",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202512",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202601",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202602",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202603",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202604",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202605",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202606",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202607",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202608",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 24,
+     "returned": 24,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_513Y001",
+      "itmId": "13103134473999",
+      "objL1": "13102134473ACC_CD.E1000",
+      "prdSe": "M",
+      "startPrdDe": "202409",
+      "endPrdDe": "202608"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:18.139031+00:00",
+     "raw_response_ref": "e05b11f3a42a49e1b37814c5ed46417c"
+    }
+   }
+  ],
+  "period_notices": [
+   {
+    "table": "301:DT_513Y001",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "202610",
+    "resolved_period": {
+     "frequency": "M",
+     "start": "202409",
+     "end": "202608"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 202610까지 필요하지만, 표의 최신 수록 시점은 202608입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 202409 ~ 202608"
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "e05b11f3a42a49e1b37814c5ed46417c"
+}

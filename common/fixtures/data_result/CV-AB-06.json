@@ -1,0 +1,463 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "가계신용(업권별 분기) / 가계신용",
+     "org_id": "301",
+     "table_id": "DT_151Y001",
+     "item_id": "13103134771999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134771ACC_ITEM.1000000",
+       "name": "가계신용"
+      }
+     },
+     "period": {
+      "frequency": "Q",
+      "start": "200801",
+      "end": "202404"
+     },
+     "unit": "십억원"
+    },
+    "frequency": "Q",
+    "unit": "십억원",
+    "points": [
+     {
+      "period": "200801",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "200802",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "200803",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "200804",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "200901",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "200902",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "200903",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "200904",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201001",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201002",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201003",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201004",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201101",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201102",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201103",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201104",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201201",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201202",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201203",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201204",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201301",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201302",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201303",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201304",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201401",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201402",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201403",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201404",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201501",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201502",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201503",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201504",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201601",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201602",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201603",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201604",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201701",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201702",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201703",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201704",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201801",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201802",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201803",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201804",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201901",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201902",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201903",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "201904",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202001",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202002",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202003",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202004",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202101",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202102",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202103",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202104",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202201",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202202",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202203",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202204",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202301",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202302",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202303",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202304",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202401",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202402",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202403",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202404",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 68,
+     "returned": 68,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_151Y001",
+      "itmId": "13103134771999",
+      "objL1": "13102134771ACC_ITEM.1000000",
+      "prdSe": "Q",
+      "startPrdDe": "200801",
+      "endPrdDe": "202404"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:15.114121+00:00",
+     "raw_response_ref": "cfe7d128fc034ddfbdfeafa07d537f98"
+    }
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "cfe7d128fc034ddfbdfeafa07d537f98"
+}

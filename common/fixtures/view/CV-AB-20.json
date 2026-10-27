@@ -1,0 +1,380 @@
+{
+ "stage": "C",
+ "status": "ok",
+ "result": {
+  "schema_version": "claview-c/1.1-demo",
+  "query": "2024년 수출 공산품과 농림수산품의 가격이 전년보다 얼마나 올랐는지 원화 기준 막대그래프로 비교해줘",
+  "default_view_id": "bar",
+  "views": [
+   {
+    "view_id": "line",
+    "kind": "line",
+    "title": "선그래프",
+    "chart_kind": "line",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "2020=100",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2023",
+        "2024"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+       "short_label": "총지수 / 원화기준",
+       "frequency": "Y",
+       "unit": "2020=100",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+        "org_id": "301",
+        "table_id": "DT_402Y014",
+        "item_id": "13103134642999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134642ACC_CD.*AA",
+          "name": "총지수"
+         },
+         "objL2": {
+          "code": "13102134642CRR_CTRT_CD.W",
+          "name": "원화기준"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2023",
+         "end": "2024"
+        },
+        "unit": "2020=100"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "bar",
+    "kind": "bar",
+    "title": "묶음막대",
+    "chart_kind": "bar",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "2020=100",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2023",
+        "2024"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+       "short_label": "총지수 / 원화기준",
+       "frequency": "Y",
+       "unit": "2020=100",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+        "org_id": "301",
+        "table_id": "DT_402Y014",
+        "item_id": "13103134642999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134642ACC_CD.*AA",
+          "name": "총지수"
+         },
+         "objL2": {
+          "code": "13102134642CRR_CTRT_CD.W",
+          "name": "원화기준"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2023",
+         "end": "2024"
+        },
+        "unit": "2020=100"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "table",
+    "kind": "table",
+    "title": "수치표",
+    "chart_kind": "table",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "2020=100",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2023",
+        "2024"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+       "short_label": "총지수 / 원화기준",
+       "frequency": "Y",
+       "unit": "2020=100",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+        "org_id": "301",
+        "table_id": "DT_402Y014",
+        "item_id": "13103134642999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134642ACC_CD.*AA",
+          "name": "총지수"
+         },
+         "objL2": {
+          "code": "13102134642CRR_CTRT_CD.W",
+          "name": "원화기준"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2023",
+         "end": "2024"
+        },
+        "unit": "2020=100"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   }
+  ],
+  "table": [
+   {
+    "series_id": "S001",
+    "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+    "frequency": "Y",
+    "unit": "2020=100",
+    "period_label": "2023년",
+    "period": "2023",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+    "frequency": "Y",
+    "unit": "2020=100",
+    "period_label": "2024년",
+    "period": "2024",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   }
+  ],
+  "warnings": [],
+  "notices": [],
+  "source": [
+   {
+    "series_id": "S001",
+    "org_id": "301",
+    "table_id": "DT_402Y014",
+    "item_id": "13103134642999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134642ACC_CD.*AA",
+      "name": "총지수"
+     },
+     "objL2": {
+      "code": "13102134642CRR_CTRT_CD.W",
+      "name": "원화기준"
+     }
+    },
+    "period": {
+     "frequency": "Y",
+     "start": "2023",
+     "end": "2024"
+    },
+    "unit": "2020=100",
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_402Y014",
+      "itmId": "13103134642999",
+      "objL1": "13102134642ACC_CD.*AA",
+      "objL2": "13102134642CRR_CTRT_CD.W",
+      "prdSe": "Y",
+      "startPrdDe": "2023",
+      "endPrdDe": "2024"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:21.407867+00:00",
+     "raw_response_ref": "d94fff8ba85c4674a2e313fdb887f93e"
+    }
+   }
+  ],
+  "recommendation": "질문에서 요청한 묶음막대를 먼저 보여줍니다.",
+  "blocked_views": [
+   {
+    "kind": "stacked",
+    "title": "누적막대",
+    "reason": "이 항목들을 더해 하나의 전체로 볼 수 있는지 확인되지 않았습니다. 합산 근거를 확인한 뒤 사용할 수 있습니다."
+   },
+   {
+    "kind": "percent_stacked",
+    "title": "100% 누적막대",
+    "reason": "비중을 구하려면 서로 겹치지 않는 구성 항목과 전체의 범위가 확인되어야 합니다. 현재 입력에는 그 근거가 없습니다."
+   },
+   {
+    "kind": "horizontal",
+    "title": "한 시점 가로막대",
+    "reason": "같은 주기·단위의 비교 항목이 두 개 이상 필요합니다."
+   }
+  ],
+  "quality_summary": {
+   "total_cells": 2,
+   "observed_values": 2,
+   "missing_values": 0,
+   "parse_error_values": 0,
+   "affected_series": 0
+  },
+  "synthetic": false,
+  "analysis_version": "c-analysis/2026-10-21-v3-policy",
+  "composition": null,
+  "calculation": {
+   "kind": "yoy",
+   "periods": [
+    "2024"
+   ],
+   "frequency": "Y",
+   "unit": "%",
+   "source_unit": "2020=100",
+   "policy": "월별이라는 요청이 없어 현재 B의 연간 주기를 유지합니다. KOSIS 연간 원화기준 지수를 전년도 연간 지수와 비교합니다. 전년동월 대비가 아닙니다.",
+   "formula": "(해당 연도 지수 ÷ 전년도 지수 − 1) × 100",
+   "series": [
+    {
+     "id": "S001",
+     "name": "총지수 / 원화기준",
+     "full": "수출물가지수(기본분류) / 총지수 / 원화기준",
+     "unit": "%",
+     "values": [
+      "0"
+     ]
+    }
+   ],
+   "rows": [
+    {
+     "series_id": "S001",
+     "name": "총지수 / 원화기준",
+     "period": "2024",
+     "baseline_period": "2023",
+     "current_value": "1",
+     "baseline_value": "1",
+     "value": "0",
+     "issue": null
+    }
+   ],
+   "complete": true,
+   "summary": "총지수 / 원화기준 +0.00%",
+   "highlights": [],
+   "version": "c-analysis/2026-10-21-v3-policy"
+  },
+  "chart_policy": {
+   "version": "chart-policy/2026-10-21-v1",
+   "requested": [
+    {
+     "kind": "bar",
+     "text": "막대그래프"
+    }
+   ],
+   "selected": "bar",
+   "reason": "질문에서 요청한 묶음막대를 먼저 보여줍니다.",
+   "notices": [],
+   "facts": {
+    "period_count": 2,
+    "series_count": 1,
+    "composition_verified": false
+   }
+  }
+ },
+ "issues": [],
+ "trace_ref": "ad3ca0cc22ba476ea8b37eadbb7d534a"
+}

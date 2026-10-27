@@ -1,0 +1,15 @@
+# Shared runtime dependencies for every backend service (pipeline, module-a/b/c).
+# One file, one image. Add a package here by PR (CODEOWNERS: all part leads).
+# Versions for the existing stack are taken from the previous uv.lock.
+
+# A / B / pipeline (existing)
+httpx==0.28.1
+jsonschema==4.26.0
+langgraph==1.2.12
+pydantic==2.13.5
+pyyaml==6.0.3
+
+# Service layer
+fastapi==0.115.11
+uvicorn[standard]==0.34.0
+python-dotenv==1.0.1

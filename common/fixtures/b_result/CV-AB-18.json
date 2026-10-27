@@ -1,0 +1,30 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "생산자물가지수(품목별) / 총지수",
+    "org_id": "301",
+    "table_id": "DT_404Y016",
+    "item_id": "13103134764999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134764ACC_CD.*AA",
+      "name": "총지수"
+     }
+    },
+    "period": {
+     "frequency": "M",
+     "start": "202312",
+     "end": "202412"
+    },
+    "unit": "2020=100"
+   }
+  ],
+  "relations": []
+ },
+ "issues": [],
+ "trace_ref": "475d5dbc530f4140afa547aa11211368"
+}

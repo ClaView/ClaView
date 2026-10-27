@@ -1,0 +1,630 @@
+{
+  "schema_version": "claview-ab/0.4-draft-period-augmented",
+  "dataset_id": "claview-golden-set-v1-axis3-qm-controls-10",
+  "cases": [
+    {
+      "case_id": "AX3-C-01",
+      "query": "최근 1년간 순대외금융자산 추이를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "202503",
+          "end": "202602"
+        },
+        "calendar_anchor": {
+          "frequency": "Q",
+          "start": "202501",
+          "end": "202602"
+        },
+        "floor_to_year": {
+          "frequency": "Q",
+          "start": "202501",
+          "end": "202602"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "table_name": "국제투자대조표(IIP)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-01-S1",
+              "label": "국제투자대조표(IIP) / 순대외금융자산",
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "item_id": "13103134486999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134486ACC_CD.3000000",
+                  "name": "순대외금융자산"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202503",
+                "end": "202602"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-02",
+      "query": "최근 3년간 순대외금융자산 추이를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "202303",
+          "end": "202602"
+        },
+        "calendar_anchor": {
+          "frequency": "Q",
+          "start": "202301",
+          "end": "202602"
+        },
+        "floor_to_year": {
+          "frequency": "Q",
+          "start": "202301",
+          "end": "202602"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "table_name": "국제투자대조표(IIP)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-02-S1",
+              "label": "국제투자대조표(IIP) / 순대외금융자산",
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "item_id": "13103134486999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134486ACC_CD.3000000",
+                  "name": "순대외금융자산"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202303",
+                "end": "202602"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-03",
+      "query": "최근 10년간 순대외금융자산 추이를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "201603",
+          "end": "202602"
+        },
+        "calendar_anchor": {
+          "frequency": "Q",
+          "start": "201601",
+          "end": "202602"
+        },
+        "floor_to_year": {
+          "frequency": "Q",
+          "start": "201601",
+          "end": "202602"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "table_name": "국제투자대조표(IIP)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-03-S1",
+              "label": "국제투자대조표(IIP) / 순대외금융자산",
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "item_id": "13103134486999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134486ACC_CD.3000000",
+                  "name": "순대외금융자산"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "201603",
+                "end": "202602"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-04",
+      "query": "최근 1년간 예금은행 대기업대출 금리 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "202508",
+          "end": "202607"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "202501",
+          "end": "202607"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "202501",
+          "end": "202607"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "table_name": "예금은행 대출금리(신규취급액 기준)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-04-S1",
+              "label": "예금은행 대출금리(신규취급액 기준) / 대기업대출",
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "item_id": "13103134553999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134553ACC_ITEM.BECBLA0201",
+                  "name": "대기업대출"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202508",
+                "end": "202607"
+              },
+              "unit": "연리%"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-05",
+      "query": "최근 5년간 예금은행 대기업대출 금리 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "202108",
+          "end": "202607"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "202101",
+          "end": "202607"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "202101",
+          "end": "202607"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "table_name": "예금은행 대출금리(신규취급액 기준)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-05-S1",
+              "label": "예금은행 대출금리(신규취급액 기준) / 대기업대출",
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "item_id": "13103134553999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134553ACC_ITEM.BECBLA0201",
+                  "name": "대기업대출"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202108",
+                "end": "202607"
+              },
+              "unit": "연리%"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-06",
+      "query": "최근 10년간 예금은행 대기업대출 금리 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "201608",
+          "end": "202607"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "201601",
+          "end": "202607"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "201601",
+          "end": "202607"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "table_name": "예금은행 대출금리(신규취급액 기준)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-06-S1",
+              "label": "예금은행 대출금리(신규취급액 기준) / 대기업대출",
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "item_id": "13103134553999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134553ACC_ITEM.BECBLA0201",
+                  "name": "대기업대출"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "201608",
+                "end": "202607"
+              },
+              "unit": "연리%"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-07",
+      "query": "최근 1년간 경제심리지수(ESI, 원계열) 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "202509",
+          "end": "202608"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "202501",
+          "end": "202608"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "202501",
+          "end": "202608"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_513Y001",
+              "table_name": "경제심리지수"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-07-S1",
+              "label": "경제심리지수 / 경제심리지수(원계열)",
+              "org_id": "301",
+              "table_id": "DT_513Y001",
+              "item_id": "13103134473999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134473ACC_CD.E1000",
+                  "name": "경제심리지수(원계열)"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202509",
+                "end": "202608"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-08",
+      "query": "최근 5년간 경제심리지수(ESI, 원계열) 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "202109",
+          "end": "202608"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "202101",
+          "end": "202608"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "202101",
+          "end": "202608"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_513Y001",
+              "table_name": "경제심리지수"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-08-S1",
+              "label": "경제심리지수 / 경제심리지수(원계열)",
+              "org_id": "301",
+              "table_id": "DT_513Y001",
+              "item_id": "13103134473999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134473ACC_CD.E1000",
+                  "name": "경제심리지수(원계열)"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202109",
+                "end": "202608"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-09",
+      "query": "최근 5년간 대출행태서베이 국내은행 대출태도 추이를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "202104",
+          "end": "202603"
+        },
+        "calendar_anchor": {
+          "frequency": "Q",
+          "start": "202101",
+          "end": "202603"
+        },
+        "floor_to_year": {
+          "frequency": "Q",
+          "start": "202101",
+          "end": "202603"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_514Y001",
+              "table_name": "대출행태서베이(대출태도)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-09-S1",
+              "label": "대출행태서베이(대출태도) / 국내은행-차주가중종합지수",
+              "org_id": "301",
+              "table_id": "DT_514Y001",
+              "item_id": "13103134672999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134672ACC_CD.AA",
+                  "name": "국내은행-차주가중종합지수"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202104",
+                "end": "202603"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-C-10",
+      "query": "최근 3년간 기업경기조사 대기업 기업심리지수 전망 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "202310",
+          "end": "202609"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "202301",
+          "end": "202609"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "202301",
+          "end": "202609"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_512Y014",
+              "table_name": "기업경기조사(전망)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-C-10-S1",
+              "label": "기업경기조사(전망) / 대 기 업 / 기업심리지수전망",
+              "org_id": "301",
+              "table_id": "DT_512Y014",
+              "item_id": "13103134488999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134488BUSINESS_TYPE_CD.X5000",
+                  "name": "대 기 업"
+                },
+                "objL2": {
+                  "code": "13102134488BSI_CD.BX",
+                  "name": "기업심리지수전망"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202310",
+                "end": "202609"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    }
+  ]
+}

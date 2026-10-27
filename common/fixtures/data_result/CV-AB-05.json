@@ -1,0 +1,181 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "국제수지 / 경상수지",
+     "org_id": "301",
+     "table_id": "DT_301Y013",
+     "item_id": "13103134519999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134519ACC_CD.000000",
+       "name": "경상수지"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2005",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2005",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2006",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2007",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2008",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2009",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2010",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2011",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2012",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2013",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2014",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2015",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 21,
+     "returned": 21,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y013",
+      "itmId": "13103134519999",
+      "objL1": "13102134519ACC_CD.000000",
+      "prdSe": "Y",
+      "startPrdDe": "2005",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:14.712048+00:00",
+     "raw_response_ref": "ffc3c89c8a18472885b868555744adf4"
+    }
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "ffc3c89c8a18472885b868555744adf4"
+}

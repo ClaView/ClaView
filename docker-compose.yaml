@@ -1,0 +1,60 @@
+# Service stack: frontend (nginx) -> pipeline. The pipeline runs A -> B -> fetch -> C in its own
+# process through each module's service code. module-a/b/c serve the same code as HTTP APIs
+# for each module's own tests and evaluation; the pipeline does not call them.
+#   docker compose up -d --build --wait        then open http://localhost:10300/
+# Keys come from .env (env_file) only. Never write key values in this file.
+x-backend: &backend
+  build: .
+  image: claview-backend:latest
+  env_file: .env
+  environment:
+    GIT_SHA: ${GIT_SHA:-unknown}      # shown in /info; set by `make up` (git rev-parse --short HEAD)
+  restart: unless-stopped
+  networks: [claview_net]
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:8888/health"]
+    interval: 30s
+    timeout: 10s
+    retries: 3
+    start_period: 60s
+
+services:
+  module-a:
+    <<: *backend
+    command: ["uvicorn", "claview_a_api.api:app", "--host", "0.0.0.0", "--port", "8888", "--no-server-header"]
+    ports: ["${A_PORT:-10311}:8888"]
+
+  module-b:
+    <<: *backend
+    command: ["uvicorn", "claview_b_api.api:app", "--host", "0.0.0.0", "--port", "8888", "--no-server-header"]
+    ports: ["${B_PORT:-10312}:8888"]
+
+  module-c:
+    <<: *backend
+    command: ["uvicorn", "claview_c_api.api:app", "--host", "0.0.0.0", "--port", "8888", "--no-server-header"]
+    ports: ["${C_PORT:-10313}:8888"]
+
+  pipeline:
+    <<: *backend
+    command: ["uvicorn", "claview_pipeline.api:app", "--host", "0.0.0.0", "--port", "8888", "--no-server-header"]
+    ports: ["${PIPELINE_PORT:-10301}:8888"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    image: claview-frontend:latest
+    restart: unless-stopped
+    ports: ["${FRONTEND_PORT:-10300}:80"]
+    networks: [claview_net]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      pipeline: {condition: service_healthy}
+
+networks:
+  claview_net:
+    driver: bridge

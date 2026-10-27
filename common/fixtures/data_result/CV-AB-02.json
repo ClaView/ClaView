@@ -1,0 +1,115 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+     "org_id": "301",
+     "table_id": "DT_200Y101",
+     "item_id": "13103136288999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102136288ACC_ITEM.101",
+       "name": "경제규모 및 국민소득(명목)"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": null
+    },
+    "frequency": "Y",
+    "unit": null,
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_200Y101",
+      "itmId": "13103136288999",
+      "objL1": "13102136288ACC_ITEM.101",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:13.902116+00:00",
+     "raw_response_ref": "c03115598c1f4d73b53304d34a917c65"
+    }
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "c03115598c1f4d73b53304d34a917c65"
+}

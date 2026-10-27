@@ -1,0 +1,3750 @@
+{
+  "version": 2,
+  "direction_date": "2026-10-12",
+  "expected_table_groups_sha256": "93f7cff4aad8166c34c3193bf49364f91fcf2e53fcec69ad9c01d0fef2061731",
+  "twin_group_rule": "sha256 of sorted answer groups with sorted unique allowed table IDs; first 16 hex digits prefixed tg-",
+  "policy": {
+    "exclude": "boundary or clarify=true only",
+    "table_count": "len(expected groups): 1=single, >1=multi; retain non-clarify multi",
+    "golden_status": "user decision 2026-10-12 12:36",
+    "dev_status": "automatic proposal, not user-approved labels",
+    "scope": "conservative saved-metadata screen; false does not prove uniqueness",
+    "score_independent": true,
+    "rules": [
+      {
+        "tables": [
+          "DT_121Y006",
+          "DT_121Y015"
+        ],
+        "axis": "신규취급액/잔액",
+        "markers": "신규|잔액|새로|남아있는|기존대출",
+        "terms": {
+          "대기업대출": [
+            "대기업대출",
+            "대기업대출"
+          ],
+          "중소기업대출": [
+            "중소기업대출",
+            "중소기업대출"
+          ]
+        },
+        "generic": [
+          "대출금리",
+          [
+            "대기업대출",
+            "중소기업대출"
+          ]
+        ],
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_404Y014",
+          "DT_404Y016"
+        ],
+        "axis": "기본분류/품목별",
+        "markers": "기본분류|품목별|특수분류|용도별",
+        "terms": {
+          "공산품": [
+            "공산품",
+            "공산품"
+          ],
+          "서비스": [
+            "서비스",
+            "서비스"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_401Y015",
+          "DT_401Y017"
+        ],
+        "axis": "기본분류/품목별",
+        "markers": "기본분류|품목별|특수분류|용도별",
+        "terms": {
+          "원유": [
+            "원유",
+            "원유"
+          ]
+        },
+        "generic": [
+          "수입물가(?:지수)?(?:를|와|의|추이|$)",
+          [
+            "총지수",
+            "총지수"
+          ]
+        ],
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_402Y014",
+          "DT_402Y016"
+        ],
+        "axis": "기본분류/품목별",
+        "markers": "기본분류|품목별|특수분류|용도별",
+        "terms": {
+          "공산품": [
+            "공산품",
+            "공산품"
+          ],
+          "농림수산품": [
+            "농림수산품",
+            "농림수산품"
+          ]
+        },
+        "generic": [
+          "수출물가(?:지수)?(?:를|와|의|추이|$)",
+          [
+            "총지수",
+            "총지수"
+          ]
+        ],
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_200Y128",
+          "DT_200Y130"
+        ],
+        "axis": "계절조정/원계열",
+        "markers": "원계열|계절|조정하지|조정전",
+        "terms": {
+          "설비투자": [
+            "설비투자",
+            "설비투자"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_200Y108",
+          "DT_200Y110"
+        ],
+        "axis": "계절조정/원계열",
+        "markers": "원계열|계절|조정하지|조정전",
+        "terms": {
+          "민간소비": [
+            "민간",
+            "민간"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_161Y005",
+          "DT_161Y006"
+        ],
+        "axis": "계절조정/원계열",
+        "markers": "원계열|계절|조정하지|조정전",
+        "terms": {
+          "M2": [
+            "M2(평잔계절조정계열)",
+            "M2(평잔 원계열)"
+          ],
+          "광의통화": [
+            "M2(평잔계절조정계열)",
+            "M2(평잔 원계열)"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_161Y007",
+          "DT_161Y008"
+        ],
+        "axis": "계절조정/원계열",
+        "markers": "원계열|계절|조정하지|조정전",
+        "terms": {
+          "M2": [
+            "M2(말잔 계절조정계열)",
+            "M2 (말잔원계열)"
+          ],
+          "광의통화": [
+            "M2(말잔 계절조정계열)",
+            "M2 (말잔원계열)"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_161Y003",
+          "DT_161Y004"
+        ],
+        "axis": "계절조정/원계열",
+        "markers": "원계열|계절|조정하지|조정전",
+        "terms": {
+          "M1": [
+            "M1 (말잔계절조정계열)",
+            "M1 (말잔 원계열)"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_101Y001",
+          "DT_101Y002"
+        ],
+        "axis": "계절조정/원계열",
+        "markers": "원계열|계절|조정하지|조정전",
+        "terms": {
+          "M2": [
+            "M2(말잔 계절조정계열)",
+            "M2(말잔 원계열)"
+          ],
+          "광의통화": [
+            "M2(말잔 계절조정계열)",
+            "M2(말잔 원계열)"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_161Y006",
+          "DT_161Y008"
+        ],
+        "axis": "평잔/말잔",
+        "markers": "말잔|평잔|월말|월평균|기말|평균잔액",
+        "terms": {
+          "M2": [
+            "M2(평잔 원계열)",
+            "M2 (말잔원계열)"
+          ],
+          "광의통화": [
+            "M2(평잔 원계열)",
+            "M2 (말잔원계열)"
+          ]
+        },
+        "generic": null,
+        "family": "stem_v1"
+      },
+      {
+        "tables": [
+          "DT_151Y002",
+          "DT_151Y005"
+        ],
+        "axis": "업권별/용도별",
+        "markers": "업권|용도",
+        "terms": {
+          "가계대출": [
+            "예금취급기관",
+            "예금취급기관"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      },
+      {
+        "tables": [
+          "DT_151Y001",
+          "DT_151Y004"
+        ],
+        "axis": "업권별/용도별",
+        "markers": "업권|용도",
+        "terms": {
+          "가계신용": [
+            "가계신용",
+            "가계신용"
+          ]
+        },
+        "generic": null,
+        "family": "parent_v1"
+      }
+    ],
+    "evidence_note": "Stored metadata demonstrates request-series availability, not equality of live observations; no API calls."
+  },
+  "inputs": {
+    "roles_v1_sha256": "2992a190f936e137e1750487baeb33072b0ff3081fa3afb7d293bd4c3cb269bd",
+    "nodes2_sha256": "ecea4afd39d1b384b09eec96f4e982deb0ace7d9ea4e726d969951c86674565d",
+    "catalog_snapshot": "2026-09-16#0ff158a8717c1c5f",
+    "meta_snapshot": "2026-09-16#b604e909d40f4228"
+  },
+  "review_needed": {
+    "PC:EQ-26": {
+      "question": "차주당 주택담보대출을 연령대별로 보여줘",
+      "table_ids": [
+        "DT_181Y011",
+        "DT_181Y012"
+      ],
+      "reason": "신규/잔액 미지정과 연령대 항목은 확인되지만 제목에 괄호가 없어 현재 S6 두 판본 모두 형제로 연결하지 않음. 관계 정의 확장 검토.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "A:CX-Q054": {
+      "question": "연령별 지역별 대출 자료를 보고 싶다.",
+      "table_ids": [
+        "DT_181Y001",
+        "DT_181Y002",
+        "DT_181Y011",
+        "DT_181Y012"
+      ],
+      "reason": "대출 범위(가계/주택담보)와 신규/잔액 모두 불명확. 요청 항목 계열 확정 전 자동 제외하지 않음.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "PC:EQ-28": {
+      "question": "수출 결제통화 중 원화 비중을 지역별로 보여줘",
+      "table_ids": [
+        "DT_303Y001",
+        "DT_303Y003"
+      ],
+      "reason": "지역별 원화와 지역/국가별 원화의 세분화 요구 및 비중 산출 의미 확인 필요. S6 형제 연결 없음.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "PC:EQ-42": {
+      "question": "경상수지 추이를 보여줘",
+      "table_ids": [
+        "DT_301Y013",
+        "DT_301Y017",
+        "DT_200Y101"
+      ],
+      "reason": "계절조정 미지정 외에 기존 정답 표지 E-05 문제가 겹침. S6 형제 관계 및 경상수지 계열 검토; 정답 불변.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "PC:EQ-18": {
+      "question": "2005년부터 2020년까지 전산업 부채비율 추이를 보여줘",
+      "table_ids": [
+        "DT_501Y032",
+        "DT_501Y031",
+        "DT_501Y007"
+      ],
+      "reason": "기간 연결과 표본조사/산업분류 전환이 겹침. 같은 모집단·계열인지 확인 필요.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "PC:EQ-19": {
+      "question": "2012년 중소기업 매출액증가율을 보여줘",
+      "table_ids": [
+        "DT_501Y005",
+        "DT_501Y019",
+        "DT_501Y020"
+      ],
+      "reason": "산업분류와 중소기업 법적 범위·수록 기간이 함께 다름. 같은 요청 계열인지 사람 검토 필요.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "B:CX-Q064": {
+      "question": "기업 성장성 지표를 찾아줘.",
+      "table_ids": [
+        "DT_501Y005",
+        "DT_501Y019",
+        "DT_501Y020"
+      ],
+      "reason": "산업분류와 중소기업 법적 범위·수록 기간이 함께 다름. 같은 요청 계열인지 사람 검토 필요.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "A:CX-Q084": {
+      "question": "기업경기조사의 실적과 전망을 나란히 비교해줘.",
+      "table_ids": [
+        "DT_512Y013",
+        "DT_512Y014",
+        "DT_512Y015",
+        "DT_512Y016"
+      ],
+      "reason": "실적/전망 또는 가중 방식 미지정. 저장 표의 업종 범위와 항목 주석이 달라 동일 요청 계열 및 과거 시점 표현의 의미를 검토.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "B:CX-Q074": {
+      "question": "기업경기조사의 전망 지수를 찾아줘.",
+      "table_ids": [
+        "DT_512Y013",
+        "DT_512Y014",
+        "DT_512Y015",
+        "DT_512Y016"
+      ],
+      "reason": "실적/전망 또는 가중 방식 미지정. 저장 표의 업종 범위와 항목 주석이 달라 동일 요청 계열 및 과거 시점 표현의 의미를 검토.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "B:CX-Q078": {
+      "question": "기업경기조사 실적과 전망을 각각 비교해줘.",
+      "table_ids": [
+        "DT_512Y013",
+        "DT_512Y014",
+        "DT_512Y015",
+        "DT_512Y016"
+      ],
+      "reason": "실적/전망 또는 가중 방식 미지정. 저장 표의 업종 범위와 항목 주석이 달라 동일 요청 계열 및 과거 시점 표현의 의미를 검토.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "PC:EQ-31": {
+      "question": "제조업 BSI 업황을 최근 1년 보여줘",
+      "table_ids": [
+        "DT_512Y013",
+        "DT_512Y014",
+        "DT_512Y015",
+        "DT_512Y016"
+      ],
+      "reason": "실적/전망 또는 가중 방식 미지정. 저장 표의 업종 범위와 항목 주석이 달라 동일 요청 계열 및 과거 시점 표현의 의미를 검토.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "PC:EQ-34": {
+      "question": "기업들이 체감하는 경기가 어떤지 보여줘",
+      "table_ids": [
+        "DT_512Y013",
+        "DT_512Y014",
+        "DT_512Y015",
+        "DT_512Y016"
+      ],
+      "reason": "실적/전망 또는 가중 방식 미지정. 저장 표의 업종 범위와 항목 주석이 달라 동일 요청 계열 및 과거 시점 표현의 의미를 검토.",
+      "status": "needs_review_kept_in_scoring"
+    },
+    "PC:EQ-30": {
+      "question": "GDP 대비 경상수지 비율을 보여줘",
+      "table_ids": [
+        "DT_200Y101",
+        "DT_200Y102"
+      ],
+      "reason": "연간/분기 주기 미지정. GDP 대비 경상수지 산식·주기 요구 해석이 필요해 자동 제외하지 않음.",
+      "status": "needs_review_kept_in_scoring"
+    }
+  },
+  "cases": {
+    "A:CX-Q001": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-6657242e934822d4",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q002": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-f564137979cb5f81",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q003": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-fe9d6221b4e60b54",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q004": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-6148e5567f4632b2",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q005": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-9d9410af58b90f2d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q006": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-7e74e8aa489537de",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q007": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-c20afcea8e60daa6",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q008": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-a508f18582855ac4",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q009": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-2971c3631f0852d0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q010": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-914308a31da0b2f5",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q011": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-96075ede0d366bd0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q012": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-25a4bd43feb5262a",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q013": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-b2c26d3c3f5c1dc0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q014": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-45a821f346017b90",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q015": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-40839eaf9dc7128d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q016": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-d500bf6b44d23621",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q017": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-cad2b9d5fbdb6d30",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q018": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e5dbc124e3c358ea",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q019": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-c3f7c0859326577b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q020": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-ae8558db81aed60d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q021": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-f32bba05d946106f",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q022": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a532b96bdeb51780",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q023": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-121bef44edef5154",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q024": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-7dab5e108a0b6dd6",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q025": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-22b2592974ade170",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q026": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-7dab5e108a0b6dd6",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_404Y014",
+              "DT_404Y016"
+            ],
+            "axis": "기본분류/품목별",
+            "evidence": {
+              "question": "생산자물가지수의 공산품을 보고 싶다.",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_404Y014": "생산자물가지수(기본분류)",
+                "DT_404Y016": "생산자물가지수(품목별)"
+              },
+              "requested_series": [
+                {
+                  "request": "공산품",
+                  "series": [
+                    {
+                      "table_id": "DT_404Y014",
+                      "item": "공산품",
+                      "item_id": "13102134604ACC_CD.3AA"
+                    },
+                    {
+                      "table_id": "DT_404Y016",
+                      "item": "공산품",
+                      "item_id": "13102134764ACC_CD.3AA"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "기본분류|품목별|특수분류|용도별",
+              "coverage": {
+                "DT_404Y014": {
+                  "M": {
+                    "start": "1965.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1965 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1965",
+                    "end": "2025"
+                  }
+                },
+                "DT_404Y016": {
+                  "M": {
+                    "start": "1965.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1965 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1965",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "A:CX-Q027": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d9923aaaf94462ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q028": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-15cbb586668c626e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q029": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-8937d7c68e73eb6e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q030": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-92470a1cbeef38e7",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q031": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-856174e830a02c3c",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q032": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a467312e96702e83",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q033": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-ca76234d0349edcd",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q034": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-2542b5e0ec59fde4",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_401Y015",
+              "DT_401Y017"
+            ],
+            "axis": "기본분류/품목별",
+            "evidence": {
+              "question": "수입 가격 가운데 원유만 따로 보고 싶다.",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_401Y015": "수입물가지수(기본분류)",
+                "DT_401Y017": "수입물가지수(품목별)"
+              },
+              "requested_series": [
+                {
+                  "request": "원유",
+                  "series": [
+                    {
+                      "table_id": "DT_401Y015",
+                      "item": "원유",
+                      "item_id": "13102134643ACC_CD.201121AA"
+                    },
+                    {
+                      "table_id": "DT_401Y017",
+                      "item": "원유",
+                      "item_id": "13102134644ACC_CD.20112101AA"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "기본분류|품목별|특수분류|용도별",
+              "coverage": {
+                "DT_401Y015": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                },
+                "DT_401Y017": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "A:CX-Q035": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-1d59ac3e0e14bfce",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q036": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-69bc4068fb135526",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q037": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3dd1162e74b7bf4b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q038": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-48d9372a47604846",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q039": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-f61d983455babfe9",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q040": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-fb9bffc739578010",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q041": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-c4e5935f542540a2",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q042": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-1aa3a5d1f83a6d91",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q043": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-b0bf295cd5bbc187",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q044": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3ccd7524d3cefb98",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q045": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-22785dfa868f9644",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q046": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-4f4b99472701ea68",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q047": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-207047a8e38d61d5",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q048": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-ca9e00fc55fc8489",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q049": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-82065284706fbef7",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q050": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-66b4e820c65d5db0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q051": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q052": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e518a6b94046cd81",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q053": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-06c028d5738c1d4d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q054": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-5e1210e2cdc06b8d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q055": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q056": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-6c7eef96d93c9a85",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q057": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-c528dae127545e23",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q058": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-0fb23d7879002b6b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q059": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3292be75ff230638",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q060": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-e129ecf0f9338d6b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q061": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-19f0f7a818c34f94",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q062": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-5a27c8d8a773ccc9",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q063": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-82f8148acd0f9929",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q064": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-590c9181b0ffd27a",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q065": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3e02bc757c88553b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q066": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a1d0d21838fa1706",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q067": {
+      "role": "boundary",
+      "origin": "hold",
+      "twin_group": "tg-3e02bc757c88553b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q068": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-70f725a562636c48",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q069": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3e02bc757c88553b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q070": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-25a2318a30c8f31f",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q071": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-362667941cd09332",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q072": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-5e43b2160c155dbd",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q073": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q074": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-082ce2a82be6871e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q075": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q076": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-362667941cd09332",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q077": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-a29ac34accb57cfc",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q078": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-0821389569d4cb65",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q079": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-0f35bde9efe35248",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q080": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-8c5cedd050197847",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q081": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-1252fcabf6467e18",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q082": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-751c31f4971ae05b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q083": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-9a8ffbb2b337fc2e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "A:CX-Q084": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-40305416e814240a",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q001": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-fe9d6221b4e60b54",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q002": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-9043f895d7ca1065",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q003": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-e07c527091af7421",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q004": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-6657242e934822d4",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q005": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-7e74e8aa489537de",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q006": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9d9410af58b90f2d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q007": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-4db7e68d0e9cdc23",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q008": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-6c2b67bdc9c0cdcd",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q009": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3815285e00040c13",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q010": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-6148e5567f4632b2",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q011": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-93d0d9188e14d7df",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q012": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-98fc06d9e5200215",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q013": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-96075ede0d366bd0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q014": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-b2c26d3c3f5c1dc0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q015": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a9674c1df9c86514",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q016": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-b2c26d3c3f5c1dc0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q017": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-5e1210e2cdc06b8d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q018": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-e518a6b94046cd81",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q019": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q020": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-76835b3dcaf11cc5",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q021": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-397dee443fd1a8c0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q022": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-fe8ab2fa08ed58f0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q023": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9b894c68677aab41",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q024": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-0d67c3ffbdc8581e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q025": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-880a1266cd9552d3",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q026": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-cad2b9d5fbdb6d30",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q027": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-880a1266cd9552d3",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q028": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d500bf6b44d23621",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q029": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-40839eaf9dc7128d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q030": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e5dbc124e3c358ea",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q031": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-f32bba05d946106f",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q032": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-880a1266cd9552d3",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_121Y006",
+              "DT_121Y015"
+            ],
+            "axis": "신규취급액/잔액",
+            "evidence": {
+              "question": "예금은행 대출금리를 보여줘.",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_121Y006": "예금은행 대출금리(신규취급액 기준)",
+                "DT_121Y015": "예금은행 대출금리(잔액 기준)"
+              },
+              "requested_series": [
+                {
+                  "request": "표 전체 계열",
+                  "series": [
+                    {
+                      "table_id": "DT_121Y006",
+                      "item": "대기업대출",
+                      "item_id": "13102134553ACC_ITEM.BECBLA0201"
+                    },
+                    {
+                      "table_id": "DT_121Y015",
+                      "item": "중소기업대출",
+                      "item_id": "13102134612ACC_ITEM.BECBLB020102"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "신규|잔액|새로|남아있는|기존대출",
+              "coverage": {
+                "DT_121Y006": {
+                  "M": {
+                    "start": "1996.01",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "1996 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1996",
+                    "end": "2025"
+                  }
+                },
+                "DT_121Y015": {
+                  "M": {
+                    "start": "1996.01",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "1996 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1996",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "B:CX-Q033": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d9923aaaf94462ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q034": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-121bef44edef5154",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q035": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-2542b5e0ec59fde4",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q036": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3720689db3a8d943",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q037": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-92470a1cbeef38e7",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q038": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-460e0b8dfb2cad9c",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q039": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-8937d7c68e73eb6e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q040": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-22b2592974ade170",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q041": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-1d59ac3e0e14bfce",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q042": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-856174e830a02c3c",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q043": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-0886405b3d55d1b3",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q044": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-48d9372a47604846",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q045": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-e22f22cc8743d0ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q046": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-f61d983455babfe9",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q047": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3dd1162e74b7bf4b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q048": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-69bc4068fb135526",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q049": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-a6a0f9c3fae205da",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q050": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-c4e5935f542540a2",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q051": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-1aa3a5d1f83a6d91",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q052": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-fb9bffc739578010",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q053": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-207047a8e38d61d5",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q054": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-ca9e00fc55fc8489",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q055": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3ccd7524d3cefb98",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q056": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-1421786d9283d4c7",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q057": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-22785dfa868f9644",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q058": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-72fe7d0ccf4a74ce",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q059": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-4f4b99472701ea68",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q060": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-2cd1df74f0c4dfc8",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q061": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-2f5a1284590a42f4",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q062": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-b0bf295cd5bbc187",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q063": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-78208cf3a74d2318",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q064": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-207047a8e38d61d5",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q065": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e129ecf0f9338d6b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q066": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-5a27c8d8a773ccc9",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q067": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-09c919ceb82197e7",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q068": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3292be75ff230638",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q069": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-64487645a833cafb",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q070": {
+      "role": "boundary",
+      "origin": "hold",
+      "twin_group": "tg-c291e8950182dc5e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q071": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q072": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-082ce2a82be6871e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q073": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-8926deb52bdf6385",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q074": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-37cb591e7eb40aff",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q075": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-362667941cd09332",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q076": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-751c31f4971ae05b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q077": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-51f2f6ed59929a20",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q078": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-40305416e814240a",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q079": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3e02bc757c88553b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q080": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-f17ccde96177011e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q081": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-590c9181b0ffd27a",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q082": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a1d0d21838fa1706",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q083": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-45f916c85e8f4883",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q084": {
+      "role": "boundary",
+      "origin": "dev",
+      "twin_group": "tg-45f916c85e8f4883",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q085": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e07c527091af7421",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q086": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-98fc06d9e5200215",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q087": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q088": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-5e1210e2cdc06b8d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q089": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-880a1266cd9552d3",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q090": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-cad2b9d5fbdb6d30",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q091": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-8937d7c68e73eb6e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q092": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-d9923aaaf94462ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q093": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-a6a0f9c3fae205da",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q094": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-ca9e00fc55fc8489",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q095": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "B:CX-Q096": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3e02bc757c88553b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-01": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-11fc6095f774ae08",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-02": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-11fc6095f774ae08",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-03": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-11fc6095f774ae08",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-04": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-c4e5935f542540a2",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-05": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-c4e5935f542540a2",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-06": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-622dc26d64a34560",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-07": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-880a1266cd9552d3",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "user_decision",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_121Y006",
+              "DT_121Y015"
+            ],
+            "axis": "신규취급액/잔액",
+            "evidence": {
+              "question": "최근 3년간 예금은행 기업대출 금리를 대기업대출·중소기업대출로 나눠 월별 꺾은선 그래프로 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_121Y006": "예금은행 대출금리(신규취급액 기준)",
+                "DT_121Y015": "예금은행 대출금리(잔액 기준)"
+              },
+              "requested_series": [
+                {
+                  "request": "대기업대출",
+                  "series": [
+                    {
+                      "table_id": "DT_121Y006",
+                      "item": "대기업대출",
+                      "item_id": "13102134553ACC_ITEM.BECBLA0201"
+                    },
+                    {
+                      "table_id": "DT_121Y015",
+                      "item": "대기업대출",
+                      "item_id": "13102134612ACC_ITEM.BECBLB020101"
+                    }
+                  ]
+                },
+                {
+                  "request": "중소기업대출",
+                  "series": [
+                    {
+                      "table_id": "DT_121Y006",
+                      "item": "중소기업대출",
+                      "item_id": "13102134553ACC_ITEM.BECBLA0202"
+                    },
+                    {
+                      "table_id": "DT_121Y015",
+                      "item": "중소기업대출",
+                      "item_id": "13102134612ACC_ITEM.BECBLB020102"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "신규|잔액|새로|남아있는|기존대출",
+              "coverage": {
+                "DT_121Y006": {
+                  "M": {
+                    "start": "1996.01",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "1996 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1996",
+                    "end": "2025"
+                  }
+                },
+                "DT_121Y015": {
+                  "M": {
+                    "start": "1996.01",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "1996 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1996",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "CV-AB-08": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-622dc26d64a34560",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-09": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-b2c26d3c3f5c1dc0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-10": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-5cc5af43d66a853a",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-11": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-0f0a4be69eeb7a52",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-12": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-4e0b6666cc82662a",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-13": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-e8b9251776e90d55",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-14": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-ca9e00fc55fc8489",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-15": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-362667941cd09332",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-16": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-7dab5e108a0b6dd6",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "user_decision",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_404Y014",
+              "DT_404Y016"
+            ],
+            "axis": "기본분류/품목별",
+            "evidence": {
+              "question": "2024년 공산품과 서비스의 생산자물가가 어떻게 달랐는지 월별로 비교해줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_404Y014": "생산자물가지수(기본분류)",
+                "DT_404Y016": "생산자물가지수(품목별)"
+              },
+              "requested_series": [
+                {
+                  "request": "공산품",
+                  "series": [
+                    {
+                      "table_id": "DT_404Y014",
+                      "item": "공산품",
+                      "item_id": "13102134604ACC_CD.3AA"
+                    },
+                    {
+                      "table_id": "DT_404Y016",
+                      "item": "공산품",
+                      "item_id": "13102134764ACC_CD.3AA"
+                    }
+                  ]
+                },
+                {
+                  "request": "서비스",
+                  "series": [
+                    {
+                      "table_id": "DT_404Y014",
+                      "item": "서비스",
+                      "item_id": "13102134604ACC_CD.5AA"
+                    },
+                    {
+                      "table_id": "DT_404Y016",
+                      "item": "서비스",
+                      "item_id": "13102134764ACC_CD.5AA"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "기본분류|품목별|특수분류|용도별",
+              "coverage": {
+                "DT_404Y014": {
+                  "M": {
+                    "start": "1965.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1965 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1965",
+                    "end": "2025"
+                  }
+                },
+                "DT_404Y016": {
+                  "M": {
+                    "start": "1965.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1965 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1965",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "CV-AB-17": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-121bef44edef5154",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-18": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-d9923aaaf94462ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-19": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-92470a1cbeef38e7",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-20": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-856174e830a02c3c",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "user_decision",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_402Y014",
+              "DT_402Y016"
+            ],
+            "axis": "기본분류/품목별",
+            "evidence": {
+              "question": "2024년 수출 공산품과 농림수산품의 가격이 전년보다 얼마나 올랐는지 원화 기준 막대그래프로 비교해줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_402Y014": "수출물가지수(기본분류)",
+                "DT_402Y016": "수출물가지수(품목별)"
+              },
+              "requested_series": [
+                {
+                  "request": "공산품",
+                  "series": [
+                    {
+                      "table_id": "DT_402Y014",
+                      "item": "공산품",
+                      "item_id": "13102134642ACC_CD.3AA"
+                    },
+                    {
+                      "table_id": "DT_402Y016",
+                      "item": "공산품",
+                      "item_id": "13102134578ACC_CD.3AA"
+                    }
+                  ]
+                },
+                {
+                  "request": "농림수산품",
+                  "series": [
+                    {
+                      "table_id": "DT_402Y014",
+                      "item": "농림수산품",
+                      "item_id": "13102134642ACC_CD.1AA"
+                    },
+                    {
+                      "table_id": "DT_402Y016",
+                      "item": "농림수산품",
+                      "item_id": "13102134578ACC_CD.1AA"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "기본분류|품목별|특수분류|용도별",
+              "coverage": {
+                "DT_402Y014": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                },
+                "DT_402Y016": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "CV-AB-21": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-a532b96bdeb51780",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "CV-AB-22": {
+      "role": "golden_regression",
+      "origin": "golden",
+      "twin_group": "tg-e3955bdc8dc8ee74",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-01": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-45f916c85e8f4883",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-02": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-8937d7c68e73eb6e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-03": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-3e02bc757c88553b",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-04": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-608a393ecb7e7fe0",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_200Y128",
+              "DT_200Y130"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "설비투자 증가율을 분기별로 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_200Y128": "자본재형태별 총자본형성(계절조정, 실질, 분기)",
+                "DT_200Y130": "자본재형태별 총자본형성(원계열, 실질, 분기 및 연간)"
+              },
+              "requested_series": [
+                {
+                  "request": "설비투자",
+                  "series": [
+                    {
+                      "table_id": "DT_200Y128",
+                      "item": "설비투자",
+                      "item_id": "13102136294ACC_ITEM.10105"
+                    },
+                    {
+                      "table_id": "DT_200Y130",
+                      "item": "설비투자",
+                      "item_id": "13102136263ACC_ITEM.10105"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_200Y128": {
+                  "Q": {
+                    "start": "1970 1/4",
+                    "end": "2026 2/4"
+                  }
+                },
+                "DT_200Y130": {
+                  "Q": {
+                    "start": "1970 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1970",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-05": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-11fc6095f774ae08",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-06": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-8926deb52bdf6385",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-07": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-9c3754c0e2f1a8ad",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-08": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-84ee4f334b020884",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-09": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e5dbc124e3c358ea",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-10": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-de75c67f6c6ef52d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-11": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-95d574e188c22876",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_161Y005",
+              "DT_161Y006"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "M2 추이를 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_161Y005": "M2 상품별 구성내역(평잔, 계절조정계열)",
+                "DT_161Y006": "M2 상품별 구성내역(평잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "M2",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y005",
+                      "item": "M2(평잔계절조정계열)",
+                      "item_id": "13102852615ACC_ITEM.BBHS00"
+                    },
+                    {
+                      "table_id": "DT_161Y006",
+                      "item": "M2(평잔 원계열)",
+                      "item_id": "13102852603ACC_ITEM.BBHA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_161Y005": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2026 1/4",
+                    "end": "2026 1/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y006": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "sibling_table_ids": [
+              "DT_161Y007",
+              "DT_161Y008"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "M2 추이를 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_161Y007": "M2 상품별 구성내역(말잔, 계절조정계열)",
+                "DT_161Y008": "M2 상품별 구성내역(말잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "M2",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y007",
+                      "item": "M2(말잔 계절조정계열)",
+                      "item_id": "13102852611ACC_ITEM.BBGS00"
+                    },
+                    {
+                      "table_id": "DT_161Y008",
+                      "item": "M2 (말잔원계열)",
+                      "item_id": "13102844599ACC_ITEM.BBGA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_161Y007": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2026 1/4",
+                    "end": "2026 1/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y008": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "sibling_table_ids": [
+              "DT_161Y006",
+              "DT_161Y008"
+            ],
+            "axis": "평잔/말잔",
+            "evidence": {
+              "question": "M2 추이를 보여줘",
+              "relation": "stem_v1",
+              "titles": {
+                "DT_161Y006": "M2 상품별 구성내역(평잔, 원계열)",
+                "DT_161Y008": "M2 상품별 구성내역(말잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "M2",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y006",
+                      "item": "M2(평잔 원계열)",
+                      "item_id": "13102852603ACC_ITEM.BBHA00"
+                    },
+                    {
+                      "table_id": "DT_161Y008",
+                      "item": "M2 (말잔원계열)",
+                      "item_id": "13102844599ACC_ITEM.BBGA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "말잔|평잔|월말|월평균|기말|평균잔액",
+              "coverage": {
+                "DT_161Y006": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y008": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-12": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-f32bba05d946106f",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_121Y006",
+              "DT_121Y015"
+            ],
+            "axis": "신규취급액/잔액",
+            "evidence": {
+              "question": "예금은행 대출금리 추이를 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_121Y006": "예금은행 대출금리(신규취급액 기준)",
+                "DT_121Y015": "예금은행 대출금리(잔액 기준)"
+              },
+              "requested_series": [
+                {
+                  "request": "표 전체 계열",
+                  "series": [
+                    {
+                      "table_id": "DT_121Y006",
+                      "item": "대기업대출",
+                      "item_id": "13102134553ACC_ITEM.BECBLA0201"
+                    },
+                    {
+                      "table_id": "DT_121Y015",
+                      "item": "중소기업대출",
+                      "item_id": "13102134612ACC_ITEM.BECBLB020102"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "신규|잔액|새로|남아있는|기존대출",
+              "coverage": {
+                "DT_121Y006": {
+                  "M": {
+                    "start": "1996.01",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "1996 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1996",
+                    "end": "2025"
+                  }
+                },
+                "DT_121Y015": {
+                  "M": {
+                    "start": "1996.01",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "1996 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1996",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-13": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-3fd3ebdbd083624c",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_200Y108",
+              "DT_200Y110"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "민간소비 증가율을 분기별로 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_200Y108": "국내총생산에 대한 지출(계절조정, 실질, 분기)",
+                "DT_200Y110": "국내총생산에 대한 지출(원계열, 실질, 분기 및 연간)"
+              },
+              "requested_series": [
+                {
+                  "request": "민간소비",
+                  "series": [
+                    {
+                      "table_id": "DT_200Y108",
+                      "item": "민간",
+                      "item_id": "13102136297ACC_ITEM.1010110"
+                    },
+                    {
+                      "table_id": "DT_200Y110",
+                      "item": "민간",
+                      "item_id": "13102136261ACC_ITEM.1010110"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_200Y108": {
+                  "Q": {
+                    "start": "1960 1/4",
+                    "end": "2026 2/4"
+                  }
+                },
+                "DT_200Y110": {
+                  "Q": {
+                    "start": "1960 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1953",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-14": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-5efbc26e499e7264",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_151Y002",
+              "DT_151Y005"
+            ],
+            "axis": "업권별/용도별",
+            "evidence": {
+              "question": "가계대출을 월별로 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_151Y002": "예금취급기관 가계대출(업권별, 월)",
+                "DT_151Y005": "예금취급기관 가계대출(용도별, 월)"
+              },
+              "requested_series": [
+                {
+                  "request": "가계대출",
+                  "series": [
+                    {
+                      "table_id": "DT_151Y002",
+                      "item": "예금취급기관",
+                      "item_id": "13102134549ACC_ITEM.1110000"
+                    },
+                    {
+                      "table_id": "DT_151Y005",
+                      "item": "예금취급기관",
+                      "item_id": "13102134699ACC_ITEM.1110000"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "업권|용도",
+              "coverage": {
+                "DT_151Y002": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_151Y005": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-15": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-48d9372a47604846",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-16": {
+      "role": "boundary",
+      "origin": "dev",
+      "twin_group": "tg-5cc5af43d66a853a",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-17": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-05a7aacc45fc4a15",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-18": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-40b3099f1d84a332",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-19": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-6758092fce10a738",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-20": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-96075ede0d366bd0",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_101Y001",
+              "DT_101Y002"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "1990년대 M2 말잔 추이를 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_101Y001": "M2 상품별 구성내역(말잔, 계절조정계열)",
+                "DT_101Y002": "M2 상품별 구성내역(말잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "M2",
+                  "series": [
+                    {
+                      "table_id": "DT_101Y001",
+                      "item": "M2(말잔 계절조정계열)",
+                      "item_id": "13102134693ACC_ITEM.BBGS00"
+                    },
+                    {
+                      "table_id": "DT_101Y002",
+                      "item": "M2(말잔 원계열)",
+                      "item_id": "13102134509ACC_ITEM.BBGA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_101Y001": {
+                  "M": {
+                    "start": "1970.01",
+                    "end": "2004.09"
+                  },
+                  "Y": {
+                    "start": "1970",
+                    "end": "2003"
+                  }
+                },
+                "DT_101Y002": {
+                  "M": {
+                    "start": "1960.01",
+                    "end": "2004.09"
+                  },
+                  "Q": {
+                    "start": "1960 1/4",
+                    "end": "2004 3/4"
+                  },
+                  "Y": {
+                    "start": "1960",
+                    "end": "2003"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-21": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-f6eb1ec6783a1d16",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-22": {
+      "role": "boundary",
+      "origin": "dev",
+      "twin_group": "tg-81b412719a0653ae",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-23": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-d13876ac7734a06d",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-24": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-05b1c0fab8ed7ba0",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-25": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e518a6b94046cd81",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-26": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-707e8db39efec5d3",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-27": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-856174e830a02c3c",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_402Y014",
+              "DT_402Y016"
+            ],
+            "axis": "기본분류/품목별",
+            "evidence": {
+              "question": "수출물가지수를 달러 기준으로 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_402Y014": "수출물가지수(기본분류)",
+                "DT_402Y016": "수출물가지수(품목별)"
+              },
+              "requested_series": [
+                {
+                  "request": "표 전체 계열",
+                  "series": [
+                    {
+                      "table_id": "DT_402Y014",
+                      "item": "총지수",
+                      "item_id": "13102134642ACC_CD.*AA"
+                    },
+                    {
+                      "table_id": "DT_402Y016",
+                      "item": "총지수",
+                      "item_id": "13102134578ACC_CD.*AA"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "기본분류|품목별|특수분류|용도별",
+              "coverage": {
+                "DT_402Y014": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                },
+                "DT_402Y016": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-28": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-c859c8ff9e14c0fd",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-29": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-fe8ab2fa08ed58f0",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_151Y002",
+              "DT_151Y005"
+            ],
+            "axis": "업권별/용도별",
+            "evidence": {
+              "question": "가계대출 증가율을 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_151Y002": "예금취급기관 가계대출(업권별, 월)",
+                "DT_151Y005": "예금취급기관 가계대출(용도별, 월)"
+              },
+              "requested_series": [
+                {
+                  "request": "가계대출",
+                  "series": [
+                    {
+                      "table_id": "DT_151Y002",
+                      "item": "예금취급기관",
+                      "item_id": "13102134549ACC_ITEM.1110000"
+                    },
+                    {
+                      "table_id": "DT_151Y005",
+                      "item": "예금취급기관",
+                      "item_id": "13102134699ACC_ITEM.1110000"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "업권|용도",
+              "coverage": {
+                "DT_151Y002": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_151Y005": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-30": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-e95b2ce361098f4e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-31": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-381a2512542b543e",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-32": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-45a821f346017b90",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_161Y005",
+              "DT_161Y006"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "광의통화 증가율을 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_161Y005": "M2 상품별 구성내역(평잔, 계절조정계열)",
+                "DT_161Y006": "M2 상품별 구성내역(평잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "광의통화",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y005",
+                      "item": "M2(평잔계절조정계열)",
+                      "item_id": "13102852615ACC_ITEM.BBHS00"
+                    },
+                    {
+                      "table_id": "DT_161Y006",
+                      "item": "M2(평잔 원계열)",
+                      "item_id": "13102852603ACC_ITEM.BBHA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_161Y005": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2026 1/4",
+                    "end": "2026 1/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y006": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "sibling_table_ids": [
+              "DT_161Y007",
+              "DT_161Y008"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "광의통화 증가율을 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_161Y007": "M2 상품별 구성내역(말잔, 계절조정계열)",
+                "DT_161Y008": "M2 상품별 구성내역(말잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "광의통화",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y007",
+                      "item": "M2(말잔 계절조정계열)",
+                      "item_id": "13102852611ACC_ITEM.BBGS00"
+                    },
+                    {
+                      "table_id": "DT_161Y008",
+                      "item": "M2 (말잔원계열)",
+                      "item_id": "13102844599ACC_ITEM.BBGA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_161Y007": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2026 1/4",
+                    "end": "2026 1/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y008": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "sibling_table_ids": [
+              "DT_161Y006",
+              "DT_161Y008"
+            ],
+            "axis": "평잔/말잔",
+            "evidence": {
+              "question": "광의통화 증가율을 보여줘",
+              "relation": "stem_v1",
+              "titles": {
+                "DT_161Y006": "M2 상품별 구성내역(평잔, 원계열)",
+                "DT_161Y008": "M2 상품별 구성내역(말잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "광의통화",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y006",
+                      "item": "M2(평잔 원계열)",
+                      "item_id": "13102852603ACC_ITEM.BBHA00"
+                    },
+                    {
+                      "table_id": "DT_161Y008",
+                      "item": "M2 (말잔원계열)",
+                      "item_id": "13102844599ACC_ITEM.BBGA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "말잔|평잔|월말|월평균|기말|평균잔액",
+              "coverage": {
+                "DT_161Y006": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y008": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-33": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-a6a0f9c3fae205da",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-34": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-c3193cd30084717f",
+      "clarify": false,
+      "clarify_reason": null
+    },
+    "PC:EQ-39": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-914fd337bad9e638",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_401Y015",
+              "DT_401Y017"
+            ],
+            "axis": "기본분류/품목별",
+            "evidence": {
+              "question": "수출물가와 수입물가를 함께 비교해줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_401Y015": "수입물가지수(기본분류)",
+                "DT_401Y017": "수입물가지수(품목별)"
+              },
+              "requested_series": [
+                {
+                  "request": "표 전체 계열",
+                  "series": [
+                    {
+                      "table_id": "DT_401Y015",
+                      "item": "총지수",
+                      "item_id": "13102134643ACC_CD.*AA"
+                    },
+                    {
+                      "table_id": "DT_401Y017",
+                      "item": "총지수",
+                      "item_id": "13102134644ACC_CD.*AA"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "기본분류|품목별|특수분류|용도별",
+              "coverage": {
+                "DT_401Y015": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                },
+                "DT_401Y017": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "sibling_table_ids": [
+              "DT_402Y014",
+              "DT_402Y016"
+            ],
+            "axis": "기본분류/품목별",
+            "evidence": {
+              "question": "수출물가와 수입물가를 함께 비교해줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_402Y014": "수출물가지수(기본분류)",
+                "DT_402Y016": "수출물가지수(품목별)"
+              },
+              "requested_series": [
+                {
+                  "request": "표 전체 계열",
+                  "series": [
+                    {
+                      "table_id": "DT_402Y014",
+                      "item": "총지수",
+                      "item_id": "13102134642ACC_CD.*AA"
+                    },
+                    {
+                      "table_id": "DT_402Y016",
+                      "item": "총지수",
+                      "item_id": "13102134578ACC_CD.*AA"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "기본분류|품목별|특수분류|용도별",
+              "coverage": {
+                "DT_402Y014": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                },
+                "DT_402Y016": {
+                  "M": {
+                    "start": "1971.01",
+                    "end": "2026.08"
+                  },
+                  "Q": {
+                    "start": "1971 1/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "1971",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-40": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-de906a2951106526",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_151Y001",
+              "DT_151Y004"
+            ],
+            "axis": "업권별/용도별",
+            "evidence": {
+              "question": "가계신용과 명목 GDP를 한 그래프에 보여줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_151Y001": "가계신용(업권별, 분기)",
+                "DT_151Y004": "가계신용(용도별, 분기)"
+              },
+              "requested_series": [
+                {
+                  "request": "가계신용",
+                  "series": [
+                    {
+                      "table_id": "DT_151Y001",
+                      "item": "가계신용",
+                      "item_id": "13102134771ACC_ITEM.1000000"
+                    },
+                    {
+                      "table_id": "DT_151Y004",
+                      "item": "가계신용",
+                      "item_id": "13102134772ACC_ITEM.1000000"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "업권|용도",
+              "coverage": {
+                "DT_151Y001": {
+                  "Q": {
+                    "start": "2002 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2002",
+                    "end": "2025"
+                  }
+                },
+                "DT_151Y004": {
+                  "Q": {
+                    "start": "2002 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2002",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-41": {
+      "role": "dev_pool",
+      "origin": "hold",
+      "twin_group": "tg-0080869fa4416d0b",
+      "clarify": true,
+      "clarify_reason": {
+        "status": "auto_proposal",
+        "reasons": [
+          {
+            "sibling_table_ids": [
+              "DT_161Y007",
+              "DT_161Y008"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "M1과 M2를 함께 비교해줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_161Y007": "M2 상품별 구성내역(말잔, 계절조정계열)",
+                "DT_161Y008": "M2 상품별 구성내역(말잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "M2",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y007",
+                      "item": "M2(말잔 계절조정계열)",
+                      "item_id": "13102852611ACC_ITEM.BBGS00"
+                    },
+                    {
+                      "table_id": "DT_161Y008",
+                      "item": "M2 (말잔원계열)",
+                      "item_id": "13102844599ACC_ITEM.BBGA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_161Y007": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2026 1/4",
+                    "end": "2026 1/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y008": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "sibling_table_ids": [
+              "DT_161Y003",
+              "DT_161Y004"
+            ],
+            "axis": "계절조정/원계열",
+            "evidence": {
+              "question": "M1과 M2를 함께 비교해줘",
+              "relation": "parent_v1",
+              "titles": {
+                "DT_161Y003": "M1 상품별 구성내역(말잔, 계절조정계열)",
+                "DT_161Y004": "M1 상품별 구성내역(말잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "M1",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y003",
+                      "item": "M1 (말잔계절조정계열)",
+                      "item_id": "13102852606ACC_ITEM.BBKS00"
+                    },
+                    {
+                      "table_id": "DT_161Y004",
+                      "item": "M1 (말잔 원계열)",
+                      "item_id": "13102852607ACC_ITEM.BBKA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "원계열|계절|조정하지|조정전",
+              "coverage": {
+                "DT_161Y003": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2026 1/4",
+                    "end": "2026 1/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y004": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "sibling_table_ids": [
+              "DT_161Y006",
+              "DT_161Y008"
+            ],
+            "axis": "평잔/말잔",
+            "evidence": {
+              "question": "M1과 M2를 함께 비교해줘",
+              "relation": "stem_v1",
+              "titles": {
+                "DT_161Y006": "M2 상품별 구성내역(평잔, 원계열)",
+                "DT_161Y008": "M2 상품별 구성내역(말잔, 원계열)"
+              },
+              "requested_series": [
+                {
+                  "request": "M2",
+                  "series": [
+                    {
+                      "table_id": "DT_161Y006",
+                      "item": "M2(평잔 원계열)",
+                      "item_id": "13102852603ACC_ITEM.BBHA00"
+                    },
+                    {
+                      "table_id": "DT_161Y008",
+                      "item": "M2 (말잔원계열)",
+                      "item_id": "13102844599ACC_ITEM.BBGA00"
+                    }
+                  ]
+                }
+              ],
+              "absent_markers": "말잔|평잔|월말|월평균|기말|평균잔액",
+              "coverage": {
+                "DT_161Y006": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                },
+                "DT_161Y008": {
+                  "M": {
+                    "start": "2003.10",
+                    "end": "2026.07"
+                  },
+                  "Q": {
+                    "start": "2003 4/4",
+                    "end": "2026 2/4"
+                  },
+                  "Y": {
+                    "start": "2003",
+                    "end": "2025"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "PC:EQ-42": {
+      "role": "dev_pool",
+      "origin": "dev",
+      "twin_group": "tg-d5ec4283347b00d3",
+      "clarify": false,
+      "clarify_reason": null
+    }
+  }
+}

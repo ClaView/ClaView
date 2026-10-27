@@ -1,0 +1,7 @@
+{
+ "_about": [
+  "Variant failures of the code the variant tests were recorded on (plan 08 T3, step 2; user decision",
+  "2): [case ID, operation, variant text, failure kind]. Expected failures, not expectations: a fix removes its rows."
+ ],
+ "failures": []
+}

@@ -25,9 +25,13 @@ node_modules/
 
 # Generated data and outputs
 /data/raw/*
+# Catalog metadata snapshot read by A, B and claview.pipeline.
+!/data/raw/boK_meta_raw.jsonl
 /data/processed/*
 /data/indexes/*
 *.log
+/eval/results/
+/runs/
 
 # Local files
 .DS_Store

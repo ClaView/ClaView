@@ -1,0 +1,160 @@
+{
+ "_about": ["Grammar words of question interpretation (plan 08 T2): request, filler, coordinator, punctuation, particle,", "marker, negation, exclusion, relation, tail-noun, X-byeol and unit words, one place for every class. A word is", "compared as an index key (NFKC, lower case, no spaces) unless a class says otherwise. Derived sets are built only", "in interpret/lexicon.py. General Korean grammar; not tuned to questions, cases or answers. Condition vocabulary", "(basis axes, calc patterns, period words) stays in condition_words.json; model-step labels and option texts stay", "in model_step_words.json; table-selection words stay in evidence_words.json."],
+ "script": {
+  "_about": "Character ranges (regular-expression class bodies) of the scripts the rules read: Hangul syllables, Hangul jamo and compatibility jamo, and the other letters of a word.",
+  "hangul_syllables": "가-힣",
+  "hangul_jamo": "ᄀ-ᇿ",
+  "hangul_compat_jamo": "㄰-㆏",
+  "word_other": "A-Za-z0-9"
+ },
+ "request": {
+  "_about": ["Request and predicate words taken off the end of a clause (2-5: only known words are removed, an unknown noun", "stays). forms.final: complete asking predicates (a request that ends; 'A를 보여줄래, B는 빼줘' ends its clause at", "the comma); the predicate of 'X 필요 없어' is the exclusion's existence entry (exclusion.existence), never a", "request; forms.noun: display and filler nouns of a request. polite_endings: a final form with one of these", "after it is final too ('보여줘요'; plan 08 step 4: the forms replace the old 'words x final endings' rule)."],
+  "words": ["보여줘", "보여주세요", "보여주시겠어요", "보여줄래", "보여줄", "보여주시고요", "보여", "알려줘", "알려주세요", "알려줄래", "알려줄", "알려", "찾아줘", "찾아주세요", "찾아", "정리해줘", "정리해", "그려줘", "그려", "만들어줘", "만들어", "확인해줘", "확인", "조회해줘", "조회", "뽑아줘", "뽑아", "줘", "주세요", "주라", "해줘", "해주세요", "보고", "보자", "봐줘", "볼래", "볼", "싶어", "싶다", "싶어요", "싶습니다", "궁금해", "궁금해요", "궁금하다", "궁금합니다", "얼마야", "얼마였어", "얼마인지", "얼마일까", "얼마예요", "어때", "어떤지", "어떻게", "어떨까", "됐어", "됐나", "되나", "돼", "되는지", "됐는지", "부탁해", "부탁드려요", "부탁드립니다", "필요해", "필요하다", "있어", "있을까", "있나", "있는지", "수", "그래프", "막대그래프", "꺾은선", "선그래프", "그래프에서", "차트", "표", "함께", "같이", "한", "하나의", "나눠", "나눠서", "나누어", "나눈", "작성해줘", "구해줘", "계산해줘", "비교해", "비교해서", "누적", "적용해줘", "적용해", "생략해줘", "써줘", "해", "하는", "필요", "없어", "없다", "없어요", "없습니다", "알고", "원해", "원합니다"],
+  "forms": {"final": ["보여줘", "보여주세요", "보여주시겠어요", "보여줄래", "보여주시고요", "알려줘", "알려주세요", "알려줄래", "찾아줘", "찾아주세요", "정리해줘", "정리해", "그려줘", "만들어줘", "만들어", "확인해줘", "조회해줘", "뽑아줘", "줘", "주세요", "주라", "해줘", "해주세요", "보자", "봐줘", "볼래", "싶어", "싶다", "싶어요", "싶습니다", "궁금해", "궁금해요", "궁금하다", "궁금합니다", "얼마야", "얼마였어", "얼마일까", "얼마예요", "어때", "어떨까", "됐어", "됐나", "되나", "돼", "부탁해", "부탁드려요", "부탁드립니다", "필요해", "필요하다", "있어", "있을까", "있나", "작성해줘", "구해줘", "계산해줘", "비교해", "적용해줘", "적용해", "생략해줘", "써줘", "해", "보여", "알려", "찾아", "그려", "뽑아", "원해", "원합니다"], "noun": ["수", "그래프", "막대그래프", "꺾은선", "선그래프", "그래프에서", "차트", "표", "필요", "누적", "하나의", "한"]},
+  "polite_endings": ["요"]
+ },
+ "clause_end_request": {
+  "_about": "Request verbs with a connective ending that end a clause and start another (보여주고).",
+  "words": ["보여주고", "알려주고", "찾아주고", "확인하고", "조회하고", "보여주며", "알려주며"]
+ },
+ "connective": {
+  "_about": "A predicate stem with a connective ending ends a clause (plan 04, 2-4: item clause and other clauses); the endings also end a clause of the attribution rules.",
+  "endings": ["되", "고", "며", "면서", "해서", "지만"],
+  "stems": ["보여주", "알려주", "찾아주", "적용하", "적용해", "하", "해", "비교하", "비교해", "정리하", "확인하", "조회하", "나타내", "그려주", "생략하"]
+ },
+ "filler": {
+  "_about": ["words: filler words that are neither names nor leftover words (2-3 check 5, user 10/18). base_word: the lone", "basis word, a filler except right after a period ('2015년 기준' is a base year and stays an unknown word).", "model_ignorable: request and filler words (or their stems) a leftover word the model read as such must be", "(model_verify V-cover)."],
+  "words": ["각각의", "따로", "지표", "값", "자료", "데이터", "수치", "관련", "좀", "혹시", "한번", "우리나라", "얼마나", "흐름", "규모", "수준", "모두", "둘", "다", "두", "전체", "기준", "통계", "것", "현황", "내역", "최근", "동시에"],
+  "base_word": "기준",
+  "model_ignorable": ["알고", "알려", "궁금", "궁금해", "혹시", "좀", "한번", "보고", "싶어", "싶다", "싶습니다", "싶은데", "주세요", "줘", "수치", "추이"]
+ },
+ "coordinator": {
+  "_about": ["Words and particles that join list items. words: list words written apart (및, 그리고). particles: joiner", "particles written against an item; after_name_only: the ones read as a joiner only on a name, condition or", "qualifier token (on a bare word only 와/과 join, old find_lists). and_word: the list word inside and-names of", "the catalog and the 'W 및 X' merge. conjunctive: the list words that join (및, 그리고), not choose (또는, 혹은).", "list_joiners: the joiner particles a question writes in place of the and-word or a list mark inside one", "catalog name ('A 및 B', 'A·B' -> 'A과 B', 'A와 B'; plan 14 I8 joiner keys of catalog/names.py)."],
+  "words": ["및", "그리고", "또는", "혹은"],
+  "particles": ["와", "과", "이랑", "랑", "하고"],
+  "after_name_only": ["이랑", "랑", "하고"],
+  "conjunctive": ["및", "그리고"],
+  "list_joiners": ["과", "와"],
+  "and_word": "및"
+ },
+ "punctuation": {
+  "_about": ["Marks after NFKC (full-width forms read as these). sentence_end ends a clause; separators cut a list; dots are", "the middle dots of a list; open/close are brackets; other: other marks of the tokenizer. axis_list adds the", "slash between listed X-byeol axes; trim: marks trimmed off a requirement quote; name_split: marks between the", "words of a table name (catalog reading); list_dots_norm: the middle dots of the 2.2 list rules (normalised text); number_marks: marks inside a number."],
+  "sentence_end": ".?!",
+  "separators": ",·ᆞ・ㆍ;",
+  "dots": "·ᆞ・ㆍ",
+  "open": "([{",
+  "close": ")]}",
+  "other": ":\"'~/",
+  "comma": ",",
+  "period": ".",
+  "axis_list": "/",
+  "trim": " ,　\t",
+  "name_split": "(),·/",
+  "list_dots_norm": "·ᆞ・",
+  "number_marks": ".,~%"
+ },
+ "particles": {
+  "_about": ["Particles and endings by kind. endings: particles and verb endings cut off a word before it is looked up (and", "after a name); name_boundary: endings that may follow a catalog name inside one written word (catalog/spans.py);", "topic, object, genitive, complement, designate (restrictive: 'X만', 'X에만'), subject, aux (는/도 between a verb", "stem ending and its negation: '하지는 말고'); phrase_end_endings: endings that close a phrase besides the case", "particles; list_tail, token_tail: particles after the last item of a 2.2 list and after a word of a phrase;", "marker: particles after a relation, function or display word; phrase_closing: particles that end the words", "before a shared head ('X A와 B'); genitive_of: the genitive particle itself."],
+  "endings": ["하며", "하면서", "하지만", "을", "를", "은", "는", "이", "가", "의", "와", "과", "로", "으로", "에", "에서", "도", "만", "이랑", "랑", "하고", "처럼", "까지", "부터", "보다", "에게", "에는", "에서는", "로는", "으로는", "에만", "만의", "만을", "와의", "과의", "에서의", "로의", "으로의", "들", "들의", "요", "이나", "나", "이며", "며", "에도", "로도", "으로도", "는지", "인지", "했는지", "했나", "했어", "했다", "해서", "하는", "하는지", "한지", "하고", "하되", "해", "한", "된", "되는", "될", "할", "이야", "야", "였어", "였는지", "이었는지", "일까", "인가", "이다", "어"],
+  "name_boundary": ["을", "를", "은", "는", "이", "가", "의", "와", "과", "로", "으로", "에", "에서", "도", "만", "및", "이랑", "랑", "하고", "처럼", "까지", "부터", "보다", "마다", "별로", "별", "중", "대비", "이나", "나", "으로는", "로는", "에만", "만의", "만을", "에는", "에서는", "에도", "와의", "과의", "로의", "으로의", "에서의", "까지의", "부터의", "들", "들의", "요", "도요"],
+  "topic": ["은", "는"],
+  "object": ["을", "를"],
+  "genitive": ["의", "에서"],
+  "genitive_of": "의",
+  "complement": ["로", "으로"],
+  "designate": ["는", "은", "만", "에만", "에는"],
+  "restrictive": ["에만", "만"],
+  "subject": ["이", "가"],
+  "aux": ["는", "도"],
+  "phrase_end_endings": ["는지", "인지", "했는지", "고", "며", "해서"],
+  "list_tail": ["으로", "에서", "처럼", "의", "을", "를", "이", "가", "은", "는", "로", "에", "도"],
+  "list_subject": ["이", "가"],
+  "token_tail": ["으로", "에서", "에게", "처럼", "부터", "까지", "의", "을", "를", "은", "는", "이", "가", "로", "에", "도", "와", "과", "만"],
+  "marker": ["을", "를", "이", "가", "은", "는", "의", "로", "으로", "도", "만", "과", "와", "에", "에서"],
+  "phrase_closing": ["으로", "에서", "을", "를", "이", "가", "은", "는", "로", "에", "도", "와", "과", "만"]
+ },
+ "verb_endings": {
+  "_about": "modifier: adnominal verb endings (an unknown verb with one right before a condition or name modifies it: '보유한 X별'); adnominal_final: the last syllable of an adnominal verb form ('늘어난', '가진') that continues a noun phrase in the attribution rules.",
+  "modifier": ["한", "된", "하는", "되는"],
+  "adnominal_final": ["본", "한", "된", "난", "온", "간", "낸", "친", "운", "인", "던", "진", "린", "른", "쓴", "든"]
+ },
+ "markers": {
+  "_about": ["plan 05 B: distributive markers split a requirement per listed X-byeol axis; simultaneous markers keep one", "requirement over them. common: words that make a tail condition common (2-4 rule 5, with the two lists", "above). measure_skip: words that are no noun word of an item (2.7 indicator words)."],
+  "distributive": ["각각", "따로"],
+  "simultaneous": ["동시에", "함께", "같이"],
+  "common": ["모두", "둘 다", "모든"],
+  "measure_skip": ["모두", "각각", "둘", "다", "함께"]
+ },
+ "divide": {
+  "_about": "Dividing verbs ('A와 B를 나눠'), their adnominal form ('A와 B를 나눈 N'), the adverbs allowed between the listed axes and the verb, and the ending that closes the phrase N of 'N에서 A와 B를 나누어'.",
+  "words": ["나눠", "나눠서", "나누어", "나누어서"],
+  "adnominal": ["나눈"],
+  "adverbs": ["동시에", "함께", "같이", "모두"],
+  "source_endings": ["에서"]
+ },
+ "negation": {
+  "_about": ["words: phrase negation ('A가 아니라 B', 'A 말고 B'). basis: the negation read after a basis word (old q4:", "particles, then one of the words; a word may hold a space). designation: words that make a designation", "clause ambiguous (2-4 rule 1)."],
+  "words": ["아니라", "아니고", "아닌", "말고", "대신"],
+  "basis_particles": ["을", "를", "이", "가", "은", "는"],
+  "basis_words": ["뺀", "빼고", "제외", "아니", "아닌", "하지 않", "안 한"],
+  "designation": ["말고", "않", "빼고", "빼서", "빼면", "제외", "아닌"]
+ },
+ "exclusion": {
+  "_about": ["Exclusion predicates (2.2, plan 05 E): verbs in regular-expression alternation order (the order decides", "overlaps), the particles before them, the ending and verbs that negate them ('제외하지 말고': negated_ending", "+ negated_by), the suffix 이외, the source and tails of a calculation definition in brackets and the", "complement hints. existence: the existence-negation predicate ('X는 필요 없어', '필요가 없어',", "'필요는 없어'): a noun of 'nouns', one of 'particles' or none, then the negative stem; 'forms' are its", "written forms, read by the request words as no request (one reading of the predicate's polarity)."],
+  "verbs": ["뺀", "빼고", "제외한", "제외하고", "제외", "제외해줘", "제외해 줘", "제외해주세요", "빼줘", "빼 줘", "빼주세요", "빼 주세요", "없이"],
+  "existence": {"nouns": ["필요"], "particles": ["가", "는", "도"], "negative": "없", "forms": ["없어", "없다", "없어요", "없습니다"]},
+  "particles": ["을", "를", "은", "는"],
+  "negated_ending": "지",
+  "negated_by": ["말", "않"],
+  "suffix": "이외",
+  "definition_source": "에서",
+  "definition_tails": ["것", "값", "금액", "수치"],
+  "hints": ["{name}이외", "{name}제외", "{name} 제외"]
+ },
+ "appositive": {
+  "_about": "Appositive words ('A, 즉 B').",
+  "words": ["즉", "그러니까", "다시"]
+ },
+ "relation": {
+  "_about": ["Relation, function and display words of 2.2 as word patterns: regex, value, and the word boundaries required", "at the start and the end ('word': no letter before / after but a marker particle). combine: combining verbs", "and the relation they make; share: share verbs; list_separators: relation words that also cut a list ('대비')."],
+  "patterns": [{"regex": "의\\s*몇\\s*(?:%|퍼센트|프로)", "value": "percent_of", "start": "any", "end": "any"}, {"regex": "(?:으로|로)\\s*나눈", "value": "ratio", "start": "any", "end": "any"}, {"regex": "대비", "value": "ratio", "start": "word", "end": "any"}, {"regex": "비율", "value": "ratio", "start": "word", "end": "word"}, {"regex": "차이|격차|스프레드", "value": "diff", "start": "word", "end": "any"}, {"regex": "비중", "value": "share_of", "start": "word", "end": "any"}, {"regex": "상계", "value": "net", "start": "word", "end": "any"}],
+  "combine": {"합친": "sum", "합한": "sum", "더한": "sum", "합산한": "sum", "상계한": "net", "차감한": "diff"},
+  "share": ["차지하는", "차지한"],
+  "list_separators": ["대비"]
+ },
+ "function": {
+  "_about": "Function words of 2.2 (patterns as in 'relation').",
+  "patterns": [{"regex": "(?:으로|로)\\s*(?:나눠서|나누어서|나눠|나누어)", "value": "split_by", "start": "any", "end": "any"}, {"regex": "(?:을|를|은|는)?\\s*(?:뺀|빼고|빼서|빼면)", "value": "minus", "start": "any", "end": "any"}, {"regex": "(?:중|가운데)(?:에서|에)?", "value": "among", "start": "word", "end": "word"}, {"regex": "각각", "value": "each", "start": "word", "end": "any"}]
+ },
+ "display": {
+  "_about": "Display words of 2.2 (patterns as in 'relation').",
+  "patterns": [{"regex": "추이", "value": "trend", "start": "any", "end": "any"}, {"regex": "비교|견주|견줘", "value": "compare", "start": "word", "end": "any"}, {"regex": "구성", "value": "composition", "start": "word", "end": "word"}, {"regex": "나란히", "value": "side_by_side", "start": "word", "end": "any"}]
+ },
+ "tail_nouns": {
+  "_about": ["General nouns written right after a condition or value. basis: after a basis value ('명목 금액'): read as part", "of that value; topic_lead: between a condition and the next topic head ('분기 기준으로 B는'); negation: between", "a basis word and its negation ('기준이 아니라'); list_boundary: words before a list that do not modify it."],
+  "basis": ["금액", "값", "수치", "기준"],
+  "topic_lead": ["기준", "계열"],
+  "negation": ["기준", "계열"],
+  "list_boundary": ["중", "가운데", "기준"]
+ },
+ "byeol": {
+  "_about": "The X-byeol mark ('X별'), the particles it may take, and the frequency heads whose X-byeol is a frequency.",
+  "marker": "별",
+  "particles": ["로"],
+  "frequency_heads": ["연도", "월", "분기", "반기", "년도", "연", "월말", "분기말", "반기말", "연말", "년말"]
+ },
+ "derived_names": {
+  "_about": "Plan 09 P1: tail words of a table name that a question may leave out ('가상물가지수' read from '가상물가'); the catalog name index adds the name without the tail as a derived name (never exact).",
+  "tail_words": ["지수"]
+ },
+ "units": {
+  "_about": "Unit words of 2.2: scales, money units and their currency, the unit word, percent words.",
+  "scales": ["십억", "백만", "천만", "천", "억", "조"],
+  "money": ["원", "달러"],
+  "unit_word": "단위",
+  "percent": ["퍼센트", "%"],
+  "percent_value": "%",
+  "count_word": "몇",
+  "money_currency": {"원": "원화", "달러": "달러"}
+ }
+}

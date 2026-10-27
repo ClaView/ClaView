@@ -1,0 +1,798 @@
+{
+  "schema_version": "claview-ab/0.4-draft-period-augmented",
+  "dataset_id": "claview-golden-set-v1-axis3-cross-frequency-12",
+  "cases": [
+    {
+      "case_id": "AX3-B-01",
+      "query": "최근 5년간 지역별 결제통화 수출 금액(달러 아세안) 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202101",
+          "end": "202502"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202001",
+          "end": "202502"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202101",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "table_name": "지역별 결제통화(수출)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-01-S1",
+              "label": "지역별 결제통화(수출) / 달러 (아세안) / 금액",
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "item_id": "13103134484999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134484ACC_CD.REGEXASEANUSD",
+                  "name": "달러 (아세안)"
+                },
+                "objL2": {
+                  "code": "13102134484AMT_RATIO_CD.AMT",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202101",
+                "end": "202502"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-02",
+      "query": "최근 5년간 지역별 결제통화 수출 금액(달러 아세안) 추이를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "202101",
+          "end": "202504"
+        },
+        "calendar_anchor": {
+          "frequency": "Q",
+          "start": "202001",
+          "end": "202504"
+        },
+        "floor_to_year": {
+          "frequency": "Q",
+          "start": "202101",
+          "end": "202504"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "table_name": "지역별 결제통화(수출)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-02-S1",
+              "label": "지역별 결제통화(수출) / 달러 (아세안) / 금액",
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "item_id": "13103134484999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134484ACC_CD.REGEXASEANUSD",
+                  "name": "달러 (아세안)"
+                },
+                "objL2": {
+                  "code": "13102134484AMT_RATIO_CD.AMT",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202101",
+                "end": "202504"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-03",
+      "query": "최근 5년간 지역별 결제통화 수출 금액(달러 아세안) 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "202101",
+          "end": "202512"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "202001",
+          "end": "202512"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "202101",
+          "end": "202512"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "table_name": "지역별 결제통화(수출)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-03-S1",
+              "label": "지역별 결제통화(수출) / 달러 (아세안) / 금액",
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "item_id": "13103134484999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134484ACC_CD.REGEXASEANUSD",
+                  "name": "달러 (아세안)"
+                },
+                "objL2": {
+                  "code": "13102134484AMT_RATIO_CD.AMT",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202101",
+                "end": "202512"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-04",
+      "query": "최근 2년간 지역별 결제통화 수출 금액(달러 아세안) 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202401",
+          "end": "202502"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202301",
+          "end": "202502"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202401",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "table_name": "지역별 결제통화(수출)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-04-S1",
+              "label": "지역별 결제통화(수출) / 달러 (아세안) / 금액",
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "item_id": "13103134484999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134484ACC_CD.REGEXASEANUSD",
+                  "name": "달러 (아세안)"
+                },
+                "objL2": {
+                  "code": "13102134484AMT_RATIO_CD.AMT",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202401",
+                "end": "202502"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-05",
+      "query": "최근 2년간 지역별 결제통화 수출 금액(달러 아세안) 추이를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "202401",
+          "end": "202504"
+        },
+        "calendar_anchor": {
+          "frequency": "Q",
+          "start": "202301",
+          "end": "202504"
+        },
+        "floor_to_year": {
+          "frequency": "Q",
+          "start": "202401",
+          "end": "202504"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "table_name": "지역별 결제통화(수출)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-05-S1",
+              "label": "지역별 결제통화(수출) / 달러 (아세안) / 금액",
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "item_id": "13103134484999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134484ACC_CD.REGEXASEANUSD",
+                  "name": "달러 (아세안)"
+                },
+                "objL2": {
+                  "code": "13102134484AMT_RATIO_CD.AMT",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202401",
+                "end": "202504"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-06",
+      "query": "최근 2년간 지역별 결제통화 수출 금액(달러 아세안) 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "202401",
+          "end": "202512"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "202301",
+          "end": "202512"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "202401",
+          "end": "202512"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "table_name": "지역별 결제통화(수출)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-06-S1",
+              "label": "지역별 결제통화(수출) / 달러 (아세안) / 금액",
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "item_id": "13103134484999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134484ACC_CD.REGEXASEANUSD",
+                  "name": "달러 (아세안)"
+                },
+                "objL2": {
+                  "code": "13102134484AMT_RATIO_CD.AMT",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202512"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-07",
+      "query": "최근 5년간 지식서비스 무역통계 수출(IT 개발 및 운영 서비스) 추이를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202102",
+          "end": "202601"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202101",
+          "end": "202601"
+        },
+        "floor_to_year": {
+          "frequency": "H",
+          "start": "202101",
+          "end": "202601"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "table_name": "지식서비스 무역통계(유형별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-07-S1",
+              "label": "지식서비스 무역통계(유형별) / 수출 / IT 개발 및 운영 서비스",
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "item_id": "13103836578999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102836578GUBUN_CD.AA0200",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102836578ACC_ITEM.ISA0210",
+                  "name": "IT 개발 및 운영 서비스"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202102",
+                "end": "202601"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-08",
+      "query": "최근 5년간 지식서비스 무역통계 수출(IT 개발 및 운영 서비스) 추이를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "202103",
+          "end": "202602"
+        },
+        "calendar_anchor": {
+          "frequency": "Q",
+          "start": "202101",
+          "end": "202602"
+        },
+        "floor_to_year": {
+          "frequency": "Q",
+          "start": "202101",
+          "end": "202602"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "table_name": "지식서비스 무역통계(유형별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-08-S1",
+              "label": "지식서비스 무역통계(유형별) / 수출 / IT 개발 및 운영 서비스",
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "item_id": "13103836578999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102836578GUBUN_CD.AA0200",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102836578ACC_ITEM.ISA0210",
+                  "name": "IT 개발 및 운영 서비스"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202103",
+                "end": "202602"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-09",
+      "query": "최근 5년간 지식서비스 무역통계 수출(IT 개발 및 운영 서비스) 추이를 연도별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Y",
+          "start": "2021",
+          "end": "2025"
+        },
+        "calendar_anchor": {
+          "frequency": "Y",
+          "start": "2020",
+          "end": "2025"
+        },
+        "floor_to_year": {
+          "frequency": "Y",
+          "start": "2021",
+          "end": "2025"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "table_name": "지식서비스 무역통계(유형별)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-09-S1",
+              "label": "지식서비스 무역통계(유형별) / 수출 / IT 개발 및 운영 서비스",
+              "org_id": "301",
+              "table_id": "DT_304Y101",
+              "item_id": "13103836578999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102836578GUBUN_CD.AA0200",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102836578ACC_ITEM.ISA0210",
+                  "name": "IT 개발 및 운영 서비스"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-10",
+      "query": "최근 5년간 생명보험회사 전국 수신 말잔 추이를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "M",
+          "start": "202106",
+          "end": "202605"
+        },
+        "calendar_anchor": {
+          "frequency": "M",
+          "start": "202101",
+          "end": "202605"
+        },
+        "floor_to_year": {
+          "frequency": "M",
+          "start": "202101",
+          "end": "202605"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_141Y008",
+              "table_name": "생명보험회사 지역별 수신(말잔)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-10-S1",
+              "label": "생명보험회사 지역별 수신(말잔) / 생명보험회사 / 전국",
+              "org_id": "301",
+              "table_id": "DT_141Y008",
+              "item_id": "13103134513999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134513REP_AGENCY.0710",
+                  "name": "생명보험회사"
+                },
+                "objL2": {
+                  "code": "13102134513RG_CD.X00",
+                  "name": "전국"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202106",
+                "end": "202605"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-11",
+      "query": "최근 5년간 생명보험회사 전국 수신 말잔 추이를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "202102",
+          "end": "202601"
+        },
+        "calendar_anchor": {
+          "frequency": "Q",
+          "start": "202101",
+          "end": "202601"
+        },
+        "floor_to_year": {
+          "frequency": "Q",
+          "start": "202101",
+          "end": "202601"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_141Y008",
+              "table_name": "생명보험회사 지역별 수신(말잔)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-11-S1",
+              "label": "생명보험회사 지역별 수신(말잔) / 생명보험회사 / 전국",
+              "org_id": "301",
+              "table_id": "DT_141Y008",
+              "item_id": "13103134513999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134513REP_AGENCY.0710",
+                  "name": "생명보험회사"
+                },
+                "objL2": {
+                  "code": "13102134513RG_CD.X00",
+                  "name": "전국"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202102",
+                "end": "202601"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    },
+    {
+      "case_id": "AX3-B-12",
+      "query": "최근 5년간 생명보험회사 전국 수신 말잔 추이를 연도별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Y",
+          "start": "2021",
+          "end": "2025"
+        },
+        "calendar_anchor": {
+          "frequency": "Y",
+          "start": "2020",
+          "end": "2025"
+        },
+        "floor_to_year": {
+          "frequency": "Y",
+          "start": "2021",
+          "end": "2025"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_141Y008",
+              "table_name": "생명보험회사 지역별 수신(말잔)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "AX3-B-12-S1",
+              "label": "생명보험회사 지역별 수신(말잔) / 생명보험회사 / 전국",
+              "org_id": "301",
+              "table_id": "DT_141Y008",
+              "item_id": "13103134513999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134513REP_AGENCY.0710",
+                  "name": "생명보험회사"
+                },
+                "objL2": {
+                  "code": "13102134513RG_CD.X00",
+                  "name": "전국"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2021",
+                "end": "2025"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor', 'floor_to_year']"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "package": "0.2.0",
+  "contract": "period-contract/2026-10-21.2",
+  "policy": "period-policy/2026-10-21.1",
+  "policy_sha256": "745d4d2f49d76707f185050b1e68fe447828276e7658de84477a7f392e68c0cb"
+}

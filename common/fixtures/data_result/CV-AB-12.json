@@ -1,0 +1,189 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "국제투자대조표(IIP) / 순대외금융자산",
+     "org_id": "301",
+     "table_id": "DT_311Y001",
+     "item_id": "13103134486999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134486ACC_CD.3000000",
+       "name": "순대외금융자산"
+      }
+     },
+     "period": {
+      "frequency": "Q",
+      "start": "202103",
+      "end": "202602"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Q",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "202103",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202104",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202201",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202202",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202203",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202204",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202301",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202302",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202303",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202304",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202401",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202402",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202403",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202404",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202501",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202502",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202503",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202504",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202601",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202602",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 20,
+     "returned": 20,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_311Y001",
+      "itmId": "13103134486999",
+      "objL1": "13102134486ACC_CD.3000000",
+      "prdSe": "Q",
+      "startPrdDe": "202103",
+      "endPrdDe": "202602"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:17.057588+00:00",
+     "raw_response_ref": "c0b5869c88ac44a2bdfcece840b36da0"
+    }
+   }
+  ],
+  "period_notices": [
+   {
+    "table": "301:DT_311Y001",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "202604",
+    "resolved_period": {
+     "frequency": "Q",
+     "start": "202103",
+     "end": "202602"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 202604까지 필요하지만, 표의 최신 수록 시점은 202602입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 202103 ~ 202602"
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "c0b5869c88ac44a2bdfcece840b36da0"
+}

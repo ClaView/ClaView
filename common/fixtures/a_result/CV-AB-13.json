@@ -1,0 +1,25 @@
+{
+ "decision": "assume",
+ "tables": [
+  {
+   "org_id": "301",
+   "table_id": "DT_104Y016",
+   "table_name": "예금은행 대출금(말잔)"
+  }
+ ],
+ "b_requests": [
+  {
+   "requirement_ids": [
+    "r1"
+   ],
+   "tables": [
+    {
+     "org_id": "301",
+     "table_id": "DT_104Y016",
+     "table_name": "예금은행 대출금(말잔)"
+    }
+   ]
+  }
+ ],
+ "pending_question": null
+}

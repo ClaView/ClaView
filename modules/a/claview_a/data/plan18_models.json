@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "source": "https://developers.openai.com/api/docs/pricing",
+  "checked_date": "2026-10-21",
+  "service_tier": "default",
+  "fx_krw_per_usd_assumption": 1327.91,
+  "max_calls": 90,
+  "repetitions": 3,
+  "consecutive_format_failure_limit": 2,
+  "selection": {"variant": "router", "candidate_policy": "legacy"},
+  "max_output_tokens": 8192,
+  "max_input_bytes": 100000,
+  "profiles": [
+    {"id": "luna_low", "model": "gpt-6-luna", "effort": "low", "count": 20, "input_usd_per_million": 0.1, "cached_input_usd_per_million": 0.01, "output_usd_per_million": 0.5},
+    {"id": "luna_high", "model": "gpt-6-luna", "effort": "high", "count": 5, "input_usd_per_million": 0.1, "cached_input_usd_per_million": 0.01, "output_usd_per_million": 0.5},
+    {"id": "sol_low", "model": "gpt-6.1-sol", "effort": "low", "count": 5, "input_usd_per_million": 2.0, "cached_input_usd_per_million": 0.1, "output_usd_per_million": 10.0}
+  ]
+}

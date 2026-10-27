@@ -1,0 +1,469 @@
+{
+ "stage": "C",
+ "status": "ok",
+ "result": {
+  "schema_version": "claview-c/1.1-demo",
+  "query": "2020년 이후 전산업 매출액영업이익률을 연도별 표로 정리해줘",
+  "default_view_id": "table",
+  "views": [
+   {
+    "view_id": "line",
+    "kind": "line",
+    "title": "선그래프",
+    "chart_kind": "line",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "%",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+       "short_label": "C10 식료품 / 종합 / 총자산세전순이익률",
+       "frequency": "Y",
+       "unit": "%",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+        "org_id": "301",
+        "table_id": "DT_501Y006",
+        "item_id": "13103134573999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134573BZTYP_CD.C10",
+          "name": "C10 식료품"
+         },
+         "objL2": {
+          "code": "13102134573ENTERPRISE_SCALE.A",
+          "name": "종합"
+         },
+         "objL3": {
+          "code": "13102134573ACC_ITEM.6011",
+          "name": "총자산세전순이익률"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2020",
+         "end": "2024"
+        },
+        "unit": "%"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "bar",
+    "kind": "bar",
+    "title": "묶음막대",
+    "chart_kind": "bar",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "%",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+       "short_label": "C10 식료품 / 종합 / 총자산세전순이익률",
+       "frequency": "Y",
+       "unit": "%",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+        "org_id": "301",
+        "table_id": "DT_501Y006",
+        "item_id": "13103134573999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134573BZTYP_CD.C10",
+          "name": "C10 식료품"
+         },
+         "objL2": {
+          "code": "13102134573ENTERPRISE_SCALE.A",
+          "name": "종합"
+         },
+         "objL3": {
+          "code": "13102134573ACC_ITEM.6011",
+          "name": "총자산세전순이익률"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2020",
+         "end": "2024"
+        },
+        "unit": "%"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "table",
+    "kind": "table",
+    "title": "수치표",
+    "chart_kind": "table",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "%",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+       "short_label": "C10 식료품 / 종합 / 총자산세전순이익률",
+       "frequency": "Y",
+       "unit": "%",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+        "org_id": "301",
+        "table_id": "DT_501Y006",
+        "item_id": "13103134573999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134573BZTYP_CD.C10",
+          "name": "C10 식료품"
+         },
+         "objL2": {
+          "code": "13102134573ENTERPRISE_SCALE.A",
+          "name": "종합"
+         },
+         "objL3": {
+          "code": "13102134573ACC_ITEM.6011",
+          "name": "총자산세전순이익률"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2020",
+         "end": "2024"
+        },
+        "unit": "%"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   }
+  ],
+  "table": [
+   {
+    "series_id": "S001",
+    "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+    "frequency": "Y",
+    "unit": "%",
+    "period_label": "2020년",
+    "period": "2020",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+    "frequency": "Y",
+    "unit": "%",
+    "period_label": "2021년",
+    "period": "2021",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+    "frequency": "Y",
+    "unit": "%",
+    "period_label": "2022년",
+    "period": "2022",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+    "frequency": "Y",
+    "unit": "%",
+    "period_label": "2023년",
+    "period": "2023",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+    "frequency": "Y",
+    "unit": "%",
+    "period_label": "2024년",
+    "period": "2024",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   }
+  ],
+  "warnings": [],
+  "notices": [
+   {
+    "table": "301:DT_501Y006",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "2026",
+    "resolved_period": {
+     "frequency": "Y",
+     "start": "2020",
+     "end": "2024"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 2026까지 필요하지만, 표의 최신 수록 시점은 2024입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 2020 ~ 2024"
+   }
+  ],
+  "source": [
+   {
+    "series_id": "S001",
+    "org_id": "301",
+    "table_id": "DT_501Y006",
+    "item_id": "13103134573999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134573BZTYP_CD.C10",
+      "name": "C10 식료품"
+     },
+     "objL2": {
+      "code": "13102134573ENTERPRISE_SCALE.A",
+      "name": "종합"
+     },
+     "objL3": {
+      "code": "13102134573ACC_ITEM.6011",
+      "name": "총자산세전순이익률"
+     }
+    },
+    "period": {
+     "frequency": "Y",
+     "start": "2020",
+     "end": "2024"
+    },
+    "unit": "%",
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_501Y006",
+      "itmId": "13103134573999",
+      "objL1": "13102134573BZTYP_CD.C10",
+      "objL2": "13102134573ENTERPRISE_SCALE.A",
+      "objL3": "13102134573ACC_ITEM.6011",
+      "prdSe": "Y",
+      "startPrdDe": "2020",
+      "endPrdDe": "2024"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:17.958372+00:00",
+     "raw_response_ref": "6743b742d26f46d4a7ca97fc47537122"
+    }
+   }
+  ],
+  "recommendation": "질문에서 요청한 수치표를 먼저 보여줍니다.",
+  "blocked_views": [
+   {
+    "kind": "stacked",
+    "title": "누적막대",
+    "reason": "이 항목들을 더해 하나의 전체로 볼 수 있는지 확인되지 않았습니다. 합산 근거를 확인한 뒤 사용할 수 있습니다."
+   },
+   {
+    "kind": "percent_stacked",
+    "title": "100% 누적막대",
+    "reason": "비중을 구하려면 서로 겹치지 않는 구성 항목과 전체의 범위가 확인되어야 합니다. 현재 입력에는 그 근거가 없습니다."
+   },
+   {
+    "kind": "horizontal",
+    "title": "한 시점 가로막대",
+    "reason": "같은 주기·단위의 비교 항목이 두 개 이상 필요합니다."
+   }
+  ],
+  "quality_summary": {
+   "total_cells": 5,
+   "observed_values": 5,
+   "missing_values": 0,
+   "parse_error_values": 0,
+   "affected_series": 0
+  },
+  "synthetic": false,
+  "analysis_version": "c-analysis/2026-10-21-v3-policy",
+  "composition": null,
+  "calculation": null,
+  "chart_policy": {
+   "version": "chart-policy/2026-10-21-v1",
+   "requested": [
+    {
+     "kind": "table",
+     "text": "표로"
+    }
+   ],
+   "selected": "table",
+   "reason": "질문에서 요청한 수치표를 먼저 보여줍니다.",
+   "notices": [],
+   "facts": {
+    "period_count": 5,
+    "series_count": 1,
+    "composition_verified": false
+   }
+  }
+ },
+ "issues": [],
+ "trace_ref": "d454e4a204d04199a2576e5a2a8679e9"
+}

@@ -1,0 +1,26 @@
+{
+ "decision": "assume",
+ "tables": [
+  {
+   "org_id": "301",
+   "table_id": "DT_401Y015",
+   "table_name": "수입물가지수(기본분류)"
+  }
+ ],
+ "b_requests": [
+  {
+   "requirement_ids": [
+    "r1",
+    "r2"
+   ],
+   "tables": [
+    {
+     "org_id": "301",
+     "table_id": "DT_401Y015",
+     "table_name": "수입물가지수(기본분류)"
+    }
+   ]
+  }
+ ],
+ "pending_question": null
+}

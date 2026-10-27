@@ -1,0 +1,30 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "org_id": "301",
+    "table_id": "DT_200Y101",
+    "item_id": "13103136288999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102136288ACC_ITEM.101",
+      "name": "경제규모 및 국민소득(명목)"
+     }
+    },
+    "period": {
+     "frequency": "Y",
+     "start": "2015",
+     "end": "2025"
+    },
+    "unit": null
+   }
+  ],
+  "relations": []
+ },
+ "issues": [],
+ "trace_ref": "8ca02ee0be8341679a8a0c9b917bd319"
+}

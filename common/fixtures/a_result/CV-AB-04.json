@@ -1,0 +1,25 @@
+{
+ "decision": "assume",
+ "tables": [
+  {
+   "org_id": "301",
+   "table_id": "DT_301Y013",
+   "table_name": "국제수지"
+  }
+ ],
+ "b_requests": [
+  {
+   "requirement_ids": [
+    "r1"
+   ],
+   "tables": [
+    {
+     "org_id": "301",
+     "table_id": "DT_301Y013",
+     "table_name": "국제수지"
+    }
+   ]
+  }
+ ],
+ "pending_question": null
+}

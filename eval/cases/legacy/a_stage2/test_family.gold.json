@@ -1,0 +1,330 @@
+{
+  "schema_version": "claview-a-eval/1",
+  "dataset_id": "a-stage2-20261005-test_family",
+  "split": "test_family",
+  "source_sha256": {
+    "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+    "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+    "original_gold": "2e27b49701636e1f51739d51bd7ccaef4c23d43c7c1ae66960e8bd671e80e5c5",
+    "definitions": "5548e0be9d228421b4a87095806072a53e0202dca15186b2cc7be19363689839"
+  },
+  "cases": [
+    {
+      "case_id": "A-F01",
+      "query": "신용카드",
+      "query_revision": 1,
+      "prior_turns": [],
+      "tags": [
+        "exact_title"
+      ],
+      "families": [
+        "payments"
+      ],
+      "variant_group": "payments",
+      "semantic_group": "payments",
+      "review_status": "draft",
+      "reviewer": null,
+      "review_note": "생성 초안. 공식 근거의 적합성·다른 허용 표·역질문 필요성을 사람 검수해야 함.",
+      "decision": "display_candidates",
+      "target_kind": "single",
+      "table_groups": [
+        [
+          "301:DT_601Y003"
+        ]
+      ],
+      "clarification_axes": [],
+      "evidence": [
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_601Y003",
+          "field": "title",
+          "quote": "신용카드",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        }
+      ],
+      "rationale": "공식 표명과 명시 조건에 근거한 A 표 후보 라벨 초안. 계열·기간 정답은 채점하지 않음."
+    },
+    {
+      "case_id": "A-F02",
+      "query": "신용카드 개인과 법인 이용금액을 함께 비교",
+      "query_revision": 1,
+      "prior_turns": [],
+      "tags": [
+        "metadata_dependent",
+        "one_table_many_series"
+      ],
+      "families": [
+        "payments"
+      ],
+      "variant_group": "payments",
+      "semantic_group": "payments",
+      "review_status": "draft",
+      "reviewer": null,
+      "review_note": "생성 초안. 공식 근거의 적합성·다른 허용 표·역질문 필요성을 사람 검수해야 함.",
+      "decision": "display_candidates",
+      "target_kind": "single",
+      "table_groups": [
+        [
+          "301:DT_601Y003"
+        ]
+      ],
+      "clarification_axes": [],
+      "evidence": [
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_601Y003",
+          "field": "title",
+          "quote": "신용카드",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        },
+        {
+          "source": "data/raw/boK_meta_raw.jsonl",
+          "table_id": "301:DT_601Y003",
+          "field": "ITM.ITM_NM",
+          "quote": "개인 이용금액",
+          "snapshot_sha256": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e"
+        },
+        {
+          "source": "data/raw/boK_meta_raw.jsonl",
+          "table_id": "301:DT_601Y003",
+          "field": "ITM.ITM_NM",
+          "quote": "법인 이용금액",
+          "snapshot_sha256": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e"
+        }
+      ],
+      "rationale": "공식 표명과 명시 조건에 근거한 A 표 후보 라벨 초안. 계열·기간 정답은 채점하지 않음."
+    },
+    {
+      "case_id": "A-F03",
+      "query": "결제시스템별 통계",
+      "query_revision": 1,
+      "prior_turns": [],
+      "tags": [
+        "exact_title"
+      ],
+      "families": [
+        "payments"
+      ],
+      "variant_group": "payments",
+      "semantic_group": "payments",
+      "review_status": "draft",
+      "reviewer": null,
+      "review_note": "생성 초안. 공식 근거의 적합성·다른 허용 표·역질문 필요성을 사람 검수해야 함.",
+      "decision": "display_candidates",
+      "target_kind": "single",
+      "table_groups": [
+        [
+          "301:DT_602Y001"
+        ]
+      ],
+      "clarification_axes": [],
+      "evidence": [
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_602Y001",
+          "field": "title",
+          "quote": "결제시스템별 통계",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        }
+      ],
+      "rationale": "공식 표명과 명시 조건에 근거한 A 표 후보 라벨 초안. 계열·기간 정답은 채점하지 않음."
+    },
+    {
+      "case_id": "A-F04",
+      "query": "결제시스템별 통계와 지급수단별 통계 둘 다",
+      "query_revision": 1,
+      "prior_turns": [],
+      "tags": [
+        "multiple_tables"
+      ],
+      "families": [
+        "payments"
+      ],
+      "variant_group": "payments",
+      "semantic_group": "payments",
+      "review_status": "draft",
+      "reviewer": null,
+      "review_note": "생성 초안. 공식 근거의 적합성·다른 허용 표·역질문 필요성을 사람 검수해야 함.",
+      "decision": "display_candidates",
+      "target_kind": "multiple_required",
+      "table_groups": [
+        [
+          "301:DT_602Y001"
+        ],
+        [
+          "301:DT_602Y002"
+        ]
+      ],
+      "clarification_axes": [],
+      "evidence": [
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_602Y001",
+          "field": "title",
+          "quote": "결제시스템별 통계",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        },
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_602Y002",
+          "field": "title",
+          "quote": "지급수단별 통계",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        }
+      ],
+      "rationale": "공식 표명과 명시 조건에 근거한 A 표 후보 라벨 초안. 계열·기간 정답은 채점하지 않음."
+    },
+    {
+      "case_id": "A-F05",
+      "query": "수출물량지수",
+      "query_revision": 1,
+      "prior_turns": [],
+      "tags": [
+        "exact_title"
+      ],
+      "families": [
+        "403"
+      ],
+      "variant_group": "trade-index",
+      "semantic_group": "trade-index",
+      "review_status": "draft",
+      "reviewer": null,
+      "review_note": "생성 초안. 공식 근거의 적합성·다른 허용 표·역질문 필요성을 사람 검수해야 함.",
+      "decision": "display_candidates",
+      "target_kind": "single",
+      "table_groups": [
+        [
+          "301:DT_403Y002"
+        ]
+      ],
+      "clarification_axes": [],
+      "evidence": [
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_403Y002",
+          "field": "title",
+          "quote": "수출물량지수",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        }
+      ],
+      "rationale": "공식 표명과 명시 조건에 근거한 A 표 후보 라벨 초안. 계열·기간 정답은 채점하지 않음."
+    },
+    {
+      "case_id": "A-F06",
+      "query": "수출 금액 지쑤를 찾아줘",
+      "query_revision": 1,
+      "prior_turns": [],
+      "tags": [
+        "typo_spacing"
+      ],
+      "families": [
+        "403"
+      ],
+      "variant_group": "trade-index",
+      "semantic_group": "trade-index",
+      "review_status": "draft",
+      "reviewer": null,
+      "review_note": "생성 초안. 공식 근거의 적합성·다른 허용 표·역질문 필요성을 사람 검수해야 함.",
+      "decision": "display_candidates",
+      "target_kind": "single",
+      "table_groups": [
+        [
+          "301:DT_403Y001"
+        ]
+      ],
+      "clarification_axes": [],
+      "evidence": [
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_403Y001",
+          "field": "title",
+          "quote": "수출금액지수",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        }
+      ],
+      "rationale": "공식 표명과 명시 조건에 근거한 A 표 후보 라벨 초안. 계열·기간 정답은 채점하지 않음."
+    },
+    {
+      "case_id": "A-F07",
+      "query": "수입금액지수와 수입물량지수를 같이 비교",
+      "query_revision": 1,
+      "prior_turns": [],
+      "tags": [
+        "multiple_tables"
+      ],
+      "families": [
+        "403"
+      ],
+      "variant_group": "trade-index",
+      "semantic_group": "trade-index",
+      "review_status": "draft",
+      "reviewer": null,
+      "review_note": "생성 초안. 공식 근거의 적합성·다른 허용 표·역질문 필요성을 사람 검수해야 함.",
+      "decision": "display_candidates",
+      "target_kind": "multiple_required",
+      "table_groups": [
+        [
+          "301:DT_403Y003"
+        ],
+        [
+          "301:DT_403Y004"
+        ]
+      ],
+      "clarification_axes": [],
+      "evidence": [
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_403Y003",
+          "field": "title",
+          "quote": "수입금액지수",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        },
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_403Y004",
+          "field": "title",
+          "quote": "수입물량지수",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        }
+      ],
+      "rationale": "공식 표명과 명시 조건에 근거한 A 표 후보 라벨 초안. 계열·기간 정답은 채점하지 않음."
+    },
+    {
+      "case_id": "A-F08",
+      "query": "수출 금액 말고 물량 지수를 보고 싶어",
+      "query_revision": 1,
+      "prior_turns": [],
+      "tags": [
+        "negation",
+        "everyday"
+      ],
+      "families": [
+        "403"
+      ],
+      "variant_group": "trade-index",
+      "semantic_group": "trade-index",
+      "review_status": "draft",
+      "reviewer": null,
+      "review_note": "생성 초안. 공식 근거의 적합성·다른 허용 표·역질문 필요성을 사람 검수해야 함.",
+      "decision": "display_candidates",
+      "target_kind": "single",
+      "table_groups": [
+        [
+          "301:DT_403Y002"
+        ]
+      ],
+      "clarification_axes": [],
+      "evidence": [
+        {
+          "source": "data/catalog/search_catalog.json",
+          "table_id": "301:DT_403Y002",
+          "field": "title",
+          "quote": "수출물량지수",
+          "snapshot_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551"
+        }
+      ],
+      "rationale": "공식 표명과 명시 조건에 근거한 A 표 후보 라벨 초안. 계열·기간 정답은 채점하지 않음."
+    }
+  ],
+  "inputs_sha256": "3738dba7745b77a058e266f366d54f265f9c2b6aede33a3a76dc360b599a59fb"
+}
