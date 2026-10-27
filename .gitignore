@@ -17,6 +17,8 @@ __pycache__/
 htmlcov/
 *.egg-info/
 build/
+# frontend/build holds the screen build scripts (frontend/Dockerfile), not packaging output.
+!/frontend/build/
 dist/
 
 # Frontend
@@ -25,7 +27,7 @@ node_modules/
 
 # Generated data and outputs
 /data/raw/*
-# Catalog metadata snapshot read by A, B and claview.pipeline.
+# Catalog metadata snapshot read by A, B and claview_pipeline.
 !/data/raw/boK_meta_raw.jsonl
 /data/processed/*
 /data/indexes/*

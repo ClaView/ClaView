@@ -1,6 +1,6 @@
 # B 계층 처리 설계
 
-표 안의 분류 값이 상하위 관계(계층)를 가질 때 B가 값을 선택·확장·표시하는 방식을 정리함. 기준은 2026-10-16 코드([stages.py](../../src/claview/stages.py), [graphs.py](../../src/claview/graphs.py), [contracts.py](../../src/claview/contracts.py))임. 표 선택(A)과 KOSIS 조회(fetch)는 범위에 포함하지 않음. 기간·주기 확정과 이름 보정(12장), 모델에 보내는 표의 축소와 요청 크기 관리(8장)를 포함함. 실측 경과는 [B 계층 처리 검증 기록](../research/B_계층_처리_검증_2026-10-13.md)을 참고함.
+표 안의 분류 값이 상하위 관계(계층)를 가질 때 B가 값을 선택·확장·표시하는 방식을 정리함. 기준은 2026-10-16 코드([stages.py](../../../../modules/b/claview_b/stages.py), [graphs.py](../../../../modules/b/claview_b/graphs.py), [contracts.py](../../../../modules/b/claview_b/contracts.py))임. 표 선택(A)과 KOSIS 조회(fetch)는 범위에 포함하지 않음. 기간·주기 확정과 이름 보정(12장), 모델에 보내는 표의 축소와 요청 크기 관리(8장)를 포함함. 실측 경과는 [B 계층 처리 검증 기록](../research/B_계층_처리_검증_2026-10-13.md)을 참고함.
 
 ## 1. 결정 사항
 
@@ -122,8 +122,9 @@
 | `split_axis_not_expanded` | `none` | `leaves`/`children` | - |
 | `expand_on_bottom_level_value` | `children`/`leaves` | `none` | - |
 | `query_names_longer_value`, `query_names_parent_value`, `query_excludes_named_value` | `none` | `named_value` | `selected`(바꾼 값 코드) |
+| `repeated_row_dropped` | - | - | `item_id`, `dimensions`(제거한 행의 항목·분류 코드). `axis`·`code`·`requested`·`applied` 없음 |
 
-공통 필드: `table`, `axis`, `code`(확장 대상 값), `requested`, `applied`, `reason`. 표가 여러 개이면 표 순서대로 이어 붙임.
+공통 필드: `table`, `axis`, `code`(확장 대상 값), `requested`, `applied`, `reason`. 단 `repeated_row_dropped`는 `table`, `item_id`, `dimensions`, `reason`만 가짐(모델이 항목·분류·펼치기·기간이 모두 같은 행을 반복해 첫 행만 남긴 경우, 확장 검사보다 앞에서 처리). 표가 여러 개이면 표 순서대로 이어 붙임.
 
 ## 7. 재시도
 
@@ -184,7 +185,7 @@
 - 모델에는 이 라벨을 한 문자열로 바꿔 보내지 않고, 공식 이름 `name`과 상위 이름 `under`로 나누어 보냄(8.1).
 - 예: 가계신용의 `여신전문기관` 2개 → `판매신용 > 여신전문기관`, `기타금융기관 등 > 여신전문기관`. 실제 표에서 DT_200Y101 `objL1`은 113개 중 49개 라벨이 이 방식으로 길어짐.
 
-## 10. 설정값 ([Config](../../src/claview/contracts.py))
+## 10. 설정값 ([Config](../../../../modules/b/claview_b/contracts.py))
 
 | 항목 | 기본값 | 용도 |
 |---|---|---|

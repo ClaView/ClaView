@@ -1,0 +1,510 @@
+{
+  "schema_version": "claview-ab/0.5-draft-multi",
+  "dataset_id": "claview-golden-set-v3-multi-table-5",
+  "note": "개발·검토용 초안. 정답 승인 전이며 성능 점수 집계 대상이 아님. 통계표 이름은 KOSIS 통계표명(data/catalog)과 같음. 값은 포함하지 않음(조회 시점 응답을 따름).",
+  "cases": [
+    {
+      "case_id": "CV-BC-01",
+      "query": "2015~2025년 연간 경상수지와 실질 GDP 성장률을 한 그래프에서 이중 축으로 보여줘.",
+      "purpose": "서로 다른 두 통계표 · 같은 주기(연) · 금액(백만달러)+증감률(%) → 이중 축",
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "table_name": "국제수지",
+              "indicator": "경상수지"
+            },
+            {
+              "org_id": "301",
+              "table_id": "DT_200Y101",
+              "table_name": "주요지표(연간지표)",
+              "indicator": "실질 GDP 성장률"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-BC-01-S1",
+              "label": "경상수지",
+              "org_id": "301",
+              "table_id": "DT_301Y013",
+              "item_id": "13103134519999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134519ACC_CD.000000",
+                  "name": "경상수지"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2015",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-BC-01-S2",
+              "label": "국내총생산(실질성장률)",
+              "org_id": "301",
+              "table_id": "DT_200Y101",
+              "item_id": "13103136288999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102136288ACC_ITEM.20101",
+                  "name": "국내총생산(실질성장률)"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2015",
+                "end": "2025"
+              },
+              "unit": "%"
+            }
+          ]
+        },
+        "alignment": {
+          "status": "unchanged",
+          "common_frequency": "Y",
+          "frequency_question": null,
+          "frequency_conversions": [],
+          "unit_conversions": [],
+          "axes": [
+            {
+              "side": "left",
+              "unit": "백만달러",
+              "kind": "money",
+              "draw": "column"
+            },
+            {
+              "side": "right",
+              "unit": "%",
+              "kind": "rate",
+              "draw": "line"
+            }
+          ],
+          "notice_codes": [
+            "dual_axis"
+          ]
+        },
+        "C": {
+          "default_view": "dual_axis",
+          "blocked_views": [
+            "line",
+            "bar"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-BC-02",
+      "query": "2022~2024년 경상수지(계절조정)와 실질 GDP 성장률을 한 그래프에서 이중 축으로 보여줘.",
+      "purpose": "주기가 다른 두 통계표(월 전용·분기 전용, 질문에 주기 언급 없음) → 사용자에게 주기 맞춤 방법을 묻고, 선택 후 이중 축(백만달러+%)",
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_301Y017",
+              "table_name": "경상수지(계절조정)",
+              "indicator": "경상수지(계절조정)"
+            },
+            {
+              "org_id": "301",
+              "table_id": "DT_200Y102",
+              "table_name": "주요지표(분기지표)",
+              "indicator": "실질 GDP 성장률"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-BC-02-S1",
+              "label": "경상수지(계절조정)",
+              "org_id": "301",
+              "table_id": "DT_301Y017",
+              "item_id": "13103134664999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134664ACC_CD.SA000",
+                  "name": "경상수지"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202201",
+                "end": "202412"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-BC-02-S2",
+              "label": "국내총생산(GDP)(실질 계절조정 전기비)",
+              "org_id": "301",
+              "table_id": "DT_200Y102",
+              "item_id": "13103136269999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102136269ACC_ITEM.10111",
+                  "name": "국내총생산(GDP)(실질 계절조정 전기비)"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202201",
+                "end": "202404"
+              },
+              "unit": "%"
+            }
+          ]
+        },
+        "alignment": {
+          "status": "needs_choice",
+          "common_frequency": "Q",
+          "frequency_question": {
+            "asked": true,
+            "target_frequency": "Q",
+            "option_ids": [
+              "freq_mean",
+              "freq_last",
+              "freq_sum",
+              "freq_none"
+            ],
+            "answer_used_for_checks": "freq_sum"
+          },
+          "after_answer": {
+            "status": "aligned",
+            "common_frequency": "Q",
+            "frequency_conversions": [
+              {
+                "table_id": "DT_301Y017",
+                "from": "M",
+                "to": "Q",
+                "method": "sum"
+              }
+            ],
+            "unit_conversions": [],
+            "axes": [
+              {
+                "side": "left",
+                "unit": "백만달러",
+                "kind": "money",
+                "draw": "column"
+              },
+              {
+                "side": "right",
+                "unit": "%",
+                "kind": "rate",
+                "draw": "line"
+              }
+            ],
+            "notice_codes": [
+              "frequency_converted",
+              "dual_axis"
+            ]
+          }
+        },
+        "C": {
+          "default_view": "dual_axis",
+          "blocked_views": [
+            "line",
+            "bar"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-BC-03",
+      "query": "2024년 월별 신용카드 이용금액을 신용카드 통계의 전체 이용금액과 지급수단 통계의 신용카드 금액으로 각각 하나씩 가져와 한 그래프에서 비교해줘.",
+      "purpose": "같은 통화·다른 단위 배율(백만원 vs 십억원) → 환산해 한 축에 표시, 원래 값 보존",
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_601Y003",
+              "table_name": "신용카드",
+              "indicator": "전체 이용금액"
+            },
+            {
+              "org_id": "301",
+              "table_id": "DT_602Y002",
+              "table_name": "지급수단별 통계",
+              "indicator": "신용카드 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-BC-03-S1",
+              "label": "전체 이용금액",
+              "org_id": "301",
+              "table_id": "DT_601Y003",
+              "item_id": "13103134583999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134583ACC_ITEM.200000",
+                  "name": "전체 이용금액"
+                },
+                "objL2": {
+                  "code": "13102134583FINCL_GRP_CD.00",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "백만원"
+            },
+            {
+              "series_id": "CV-BC-03-S2",
+              "label": "신용카드 금액",
+              "org_id": "301",
+              "table_id": "DT_602Y002",
+              "item_id": "13103134546999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134546ACC_ITEM.E1000",
+                  "name": "신용카드"
+                },
+                "objL2": {
+                  "code": "13102134546AMT_CD.MONEY",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "십억원"
+            }
+          ]
+        },
+        "alignment": {
+          "status": "aligned",
+          "common_frequency": "M",
+          "frequency_question": null,
+          "frequency_conversions": [],
+          "unit_conversions": [
+            {
+              "table_id": "DT_602Y002",
+              "from_unit": "십억원",
+              "to_unit": "백만원",
+              "factor": "1000"
+            }
+          ],
+          "axes": [
+            {
+              "side": "left",
+              "unit": "백만원",
+              "kind": "money",
+              "draw": "line"
+            }
+          ],
+          "notice_codes": [
+            "unit_scale_converted"
+          ]
+        },
+        "C": {
+          "default_view": "line",
+          "blocked_views": []
+        }
+      }
+    },
+    {
+      "case_id": "CV-BC-04",
+      "query": "2020년 1분기부터 2024년 4분기까지 분기별 가계신용 잔액과 순대외금융자산을 한 그래프에서 비교해줘.",
+      "purpose": "통화가 다른 두 금액(원 vs 달러) → 환율 환산 없이 두 축으로 분리하고 안내",
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "table_name": "가계신용(업권별, 분기)",
+              "indicator": "가계신용 잔액"
+            },
+            {
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "table_name": "국제투자대조표(IIP)",
+              "indicator": "순대외금융자산"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-BC-04-S1",
+              "label": "가계신용",
+              "org_id": "301",
+              "table_id": "DT_151Y001",
+              "item_id": "13103134771999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134771ACC_ITEM.1000000",
+                  "name": "가계신용"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202404"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-BC-04-S2",
+              "label": "순대외금융자산",
+              "org_id": "301",
+              "table_id": "DT_311Y001",
+              "item_id": "13103134486999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134486ACC_CD.3000000",
+                  "name": "순대외금융자산"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202404"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        },
+        "alignment": {
+          "status": "unchanged",
+          "common_frequency": "Q",
+          "frequency_question": null,
+          "frequency_conversions": [],
+          "unit_conversions": [],
+          "axes": [
+            {
+              "side": "left",
+              "unit": "십억원",
+              "kind": "money",
+              "draw": "line"
+            },
+            {
+              "side": "right",
+              "unit": "백만달러",
+              "kind": "money",
+              "draw": "line"
+            }
+          ],
+          "notice_codes": [
+            "currency_not_converted",
+            "dual_axis"
+          ]
+        },
+        "C": {
+          "default_view": "dual_axis",
+          "blocked_views": [
+            "line",
+            "bar"
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-BC-05",
+      "query": "2024년 월별 예금은행 주택담보대출 금리와 정기예금 금리를 한 그래프에서 비교해줘.",
+      "purpose": "음성 대조: 단위·주기가 같은 두 통계표 → 정렬 변경 없이 한 축 일반 그래프(이중 축·환산 없음)",
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "table_name": "예금은행 대출금리(신규취급액 기준)",
+              "indicator": "주택담보대출 금리"
+            },
+            {
+              "org_id": "301",
+              "table_id": "DT_121Y002",
+              "table_name": "예금은행 수신금리(신규취급액 기준)",
+              "indicator": "정기예금 금리"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-BC-05-S1",
+              "label": "주택담보대출",
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "item_id": "13103134553999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134553ACC_ITEM.BECBLA0302",
+                  "name": "주택담보대출"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "연리%"
+            },
+            {
+              "series_id": "CV-BC-05-S2",
+              "label": "정기예금",
+              "org_id": "301",
+              "table_id": "DT_121Y002",
+              "item_id": "13103134588999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134588ACC_ITEM.BEABAA211",
+                  "name": "정기예금"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "연리%"
+            }
+          ]
+        },
+        "alignment": {
+          "status": "unchanged",
+          "common_frequency": "M",
+          "frequency_question": null,
+          "frequency_conversions": [],
+          "unit_conversions": [],
+          "axes": [
+            {
+              "side": "left",
+              "unit": "연리%",
+              "kind": "rate",
+              "draw": "line"
+            }
+          ],
+          "notice_codes": []
+        },
+        "C": {
+          "default_view": "line",
+          "blocked_views": []
+        }
+      }
+    }
+  ]
+}

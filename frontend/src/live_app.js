@@ -106,7 +106,8 @@
   }
   function confirmationEl(m) {
     var spec=m.confirmation, box=el('section',{class:'confirmation-box','aria-label':'후보 표 확인'});
-    box.append(el('h3',{text:'어떤 통계표로 조회할까요?'}), el('p',{text:'아래는 데이터를 가져올 통계표 후보입니다. 표를 확인하면 항목과 기간을 정해 조회합니다. 같은 주기·단위의 여러 항목은 한 그래프에 함께 표시합니다.'}));
+    var aligning=spec.kind==='alignment';
+    box.append(el('h3',{text:aligning?'주기를 어떻게 맞출까요?':'어떤 통계표로 조회할까요?'}), el('p',{text:aligning?'함께 요청한 지표의 주기가 서로 달라 한 그래프로 보여주려면 값을 바꿔야 합니다. 방법을 고르면 이미 조회한 값으로 바로 이어서 표시하며 새로 조회하지 않습니다. 원래 값은 보존됩니다.':'아래는 데이터를 가져올 통계표 후보입니다. 표를 확인하면 항목과 기간을 정해 조회합니다. 같은 주기·단위의 여러 항목은 한 그래프에 함께 표시합니다.'}));
     var draft=m.confirmationDraft||(m.confirmationDraft={choices:{},interpretation_confirmed:false});
     var form=el('form'), controls=[];
     if(spec.conditions.length) box.append(el('p',{class:'stage-note',text:'질문에서 읽은 조건: '+spec.conditions.map(function(c){return c.quote;}).join(' · ')}));
@@ -123,6 +124,7 @@
         radio.checked=draft.choices[g.requirement_id]===option.option_id; controls.push(radio);
         option.tables.forEach(function(t){
           description.append(el('strong',{text:t.table_name}));
+          if(aligning&&!t.table_id)return;
           var facts=el('dl',{class:'candidate-facts'});
           function fact(k,v){facts.append(el('div',{},el('dt',{text:k}),el('dd',{text:v})));}
           fact('구분 기준',t.different_axes.length?t.different_axes.join(' · '):'차이 정보 미제공 · 표 이름과 수록 항목 참고');
@@ -146,14 +148,14 @@
       ackLabel.append(ack,el('span',{text:'위 질문 해석과 내가 선택한 표로 조회하는 데 동의합니다.'}));
       ack.addEventListener('change',function(){draft.interpretation_confirmed=ack.checked; saveStore(); refresh();}); form.append(ackLabel);
     }
-    var button=el('button',{type:'submit',class:'continue-button',text:'선택한 표로 계속 실행'}), hint=el('p',{class:'stage-note'});
+    var button=el('button',{type:'submit',class:'continue-button',text:aligning?'선택한 방법으로 계속':'선택한 표로 계속 실행'}), hint=el('p',{class:'stage-note'});
     function refresh(){
       var used=!!m.resumedJobId, busy=!!S.running;
       controls.forEach(function(c){c.disabled=used||busy;});
       var complete=spec.groups.every(function(g){return !!draft.choices[g.requirement_id];})&&(!spec.requires_interpretation_ack||draft.interpretation_confirmed);
       button.disabled=used||busy||!complete;
       hint.textContent=used?'선택을 전달했습니다. 아래 이어 실행 결과를 확인해 주세요.':busy?'현재 실행이 끝나면 선택할 수 있습니다.':
-        complete?'버튼을 누르면 선택한 표로 실제 조회를 시작합니다.':'각 요구의 후보를 선택해 주세요.'+(spec.requires_interpretation_ack?' 질문 해석 확인도 필요합니다.':'');
+        complete?(aligning?'버튼을 누르면 선택한 방법으로 이미 조회한 값을 맞춰 그래프를 만듭니다.':'버튼을 누르면 선택한 표로 실제 조회를 시작합니다.'):'각 요구의 후보를 선택해 주세요.'+(spec.requires_interpretation_ack?' 질문 해석 확인도 필요합니다.':'');
     }
     form.addEventListener('submit',function(e){
       e.preventDefault(); if(button.disabled)return;
@@ -169,8 +171,8 @@
     var questionExample=exampleForQuery(m.inputText);
     if(questionExample&&questionExample.note)body.append(exampleNotice(questionExample));
     if(questionExample&&questionExample.note&&m.kind==='result'&&m.cases&&!m.cases.some(function(c){return c.analysisVersion;}))body.append(el('p',{class:'stage-note',text:'이 이력은 C 보완 전 저장 결과입니다. 최신 계산·누적 화면은 22건 검수 결과에서 확인하거나 새로 실행해 주세요.'}));
-    if(m.parentRunId) body.append(el('p',{class:'stage-note',text:m.resumeKind==='b_conditions'?(m.kind==='result'?'수정한 조회 조건으로 이어 실행한 결과입니다. 원래 질문과 이전 기록은 위에 남아 있습니다.':'수정한 조회 조건을 전달했습니다. 아래에서 진행 상태를 확인하세요.'):'선택한 표로 이어 실행합니다. 아래에서 조회 조건·데이터 조회·그래프 결과를 확인하세요.'}));
-    else if(m.resumedJobId) body.append(el('p',{class:'stage-note',text:'이 확인에서 선택한 표를 전달했습니다. 아래에 이어 실행 결과가 있습니다.'}));
+    if(m.parentRunId) body.append(el('p',{class:'stage-note',text:m.resumeKind==='b_conditions'?(m.kind==='result'?'수정한 조회 조건으로 이어 실행한 결과입니다. 원래 질문과 이전 기록은 위에 남아 있습니다.':'수정한 조회 조건을 전달했습니다. 아래에서 진행 상태를 확인하세요.'):(m.resumeKind==='alignment'?'선택한 방법으로 주기를 맞춰 이어 실행합니다. 이미 조회한 값을 사용하며 새로 조회하지 않습니다.':'선택한 표로 이어 실행합니다. 아래에서 조회 조건·데이터 조회·그래프 결과를 확인하세요.')}));
+    else if(m.resumedJobId) body.append(el('p',{class:'stage-note',text:'이 확인에서 선택한 항목을 전달했습니다. 아래에 이어 실행 결과가 있습니다.'}));
     var progress=CV.ux.simplifyProgress(stepsEl(m)); progress.querySelector('details.steps').open=!complete&&!m.resumedJobId;
     if(complete){
       progress.classList.add('completed-progress');

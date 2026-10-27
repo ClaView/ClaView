@@ -21,6 +21,9 @@ from claview_b.stages import (
     B_PROMPT,
     B_PROMPT_PLAIN,
     EXPAND_MODES,
+    MAX_FOCUS_CHARS,
+    MULTI_TABLE_PROMPT,
+    TABLE_FOCUS_PROMPT,
     Services,
     apply_expand_guard,
     asks_for_breakdown,
@@ -29,6 +32,7 @@ from claview_b.stages import (
     canonicalize_selections,
     correct_to_named_value,
     display_names,
+    drop_repeated_rows,
     expand_selections,
     find_relations,
     lower_expand_on_leaves,
@@ -535,6 +539,48 @@ def test_guard_does_not_hide_the_models_own_duplicates():
     raw = {"selections": [row("A"), row("A")]}
     guarded, _ = apply_expand_guard(raw, "2020년부터 2024년까지 광공업 추이", "k")
     assert len(guarded["selections"]) == 2  # still a duplicate_selection for canonicalize
+
+
+def test_repeated_identical_rows_are_dropped_with_a_notice():
+    raw = {"selections": [row("A"), row("A"), row("B")]}
+    kept, notices = drop_repeated_rows(raw, "k")
+    assert [r["dimensions"]["objL1"] for r in kept["selections"]] == ["A", "B"]
+    assert notices == [
+        {
+            "table": "k",
+            "item_id": "I1",
+            "dimensions": {"objL1": "A", "objL2": "X"},
+            "reason": "repeated_row_dropped",
+        }
+    ]
+
+
+def test_rows_that_differ_in_period_or_expand_are_not_treated_as_repeats():
+    other_period = {**row("A"), "period": {**PERIOD, "end": "2023"}}
+    raw = {"selections": [row("A"), other_period, row("A", "children")]}
+    kept, notices = drop_repeated_rows(raw, "k")
+    assert len(kept["selections"]) == 3 and notices == []
+
+
+def test_pipeline_continues_when_the_model_repeats_a_row():
+    out = _run(
+        make_tree_table(), [row("A1"), row("A1")], Config(), query="2020년부터 2024년까지 A1 추이"
+    )
+    assert out["status"] == "ok", out["issues"]
+    assert len(out["result"]["selections"]) == 1
+    assert [n["reason"] for n in out["result"]["expand_notices"]] == ["repeated_row_dropped"]
+
+
+def test_pipeline_still_stops_when_two_rows_differ_only_in_period():
+    other_period = {**row("A1"), "period": {**PERIOD, "end": "2023"}}
+    out = _run(
+        make_tree_table(),
+        [row("A1"), other_period],
+        Config(),
+        query="2020년부터 2024년까지 A1 추이",
+    )
+    assert out["status"] != "ok"
+    assert [i["code"] for i in out["issues"]] == ["duplicate_selection"]
 
 
 def test_pipeline_without_lowering_has_no_expand_notices():
@@ -1533,3 +1579,100 @@ def test_cv_ab_17_wrong_except_value_is_replaced(golden_cases, store, config):
     assert out["status"] == "ok", out["issues"]
     assert _keys(out) == _golden_keys(case)
     assert [n["reason"] for n in out["result"]["expand_notices"]] == ["query_excludes_named_value"]
+
+
+# ---- the multi-table prompt block ---------------------------------------------
+
+
+class _RecordingModel(ScriptedModel):
+    def __init__(self, responses):
+        super().__init__(responses)
+        self.systems = {}
+        self.contexts = {}
+
+    def complete(self, task, system, context, schema, max_tokens, trace):
+        self.systems[task] = system
+        self.contexts[task] = context
+        return super().complete(task, system, context, schema, max_tokens, trace)
+
+
+def _systems(table_ids, query, focus=None, *, contexts=False):
+    """What B's model received per table; `focus` maps table_id -> the entry's `focus` value."""
+    table = make_tree_table()
+
+    class Store:
+        catalog = {f"301:{t}": {} for t in table_ids}
+
+        def get(self, org, tid):
+            return table
+
+    model = _RecordingModel({f"B:301:{t}": [{"selections": [row("A1")]}] for t in table_ids})
+    services = Services(Store(), search=None, model=model, config=Config(), trace=Trace())
+    entries = [{"org_id": "301", "table_id": t, "table_name": t} for t in table_ids]
+    for entry in entries:
+        if focus and entry["table_id"] in focus:
+            entry["focus"] = focus[entry["table_id"]]
+    out = build_b_graph(services).invoke(
+        {"query": query, "a_result": {"tables": entries}}, {"recursion_limit": 40}
+    )
+    if contexts:
+        return model.systems, model.contexts, out["stage_outcome"]
+    return model.systems
+
+
+def test_multi_table_block_is_added_only_for_more_than_one_table():
+    query = "2020년부터 2024년까지 A1 추이"
+    single = _systems(["DT_ONE"], query)
+    assert single["B:301:DT_ONE"] in {B_PROMPT, B_PROMPT_PLAIN}
+    many = _systems(["DT_ONE", "DT_TWO"], query)
+    assert set(many) == {"B:301:DT_ONE", "B:301:DT_TWO"}
+    assert all(
+        s.endswith(MULTI_TABLE_PROMPT) and s.startswith(B_PROMPT_PLAIN) for s in many.values()
+    )
+
+
+# ---- the optional `focus` of a table entry ------------------------------------------------
+
+
+def test_focus_reaches_only_its_own_tables_call_and_adds_the_prompt_sentence():
+    query = "2020년부터 2024년까지 A1 추이"
+    systems, ctx, out = _systems(["DT_ONE", "DT_TWO"], query, {"DT_ONE": "수출"}, contexts=True)
+    assert out["status"] == "ok", out["issues"]
+    one, two = "B:301:DT_ONE", "B:301:DT_TWO"
+    assert ctx[one]["table_focus"] == "수출" and "table_focus" not in ctx[two]
+    assert systems[one].endswith(TABLE_FOCUS_PROMPT) and TABLE_FOCUS_PROMPT not in systems[two]
+    # the table list the model sees keeps its three fields; focus is not repeated there
+    assert all(set(t) == {"org_id", "table_id", "table_name"} for t in ctx[one]["selected_tables"])
+    # order: base prompt, multi-table block, focus sentence
+    assert systems[one].index(MULTI_TABLE_PROMPT) < systems[one].index(TABLE_FOCUS_PROMPT)
+
+
+def test_a_single_table_with_focus_gets_the_sentence_without_the_multi_table_block():
+    systems, ctx, _ = _systems(
+        ["DT_ONE"], "2020년부터 2024년까지 A1 추이", {"DT_ONE": "수출"}, contexts=True
+    )
+    system = systems["B:301:DT_ONE"]
+    assert system.endswith(TABLE_FOCUS_PROMPT) and MULTI_TABLE_PROMPT not in system
+    assert ctx["B:301:DT_ONE"]["table_focus"] == "수출"
+
+
+def test_without_focus_nothing_changes():
+    systems, ctx, _ = _systems(["DT_ONE"], "2020년부터 2024년까지 A1 추이", contexts=True)
+    assert systems["B:301:DT_ONE"] in {B_PROMPT, B_PROMPT_PLAIN}
+    assert "table_focus" not in ctx["B:301:DT_ONE"]
+
+
+@pytest.mark.parametrize("bad", ["", "   ", 5, ["수출"], "가" * (MAX_FOCUS_CHARS + 1)])
+def test_an_unusable_focus_is_an_invalid_a_result(bad):
+    systems, _, out = _systems(
+        ["DT_ONE"], "2020년부터 2024년까지 A1 추이", {"DT_ONE": bad}, contexts=True
+    )
+    assert out["status"] != "ok"
+    assert [i["code"] for i in out["issues"]] == ["invalid_a_result"]
+    assert systems == {}  # the model was never called
+
+
+def test_an_emptied_multi_table_block_leaves_the_base_prompt_untouched(monkeypatch):
+    monkeypatch.setattr("claview_b.stages.MULTI_TABLE_PROMPT", "")
+    systems = _systems(["DT_ONE", "DT_TWO"], "2020년부터 2024년까지 A1 추이")
+    assert all(s in {B_PROMPT, B_PROMPT_PLAIN} for s in systems.values())

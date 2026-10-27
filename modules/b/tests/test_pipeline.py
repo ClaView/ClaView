@@ -68,7 +68,7 @@ def test_depth_and_full_path_are_catalog_metadata(store):
     assert dim["parent_code"] and len(dim["path"]) > 1
 
 
-@pytest.mark.parametrize("bad", ["missing_axis", "unknown_code", "duplicate", "extra_field"])
+@pytest.mark.parametrize("bad", ["missing_axis", "unknown_code", "extra_field"])
 def test_b_rejects_invalid_output(store, bad):
     c = case()
     responses = scripted_answers(c)
@@ -78,12 +78,24 @@ def test_b_rejects_invalid_output(store, bad):
         del row["dimensions"]["objL2"]
     elif bad == "unknown_code":
         row["dimensions"]["objL1"] = "INVALID"
-    elif bad == "duplicate":
-        raw["selections"].append(copy.deepcopy(row))
     else:
         row["decision"] = "select"
     result = select_series(c["query"], c["expected"]["A"], services(store, responses=responses))
     assert result["status"] == "error" and result["result"] is None
+
+
+def test_b_drops_a_row_the_model_repeated_and_reports_it(store):
+    """A repeated identical row adds no series: B keeps one and says so (it used to stop)."""
+    c = case()
+    responses = scripted_answers(c)
+    raw = responses["B:301:DT_401Y018"][0]
+    raw["selections"].append(copy.deepcopy(raw["selections"][0]))
+    result = select_series(c["query"], c["expected"]["A"], services(store, responses=responses))
+    assert result["status"] == "ok", result
+    assert len(result["result"]["selections"]) == len(
+        scripted_answers(c)["B:301:DT_401Y018"][0]["selections"]
+    )
+    assert [n["reason"] for n in result["result"]["expand_notices"]] == ["repeated_row_dropped"]
 
 
 def test_stated_period_comes_from_the_question_not_the_model(store):

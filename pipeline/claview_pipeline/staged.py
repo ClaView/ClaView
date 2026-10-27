@@ -31,7 +31,12 @@ from claview_common.contracts import CONTRACT_VERSION
 from claview_common.settings import PATHS
 from claview_common.settings import load as load_settings
 
-from .confirmation import make_confirmation, table_names, validate_confirmation
+from .confirmation import (
+    make_alignment_confirmation,
+    make_confirmation,
+    table_names,
+    validate_confirmation,
+)
 from .request_capabilities import unsupported_request
 
 ROOT = PATHS.root
@@ -93,7 +98,15 @@ MESSAGES = {
     "kosis_no_data": "KOSIS에 요청한 조건의 자료가 없습니다(err 30). A가 고른 표나 분류가 질문에 맞는지 확인해 주세요. 아래 요청 조건을 KOSIS 화면에서 직접 조회해 볼 수 있습니다.",
     "kosis_service_error": "KOSIS가 조회 요청을 처리하지 못했습니다. 아래 KOSIS 응답과 요청 조건을 확인해 주세요.",
     "no_data": "조회 응답에 값이 없습니다. 기간이나 항목을 바꿔 다시 질문해 주세요.",
+    "frequency_choice_required": "함께 요청한 지표의 주기가 서로 다릅니다. 주기를 맞추는 방법을 선택해 주세요. 맞추면 값이 바뀌므로 임의로 정하지 않았습니다.",
+    "alignment_period_too_short": "조회 기간이 맞추려는 주기 한 기간보다 짧아 주기를 맞출 수 없습니다. 기간을 늘려 다시 질문해 주세요.",
+    "alignment_policy_not_allowed": "선택한 방법은 이 지표에 쓸 수 없습니다(비율·지수는 합계로 바꿀 수 없음).",
+    "alignment_policy_invalid": "선택한 주기 맞춤 방법을 적용하지 못했습니다. 같은 질문을 다시 입력해 주세요.",
 }
+# 여러 요구를 한 차트에 합치라는 표현이 있을 때만 요구별 결과를 합친다(그 외에는 요구별 카드).
+COMBINE_REQUEST = re.compile(
+    r"한\s*(?:그래프|차트|화면)|하나의\s*(?:그래프|차트|화면)|같은\s*(?:그래프|차트)|이중\s*축|양축|겹쳐|한꺼번에"
+)
 SKIP_REASONS = {
     "no_table": "질문에 맞는 표 후보를 찾지 못했습니다.",
     "execution_unresolved": "조회에 필요한 조건이 확정되지 않았습니다.",
@@ -141,7 +154,21 @@ def ui_cases(chart, data_result, run_id, tables):
     spec = chart["views"][0]["spec"]
     names = {t["table_id"]: t["table_name"] for t in tables}
     out = []
-    for group in spec["groups"]:
+    groups = spec["groups"]
+    axes = spec.get("axes")
+    if axes:
+        # 이중 축: 단위가 다른 그룹을 한 카드로 합치고, 계열마다 단위와 축 번호를 싣는다.
+        groups = [
+            {
+                "group_id": "G1",
+                "frequency": groups[0]["frequency"],
+                "unit": " · ".join(str(a["unit"] or "단위 미제공") for a in axes),
+                "series_ids": [s["series_id"] for s in spec["series"]],
+                "periods": sorted({p for g in groups for p in g["periods"]}),
+            }
+        ]
+    axis_of = {i: n for n, a in enumerate(axes or []) for i in a["series_ids"]}
+    for group in groups:
         series = [s for s in spec["series"] if s["series_id"] in group["series_ids"]]
         requested = spec.get("requested_period")
         periods = [
@@ -176,10 +203,16 @@ def ui_cases(chart, data_result, run_id, tables):
             cards.append(
                 {
                     "id": s["series_id"],
-                    "name": s["short_label"],
+                    "name": (
+                        f"{s['short_label']} ({s['unit'] or '단위 미제공'}, "
+                        f"{'왼쪽' if axes[axis_of[s['series_id']]]['side'] == 'left' else '오른쪽'} 축)"
+                        if axes
+                        else s["short_label"]
+                    ),
                     "full": s["label"],
-                    "unit": unit,
+                    "unit": (s["unit"] or "단위 미제공") if axes else unit,
                     "values": [lookup[s["series_id"]].get(p, {}).get("value") for p in periods],
+                    **({"axis": axis_of[s["series_id"]]} if axes else {}),
                 }
             )
         sources = [s for s in chart["source"] if s["series_id"] in group["series_ids"]]
@@ -225,6 +258,20 @@ def ui_cases(chart, data_result, run_id, tables):
                 "kindTitles": {v["kind"]: v["title"] for v in allowed},
                 "defaultView": default,
                 "smallType": "bar" if "막대" in chart["query"] else "line",
+                **(
+                    {
+                        "axes": [
+                            {
+                                "side": a["side"],
+                                "unit": a["unit"] or "단위 미제공",
+                                "draw": a["draw"],
+                            }
+                            for a in axes
+                        ]
+                    }
+                    if axes
+                    else {}
+                ),
                 "maxDecimals": 1,
                 "recommend": chart["recommendation"],
                 "blocked": chart["blocked_views"],
@@ -337,10 +384,27 @@ class Pipeline:
 
     def resume(self, paused, confirmation, *, emit=lambda x: None):
         answer = self.validate_resume(paused, confirmation)
+        if answer.get("kind") == "alignment":
+            # 조회·모델 호출 없이, 보관한 조회 결과에 선택한 주기 맞춤 방법만 적용한다.
+            return self.run(
+                paused["query"],
+                as_of=paused["as_of"],
+                emit=emit,
+                _resume_alignment=(paused, answer["option_id"]),
+            )
         return self.run(paused["query"], as_of=paused["as_of"], emit=emit, _resume=(paused, answer))
 
     # ---- one run ---------------------------------------------------------------------
-    def run(self, query, *, emit=lambda x: None, as_of=None, through="C", _resume=None):
+    def run(
+        self,
+        query,
+        *,
+        emit=lambda x: None,
+        as_of=None,
+        through="C",
+        _resume=None,
+        _resume_alignment=None,
+    ):
         query = validate_query(query)
         if any(secret in query for secret in self.secrets):
             raise ValueError("질문에 키를 포함할 수 없습니다.")
@@ -400,37 +464,40 @@ class Pipeline:
             else None
         )
         try:
-            update("question", "running", "A(규칙 기반)가 질문을 해석하고 통계표를 고릅니다.")
-            capability = unsupported_request(query, self.store.catalog)
-            if capability:
-                state["capability"] = capability
-                raise StageFailure(capability["code"], capability["status"])
-            if _resume:
-                paused, answer = _resume
-                state["parent_run_id"] = paused["run_id"]
-                state["resume_kind"] = "a_question"
-                a_out = a_service.answer(paused["a_state"], answer["option_id"])
-                a_state = a_out["state"]
-                if a_state["response"].get("answer_error"):
-                    state["answer_error"] = a_state["response"]["answer_error"]
-                    raise StageFailure("answer_invalid", "unresolved")
-                state["user_confirmation"] = {
-                    "source": "user_confirmation",
-                    "parent_run_id": paused["run_id"],
-                    "at": now(),
-                    "question_id": answer["question_id"],
-                    "option_id": answer["option_id"],
-                }
+            if _resume_alignment:
+                self._resume_alignment(state, _resume_alignment, update, traces)
             else:
-                a_out = a_service.select(query, state["as_of"])
-                a_state = a_out["state"]
-            state["a_state"] = a_state
-            state["as_of"] = a_state["as_of"]
-            state["b_requests"] = a_out["b_requests"]
-            b = b_service.BService(model, client, self.mode)
-            self._assemble(
-                state, a_state, a_out["b_requests"], b, through, update, run_id, bool(_resume), traces
-            )
+                update("question", "running", "A(규칙 기반)가 질문을 해석하고 통계표를 고릅니다.")
+                capability = unsupported_request(query, self.store.catalog)
+                if capability:
+                    state["capability"] = capability
+                    raise StageFailure(capability["code"], capability["status"])
+                if _resume:
+                    paused, answer = _resume
+                    state["parent_run_id"] = paused["run_id"]
+                    state["resume_kind"] = "a_question"
+                    a_out = a_service.answer(paused["a_state"], answer["option_id"])
+                    a_state = a_out["state"]
+                    if a_state["response"].get("answer_error"):
+                        state["answer_error"] = a_state["response"]["answer_error"]
+                        raise StageFailure("answer_invalid", "unresolved")
+                    state["user_confirmation"] = {
+                        "source": "user_confirmation",
+                        "parent_run_id": paused["run_id"],
+                        "at": now(),
+                        "question_id": answer["question_id"],
+                        "option_id": answer["option_id"],
+                    }
+                else:
+                    a_out = a_service.select(query, state["as_of"])
+                    a_state = a_out["state"]
+                state["a_state"] = a_state
+                state["as_of"] = a_state["as_of"]
+                state["b_requests"] = a_out["b_requests"]
+                b = b_service.BService(model, client, self.mode)
+                self._assemble(
+                    state, a_state, a_out["b_requests"], b, through, update, run_id, bool(_resume), traces
+                )
         except StageFailure as exc:
             self._fail(state, exc, update, current)
         except Exception as exc:  # noqa: BLE001 - never show a stored sample instead of a result
@@ -600,7 +667,7 @@ class Pipeline:
         if through == "B":
             state["status"] = "b_verified"
             return
-        cases, rendered_partial = [], False
+        rendered_partial, jobs = False, []
         for index, (req, result) in enumerate(ready, 1):
             fetched = b.fetch(result["b_outcome"]["result"])[0] if result["selections"] else {}
             if client is None or fetched.get("status") == "not_run":
@@ -616,12 +683,93 @@ class Pipeline:
                 )
             else:
                 rendered_partial |= fetched["status"] == "partial"
-                out = self._render(state, result, fetched, run_id + f"-{index}", b)
-                if out is None:
-                    failures.append(("chart", "invalid_c_input", "error"))
-                else:
-                    rendered_partial |= out[1] == "partial"
-                    cases.extend(out[0])
+                jobs.append(
+                    {
+                        "data": self._render_data(result, fetched, b),
+                        "tables": result["a_result"]["tables"],
+                        "run_id": run_id + f"-{index}",
+                    }
+                )
+        jobs = self._combine_jobs(state["query"], jobs)
+        self._render_stage(state, jobs, None, update, traces, failures, rendered_partial)
+
+    # ---- fetched series -> aligned -> C -> UI cards -----------------------------------
+    def _render_data(self, result, fetched, b):
+        """One requirement: fetched series plus B's relations/periods, ready for alignment."""
+        b_result = result["b_outcome"]["result"]
+        data = copy.deepcopy(fetched["result"])
+        # 조회 결과에 없는 B 필드(상하위 관계, 기간 안내)를 연결층에서 보존한다.
+        data["relations"] = copy.deepcopy(b_result.get("relations", []))
+        for field in ("requested_period", "period_notices", "user_periods"):
+            if field in b_result and field not in data:
+                data[field] = copy.deepcopy(b_result[field])
+        if b.client is not None:
+            attach_live_total(data, b)
+        return data
+
+    def _combine_jobs(self, query, jobs):
+        """Several requirements share one chart only when the question asks for one chart."""
+        if len(jobs) < 2 or not COMBINE_REQUEST.search(query):
+            return jobs
+        tables = list({t["table_id"]: t for j in jobs for t in j["tables"]}.values())
+        return [
+            {
+                "data": b_service.combine_results([j["data"] for j in jobs]),
+                "tables": tables,
+                "run_id": jobs[0]["run_id"],
+            }
+        ]
+
+    def _render_stage(self, state, jobs, policy, update, traces, failures, rendered_partial):
+        """Align (units/frequency/period), render with C, and finish the fetch/chart stages.
+
+        When the frequencies differ and no `policy` was chosen yet, the run pauses with a
+        confirmation card; the fetched data is kept so the answer needs no new HCX/KOSIS call.
+        """
+        aligned = []
+        for job in jobs:
+            try:
+                data = b_service.align(job["data"], frequency_policy=policy)
+            except b_service.AlignmentError as exc:
+                failures.append(("chart", exc.code, "error"))
+                state.setdefault("alignment_errors", []).append(str(exc))
+                continue
+            if data["alignment"]["status"] == "needs_choice":
+                choice = data["alignment"]["choice"]
+                count = sum(len(j["data"].get("series", [])) for j in jobs)
+                update(
+                    "fetch",
+                    "completed",
+                    f"{count}개 계열을 실제 조회했습니다.",
+                    [
+                        ["조회 상태", "정상"],
+                        ["자료", "이번 실행의 KOSIS 응답 · 저장 샘플 대체 없음"],
+                    ],
+                )
+                update(
+                    "chart",
+                    "needs_confirmation",
+                    "주기가 다른 지표를 어떻게 맞출지 선택해 주세요.",
+                    [
+                        ["필요한 선택", "주기 맞춤 방법"],
+                        ["조회 호출", "추가 호출 없음(이미 받은 값을 사용)"],
+                    ],
+                    [o["label"] for o in choice["options"]],
+                )
+                state["confirmation"] = make_alignment_confirmation(choice)
+                state["render_jobs"] = copy.deepcopy(jobs)
+                state["fetch_partial"] = rendered_partial
+                state["pre_failures"] = [list(f) for f in failures]
+                raise StageFailure("frequency_choice_required", "needs_confirmation")
+            aligned.append((job, data))
+        cases = []
+        for job, data in aligned:
+            out = self._render(state, job, data)
+            if out is None:
+                failures.append(("chart", "invalid_c_input", "error"))
+            else:
+                rendered_partial |= out[1] == "partial"
+                cases.extend(out[0])
         fetch_failures = [f for f in failures if f[0] == "fetch"]
         if not cases:
             stage, code, kind = next(
@@ -632,6 +780,13 @@ class Pipeline:
                 err, error_rows = _service_error_rows(traces)
                 if err == "30":
                     code = "kosis_no_data"
+            elif stage == "chart":
+                detail = (state.get("alignment_errors") or [None])[-1]
+                if detail is None:
+                    outs = state["stage_outcomes"].get("C") or [{}]
+                    detail = next((i.get("message") for i in outs[-1].get("issues", [])), None)
+                if detail:
+                    error_rows = [["상세", detail]]
             update(
                 stage,
                 "failed",
@@ -662,30 +817,57 @@ class Pipeline:
             note="그래프는 브라우저에서 Highcharts로 그립니다. 누적은 합산 근거가 없으면 제한합니다.",
         )
 
-    def _render(self, state, result, fetched, run_id, b):
-        """One requirement: fetched series (+ B's relations/periods) -> C -> UI cards."""
-        b_result = result["b_outcome"]["result"]
-        data = copy.deepcopy(fetched["result"])
-        # 조회 결과에 없는 B 필드(상하위 관계, 기간 안내)를 연결층에서 보존한다.
-        data["relations"] = copy.deepcopy(b_result.get("relations", []))
-        for field in ("requested_period", "period_notices", "user_periods"):
-            if field in b_result and field not in data:
-                data[field] = copy.deepcopy(b_result[field])
-        if b.client is not None:
-            attach_live_total(data, b)
+    def _render(self, state, job, data):
+        """One aligned data_result -> C -> UI cards (None when C refuses the input)."""
         out = c_service.present(state["query"], data)
         state["stage_outcomes"].setdefault("C", []).append(out)
         if out["status"] not in {"ok", "partial"}:
             return None
-        tables = result["a_result"]["tables"]
         state.setdefault("chart_results", []).append(out["result"])
-        return ui_cases(out["result"], data, run_id, tables), out["status"]
+        return ui_cases(out["result"], data, job["run_id"], job["tables"]), out["status"]
+
+    def _resume_alignment(self, state, resume, update, traces):
+        """Apply the user's frequency choice to the stored fetch result (no HCX/KOSIS call)."""
+        paused, policy = resume
+        state["parent_run_id"] = paused["run_id"]
+        state["resume_kind"] = "alignment"
+        state["as_of"] = paused["as_of"]
+        state["a_state"] = paused.get("a_state")
+        state["user_confirmation"] = {
+            "source": "user_confirmation",
+            "parent_run_id": paused["run_id"],
+            "at": now(),
+            "question_id": "frequency_alignment",
+            "option_id": policy,
+        }
+        for entry in paused["stages"]:
+            if entry["id"] != "chart":
+                update(
+                    entry["id"],
+                    entry["status"],
+                    entry["summary"],
+                    entry.get("rows"),
+                    entry.get("list"),
+                    entry.get("note", ""),
+                )
+        update("chart", "running", "선택한 방법으로 주기를 맞춰 그래프 자료를 만듭니다.")
+        self._render_stage(
+            state,
+            copy.deepcopy(paused["render_jobs"]),
+            policy,
+            update,
+            traces,
+            [tuple(f) for f in paused.get("pre_failures", [])],
+            bool(paused.get("fetch_partial")),
+        )
 
     def _fail(self, state, exc, update, current):
         state["status"], state["error_code"] = exc.status, exc.code
         state["message"] = state.get("capability", {}).get("message") or MESSAGES.get(
             exc.code, f"해당 단계에서 중단했습니다. 확인 코드: {exc.code}"
         )
+        if exc.code == "frequency_choice_required" and state.get("confirmation"):
+            state["message"] = MESSAGES["frequency_choice_required"]
         if exc.code == "a_selection_unsettled" and state.get("confirmation"):
             state["message"] = (
                 "후보 표를 확인해 주세요. 선택한 표로 B의 조건 선택·KOSIS 조회·그래프 표시를 이어갑니다."

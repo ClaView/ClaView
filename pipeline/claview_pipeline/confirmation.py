@@ -66,7 +66,7 @@ def _table_card(store, index, table_id, differences):
     return card
 
 
-def _label_card(label):
+def _label_card(label, note="A가 제시한 해석 후보"):
     return {
         "org_id": "",
         "table_id": "",
@@ -77,7 +77,38 @@ def _label_card(label):
         "units": [],
         "different_axes": [],
         "example_items": [],
-        "search_note": "A가 제시한 해석 후보",
+        "search_note": note,
+    }
+
+
+def make_alignment_confirmation(choice):
+    """The card for the frequency question of `claview_b.align` (same shape as A's card)."""
+    options = [
+        {
+            "option_id": option["option_id"],
+            "label": option["label"],
+            "tables": [_label_card(option["label"], "주기를 맞추는 방법")],
+        }
+        for option in choice["options"]
+    ]
+    group = {
+        "requirement_id": choice["question_id"],
+        "quote": " · ".join(f"{s['label']}" for s in choice["series"]),
+        "indicator": choice["text"],
+        "breakdown": [],
+        "a_status": "question",
+        "reasons": [choice["question_id"]],
+        "options": options,
+    }
+    return {
+        "kind": "alignment",
+        "requires_interpretation_ack": False,
+        "recovery_note": "",
+        "interpretation_reasons": [],
+        "conditions": [],
+        "groups": [group],
+        "question_text": choice["text"],
+        "dimension": choice["question_id"],
     }
 
 
@@ -153,6 +184,13 @@ def validate_confirmation(paused, payload):
     option = next((o for o in group["options"] if o["option_id"] == choice["option_id"]), None)
     if option is None:
         raise ValueError("제시된 후보 중에서 선택해 주세요.")
+    if confirmation.get("kind") == "alignment":
+        # 주기 맞춤 질문: A의 질문이 아니므로 A에 답을 넘기지 않는다.
+        return {
+            "kind": "alignment",
+            "question_id": group["requirement_id"],
+            "option_id": option["option_id"],
+        }
     return {
         "request_id": a_state["request_id"],
         "question_version": a_state["question_version"],

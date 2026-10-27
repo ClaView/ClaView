@@ -21,7 +21,7 @@ B가 이미 받는 형식만 쓴다.
 ```
 
 - `tables`는 A v1의 `b_handoff["tables"]`와 같은 세 필드이며 A가 정한 순서를 유지한다(`to_b_a_result`).
-- B는 이 행 전체를 모델 문맥 `selected_tables`에 넣는다. 세 필드만 넘기므로 B 모델에 들어가는 문맥은 기존 B 단독 실행과 같은 형태다. 시험이 이를 확인한다.
+- B는 이 행 전체를 모델 문맥 `selected_tables`에 넣는다. 세 필드만 넘기므로 B 모델에 들어가는 문맥은 기존 B 단독 실행과 같은 형태다. 시험이 이를 확인한다. (2026-10-26: 표 항목에 선택 필드 `focus`가 있으면 모델 문맥에는 `selected_tables`와 별도로 해당 표의 `table_focus`만 더해지며 `selected_tables`는 세 필드를 유지한다. [A→B 표 목록 계약](../../contracts/A_to_B_표목록.md))
 - A의 `requirements`, `conditions`, `matched_items`, `scopes`, `confidence`, `evidence`, `issue_codes`는 B에 넘기지 않는다. 결과 state의 `a_v1`에 그대로 남겨 진단에 쓴다.
 - A와 B는 같은 저장 카탈로그·메타(`data/catalog/search_catalog.json`, `data/raw/boK_meta_raw.jsonl`)를 읽는다. N5의 `reference/baseline-1006/data` 두 파일과 바이트가 같다.
 
