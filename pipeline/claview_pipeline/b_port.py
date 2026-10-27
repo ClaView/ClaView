@@ -1,7 +1,8 @@
 """A's AdapterPort bound to B's table-list entry (plan 25 step 2).
 
 B takes what its own A -> B pipeline gives it: the original question and the tables A
-chose, `{"tables": [{org_id, table_id, table_name}]}` (`B_TABLE_FIELDS`, as B's own A -> B input).
+chose, `{"tables": [{org_id, table_id, table_name, focus?}]}` (`B_TABLE_FIELDS` plus the optional
+`focus`, as B's own A -> B input).
 The port runs B's graph (`build_b_graph`) on that, then `fetch_data`. A's port shape is kept:
 the request and result echo A's assumptions and carry one scope per A requirement; B itself
 does not read them. The B selection model and the KOSIS client are injected.
@@ -23,6 +24,10 @@ from claview_b.services import Services
 
 # The table fields B reads from A (B's own A -> B input, `claview_b.ab_pipeline.B_TABLE_FIELDS`).
 B_TABLE_FIELDS = ("org_id", "table_id", "table_name")
+# Optional per-table field: the indicator(s) of the question this table was chosen for (A's
+# requirement wording). B shows it to the model for that table's call; absent = unchanged behaviour.
+OPTIONAL_TABLE_FIELDS = ("focus",)
+FOCUS_JOIN = " / "
 # The port's own request/result shape (not a B contract version).
 TABLE_LIST_CONTRACT = "flow-table-list/2026-10-23.1"
 NOT_RUN_FETCH_REASON = "no_fetch_client"
@@ -34,9 +39,20 @@ def to_table_request(payload: dict, *, a_assumptions: dict) -> dict:
     for selection in payload.get("selections") or []:
         for entry in selection.get("tables") or []:
             table = {k: entry.get(k) for k in B_TABLE_FIELDS}
+            focus = entry.get("focus")
+            if focus is not None:
+                table["focus"] = focus
             key = (table["org_id"], table["table_id"])
-            if all((t["org_id"], t["table_id"]) != key for t in tables):
+            known = next((t for t in tables if (t["org_id"], t["table_id"]) == key), None)
+            if known is None:
                 tables.append(table)
+            elif isinstance(focus, str) and focus.strip():
+                # the same table serves several requirements: it holds all their indicators
+                have = known.get("focus")
+                if not isinstance(have, str) or not have.strip():
+                    known["focus"] = focus
+                elif focus not in have.split(FOCUS_JOIN):
+                    known["focus"] = have + FOCUS_JOIN + focus
     return {
         "contract_version": TABLE_LIST_CONTRACT,
         "query": payload.get("question") or payload.get("query"),
@@ -58,8 +74,18 @@ def check_table_request(request: dict) -> list[str]:
     if not tables:
         problems.append("tables_missing")
     for table in tables or []:
-        if set(table) != set(B_TABLE_FIELDS) or not table["org_id"] or not table["table_id"]:
+        keys = set(table)
+        if (
+            not set(B_TABLE_FIELDS) <= keys
+            or not keys <= set(B_TABLE_FIELDS) | set(OPTIONAL_TABLE_FIELDS)
+            or not table["org_id"]
+            or not table["table_id"]
+        ):
             problems.append("table_fields")
+        elif "focus" in table and (
+            not isinstance(table["focus"], str) or not table["focus"].strip()
+        ):
+            problems.append("table_focus")
     ids = [s.get("scope_id") for s in request.get("scopes") or []]
     if not ids or len(ids) != len(set(ids)) or not all(isinstance(i, str) and i for i in ids):
         problems.append("scope_ids")

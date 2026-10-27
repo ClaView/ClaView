@@ -1,0 +1,585 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClaView multi-table / dual-axis development set 0.5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "claview-ab/0.5-draft-multi"
+    },
+    "dataset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    },
+    "note": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "table": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "org_id",
+        "table_id",
+        "table_name"
+      ],
+      "properties": {
+        "org_id": {
+          "$ref": "#/$defs/text"
+        },
+        "table_id": {
+          "$ref": "#/$defs/text"
+        },
+        "table_name": {
+          "$ref": "#/$defs/text"
+        },
+        "indicator": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "dimension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "name"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/text"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frequency",
+        "start",
+        "end"
+      ],
+      "properties": {
+        "frequency": {
+          "enum": [
+            "Y",
+            "Q",
+            "M"
+          ]
+        },
+        "start": {
+          "$ref": "#/$defs/text"
+        },
+        "end": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "frequency": {
+                "const": "Y"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "start": {
+                "pattern": "^[0-9]{4}$"
+              },
+              "end": {
+                "pattern": "^[0-9]{4}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "frequency": {
+                "const": "Q"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "start": {
+                "pattern": "^[0-9]{4}0[1-4]$"
+              },
+              "end": {
+                "pattern": "^[0-9]{4}0[1-4]$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "frequency": {
+                "const": "M"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "start": {
+                "pattern": "^[0-9]{4}(0[1-9]|1[0-2])$"
+              },
+              "end": {
+                "pattern": "^[0-9]{4}(0[1-9]|1[0-2])$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "series_id",
+        "label",
+        "org_id",
+        "table_id",
+        "item_id",
+        "dimensions",
+        "period",
+        "unit"
+      ],
+      "properties": {
+        "series_id": {
+          "$ref": "#/$defs/text"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "org_id": {
+          "$ref": "#/$defs/text"
+        },
+        "table_id": {
+          "$ref": "#/$defs/text"
+        },
+        "item_id": {
+          "$ref": "#/$defs/text"
+        },
+        "dimensions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "patternProperties": {
+            "^objL[1-8]$": {
+              "$ref": "#/$defs/dimension"
+            }
+          }
+        },
+        "period": {
+          "$ref": "#/$defs/period"
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "query",
+        "purpose",
+        "expected"
+      ],
+      "properties": {
+        "case_id": {
+          "$ref": "#/$defs/text"
+        },
+        "query": {
+          "$ref": "#/$defs/text"
+        },
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "decision",
+            "A",
+            "B",
+            "alignment",
+            "C"
+          ],
+          "properties": {
+            "decision": {
+              "const": "select"
+            },
+            "A": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "tables"
+              ],
+              "properties": {
+                "tables": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/table"
+                  }
+                }
+              }
+            },
+            "B": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "selections"
+              ],
+              "properties": {
+                "selections": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/selection"
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "$ref": "#/$defs/alignment"
+            },
+            "C": {
+              "$ref": "#/$defs/c_view"
+            }
+          }
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "axis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "side",
+        "unit",
+        "kind",
+        "draw"
+      ],
+      "properties": {
+        "side": {
+          "enum": [
+            "left",
+            "right"
+          ]
+        },
+        "unit": {
+          "$ref": "#/$defs/text"
+        },
+        "kind": {
+          "enum": [
+            "money",
+            "rate",
+            "index",
+            "other",
+            "unknown"
+          ]
+        },
+        "draw": {
+          "enum": [
+            "line",
+            "column"
+          ]
+        }
+      }
+    },
+    "frequency_conversion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "table_id",
+        "from",
+        "to",
+        "method"
+      ],
+      "properties": {
+        "table_id": {
+          "$ref": "#/$defs/text"
+        },
+        "from": {
+          "enum": [
+            "Y",
+            "H",
+            "Q",
+            "M"
+          ]
+        },
+        "to": {
+          "enum": [
+            "Y",
+            "H",
+            "Q",
+            "M"
+          ]
+        },
+        "method": {
+          "enum": [
+            "mean",
+            "last",
+            "sum"
+          ]
+        }
+      }
+    },
+    "unit_conversion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "table_id",
+        "from_unit",
+        "to_unit",
+        "factor"
+      ],
+      "properties": {
+        "table_id": {
+          "$ref": "#/$defs/text"
+        },
+        "from_unit": {
+          "$ref": "#/$defs/text"
+        },
+        "to_unit": {
+          "$ref": "#/$defs/text"
+        },
+        "factor": {
+          "type": "string",
+          "pattern": "^[0-9.]+$"
+        }
+      }
+    },
+    "alignment_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "common_frequency",
+        "frequency_conversions",
+        "unit_conversions",
+        "axes",
+        "notice_codes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "unchanged",
+            "aligned",
+            "needs_choice"
+          ]
+        },
+        "common_frequency": {
+          "enum": [
+            "Y",
+            "H",
+            "Q",
+            "M"
+          ]
+        },
+        "frequency_conversions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/frequency_conversion"
+          }
+        },
+        "unit_conversions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unit_conversion"
+          }
+        },
+        "axes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/axis"
+          }
+        },
+        "notice_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "alignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "common_frequency",
+        "frequency_question"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "unchanged",
+            "aligned",
+            "needs_choice"
+          ]
+        },
+        "common_frequency": {
+          "enum": [
+            "Y",
+            "H",
+            "Q",
+            "M"
+          ]
+        },
+        "frequency_conversions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/frequency_conversion"
+          }
+        },
+        "unit_conversions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unit_conversion"
+          }
+        },
+        "axes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/axis"
+          }
+        },
+        "notice_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        "frequency_question": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "asked",
+                "target_frequency",
+                "option_ids",
+                "answer_used_for_checks"
+              ],
+              "properties": {
+                "asked": {
+                  "const": true
+                },
+                "target_frequency": {
+                  "enum": [
+                    "Y",
+                    "H",
+                    "Q",
+                    "M"
+                  ]
+                },
+                "option_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/text"
+                  }
+                },
+                "answer_used_for_checks": {
+                  "$ref": "#/$defs/text"
+                }
+              }
+            }
+          ]
+        },
+        "after_answer": {
+          "$ref": "#/$defs/alignment_result"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "needs_choice"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "after_answer"
+            ]
+          },
+          "else": {
+            "required": [
+              "frequency_conversions",
+              "unit_conversions",
+              "axes",
+              "notice_codes"
+            ]
+          }
+        }
+      ]
+    },
+    "c_view": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "default_view",
+        "blocked_views"
+      ],
+      "properties": {
+        "default_view": {
+          "enum": [
+            "dual_axis",
+            "line",
+            "bar",
+            "table"
+          ]
+        },
+        "blocked_views": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "line",
+              "bar",
+              "horizontal",
+              "dual_axis"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
