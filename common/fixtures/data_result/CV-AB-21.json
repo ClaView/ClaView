@@ -1,0 +1,127 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "국내공급물가지수 / 총지수",
+     "org_id": "301",
+     "table_id": "DT_405Y006",
+     "item_id": "13103134640999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134640ACC_CD.*A",
+       "name": "총지수"
+      }
+     },
+     "period": {
+      "frequency": "M",
+      "start": "202401",
+      "end": "202412"
+     },
+     "unit": "2020=100"
+    },
+    "frequency": "M",
+    "unit": "2020=100",
+    "points": [
+     {
+      "period": "202401",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202402",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202403",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202404",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202405",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202406",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202407",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202408",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202409",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202410",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202411",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "202412",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 12,
+     "returned": 12,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_405Y006",
+      "itmId": "13103134640999",
+      "objL1": "13102134640ACC_CD.*A",
+      "prdSe": "M",
+      "startPrdDe": "202401",
+      "endPrdDe": "202412"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:21.988525+00:00",
+     "raw_response_ref": "09a8bf268584465c96308030840fec45"
+    }
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "09a8bf268584465c96308030840fec45"
+}

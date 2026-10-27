@@ -1,0 +1,25 @@
+{
+ "decision": "proceed",
+ "tables": [
+  {
+   "org_id": "301",
+   "table_id": "DT_501Y006",
+   "table_name": "손익 지표(제11차 한국표준산업분류, 2009~)"
+  }
+ ],
+ "b_requests": [
+  {
+   "requirement_ids": [
+    "r1"
+   ],
+   "tables": [
+    {
+     "org_id": "301",
+     "table_id": "DT_501Y006",
+     "table_name": "손익 지표(제11차 한국표준산업분류, 2009~)"
+    }
+   ]
+  }
+ ],
+ "pending_question": null
+}

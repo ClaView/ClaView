@@ -1,0 +1,30 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "총산출물가지수 / 총지수",
+    "org_id": "301",
+    "table_id": "DT_405Y007",
+    "item_id": "13103134577999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134577ACC_CD.*A",
+      "name": "총지수"
+     }
+    },
+    "period": {
+     "frequency": "M",
+     "start": "202401",
+     "end": "202412"
+    },
+    "unit": "2020=100"
+   }
+  ],
+  "relations": []
+ },
+ "issues": [],
+ "trace_ref": "1431d1dfbbf24b7a929754c88e0896a2"
+}

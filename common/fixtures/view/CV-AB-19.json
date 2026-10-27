@@ -1,0 +1,658 @@
+{
+ "stage": "C",
+ "status": "ok",
+ "result": {
+  "schema_version": "claview-c/1.1-demo",
+  "query": "2024년 수입 원재료와 중간재의 물가 흐름을 원화 기준으로 월별 비교해줘",
+  "default_view_id": "line",
+  "views": [
+   {
+    "view_id": "line",
+    "kind": "line",
+    "title": "선그래프",
+    "chart_kind": "line",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "M",
+       "unit": "2020=100",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202401",
+        "202402",
+        "202403",
+        "202404",
+        "202405",
+        "202406",
+        "202407",
+        "202408",
+        "202409",
+        "202410",
+        "202411",
+        "202412"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+       "short_label": "총지수 / 원화기준",
+       "frequency": "M",
+       "unit": "2020=100",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202401",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202402",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202403",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202404",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202405",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202406",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202407",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202408",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202409",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202410",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202411",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202412",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+        "org_id": "301",
+        "table_id": "DT_401Y018",
+        "item_id": "13103134729999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134729ACC_CD.*AA",
+          "name": "총지수"
+         },
+         "objL2": {
+          "code": "13102134729CRR_CTRT_CD.W",
+          "name": "원화기준"
+         }
+        },
+        "period": {
+         "frequency": "M",
+         "start": "202401",
+         "end": "202412"
+        },
+        "unit": "2020=100"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "bar",
+    "kind": "bar",
+    "title": "묶음막대",
+    "chart_kind": "bar",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "M",
+       "unit": "2020=100",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202401",
+        "202402",
+        "202403",
+        "202404",
+        "202405",
+        "202406",
+        "202407",
+        "202408",
+        "202409",
+        "202410",
+        "202411",
+        "202412"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+       "short_label": "총지수 / 원화기준",
+       "frequency": "M",
+       "unit": "2020=100",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202401",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202402",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202403",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202404",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202405",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202406",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202407",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202408",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202409",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202410",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202411",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202412",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+        "org_id": "301",
+        "table_id": "DT_401Y018",
+        "item_id": "13103134729999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134729ACC_CD.*AA",
+          "name": "총지수"
+         },
+         "objL2": {
+          "code": "13102134729CRR_CTRT_CD.W",
+          "name": "원화기준"
+         }
+        },
+        "period": {
+         "frequency": "M",
+         "start": "202401",
+         "end": "202412"
+        },
+        "unit": "2020=100"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "table",
+    "kind": "table",
+    "title": "수치표",
+    "chart_kind": "table",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "M",
+       "unit": "2020=100",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202401",
+        "202402",
+        "202403",
+        "202404",
+        "202405",
+        "202406",
+        "202407",
+        "202408",
+        "202409",
+        "202410",
+        "202411",
+        "202412"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+       "short_label": "총지수 / 원화기준",
+       "frequency": "M",
+       "unit": "2020=100",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202401",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202402",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202403",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202404",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202405",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202406",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202407",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202408",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202409",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202410",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202411",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202412",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+        "org_id": "301",
+        "table_id": "DT_401Y018",
+        "item_id": "13103134729999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134729ACC_CD.*AA",
+          "name": "총지수"
+         },
+         "objL2": {
+          "code": "13102134729CRR_CTRT_CD.W",
+          "name": "원화기준"
+         }
+        },
+        "period": {
+         "frequency": "M",
+         "start": "202401",
+         "end": "202412"
+        },
+        "unit": "2020=100"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   }
+  ],
+  "table": [
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 1월",
+    "period": "202401",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 2월",
+    "period": "202402",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 3월",
+    "period": "202403",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 4월",
+    "period": "202404",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 5월",
+    "period": "202405",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 6월",
+    "period": "202406",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 7월",
+    "period": "202407",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 8월",
+    "period": "202408",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 9월",
+    "period": "202409",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 10월",
+    "period": "202410",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 11월",
+    "period": "202411",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "수입물가지수(용도별) / 총지수 / 원화기준",
+    "frequency": "M",
+    "unit": "2020=100",
+    "period_label": "2024년 12월",
+    "period": "202412",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   }
+  ],
+  "warnings": [],
+  "notices": [],
+  "source": [
+   {
+    "series_id": "S001",
+    "org_id": "301",
+    "table_id": "DT_401Y018",
+    "item_id": "13103134729999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134729ACC_CD.*AA",
+      "name": "총지수"
+     },
+     "objL2": {
+      "code": "13102134729CRR_CTRT_CD.W",
+      "name": "원화기준"
+     }
+    },
+    "period": {
+     "frequency": "M",
+     "start": "202401",
+     "end": "202412"
+    },
+    "unit": "2020=100",
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_401Y018",
+      "itmId": "13103134729999",
+      "objL1": "13102134729ACC_CD.*AA",
+      "objL2": "13102134729CRR_CTRT_CD.W",
+      "prdSe": "M",
+      "startPrdDe": "202401",
+      "endPrdDe": "202412"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:20.797111+00:00",
+     "raw_response_ref": "3d87fa449f4e4b40bffea68347aa9fd1"
+    }
+   }
+  ],
+  "recommendation": "종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다.",
+  "blocked_views": [
+   {
+    "kind": "stacked",
+    "title": "누적막대",
+    "reason": "이 항목들을 더해 하나의 전체로 볼 수 있는지 확인되지 않았습니다. 합산 근거를 확인한 뒤 사용할 수 있습니다."
+   },
+   {
+    "kind": "percent_stacked",
+    "title": "100% 누적막대",
+    "reason": "비중을 구하려면 서로 겹치지 않는 구성 항목과 전체의 범위가 확인되어야 합니다. 현재 입력에는 그 근거가 없습니다."
+   },
+   {
+    "kind": "horizontal",
+    "title": "한 시점 가로막대",
+    "reason": "같은 주기·단위의 비교 항목이 두 개 이상 필요합니다."
+   }
+  ],
+  "quality_summary": {
+   "total_cells": 12,
+   "observed_values": 12,
+   "missing_values": 0,
+   "parse_error_values": 0,
+   "affected_series": 0
+  },
+  "synthetic": false,
+  "analysis_version": "c-analysis/2026-10-21-v3-policy",
+  "composition": null,
+  "calculation": null,
+  "chart_policy": {
+   "version": "chart-policy/2026-10-21-v1",
+   "requested": [],
+   "selected": "line",
+   "reason": "종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다.",
+   "notices": [],
+   "facts": {
+    "period_count": 12,
+    "series_count": 1,
+    "composition_verified": false
+   }
+  }
+ },
+ "issues": [],
+ "trace_ref": "fc6500d81f584121b97a9331b82f97ce"
+}

@@ -1,0 +1,1044 @@
+{
+ "stage": "C",
+ "status": "ok",
+ "result": {
+  "schema_version": "claview-c/1.1-demo",
+  "query": "최근 2년간 경제심리지수(ESI, 원계열)를 월별 그래프로 보여줘",
+  "default_view_id": "line",
+  "views": [
+   {
+    "view_id": "line",
+    "kind": "line",
+    "title": "선그래프",
+    "chart_kind": "line",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "M",
+       "unit": null,
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202409",
+        "202410",
+        "202411",
+        "202412",
+        "202501",
+        "202502",
+        "202503",
+        "202504",
+        "202505",
+        "202506",
+        "202507",
+        "202508",
+        "202509",
+        "202510",
+        "202511",
+        "202512",
+        "202601",
+        "202602",
+        "202603",
+        "202604",
+        "202605",
+        "202606",
+        "202607",
+        "202608"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "경제심리지수 / 경제심리지수(원계열)",
+       "short_label": "경제심리지수(원계열)",
+       "frequency": "M",
+       "unit": null,
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202409",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202410",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202411",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202412",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202501",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202502",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202503",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202504",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202505",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202506",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202507",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202508",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202509",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202510",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202511",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202512",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202601",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202602",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202603",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202604",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202605",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202606",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202607",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202608",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "경제심리지수 / 경제심리지수(원계열)",
+        "org_id": "301",
+        "table_id": "DT_513Y001",
+        "item_id": "13103134473999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134473ACC_CD.E1000",
+          "name": "경제심리지수(원계열)"
+         }
+        },
+        "period": {
+         "frequency": "M",
+         "start": "202409",
+         "end": "202608"
+        },
+        "unit": null
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "bar",
+    "kind": "bar",
+    "title": "묶음막대",
+    "chart_kind": "bar",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "M",
+       "unit": null,
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202409",
+        "202410",
+        "202411",
+        "202412",
+        "202501",
+        "202502",
+        "202503",
+        "202504",
+        "202505",
+        "202506",
+        "202507",
+        "202508",
+        "202509",
+        "202510",
+        "202511",
+        "202512",
+        "202601",
+        "202602",
+        "202603",
+        "202604",
+        "202605",
+        "202606",
+        "202607",
+        "202608"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "경제심리지수 / 경제심리지수(원계열)",
+       "short_label": "경제심리지수(원계열)",
+       "frequency": "M",
+       "unit": null,
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202409",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202410",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202411",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202412",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202501",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202502",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202503",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202504",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202505",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202506",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202507",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202508",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202509",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202510",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202511",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202512",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202601",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202602",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202603",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202604",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202605",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202606",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202607",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202608",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "경제심리지수 / 경제심리지수(원계열)",
+        "org_id": "301",
+        "table_id": "DT_513Y001",
+        "item_id": "13103134473999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134473ACC_CD.E1000",
+          "name": "경제심리지수(원계열)"
+         }
+        },
+        "period": {
+         "frequency": "M",
+         "start": "202409",
+         "end": "202608"
+        },
+        "unit": null
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "table",
+    "kind": "table",
+    "title": "수치표",
+    "chart_kind": "table",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "M",
+       "unit": null,
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202409",
+        "202410",
+        "202411",
+        "202412",
+        "202501",
+        "202502",
+        "202503",
+        "202504",
+        "202505",
+        "202506",
+        "202507",
+        "202508",
+        "202509",
+        "202510",
+        "202511",
+        "202512",
+        "202601",
+        "202602",
+        "202603",
+        "202604",
+        "202605",
+        "202606",
+        "202607",
+        "202608"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "경제심리지수 / 경제심리지수(원계열)",
+       "short_label": "경제심리지수(원계열)",
+       "frequency": "M",
+       "unit": null,
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202409",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202410",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202411",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202412",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202501",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202502",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202503",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202504",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202505",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202506",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202507",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202508",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202509",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202510",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202511",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202512",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202601",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202602",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202603",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202604",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202605",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202606",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202607",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202608",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "경제심리지수 / 경제심리지수(원계열)",
+        "org_id": "301",
+        "table_id": "DT_513Y001",
+        "item_id": "13103134473999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134473ACC_CD.E1000",
+          "name": "경제심리지수(원계열)"
+         }
+        },
+        "period": {
+         "frequency": "M",
+         "start": "202409",
+         "end": "202608"
+        },
+        "unit": null
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   }
+  ],
+  "table": [
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2024년 9월",
+    "period": "202409",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2024년 10월",
+    "period": "202410",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2024년 11월",
+    "period": "202411",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2024년 12월",
+    "period": "202412",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 1월",
+    "period": "202501",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 2월",
+    "period": "202502",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 3월",
+    "period": "202503",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 4월",
+    "period": "202504",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 5월",
+    "period": "202505",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 6월",
+    "period": "202506",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 7월",
+    "period": "202507",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 8월",
+    "period": "202508",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 9월",
+    "period": "202509",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 10월",
+    "period": "202510",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 11월",
+    "period": "202511",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2025년 12월",
+    "period": "202512",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2026년 1월",
+    "period": "202601",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2026년 2월",
+    "period": "202602",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2026년 3월",
+    "period": "202603",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2026년 4월",
+    "period": "202604",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2026년 5월",
+    "period": "202605",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2026년 6월",
+    "period": "202606",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2026년 7월",
+    "period": "202607",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "경제심리지수 / 경제심리지수(원계열)",
+    "frequency": "M",
+    "unit": null,
+    "period_label": "2026년 8월",
+    "period": "202608",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   }
+  ],
+  "warnings": [
+   {
+    "code": "unit_not_provided",
+    "series_id": "S001",
+    "message": "경제심리지수 / 경제심리지수(원계열): 단위 미제공."
+   }
+  ],
+  "notices": [
+   {
+    "table": "301:DT_513Y001",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "202610",
+    "resolved_period": {
+     "frequency": "M",
+     "start": "202409",
+     "end": "202608"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 202610까지 필요하지만, 표의 최신 수록 시점은 202608입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 202409 ~ 202608"
+   }
+  ],
+  "source": [
+   {
+    "series_id": "S001",
+    "org_id": "301",
+    "table_id": "DT_513Y001",
+    "item_id": "13103134473999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134473ACC_CD.E1000",
+      "name": "경제심리지수(원계열)"
+     }
+    },
+    "period": {
+     "frequency": "M",
+     "start": "202409",
+     "end": "202608"
+    },
+    "unit": null,
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_513Y001",
+      "itmId": "13103134473999",
+      "objL1": "13102134473ACC_CD.E1000",
+      "prdSe": "M",
+      "startPrdDe": "202409",
+      "endPrdDe": "202608"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:18.139031+00:00",
+     "raw_response_ref": "e05b11f3a42a49e1b37814c5ed46417c"
+    }
+   }
+  ],
+  "recommendation": "종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다.",
+  "blocked_views": [
+   {
+    "kind": "stacked",
+    "title": "누적막대",
+    "reason": "이 항목들을 더해 하나의 전체로 볼 수 있는지 확인되지 않았습니다. 합산 근거를 확인한 뒤 사용할 수 있습니다."
+   },
+   {
+    "kind": "percent_stacked",
+    "title": "100% 누적막대",
+    "reason": "비중을 구하려면 서로 겹치지 않는 구성 항목과 전체의 범위가 확인되어야 합니다. 현재 입력에는 그 근거가 없습니다."
+   },
+   {
+    "kind": "horizontal",
+    "title": "한 시점 가로막대",
+    "reason": "같은 주기·단위의 비교 항목이 두 개 이상 필요합니다."
+   }
+  ],
+  "quality_summary": {
+   "total_cells": 24,
+   "observed_values": 24,
+   "missing_values": 0,
+   "parse_error_values": 0,
+   "affected_series": 0
+  },
+  "synthetic": false,
+  "analysis_version": "c-analysis/2026-10-21-v3-policy",
+  "composition": null,
+  "calculation": null,
+  "chart_policy": {
+   "version": "chart-policy/2026-10-21-v1",
+   "requested": [],
+   "selected": "line",
+   "reason": "종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다.",
+   "notices": [],
+   "facts": {
+    "period_count": 24,
+    "series_count": 1,
+    "composition_verified": false
+   }
+  }
+ },
+ "issues": [],
+ "trace_ref": "5acb6a541c384f3a9e56742e80a3fb51"
+}

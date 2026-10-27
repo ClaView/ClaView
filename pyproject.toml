@@ -1,27 +1,90 @@
-[build-system]
-requires = ["hatchling>=1.27,<2"]
-build-backend = "hatchling.build"
-
-[project]
-name = "claview"
-version = "0.1.0"
-description = "KOSIS statistics exploration and visualization agent"
-requires-python = ">=3.12,<3.13"
-dependencies = []
-
-[dependency-groups]
-dev = ["pytest>=8,<10", "ruff>=0.12,<1"]
-
-[tool.hatch.build.targets.wheel]
-only-include = ["src"]
-sources = ["src"]
+# Tool settings only. Dependencies are in requirements.txt (one file for every service image);
+# packages are found through PYTHONPATH (Dockerfile, Makefile, README 3).
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+# Each suite runs as its own pytest process (README 3): A's suite installs an import guard,
+# B's suite blocks every socket, the API suites allow loopback only.
+testpaths = ["common/tests"]
 
 [tool.ruff]
 target-version = "py312"
-line-length = 100
+line-length = 120
+# Code copied from the A, B and C shares keeps its own style; new service code is linted.
+extend-exclude = [
+    "modules/a/claview_a", "modules/a/tests", "modules/a/scripts",
+    "modules/b/claview_b", "modules/b/tests", "modules/b/scripts",
+    "modules/c/claview_c", "pipeline/claview_pipeline/staged.py", "pipeline/claview_pipeline/confirmation.py",
+    "pipeline/claview_pipeline/request_capabilities.py", "pipeline/tests/staged",
+    "frontend/build", "research",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["claview_common", "claview_a", "claview_b", "claview_c", "claview_pipeline",
+                     "claview_a_api", "claview_b_api", "claview_c_api"]
+
+# Module boundaries, checked in CI with `lint-imports` (PYTHONPATH as in the Makefile).
+[tool.importlinter]
+root_packages = ["claview_common", "claview_a", "claview_b", "claview_c",
+                 "claview_a_api", "claview_b_api", "claview_c_api", "claview_pipeline"]
+include_external_packages = false
+
+[[tool.importlinter.contracts]]
+name = "Module packages (A, B, C) do not import each other"
+type = "independence"
+modules = ["claview_a", "claview_b", "claview_c"]
+
+[[tool.importlinter.contracts]]
+name = "Shared code imports no module and no pipeline"
+type = "forbidden"
+source_modules = ["claview_common"]
+forbidden_modules = ["claview_a", "claview_b", "claview_c", "claview_a_api", "claview_b_api",
+                     "claview_c_api", "claview_pipeline"]
+
+[[tool.importlinter.contracts]]
+name = "A's package stays free of web and shared code (A's own package rules)"
+type = "forbidden"
+source_modules = ["claview_a"]
+forbidden_modules = ["claview_common", "claview_a_api"]
+
+[[tool.importlinter.contracts]]
+name = "Module APIs do not import each other"
+type = "independence"
+modules = ["claview_a_api", "claview_b_api", "claview_c_api"]
+
+[[tool.importlinter.contracts]]
+name = "A's API uses only A"
+type = "forbidden"
+source_modules = ["claview_a_api"]
+forbidden_modules = ["claview_b", "claview_c"]
+
+[[tool.importlinter.contracts]]
+name = "B's API uses only B"
+type = "forbidden"
+source_modules = ["claview_b_api"]
+forbidden_modules = ["claview_a", "claview_c"]
+
+[[tool.importlinter.contracts]]
+name = "C's API uses only C"
+type = "forbidden"
+source_modules = ["claview_c_api"]
+forbidden_modules = ["claview_a", "claview_b"]
+
+[[tool.importlinter.contracts]]
+name = "Module APIs do not import the pipeline"
+type = "forbidden"
+source_modules = ["claview_a_api", "claview_b_api", "claview_c_api"]
+forbidden_modules = ["claview_pipeline"]
+
+[[tool.importlinter.contracts]]
+name = "The service flow and API reach modules only through their service layers (claview_*_api)"
+type = "forbidden"
+source_modules = ["claview_pipeline.staged", "claview_pipeline.api", "claview_pipeline.confirmation",
+                  "claview_pipeline.request_capabilities"]
+forbidden_modules = ["claview_a", "claview_b", "claview_c"]
+allow_indirect_imports = "True"
+
+# claview_pipeline.session/b_port/evaluate/cli (the `claview` command and the golden replay evaluation)
+# still use A's built-in B port and import claview_a/claview_b directly.

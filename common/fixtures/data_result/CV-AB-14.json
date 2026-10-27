@@ -1,0 +1,109 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "손익 지표(제11차 한국표준산업분류 2009~) / C10 식료품 / 종합 / 총자산세전순이익률",
+     "org_id": "301",
+     "table_id": "DT_501Y006",
+     "item_id": "13103134573999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134573BZTYP_CD.C10",
+       "name": "C10 식료품"
+      },
+      "objL2": {
+       "code": "13102134573ENTERPRISE_SCALE.A",
+       "name": "종합"
+      },
+      "objL3": {
+       "code": "13102134573ACC_ITEM.6011",
+       "name": "총자산세전순이익률"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2020",
+      "end": "2024"
+     },
+     "unit": "%"
+    },
+    "frequency": "Y",
+    "unit": "%",
+    "points": [
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 5,
+     "returned": 5,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_501Y006",
+      "itmId": "13103134573999",
+      "objL1": "13102134573BZTYP_CD.C10",
+      "objL2": "13102134573ENTERPRISE_SCALE.A",
+      "objL3": "13102134573ACC_ITEM.6011",
+      "prdSe": "Y",
+      "startPrdDe": "2020",
+      "endPrdDe": "2024"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:17.958372+00:00",
+     "raw_response_ref": "6743b742d26f46d4a7ca97fc47537122"
+    }
+   }
+  ],
+  "period_notices": [
+   {
+    "table": "301:DT_501Y006",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "2026",
+    "resolved_period": {
+     "frequency": "Y",
+     "start": "2020",
+     "end": "2024"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 2026까지 필요하지만, 표의 최신 수록 시점은 2024입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 2020 ~ 2024"
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "6743b742d26f46d4a7ca97fc47537122"
+}

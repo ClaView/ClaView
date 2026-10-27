@@ -1,0 +1,929 @@
+{
+ "stage": "C",
+ "status": "ok",
+ "result": {
+  "schema_version": "claview-c/1.1-demo",
+  "query": "2005~2025년 연간 경상수지와 상품·서비스·본원소득·이전소득수지 추이를 그래프로 비교해줘.",
+  "default_view_id": "line",
+  "views": [
+   {
+    "view_id": "line",
+    "kind": "line",
+    "title": "선그래프",
+    "chart_kind": "line",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "백만달러",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2005",
+        "2006",
+        "2007",
+        "2008",
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "국제수지 / 경상수지",
+       "short_label": "경상수지",
+       "frequency": "Y",
+       "unit": "백만달러",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2005",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2006",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2007",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2008",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2009",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2010",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2011",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2012",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2013",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2014",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2015",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2016",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2017",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2018",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2019",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2025",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "국제수지 / 경상수지",
+        "org_id": "301",
+        "table_id": "DT_301Y013",
+        "item_id": "13103134519999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134519ACC_CD.000000",
+          "name": "경상수지"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2005",
+         "end": "2025"
+        },
+        "unit": "백만달러"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "bar",
+    "kind": "bar",
+    "title": "묶음막대",
+    "chart_kind": "bar",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "백만달러",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2005",
+        "2006",
+        "2007",
+        "2008",
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "국제수지 / 경상수지",
+       "short_label": "경상수지",
+       "frequency": "Y",
+       "unit": "백만달러",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2005",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2006",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2007",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2008",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2009",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2010",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2011",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2012",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2013",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2014",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2015",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2016",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2017",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2018",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2019",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2025",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "국제수지 / 경상수지",
+        "org_id": "301",
+        "table_id": "DT_301Y013",
+        "item_id": "13103134519999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134519ACC_CD.000000",
+          "name": "경상수지"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2005",
+         "end": "2025"
+        },
+        "unit": "백만달러"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "table",
+    "kind": "table",
+    "title": "수치표",
+    "chart_kind": "table",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": "백만달러",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2005",
+        "2006",
+        "2007",
+        "2008",
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "국제수지 / 경상수지",
+       "short_label": "경상수지",
+       "frequency": "Y",
+       "unit": "백만달러",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2005",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2006",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2007",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2008",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2009",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2010",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2011",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2012",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2013",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2014",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2015",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2016",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2017",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2018",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2019",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2025",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "국제수지 / 경상수지",
+        "org_id": "301",
+        "table_id": "DT_301Y013",
+        "item_id": "13103134519999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134519ACC_CD.000000",
+          "name": "경상수지"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2005",
+         "end": "2025"
+        },
+        "unit": "백만달러"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   }
+  ],
+  "table": [
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2005년",
+    "period": "2005",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2006년",
+    "period": "2006",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2007년",
+    "period": "2007",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2008년",
+    "period": "2008",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2009년",
+    "period": "2009",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2010년",
+    "period": "2010",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2011년",
+    "period": "2011",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2012년",
+    "period": "2012",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2013년",
+    "period": "2013",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2014년",
+    "period": "2014",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2015년",
+    "period": "2015",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2016년",
+    "period": "2016",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2017년",
+    "period": "2017",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2018년",
+    "period": "2018",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2019년",
+    "period": "2019",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2020년",
+    "period": "2020",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2021년",
+    "period": "2021",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2022년",
+    "period": "2022",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2023년",
+    "period": "2023",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2024년",
+    "period": "2024",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "frequency": "Y",
+    "unit": "백만달러",
+    "period_label": "2025년",
+    "period": "2025",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   }
+  ],
+  "warnings": [],
+  "notices": [],
+  "source": [
+   {
+    "series_id": "S001",
+    "org_id": "301",
+    "table_id": "DT_301Y013",
+    "item_id": "13103134519999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134519ACC_CD.000000",
+      "name": "경상수지"
+     }
+    },
+    "period": {
+     "frequency": "Y",
+     "start": "2005",
+     "end": "2025"
+    },
+    "unit": "백만달러",
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y013",
+      "itmId": "13103134519999",
+      "objL1": "13102134519ACC_CD.000000",
+      "prdSe": "Y",
+      "startPrdDe": "2005",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:14.493416+00:00",
+     "raw_response_ref": "f66800a1ac79494b9160ea51b49ca2b7"
+    }
+   }
+  ],
+  "recommendation": "종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다.",
+  "blocked_views": [
+   {
+    "kind": "stacked",
+    "title": "누적막대",
+    "reason": "이 항목들을 더해 하나의 전체로 볼 수 있는지 확인되지 않았습니다. 합산 근거를 확인한 뒤 사용할 수 있습니다."
+   },
+   {
+    "kind": "percent_stacked",
+    "title": "100% 누적막대",
+    "reason": "비중을 구하려면 서로 겹치지 않는 구성 항목과 전체의 범위가 확인되어야 합니다. 현재 입력에는 그 근거가 없습니다."
+   },
+   {
+    "kind": "horizontal",
+    "title": "한 시점 가로막대",
+    "reason": "같은 주기·단위의 비교 항목이 두 개 이상 필요합니다."
+   }
+  ],
+  "quality_summary": {
+   "total_cells": 21,
+   "observed_values": 21,
+   "missing_values": 0,
+   "parse_error_values": 0,
+   "affected_series": 0
+  },
+  "synthetic": false,
+  "analysis_version": "c-analysis/2026-10-21-v3-policy",
+  "composition": null,
+  "calculation": null,
+  "chart_policy": {
+   "version": "chart-policy/2026-10-21-v1",
+   "requested": [],
+   "selected": "line",
+   "reason": "종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다.",
+   "notices": [],
+   "facts": {
+    "period_count": 21,
+    "series_count": 1,
+    "composition_verified": false
+   }
+  }
+ },
+ "issues": [],
+ "trace_ref": "bda03f5bc6b14c1d8ededa8295e68d37"
+}

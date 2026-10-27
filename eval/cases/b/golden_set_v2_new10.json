@@ -1,0 +1,707 @@
+{
+  "schema_version": "claview-ab/0.4-draft",
+  "dataset_id": "claview-b-new10-v1",
+  "cases": [
+    {
+      "case_id": "CV-NEW-01",
+      "query": "2020~2025년 연간 소득교역조건지수 추이를 꺾은선 그래프로 보여줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 비슷한 이름 2개 중 하나 고르기(순상품교역조건지수 vs 소득교역조건지수), 연간",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_403Y005",
+              "table_name": "교역조건지수"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-01-S1",
+              "label": "소득교역조건지수",
+              "org_id": "301",
+              "table_id": "DT_403Y005",
+              "item_id": "13103134627999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134627TERMS_TRADE_TYPE.B",
+                  "name": "소득교역조건지수"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2020",
+                "end": "2025"
+              },
+              "unit": "2020=100"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-02",
+      "query": "최근 2년간 제조업 업황 BSI(실적)를 월별 꺾은선 그래프로 보여줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 2개 분류축 동시 선택, 상위(전산업)·하위(제조업) 중 질문에 쓰인 값, 상대 기간",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_512Y013",
+              "table_name": "기업경기조사(실적)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-02-S1",
+              "label": "제 조 업 / 업황실적BSI",
+              "org_id": "301",
+              "table_id": "DT_512Y013",
+              "item_id": "13103134673999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134673BUSINESS_TYPE_CD.C0000",
+                  "name": "제 조 업"
+                },
+                "objL2": {
+                  "code": "13102134673BSI_CD.AA",
+                  "name": "업황실적BSI"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202409",
+                "end": "202608"
+              },
+              "unit": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-03",
+      "query": "2024년 이후 예금취급기관 가계대출을 업권별로 나눠 월별 막대그래프로 보여줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 깊이를 말하지 않은 '~별' 펼침(최하위 6개), 3단 계층",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_151Y002",
+              "table_name": "예금취급기관 가계대출(업권별, 월)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-03-S1",
+              "label": "예금은행",
+              "org_id": "301",
+              "table_id": "DT_151Y002",
+              "item_id": "13103134549999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134549ACC_ITEM.1111000",
+                  "name": "예금은행"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-NEW-03-S2",
+              "label": "상호저축은행",
+              "org_id": "301",
+              "table_id": "DT_151Y002",
+              "item_id": "13103134549999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134549ACC_ITEM.1112000",
+                  "name": "상호저축은행"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-NEW-03-S3",
+              "label": "신용협동조합",
+              "org_id": "301",
+              "table_id": "DT_151Y002",
+              "item_id": "13103134549999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134549ACC_ITEM.1113100",
+                  "name": "신용협동조합"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-NEW-03-S4",
+              "label": "상호금융",
+              "org_id": "301",
+              "table_id": "DT_151Y002",
+              "item_id": "13103134549999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134549ACC_ITEM.1113200",
+                  "name": "상호금융"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-NEW-03-S5",
+              "label": "새마을금고",
+              "org_id": "301",
+              "table_id": "DT_151Y002",
+              "item_id": "13103134549999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134549ACC_ITEM.1113300",
+                  "name": "새마을금고"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-NEW-03-S6",
+              "label": "우체국예금 등",
+              "org_id": "301",
+              "table_id": "DT_151Y002",
+              "item_id": "13103134549999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134549ACC_ITEM.1114000",
+                  "name": "우체국예금 등"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-04",
+      "query": "2023년 이후 금융기관유동성(Lf, 말잔 원계열)을 상품별로 나눠 월별 누적 막대그래프로 그려줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): '~별' 펼침, 형제 깊이가 다른 계층(M2는 한 단계 아래, 비예금취급기관은 바로 아래)",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_171Y002",
+              "table_name": "Lf 상품별 구성내역(말잔, 원계열)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-04-S1",
+              "label": "M2",
+              "org_id": "301",
+              "table_id": "DT_171Y002",
+              "item_id": "13103852617999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102852617ACC_ITEM.LE01100",
+                  "name": "M2"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-NEW-04-S2",
+              "label": "2년이상 장기금융상품",
+              "org_id": "301",
+              "table_id": "DT_171Y002",
+              "item_id": "13103852617999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102852617ACC_ITEM.LE01200",
+                  "name": "2년이상 장기금융상품"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-NEW-04-S3",
+              "label": "비예금취급기관 발행 금융상품",
+              "org_id": "301",
+              "table_id": "DT_171Y002",
+              "item_id": "13103852617999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102852617ACC_ITEM.LE02000",
+                  "name": "비예금취급기관 발행 금융상품"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-05",
+      "query": "최근 5년간 예금은행의 제조업 대출금 추이를 분기별 꺾은선 그래프로 보여줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 하위 값이 많은 상위 값 하나만 고르기(펼치면 안 됨), 상대 기간 5년 분기",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_131Y013",
+              "table_name": "산업별대출금(예금은행, 전산업)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-05-S1",
+              "label": "제조업",
+              "org_id": "301",
+              "table_id": "DT_131Y013",
+              "item_id": "13103134741999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134741ACC_ITEM.BDDE13",
+                  "name": "제조업"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202103",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-06",
+      "query": "2018년 이후 은행 차주당 가계대출 잔액을 연령대별로 연도별 비교하는 그래프를 그려줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 2개 분류축 중 한 축은 고정(은행), 다른 축은 상·하위가 없는 5개 값 전부",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_181Y006",
+              "table_name": "연령별 업권별"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-06-S1",
+              "label": "20대 / 은행",
+              "org_id": "301",
+              "table_id": "DT_181Y006",
+              "item_id": "13103852636999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102852636GUBUN_CD.C001",
+                  "name": "20대"
+                },
+                "objL2": {
+                  "code": "13102852636ACC_ITEM.E010",
+                  "name": "은행"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2018",
+                "end": "2025"
+              },
+              "unit": "십만원"
+            },
+            {
+              "series_id": "CV-NEW-06-S2",
+              "label": "30대 / 은행",
+              "org_id": "301",
+              "table_id": "DT_181Y006",
+              "item_id": "13103852636999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102852636GUBUN_CD.C002",
+                  "name": "30대"
+                },
+                "objL2": {
+                  "code": "13102852636ACC_ITEM.E010",
+                  "name": "은행"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2018",
+                "end": "2025"
+              },
+              "unit": "십만원"
+            },
+            {
+              "series_id": "CV-NEW-06-S3",
+              "label": "40대 / 은행",
+              "org_id": "301",
+              "table_id": "DT_181Y006",
+              "item_id": "13103852636999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102852636GUBUN_CD.C003",
+                  "name": "40대"
+                },
+                "objL2": {
+                  "code": "13102852636ACC_ITEM.E010",
+                  "name": "은행"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2018",
+                "end": "2025"
+              },
+              "unit": "십만원"
+            },
+            {
+              "series_id": "CV-NEW-06-S4",
+              "label": "50대 / 은행",
+              "org_id": "301",
+              "table_id": "DT_181Y006",
+              "item_id": "13103852636999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102852636GUBUN_CD.C004",
+                  "name": "50대"
+                },
+                "objL2": {
+                  "code": "13102852636ACC_ITEM.E010",
+                  "name": "은행"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2018",
+                "end": "2025"
+              },
+              "unit": "십만원"
+            },
+            {
+              "series_id": "CV-NEW-06-S5",
+              "label": "60대 이상 / 은행",
+              "org_id": "301",
+              "table_id": "DT_181Y006",
+              "item_id": "13103852636999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102852636GUBUN_CD.C005",
+                  "name": "60대 이상"
+                },
+                "objL2": {
+                  "code": "13102852636ACC_ITEM.E010",
+                  "name": "은행"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2018",
+                "end": "2025"
+              },
+              "unit": "십만원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-07",
+      "query": "최근 3년간 예금은행의 1년 만기 정기예금 금리(신규취급액 기준)를 월별 꺾은선 그래프로 보여줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 28개 값 중 이름이 비슷한 항목 고르기(정기예금 / 정기예금(1년) / 정기적금(1-2년))",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_121Y002",
+              "table_name": "예금은행 수신금리(신규취급액 기준)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-07-S1",
+              "label": "정기예금(1년)",
+              "org_id": "301",
+              "table_id": "DT_121Y002",
+              "item_id": "13103134588999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134588ACC_ITEM.BEABAA2118",
+                  "name": "정기예금(1년)"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202308",
+                "end": "202607"
+              },
+              "unit": "연%, 연리%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-08",
+      "query": "2020년 이후 순대외채권을 단기와 장기로 나눠 분기별 막대그래프로 보여줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 상위 값의 하위 중 질문이 이름으로 가리킨 2개만 선택(나머지 부문별 단기·장기는 제외)",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_311Y006",
+              "table_name": "순대외채권"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-08-S1",
+              "label": "1.단기",
+              "org_id": "301",
+              "table_id": "DT_311Y006",
+              "item_id": "13103134539999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134539ACC_CD.C500000",
+                  "name": "1.단기"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "백만달러"
+            },
+            {
+              "series_id": "CV-NEW-08-S2",
+              "label": "2.장기",
+              "org_id": "301",
+              "table_id": "DT_311Y006",
+              "item_id": "13103134539999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134539ACC_CD.C600000",
+                  "name": "2.장기"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202001",
+                "end": "202602"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-09",
+      "query": "최근 3년간 향후 1년 기대인플레이션율 추이를 월별로 보여줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 하위 값(응답 구성비)이 있는 상위 값 하나를 펼치지 않고 선택, 상대 기간",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_511Y003",
+              "table_name": "기대인플레이션율(전국, 월)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-09-S1",
+              "label": "향후1년 기대인플레이션율",
+              "org_id": "301",
+              "table_id": "DT_511Y003",
+              "item_id": "13103134728999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134728CSI_CD.FMB",
+                  "name": "향후1년 기대인플레이션율"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              },
+              "unit": "%"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_id": "CV-NEW-10",
+      "query": "최근 2년간 예금취급기관의 주택관련대출과 기타대출을 월별로 나눠 비교해줘",
+      "source": {
+        "used_part": "신규 검증용 질문(공식 게시물 출처 없음): 같은 이름이 여러 곳에 있는 값(주택관련대출-예금은행 등) 중 상위 2개를 이름으로 고르기",
+        "url": "해당 없음"
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_151Y005",
+              "table_name": "예금취급기관 가계대출(용도별, 월)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-NEW-10-S1",
+              "label": "주택관련대출-예금취급기관",
+              "org_id": "301",
+              "table_id": "DT_151Y005",
+              "item_id": "13103134699999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134699ACC_ITEM.11100A0",
+                  "name": "주택관련대출-예금취급기관"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202408",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            },
+            {
+              "series_id": "CV-NEW-10-S2",
+              "label": "기타대출-예금취급기관",
+              "org_id": "301",
+              "table_id": "DT_151Y005",
+              "item_id": "13103134699999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134699ACC_ITEM.11100B0",
+                  "name": "기타대출-예금취급기관"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202408",
+                "end": "202607"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

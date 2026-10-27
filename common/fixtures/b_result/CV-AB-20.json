@@ -1,0 +1,104 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+    "org_id": "301",
+    "table_id": "DT_402Y014",
+    "item_id": "13103134642999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134642ACC_CD.*AA",
+      "name": "총지수"
+     },
+     "objL2": {
+      "code": "13102134642CRR_CTRT_CD.W",
+      "name": "원화기준"
+     }
+    },
+    "period": {
+     "frequency": "Y",
+     "start": "2023",
+     "end": "2024"
+    },
+    "unit": "2020=100"
+   }
+  ],
+  "relations": [],
+  "frequency_alternatives": [
+   {
+    "table": "301:DT_402Y014",
+    "frequency": "Q",
+    "period": {
+     "frequency": "Q",
+     "start": "202301",
+     "end": "202404"
+    },
+    "selections": [
+     {
+      "series_id": "S001",
+      "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+      "org_id": "301",
+      "table_id": "DT_402Y014",
+      "item_id": "13103134642999",
+      "dimensions": {
+       "objL1": {
+        "code": "13102134642ACC_CD.*AA",
+        "name": "총지수"
+       },
+       "objL2": {
+        "code": "13102134642CRR_CTRT_CD.W",
+        "name": "원화기준"
+       }
+      },
+      "period": {
+       "frequency": "Q",
+       "start": "202301",
+       "end": "202404"
+      },
+      "unit": "2020=100"
+     }
+    ]
+   },
+   {
+    "table": "301:DT_402Y014",
+    "frequency": "M",
+    "period": {
+     "frequency": "M",
+     "start": "202301",
+     "end": "202412"
+    },
+    "selections": [
+     {
+      "series_id": "S001",
+      "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+      "org_id": "301",
+      "table_id": "DT_402Y014",
+      "item_id": "13103134642999",
+      "dimensions": {
+       "objL1": {
+        "code": "13102134642ACC_CD.*AA",
+        "name": "총지수"
+       },
+       "objL2": {
+        "code": "13102134642CRR_CTRT_CD.W",
+        "name": "원화기준"
+       }
+      },
+      "period": {
+       "frequency": "M",
+       "start": "202301",
+       "end": "202412"
+      },
+      "unit": "2020=100"
+     }
+    ]
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "15271ef743b741f69e8897dd95e3300c"
+}

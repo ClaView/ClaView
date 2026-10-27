@@ -1,0 +1,32 @@
+{
+  "B:301:DT_401Y018": [
+    {
+      "selections": [
+        {
+          "item_id": "13103134729999",
+          "dimensions": {
+            "objL1": "13102134729ACC_CD.110AA",
+            "objL2": "13102134729CRR_CTRT_CD.W"
+          },
+          "period": {
+            "frequency": "M",
+            "start": "202401",
+            "end": "202412"
+          }
+        },
+        {
+          "item_id": "13103134729999",
+          "dimensions": {
+            "objL1": "13102134729ACC_CD.120AA",
+            "objL2": "13102134729CRR_CTRT_CD.W"
+          },
+          "period": {
+            "frequency": "M",
+            "start": "202401",
+            "end": "202412"
+          }
+        }
+      ]
+    }
+  ]
+}

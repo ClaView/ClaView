@@ -1,0 +1,26 @@
+{
+ "decision": "assume",
+ "tables": [
+  {
+   "org_id": "301",
+   "table_id": "DT_404Y015",
+   "table_name": "생산자물가지수(특수분류)"
+  }
+ ],
+ "b_requests": [
+  {
+   "requirement_ids": [
+    "r1",
+    "r2"
+   ],
+   "tables": [
+    {
+     "org_id": "301",
+     "table_id": "DT_404Y015",
+     "table_name": "생산자물가지수(특수분류)"
+    }
+   ]
+  }
+ ],
+ "pending_question": null
+}

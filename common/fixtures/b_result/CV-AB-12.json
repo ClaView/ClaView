@@ -1,0 +1,57 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "국제투자대조표(IIP) / 순대외금융자산",
+    "org_id": "301",
+    "table_id": "DT_311Y001",
+    "item_id": "13103134486999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134486ACC_CD.3000000",
+      "name": "순대외금융자산"
+     }
+    },
+    "period": {
+     "frequency": "Q",
+     "start": "202103",
+     "end": "202602"
+    },
+    "unit": "백만달러"
+   }
+  ],
+  "relations": [],
+  "period_notices": [
+   {
+    "table": "301:DT_311Y001",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "202604",
+    "resolved_period": {
+     "frequency": "Q",
+     "start": "202103",
+     "end": "202602"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 202604까지 필요하지만, 표의 최신 수록 시점은 202602입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 202103 ~ 202602"
+   }
+  ],
+  "expand_notices": [
+   {
+    "table": "301:DT_311Y001",
+    "axis": "objL1",
+    "code": "13102134486ACC_CD.1000000",
+    "requested": "none",
+    "applied": "named_value",
+    "reason": "query_names_longer_value",
+    "selected": [
+     "13102134486ACC_CD.3000000"
+    ]
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "206722480b2b465bb38475844ee9e743"
+}

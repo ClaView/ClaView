@@ -1,0 +1,669 @@
+{
+  "schema_version": "claview-mappings/2",
+  "source_version": {
+    "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+    "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+    "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+  },
+  "concepts": [
+    {
+      "concept_id": "concept-3a93d11e1e74",
+      "canonical_name": "경제심리지수",
+      "search_terms": [
+        "경제심리지수"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_513Y001",
+          "field": "catalog.title",
+          "quote": "경제심리지수"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-3f206764d716",
+      "canonical_name": "국내총생산",
+      "search_terms": [
+        "국내총생산"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_200Y101",
+          "field": "ITM[2].ITM_NM",
+          "quote": "국내총생산(명목 원화표시)"
+        },
+        {
+          "doc_id": "301:DT_200Y102",
+          "field": "ITM[1].ITM_NM",
+          "quote": "실질 국내총생산과 지출(계절조정 전기비)"
+        },
+        {
+          "doc_id": "301:DT_200Y103",
+          "field": "ITM[42].ITM_NM",
+          "quote": "국내총생산(시장가격 GDP)"
+        },
+        {
+          "doc_id": "301:DT_200Y104",
+          "field": "ITM[42].ITM_NM",
+          "quote": "국내총생산(시장가격 GDP)"
+        },
+        {
+          "doc_id": "301:DT_200Y105",
+          "field": "ITM[46].ITM_NM",
+          "quote": "국내총생산(시장가격 GDP)"
+        },
+        {
+          "doc_id": "301:DT_200Y106",
+          "field": "ITM[46].ITM_NM",
+          "quote": "국내총생산(시장가격 GDP)"
+        },
+        {
+          "doc_id": "301:DT_200Y107",
+          "field": "catalog.title",
+          "quote": "국내총생산에 대한 지출(계절조정, 명목, 분기)"
+        },
+        {
+          "doc_id": "301:DT_200Y108",
+          "field": "catalog.title",
+          "quote": "국내총생산에 대한 지출(계절조정, 실질, 분기)"
+        },
+        {
+          "doc_id": "301:DT_200Y109",
+          "field": "catalog.title",
+          "quote": "국내총생산에 대한 지출(원계열, 명목, 분기 및 연간)"
+        },
+        {
+          "doc_id": "301:DT_200Y110",
+          "field": "catalog.title",
+          "quote": "국내총생산에 대한 지출(원계열, 실질, 분기 및 연간)"
+        },
+        {
+          "doc_id": "301:DT_200Y111",
+          "field": "catalog.title",
+          "quote": "경제활동별 국내총생산 디플레이터(분기 및 연간)"
+        },
+        {
+          "doc_id": "301:DT_200Y112",
+          "field": "catalog.title",
+          "quote": "국내총생산에 대한 지출 디플레이터(분기 및 연간)"
+        },
+        {
+          "doc_id": "301:DT_200Y113",
+          "field": "catalog.title",
+          "quote": "국내총생산과 지출(명목, 연간)"
+        },
+        {
+          "doc_id": "301:DT_200Y121",
+          "field": "ITM[76].ITM_NM",
+          "quote": "국내총생산(GDP)"
+        },
+        {
+          "doc_id": "301:DT_200Y123",
+          "field": "ITM[43].ITM_NM",
+          "quote": "국내총생산(시장가격)"
+        },
+        {
+          "doc_id": "301:DT_200Y124",
+          "field": "ITM[47].ITM_NM",
+          "quote": "국내총생산(시장가격)"
+        },
+        {
+          "doc_id": "301:DT_200Y125",
+          "field": "ITM[26].ITM_NM",
+          "quote": "국내총생산에 대한 지출"
+        },
+        {
+          "doc_id": "301:DT_200Y126",
+          "field": "ITM[26].ITM_NM",
+          "quote": "국내총생산에 대한 지출"
+        },
+        {
+          "doc_id": "301:DT_200Y160",
+          "field": "ITM[4].ITM_NM",
+          "quote": "명목 국내총생산"
+        },
+        {
+          "doc_id": "301:DT_200Y161",
+          "field": "ITM[4].ITM_NM",
+          "quote": "명목 국내총생산"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-a2e0569beffa",
+      "canonical_name": "국민총소득(GNI)",
+      "search_terms": [
+        "국민총소득(GNI)"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_200Y103",
+          "field": "ITM[48].ITM_NM",
+          "quote": "국민총소득(GNI)"
+        },
+        {
+          "doc_id": "301:DT_200Y104",
+          "field": "ITM[52].ITM_NM",
+          "quote": "국민총소득(GNI)"
+        },
+        {
+          "doc_id": "301:DT_200Y105",
+          "field": "ITM[52].ITM_NM",
+          "quote": "국민총소득(GNI)"
+        },
+        {
+          "doc_id": "301:DT_200Y106",
+          "field": "ITM[56].ITM_NM",
+          "quote": "국민총소득(GNI)"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-5ab76476fbaf",
+      "canonical_name": "경상수지",
+      "search_terms": [
+        "경상수지"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_200Y122",
+          "field": "ITM[14].ITM_NM",
+          "quote": "국외경상수지"
+        },
+        {
+          "doc_id": "301:DT_301Y013",
+          "field": "ITM[1].ITM_NM",
+          "quote": "경상수지"
+        },
+        {
+          "doc_id": "301:DT_301Y015",
+          "field": "catalog.title",
+          "quote": "지역별 경상수지"
+        },
+        {
+          "doc_id": "301:DT_301Y017",
+          "field": "catalog.title",
+          "quote": "경상수지(계절조정)"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-2d2e7a6cc860",
+      "canonical_name": "대출태도",
+      "search_terms": [
+        "대출태도"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_514Y001",
+          "field": "catalog.title",
+          "quote": "대출행태서베이(대출태도)"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-ce920f5eb363",
+      "canonical_name": "재무상태표",
+      "search_terms": [
+        "재무상태표"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_501Y001",
+          "field": "catalog.title",
+          "quote": "재무상태표(제11차 한국표준산업분류, 2009~)"
+        },
+        {
+          "doc_id": "301:DT_501Y014",
+          "field": "CMMT[1].CMMT_DC",
+          "quote": "\r\n2) 재무상태표 항목은 기초와 기말의 평균금액"
+        },
+        {
+          "doc_id": "301:DT_501Y049",
+          "field": "catalog.title",
+          "quote": "재무상태표(중소기업기본법, 2015~2016)"
+        },
+        {
+          "doc_id": "301:DT_501Y050",
+          "field": "catalog.title",
+          "quote": "재무상태표(조세특례제한법, 2009~2014)"
+        },
+        {
+          "doc_id": "301:DT_501Y051",
+          "field": "catalog.title",
+          "quote": "재무상태표(2008~2010, 표본조사)"
+        },
+        {
+          "doc_id": "301:DT_501Y052",
+          "field": "catalog.title",
+          "quote": "재무상태표(2000~2007, 표본조사)"
+        },
+        {
+          "doc_id": "301:DT_501Y053",
+          "field": "catalog.title",
+          "quote": "재무상태표(1999, 표본조사)"
+        },
+        {
+          "doc_id": "301:DT_501Y054",
+          "field": "catalog.title",
+          "quote": "재무상태표(1997~1998, 표본조사)"
+        },
+        {
+          "doc_id": "301:DT_501Y055",
+          "field": "catalog.title",
+          "quote": "재무상태표(1990~1996, 표본조사)"
+        },
+        {
+          "doc_id": "301:DT_501Y081",
+          "field": "CMMT[2].CMMT_DC",
+          "quote": "2) 재무상태표 항목은 기초와 기말의 평균금액"
+        },
+        {
+          "doc_id": "301:DT_501Y082",
+          "field": "CMMT[2].CMMT_DC",
+          "quote": "2) 재무상태표 항목은 기초와 기말의 평균금액"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-1b5e32c8c23b",
+      "canonical_name": "순대외채권",
+      "search_terms": [
+        "순대외채권"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_311Y006",
+          "field": "catalog.title",
+          "quote": "순대외채권"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-8af5860778eb",
+      "canonical_name": "생산자물가지수",
+      "search_terms": [
+        "생산자물가지수"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_404Y014",
+          "field": "catalog.title",
+          "quote": "생산자물가지수(기본분류)"
+        },
+        {
+          "doc_id": "301:DT_404Y015",
+          "field": "catalog.title",
+          "quote": "생산자물가지수(특수분류)"
+        },
+        {
+          "doc_id": "301:DT_404Y016",
+          "field": "catalog.title",
+          "quote": "생산자물가지수(품목별)"
+        },
+        {
+          "doc_id": "301:DT_404Y017",
+          "field": "catalog.title",
+          "quote": "생산자물가지수-총지수(1910~1964)"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-e6834f0e2820",
+      "canonical_name": "소비자심리지수",
+      "search_terms": [
+        "소비자심리지수"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_511Y001",
+          "field": "ITM[22].ITM_NM",
+          "quote": "소비자심리지수"
+        },
+        {
+          "doc_id": "301:DT_511Y002",
+          "field": "ITM[35].ITM_NM",
+          "quote": "소비자심리지수"
+        },
+        {
+          "doc_id": "301:DT_511Y004",
+          "field": "ITM[34].ITM_NM",
+          "quote": "소비자심리지수"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept-69e426451a06",
+      "canonical_name": "수입물가지수",
+      "search_terms": [
+        "수입물가지수"
+      ],
+      "evidence": [
+        {
+          "doc_id": "301:DT_401Y015",
+          "field": "catalog.title",
+          "quote": "수입물가지수(기본분류)"
+        },
+        {
+          "doc_id": "301:DT_401Y016",
+          "field": "catalog.title",
+          "quote": "수입물가지수(특수분류)"
+        },
+        {
+          "doc_id": "301:DT_401Y017",
+          "field": "catalog.title",
+          "quote": "수입물가지수(품목별)"
+        },
+        {
+          "doc_id": "301:DT_401Y018",
+          "field": "catalog.title",
+          "quote": "수입물가지수(용도별)"
+        }
+      ]
+    }
+  ],
+  "mappings": [
+    {
+      "mapping_id": "M001",
+      "expression": "경제 심리 지수",
+      "concept_id": "concept-3a93d11e1e74",
+      "alternative_concept_ids": [],
+      "relation": "spelling_variant",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "표명 띄어쓰기 변형",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M001"
+      }
+    },
+    {
+      "mapping_id": "M007",
+      "expression": "GDP",
+      "concept_id": "concept-3f206764d716",
+      "alternative_concept_ids": [],
+      "relation": "abbreviation",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [
+        {
+          "any_positive": [
+            "성장률",
+            "실질",
+            "명목",
+            "국내",
+            "경제",
+            "연간",
+            "분기"
+          ]
+        }
+      ],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "화면 계정항목의 공식 약어",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M007"
+      }
+    },
+    {
+      "mapping_id": "M008",
+      "expression": "GNI",
+      "concept_id": "concept-a2e0569beffa",
+      "alternative_concept_ids": [],
+      "relation": "abbreviation",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [
+        {
+          "any_positive": [
+            "소득",
+            "국민",
+            "경제",
+            "연간",
+            "분기"
+          ]
+        }
+      ],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "화면 계정항목의 공식 약어",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M008"
+      }
+    },
+    {
+      "mapping_id": "M013",
+      "expression": "경상 수지",
+      "concept_id": "concept-5ab76476fbaf",
+      "alternative_concept_ids": [],
+      "relation": "spelling_variant",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "띄어쓰기 변형",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M013"
+      }
+    },
+    {
+      "mapping_id": "M022",
+      "expression": "대출 태도",
+      "concept_id": "concept-2d2e7a6cc860",
+      "alternative_concept_ids": [],
+      "relation": "spelling_variant",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "띄어쓰기 변형",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M022"
+      }
+    },
+    {
+      "mapping_id": "M032",
+      "expression": "재무 상태표",
+      "concept_id": "concept-ce920f5eb363",
+      "alternative_concept_ids": [],
+      "relation": "spelling_variant",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "띄어쓰기 변형",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M032"
+      }
+    },
+    {
+      "mapping_id": "M036",
+      "expression": "순 대외 채권",
+      "concept_id": "concept-1b5e32c8c23b",
+      "alternative_concept_ids": [],
+      "relation": "spelling_variant",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "띄어쓰기 변형",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M036"
+      }
+    },
+    {
+      "mapping_id": "M040",
+      "expression": "생산자 물가 지수",
+      "concept_id": "concept-8af5860778eb",
+      "alternative_concept_ids": [],
+      "relation": "spelling_variant",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "띄어쓰기 변형",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M040"
+      }
+    },
+    {
+      "mapping_id": "M045",
+      "expression": "소비자 심리 지수",
+      "concept_id": "concept-e6834f0e2820",
+      "alternative_concept_ids": [],
+      "relation": "spelling_variant",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "띄어쓰기 변형",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M045"
+      }
+    },
+    {
+      "mapping_id": "M049",
+      "expression": "수입 물가 지수",
+      "concept_id": "concept-69e426451a06",
+      "alternative_concept_ids": [],
+      "relation": "spelling_variant",
+      "scope": {
+        "org_ids": [
+          "301"
+        ],
+        "table_ids": []
+      },
+      "conditions": [],
+      "exclusions": [],
+      "condition_status": "structured",
+      "legacy_condition": "띄어쓰기 변형",
+      "source_version": {
+        "catalog": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+        "metadata": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "legacy": "665e79692500ebfb427ebbb40b7d3efec61adf8260bebbf5417a5736fb2813a1"
+      },
+      "review_status": "draft",
+      "reviewer": null,
+      "provenance": {
+        "kind": "retained_review_migration",
+        "source_mapping_id": "M049"
+      }
+    }
+  ]
+}

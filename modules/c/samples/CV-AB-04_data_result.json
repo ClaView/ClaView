@@ -1,0 +1,859 @@
+{
+  "series": [
+    {
+      "series_id": "S001",
+      "selection": {
+        "series_id": "S001",
+        "label": "국제수지 / 경상수지",
+        "org_id": "301",
+        "table_id": "DT_301Y013",
+        "item_id": "13103134519999",
+        "dimensions": {
+          "objL1": {
+            "code": "13102134519ACC_CD.000000",
+            "name": "경상수지"
+          }
+        },
+        "period": {
+          "frequency": "Y",
+          "start": "2005",
+          "end": "2025"
+        },
+        "unit": "백만달러"
+      },
+      "frequency": "Y",
+      "unit": "백만달러",
+      "points": [
+        {
+          "period": "2005",
+          "raw_value": "12208.6",
+          "value": "12208.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2006",
+          "raw_value": "2094.8",
+          "value": "2094.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2007",
+          "raw_value": "10472.5",
+          "value": "10472.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2008",
+          "raw_value": "1753",
+          "value": "1753",
+          "value_status": "observed"
+        },
+        {
+          "period": "2009",
+          "raw_value": "33087.6",
+          "value": "33087.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2010",
+          "raw_value": "27950.5",
+          "value": "27950.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2011",
+          "raw_value": "16638.2",
+          "value": "16638.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "2012",
+          "raw_value": "48790.6",
+          "value": "48790.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2013",
+          "raw_value": "77258.9",
+          "value": "77258.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "2014",
+          "raw_value": "83029.6",
+          "value": "83029.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2015",
+          "raw_value": "105118.6",
+          "value": "105118.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2016",
+          "raw_value": "97923.7",
+          "value": "97923.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2017",
+          "raw_value": "75230.9",
+          "value": "75230.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "2018",
+          "raw_value": "77466.5",
+          "value": "77466.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2019",
+          "raw_value": "59676.1",
+          "value": "59676.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2020",
+          "raw_value": "76503.4",
+          "value": "76503.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2021",
+          "raw_value": "83879.1",
+          "value": "83879.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2022",
+          "raw_value": "23238.4",
+          "value": "23238.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2023",
+          "raw_value": "32530.2",
+          "value": "32530.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "2024",
+          "raw_value": "99973.5",
+          "value": "99973.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2025",
+          "raw_value": "123053.8",
+          "value": "123053.8",
+          "value_status": "observed"
+        }
+      ],
+      "coverage": {
+        "expected": 21,
+        "returned": 21,
+        "missing_periods": []
+      },
+      "provenance": {
+        "params": {
+          "orgId": "301",
+          "tblId": "DT_301Y013",
+          "itmId": "13103134519999",
+          "objL1": "13102134519ACC_CD.000000",
+          "prdSe": "Y",
+          "startPrdDe": "2005",
+          "endPrdDe": "2025"
+        },
+        "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "fetched_at": "2026-10-13T08:09:19.710120+00:00",
+        "raw_response_ref": "1fc0976ac4284e268ff6b8883b6eceb1"
+      }
+    },
+    {
+      "series_id": "S002",
+      "selection": {
+        "series_id": "S002",
+        "label": "국제수지 / 상품수지",
+        "org_id": "301",
+        "table_id": "DT_301Y013",
+        "item_id": "13103134519999",
+        "dimensions": {
+          "objL1": {
+            "code": "13102134519ACC_CD.100000",
+            "name": "상품수지"
+          }
+        },
+        "period": {
+          "frequency": "Y",
+          "start": "2005",
+          "end": "2025"
+        },
+        "unit": "백만달러"
+      },
+      "frequency": "Y",
+      "unit": "백만달러",
+      "points": [
+        {
+          "period": "2005",
+          "raw_value": "32492.5",
+          "value": "32492.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2006",
+          "raw_value": "24514.5",
+          "value": "24514.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2007",
+          "raw_value": "32436.1",
+          "value": "32436.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2008",
+          "raw_value": "11746.1",
+          "value": "11746.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2009",
+          "raw_value": "48055.6",
+          "value": "48055.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2010",
+          "raw_value": "47932.3",
+          "value": "47932.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2011",
+          "raw_value": "28014.3",
+          "value": "28014.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2012",
+          "raw_value": "48589.3",
+          "value": "48589.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2013",
+          "raw_value": "80259",
+          "value": "80259",
+          "value_status": "observed"
+        },
+        {
+          "period": "2014",
+          "raw_value": "86145",
+          "value": "86145",
+          "value_status": "observed"
+        },
+        {
+          "period": "2015",
+          "raw_value": "120275",
+          "value": "120275",
+          "value_status": "observed"
+        },
+        {
+          "period": "2016",
+          "raw_value": "116461.7",
+          "value": "116461.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2017",
+          "raw_value": "113592.9",
+          "value": "113592.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "2018",
+          "raw_value": "110086.8",
+          "value": "110086.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2019",
+          "raw_value": "79812.1",
+          "value": "79812.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2020",
+          "raw_value": "82065.4",
+          "value": "82065.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2021",
+          "raw_value": "79659.1",
+          "value": "79659.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2022",
+          "raw_value": "18334.7",
+          "value": "18334.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2023",
+          "raw_value": "44630.5",
+          "value": "44630.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2024",
+          "raw_value": "110910",
+          "value": "110910",
+          "value_status": "observed"
+        },
+        {
+          "period": "2025",
+          "raw_value": "138073.2",
+          "value": "138073.2",
+          "value_status": "observed"
+        }
+      ],
+      "coverage": {
+        "expected": 21,
+        "returned": 21,
+        "missing_periods": []
+      },
+      "provenance": {
+        "params": {
+          "orgId": "301",
+          "tblId": "DT_301Y013",
+          "itmId": "13103134519999",
+          "objL1": "13102134519ACC_CD.100000",
+          "prdSe": "Y",
+          "startPrdDe": "2005",
+          "endPrdDe": "2025"
+        },
+        "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "fetched_at": "2026-10-13T08:09:19.879728+00:00",
+        "raw_response_ref": "1fc0976ac4284e268ff6b8883b6eceb1"
+      }
+    },
+    {
+      "series_id": "S003",
+      "selection": {
+        "series_id": "S003",
+        "label": "국제수지 / 서비스수지",
+        "org_id": "301",
+        "table_id": "DT_301Y013",
+        "item_id": "13103134519999",
+        "dimensions": {
+          "objL1": {
+            "code": "13102134519ACC_CD.200000",
+            "name": "서비스수지"
+          }
+        },
+        "period": {
+          "frequency": "Y",
+          "start": "2005",
+          "end": "2025"
+        },
+        "unit": "백만달러"
+      },
+      "frequency": "Y",
+      "unit": "백만달러",
+      "points": [
+        {
+          "period": "2005",
+          "raw_value": "-8984.2",
+          "value": "-8984.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "2006",
+          "raw_value": "-13040.2",
+          "value": "-13040.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "2007",
+          "raw_value": "-13039.5",
+          "value": "-13039.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2008",
+          "raw_value": "-6310.7",
+          "value": "-6310.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2009",
+          "raw_value": "-9337.7",
+          "value": "-9337.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2010",
+          "raw_value": "-13972.8",
+          "value": "-13972.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2011",
+          "raw_value": "-12056.5",
+          "value": "-12056.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2012",
+          "raw_value": "-5057.5",
+          "value": "-5057.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2013",
+          "raw_value": "-6328.8",
+          "value": "-6328.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2014",
+          "raw_value": "-3290.1",
+          "value": "-3290.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2015",
+          "raw_value": "-14625.8",
+          "value": "-14625.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2016",
+          "raw_value": "-17338.4",
+          "value": "-17338.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2017",
+          "raw_value": "-36734.1",
+          "value": "-36734.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2018",
+          "raw_value": "-29369.4",
+          "value": "-29369.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2019",
+          "raw_value": "-26845.3",
+          "value": "-26845.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2020",
+          "raw_value": "-14117.3",
+          "value": "-14117.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2021",
+          "raw_value": "-8994.4",
+          "value": "-8994.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2022",
+          "raw_value": "-10750.7",
+          "value": "-10750.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2023",
+          "raw_value": "-30742.5",
+          "value": "-30742.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2024",
+          "raw_value": "-29428.4",
+          "value": "-29428.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2025",
+          "raw_value": "-34519.4",
+          "value": "-34519.4",
+          "value_status": "observed"
+        }
+      ],
+      "coverage": {
+        "expected": 21,
+        "returned": 21,
+        "missing_periods": []
+      },
+      "provenance": {
+        "params": {
+          "orgId": "301",
+          "tblId": "DT_301Y013",
+          "itmId": "13103134519999",
+          "objL1": "13102134519ACC_CD.200000",
+          "prdSe": "Y",
+          "startPrdDe": "2005",
+          "endPrdDe": "2025"
+        },
+        "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "fetched_at": "2026-10-13T08:09:20.078215+00:00",
+        "raw_response_ref": "1fc0976ac4284e268ff6b8883b6eceb1"
+      }
+    },
+    {
+      "series_id": "S004",
+      "selection": {
+        "series_id": "S004",
+        "label": "국제수지 / 본원소득수지",
+        "org_id": "301",
+        "table_id": "DT_301Y013",
+        "item_id": "13103134519999",
+        "dimensions": {
+          "objL1": {
+            "code": "13102134519ACC_CD.300000",
+            "name": "본원소득수지"
+          }
+        },
+        "period": {
+          "frequency": "Y",
+          "start": "2005",
+          "end": "2025"
+        },
+        "unit": "백만달러"
+      },
+      "frequency": "Y",
+      "unit": "백만달러",
+      "points": [
+        {
+          "period": "2005",
+          "raw_value": "-8041.4",
+          "value": "-8041.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2006",
+          "raw_value": "-4997.7",
+          "value": "-4997.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2007",
+          "raw_value": "-4536.7",
+          "value": "-4536.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2008",
+          "raw_value": "-2415.6",
+          "value": "-2415.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2009",
+          "raw_value": "-3435.7",
+          "value": "-3435.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2010",
+          "raw_value": "-692.5",
+          "value": "-692.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2011",
+          "raw_value": "5396",
+          "value": "5396",
+          "value_status": "observed"
+        },
+        {
+          "period": "2012",
+          "raw_value": "10732.9",
+          "value": "10732.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "2013",
+          "raw_value": "7518",
+          "value": "7518",
+          "value_status": "observed"
+        },
+        {
+          "period": "2014",
+          "raw_value": "5159.4",
+          "value": "5159.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2015",
+          "raw_value": "4454.6",
+          "value": "4454.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2016",
+          "raw_value": "4567.1",
+          "value": "4567.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2017",
+          "raw_value": "5336.9",
+          "value": "5336.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "2018",
+          "raw_value": "4901.9",
+          "value": "4901.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "2019",
+          "raw_value": "12856",
+          "value": "12856",
+          "value_status": "observed"
+        },
+        {
+          "period": "2020",
+          "raw_value": "13042.3",
+          "value": "13042.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2021",
+          "raw_value": "19305.8",
+          "value": "19305.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2022",
+          "raw_value": "19784.8",
+          "value": "19784.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2023",
+          "raw_value": "25208.5",
+          "value": "25208.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2024",
+          "raw_value": "26779.5",
+          "value": "26779.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2025",
+          "raw_value": "27918.9",
+          "value": "27918.9",
+          "value_status": "observed"
+        }
+      ],
+      "coverage": {
+        "expected": 21,
+        "returned": 21,
+        "missing_periods": []
+      },
+      "provenance": {
+        "params": {
+          "orgId": "301",
+          "tblId": "DT_301Y013",
+          "itmId": "13103134519999",
+          "objL1": "13102134519ACC_CD.300000",
+          "prdSe": "Y",
+          "startPrdDe": "2005",
+          "endPrdDe": "2025"
+        },
+        "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "fetched_at": "2026-10-13T08:09:20.340427+00:00",
+        "raw_response_ref": "1fc0976ac4284e268ff6b8883b6eceb1"
+      }
+    },
+    {
+      "series_id": "S005",
+      "selection": {
+        "series_id": "S005",
+        "label": "국제수지 / 이전소득수지",
+        "org_id": "301",
+        "table_id": "DT_301Y013",
+        "item_id": "13103134519999",
+        "dimensions": {
+          "objL1": {
+            "code": "13102134519ACC_CD.400000",
+            "name": "이전소득수지"
+          }
+        },
+        "period": {
+          "frequency": "Y",
+          "start": "2005",
+          "end": "2025"
+        },
+        "unit": "백만달러"
+      },
+      "frequency": "Y",
+      "unit": "백만달러",
+      "points": [
+        {
+          "period": "2005",
+          "raw_value": "-3258.3",
+          "value": "-3258.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2006",
+          "raw_value": "-4381.8",
+          "value": "-4381.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2007",
+          "raw_value": "-4387.4",
+          "value": "-4387.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2008",
+          "raw_value": "-1266.8",
+          "value": "-1266.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2009",
+          "raw_value": "-2194.6",
+          "value": "-2194.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2010",
+          "raw_value": "-5316.5",
+          "value": "-5316.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "2011",
+          "raw_value": "-4715.6",
+          "value": "-4715.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2012",
+          "raw_value": "-5474.1",
+          "value": "-5474.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "2013",
+          "raw_value": "-4189.3",
+          "value": "-4189.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2014",
+          "raw_value": "-4984.7",
+          "value": "-4984.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2015",
+          "raw_value": "-4985.2",
+          "value": "-4985.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "2016",
+          "raw_value": "-5766.7",
+          "value": "-5766.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2017",
+          "raw_value": "-6964.8",
+          "value": "-6964.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2018",
+          "raw_value": "-8152.8",
+          "value": "-8152.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "2019",
+          "raw_value": "-6146.7",
+          "value": "-6146.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "2020",
+          "raw_value": "-4487",
+          "value": "-4487",
+          "value_status": "observed"
+        },
+        {
+          "period": "2021",
+          "raw_value": "-6091.4",
+          "value": "-6091.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2022",
+          "raw_value": "-4130.4",
+          "value": "-4130.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "2023",
+          "raw_value": "-6566.3",
+          "value": "-6566.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "2024",
+          "raw_value": "-8287.6",
+          "value": "-8287.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "2025",
+          "raw_value": "-8418.9",
+          "value": "-8418.9",
+          "value_status": "observed"
+        }
+      ],
+      "coverage": {
+        "expected": 21,
+        "returned": 21,
+        "missing_periods": []
+      },
+      "provenance": {
+        "params": {
+          "orgId": "301",
+          "tblId": "DT_301Y013",
+          "itmId": "13103134519999",
+          "objL1": "13102134519ACC_CD.400000",
+          "prdSe": "Y",
+          "startPrdDe": "2005",
+          "endPrdDe": "2025"
+        },
+        "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "fetched_at": "2026-10-13T08:09:20.568665+00:00",
+        "raw_response_ref": "1fc0976ac4284e268ff6b8883b6eceb1"
+      }
+    }
+  ]
+}

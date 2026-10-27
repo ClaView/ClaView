@@ -1,0 +1,132 @@
+{
+ "date": "2026-10-06",
+ "package": "공유용_claview_1006",
+ "fresh_install": true,
+ "package_import_location_verified": true,
+ "pytest": {
+  "tests": 518,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 2
+ },
+ "passed": 516,
+ "ruff_check": "passed",
+ "ruff_format_check": "passed",
+ "a_search": {
+  "cases": 22,
+  "before_inclusion_count": 22,
+  "after_inclusion_count": 22,
+  "before_total": 341,
+  "after_total": 245,
+  "recall_at": {
+   "3": 0.9090909090909091,
+   "5": 1.0,
+   "10": 1.0
+  },
+  "mrr": 0.7151515151515152,
+  "baseline_mrr": 0.575937950937951,
+  "filtered_pool_mrr": 0.6062409812409812,
+  "baseline_recall_at": {
+   "3": 0.6363636363636364,
+   "5": 0.6818181818181818,
+   "10": 0.9545454545454546
+  },
+  "filtered_pool_recall_at": {
+   "3": 0.6363636363636364,
+   "5": 0.7727272727272727,
+   "10": 1
+  },
+  "wrongly_filtered_cases": [],
+  "candidate_min": 5,
+  "candidate_max": 16,
+  "mean_query_ms": 893.7953181818182,
+  "elapsed_ms": 19664.995
+ },
+ "a_top1_count": 11,
+ "runtime_and_data_files_hash_verified": 123,
+ "model_or_statistics_api_requests": 0,
+ "credentials_included": false,
+ "environment_or_cache_included": false,
+ "update_2026_10_12": {
+  "date": "2026-10-12",
+  "scope": "B hierarchy handling applied on top of the v2 integrated package",
+  "fresh_install": false,
+  "python": "3.11 (not the locked 3.12 environment)",
+  "pytest": {
+   "passed": 722,
+   "skipped": 2,
+   "failed": 3,
+   "failed_tests": [
+    "tests/test_environment.py::test_python_version",
+    "tests/test_environment.py::test_package_installation_matches_project",
+    "tests/test_a_discovery.py::test_diagrams_cli_uses_user_selection_a_by_default"
+   ],
+   "failures_exist_before_change": true
+  },
+  "ruff_check": "passed",
+  "ruff_format_check": "passed",
+  "model_or_statistics_api_requests_in_this_check": 0,
+  "live_model_results_supplied_by_team": {
+   "model": "HCX-007",
+   "passed_cases": [
+    "CV-AB-04",
+    "CV-AB-05",
+    "CV-AB-08",
+    "CV-AB-09",
+    "CV-AB-10",
+    "CV-AB-13"
+   ],
+   "failed_cases_unrelated_to_hierarchy": [
+    "CV-AB-01",
+    "CV-AB-16",
+    "CV-AB-17",
+    "CV-AB-20"
+   ],
+   "last_round": "CV-AB-08/09/10/13 x3 = 12/12",
+   "all_22_cases": "not yet reflected"
+  },
+  "note": "Section values above 'update_2026_10_12' describe the 2026-10-06 fresh install and are not re-measured."
+ },
+ "update_2026_10_13": {
+  "date": "2026-10-13",
+  "scope": "period/frequency decided in code, name-based pick corrections, bottom-level expand lowering, model period text normalisation (on top of the 2026-10-12 package)",
+  "fresh_install": false,
+  "python": "3.11 (not the locked 3.12 environment)",
+  "pytest": {
+   "passed": 790,
+   "skipped": 2,
+   "failed": 3,
+   "failed_tests": [
+    "tests/test_environment.py::test_python_version",
+    "tests/test_environment.py::test_package_installation_matches_project",
+    "tests/test_a_discovery.py::test_diagrams_cli_uses_user_selection_a_by_default"
+   ],
+   "failures_exist_before_change": true
+  },
+  "pytest_b_part": {
+   "passed": 393,
+   "skipped": 2
+  },
+  "ruff_check": "passed",
+  "ruff_format_check": "passed",
+  "model_or_statistics_api_requests_in_this_check": 0,
+  "live_model_results_supplied_by_team": {
+   "model": "HCX-007",
+   "runs_of_all_22_cases": 3,
+   "passed_cases_per_run": [
+    13,
+    20,
+    21
+   ],
+   "last_run": "all cases except the one handled separately passed (1 run per case)",
+   "cases_fixed_by_code_rules_not_model_choice": [
+    "CV-AB-12",
+    "CV-AB-17",
+    "CV-AB-21"
+   ],
+   "generalisation_beyond_golden": "not verified",
+   "golden_change_needing_team_confirmation": "CV-AB-20 expected period M 202301~202412 -> Y 2023~2024"
+  },
+  "note": "Values under 'update_2026_10_12' and the top-level fields are not re-measured. Re-checked by extracting this archive into a new folder."
+ }
+}

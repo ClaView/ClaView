@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClaView A · 현재 구현과 팀 연결</title>
+<style>
+:root{color-scheme:light;--ink:#142d40;--muted:#4f6574;--line:#d6e2e8;--blue:#245b82}
+*{box-sizing:border-box}body{margin:0;background:#f2f6f8;color:var(--ink);font:16px/1.75 "Malgun Gothic",system-ui,sans-serif}
+main{max-width:1040px;margin:auto;padding:44px 24px 60px}header{border-bottom:3px solid var(--ink);padding-bottom:26px}
+small,.muted{color:var(--muted)}h1{font-size:clamp(28px,4vw,40px);line-height:1.3;margin:10px 0 16px}h2{font-size:23px;margin:0 0 16px}p{margin:10px 0}
+section{margin-top:26px;padding:26px;background:white;border:1px solid var(--line);border-radius:12px}.flow{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:20px 0}
+.node{padding:12px 16px;background:#eaf2f7;border-radius:8px;border:1px solid #c6dce9}.node strong{display:block}.arrow{color:var(--blue);font-size:22px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{border:1px solid var(--line);padding:18px;border-radius:8px}.number{display:block;font-size:32px;color:var(--blue);font-weight:700}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px 9px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#eef4f7}
+code{font-family:Consolas,monospace;font-size:.9em}pre{overflow:auto;background:#132c3e;color:#f1f7fb;border-radius:8px;padding:18px;line-height:1.7}
+.note{background:#fff5df;border-left:4px solid #c48a21;padding:14px 18px;margin-top:16px}a{color:#19567f;text-underline-offset:3px}
+@media(max-width:680px){main{padding:24px 14px}.cards{grid-template-columns:1fr}section{padding:19px}.arrow{display:none}th,td{padding:9px 5px}}
+@media print{body{background:white}main{padding:0}section{break-inside:avoid}a{color:inherit}}
+</style>
+</head>
+<body>
+<p style="padding:8px;background:#fff3cd;color:#222">이전 A(10-06, A1/A2) 문서입니다. 현재 A는 N5이며 설명은 claview-A-1015의 docs를 봅니다.</p><main>
+<header><small>CLAVIEW · A 1차 구현 · 2026-10-06</small><h1>후보 탐색과 표 확정,<br>현재 연결 가능한 범위</h1>
+<p><strong>A1 후보 탐색과 A2 근거 대조·표 집합 판단을 연결한 사용자 확정형 A 초안</strong>입니다.<br>기본 경로와 B 전달 계약을 공유하며, 일반 자연어 자동 채택은 아직 완료되지 않았습니다.</p></header>
+<section><h2>1. 두 서브그래프와 확정 흐름</h2>
+<div class="flow"><div class="node">원 질문 보존</div><span class="arrow">→</span><div class="node"><strong>A1 후보 탐색</strong>규칙·사전 / 원문·보조 검색</div><span class="arrow">→</span><div class="node"><strong>A2 표 판단</strong>요구·공식 근거 / 표 집합 검증</div><span class="arrow">→</span><div class="node"><strong>사용자 확정</strong>A.tables → B</div></div>
+<p>원 질문을 검색문으로 덮어쓰지 않습니다. 조건·근거·사용자 추가 답변은 별도로 관리합니다. 기본 <code>shadow</code>는 판단을 기록하며, 명시 <code>auto</code>는 제한된 공식 명칭 요구에서만 자동 확정을 허용합니다.</p>
+<p>A1과 A2는 실제 LangGraph로 구현돼 있고 검색기·저장소를 공유합니다. A1은 후보·조건·검색 출처를 넘기며, A2 판단 이후의 확정 저장은 기존 저장 계층을 사용합니다.</p>
+<div class="note">한 페이지 5개는 표시 개수입니다. 필요한 표 수가 아닙니다. 한 표 안의 여러 지표는 B가 여러 계열로 처리하며, 모호하다는 이유로 대안 표를 모두 확정하지 않습니다.</div></section>
+<section><h2>2. 실제 확인한 결과</h2><div class="cards">
+<div class="card"><small>기존22 · Top5 정답 포함</small><span class="number">22 / 22</span>정답이 후보 안에 있음</div>
+<div class="card"><small>첫 후보 정답</small><span class="number">11 / 22</span>순위 개선 여지 있음</div>
+<div class="card"><small>자동 채택</small><span class="number">0 / 22</span>자동 정확도 해당 없음</div></div>
+<p class="muted">22건은 모두 단일 표 정답입니다. 실제 사용자 선택 후 정확도는 미확인입니다. 임의 추가48과 다중 표·복구 기능 시험을 성능 지표에 합산하지 않습니다.</p>
+<table><tr><th>구성</th><th>현재 상태</th></tr><tr><td>용어 사전</td><td>79건 draft, 운영 승인0. 공식 문자열 확인10건은 별도 실험</td></tr><tr><td>모델</td><td>기본 off. 이전 HCX-007 해석 응답7건은 원문 위치 검증 실패로 적용0·원문 복귀</td></tr><tr><td>B·실제 조회</td><td>지정 B ZIP 통합·모의 연결 검증. B22는 조건 일치14·기간 확인 대기8. 실제 모델·수치 조회 미확인</td></tr></table>
+<p>후속 A/B 분리에서 A 구현은 <code>a_stages.py</code>·<code>a_graphs.py</code>로 이동하고 공통 의존성은 <code>services.py</code>로 모았습니다. B 조건 구현은 <code>stages.py</code>, B·부모 그래프는 <code>graphs.py</code>입니다. A1/A2 기본 구조는 유지했습니다. <a href="../research/A_B_분리와_B_통합_검수_2026-10-06.md">파일별 담당과 B 구조 검토</a></p></section>
+<section><h2>3. B에 넘기는 공동 계약</h2><p><strong>원 질문과 확정 A.tables를 유지합니다.</strong> A 내부 상태를 팀 공통 스키마의 필수 확장으로 요구하지 않습니다.</p>
+<pre><code>{
+  "tables": [{
+    "org_id": "301",
+    "table_id": "DT_401Y018",
+    "table_name": "수입물가지수(용도별)"
+  }]
+}</code></pre>
+<p>A는 표 선택, B는 표 안의 항목·분류·기간·주기 확정을 담당합니다. 확정 전에는 B를 실행하지 않습니다. B 실패 시 A를 유지하고 B만 명시적으로 재시도합니다.</p>
+<p class="muted">기존 에이전트의 답변 경로에서는 원문과 추가 맥락의 B 인자 처리를 통합 때 확인해야 합니다.</p></section>
+<section><h2>4. 공유할 문서와 읽는 순서</h2>
+<table><tr><th>문서 종류</th><th>파일과 핵심 내용</th><th>읽는 범위</th></tr>
+<tr><td>요약</td><td>이 HTML 또는 <a href="03_A_아키텍처와_구현_팀공유_2026-10-06.md">공유 문서</a> — A1/A2 역할·검증 수준·남은 한계</td><td>전체 팀 필수</td></tr>
+<tr><td>설계와 계약</td><td><a href="../design/A에서_B로_전달하는_인터페이스.md">B 전달 계약</a> — 원문·A.tables·대기/복구<br><a href="A_현재_아키텍처.md">현재 아키텍처</a> — 모듈·호출 경로</td><td>계약 필수<br>설계 참고</td></tr>
+<tr><td>실행</td><td><a href="../guides/A_사용자선택_실행과_복구.md">검색·확정·복구 안내</a> — 명령·모의 B 연결<br><a href="../guides/공통_개발환경.md">환경</a> · <a href="../../data/README.md">데이터</a> · <a href="../guides/용어_매핑_작성과_검수.md">사전 검수</a></td><td>실행 담당 필수</td></tr>
+<tr><td>검증</td><td><a href="A1_A2_22건_통합평가_6단계_2026-10-06.md">22건 평가</a> — 검색과 최종 확정 지표·실패 원인</td><td>상세 검토 시 참고</td></tr></table>
+<p>우선 <strong>요약 → B 전달 계약 → 실행 안내</strong>만 읽으면 됩니다. Markdown은 저장소 편집·검토용, HTML은 회의 열람용입니다. HTML만으로 요약을 읽을 수 있고, 상세 링크까지 쓰려면 상대 경로를 유지해 문서를 함께 전달합니다.</p></section>
+<section><h2>5. 실행을 위해 전달할 파일</h2>
+<table><tr><th>범위</th><th>전달할 파일</th></tr>
+<tr><td>코드와 환경</td><td>src/claview/, pyproject.toml, uv.lock, .python-version, .env.example, .gitignore, AGENTS.md, README.md</td></tr>
+<tr><td>도구·시험·문서</td><td>scripts/, tests/와 fixtures, docs/</td></tr>
+<tr><td>공식·검수 자료</td><td>data/catalog/, data/mappings/, data/samples/</td></tr>
+<tr><td>평가·시험 자료</td><td>eval/cases/, eval/configs/, eval/a_stage2_metric_policy.json — 기존22와 테스트 전용 자료를 구분</td></tr>
+<tr><td>전체 메타 별도 준비</td><td>data/raw/boK_meta_raw.jsonl — Git 제외, 전달 여부·해시 확인</td></tr>
+<tr><td>선택적 비교 근거</td><td>최근 평가 JSON·시험 XML. 6개 설정 통합 재현 시 도구가 참조하는 기준 기록 추가</td></tr></table>
+<div class="note">A1/A2 파일만 분리해 전달하지 않습니다. 공통 검색·메타·저장 의존성이 필요합니다. 실제 .env·키·인증 헤더·가상환경·캐시·개인 보관 자료는 공유하지 않습니다.</div>
+<p>새 환경의 첫 검색 평가는 <code>claview evaluate-search</code>를 사용합니다. 전체 메타와 기존22가 필요하며 과거 runs는 필요하지 않습니다. 전체 메타가 없으면 3표 fixture로 기능만 확인합니다.</p>
+<p><code>scripts/evaluate_a_stage6.py</code>는 DATA와 REFERENCES의 자료·기준 기록을 추가로 요구합니다. 새 환경에 과거 기록이 있다고 가정하지 않습니다. 명령과 정확한 전달 범위는 <a href="03_A_아키텍처와_구현_팀공유_2026-10-06.md">공유 문서</a>에 정리했습니다.</p>
+<p class="muted">기존 정리 검수는396개 통과 기록입니다. 이후 지정 B ZIP 통합·A 분리 시에는 <strong>516 통과·2 skip</strong>을 새로 확인했습니다. A22의 정답 순위는 모두 유지됐습니다. 실제 API 호출은 없었습니다.</p></section>
+<section><h2>6. 공유 이후 A 재점검과 개선</h2>
+<table><tr><th>순서</th><th>검토 내용과 완료 기준</th></tr>
+<tr><td>1. 현재 실행 경로</td><td>CLI → A1 → A2 → 확정 → B 입력 대조. 실제 사용되는 조건·근거와 누락 구간 기록</td></tr>
+<tr><td>2. A1 조건·검색</td><td>조건 출처·범위·사전·보조 검색 기여 검토. 원문 보존과 정답 후보 누락 여부 확인</td></tr>
+<tr><td>3. A2 근거·순위</td><td>전체 통계 요구 충족과 단어 관련성 구분. Top1·Top5·누락·근거 오류를 함께 비교</td></tr>
+<tr><td>4. 모델 해석 보완</td><td>저장 HCX 응답의 위치 실패부터 오프라인 재현. 유효한 출력만 수용하고 실패 시 원문 복귀</td></tr>
+<tr><td>5. 표 집합·확인</td><td>단일 표 복수 계열·다중 표·대안·부분 충족 구분. 자동 정확도와 자동 비율을 함께 보고</td></tr>
+<tr><td>6. B 연결 대조</td><td>지정 ZIP의 모의 인계·대기 저장은 확인. 실제 B 의미·통계 조회·확인 답변 후 재개는 별도 검증</td></tr></table>
+<p>각 기능을 따로 비교하고 기존 정책으로 돌아갈 수 있게 합니다. 구조화·순위·자동 채택 개선을 하나의 성공으로 묶지 않습니다. 임베딩·리랭커·JEV는 남은 실패 유형을 확인한 뒤 별도 실험으로 판단합니다.</p>
+<p class="muted">A1/A2 구조와 기본 정책을 유지하며 겹치는 A 코드를 분리하고 B ZIP을 통합했습니다. 기간 확인 대기는 저장·재시작 시 재사용하지만 확인 답변 후 B를 재개하는 기능은 아직 없습니다. 위 품질 개선과 실제 호출 검증은 후속 작업입니다.</p></section>
+</main></body></html>

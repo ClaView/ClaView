@@ -1,0 +1,1107 @@
+{
+ "stage": "C",
+ "status": "ok",
+ "result": {
+  "schema_version": "claview-c/1.1-demo",
+  "query": "2020년 이후 가계신용 잔액을 업권별로 나눠 분기별 막대그래프로 그려줘",
+  "default_view_id": "bar",
+  "views": [
+   {
+    "view_id": "line",
+    "kind": "line",
+    "title": "선그래프",
+    "chart_kind": "line",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Q",
+       "unit": "십억원",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202001",
+        "202002",
+        "202003",
+        "202004",
+        "202101",
+        "202102",
+        "202103",
+        "202104",
+        "202201",
+        "202202",
+        "202203",
+        "202204",
+        "202301",
+        "202302",
+        "202303",
+        "202304",
+        "202401",
+        "202402",
+        "202403",
+        "202404",
+        "202501",
+        "202502",
+        "202503",
+        "202504",
+        "202601",
+        "202602"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "가계신용(업권별 분기) / 가계신용",
+       "short_label": "가계신용",
+       "frequency": "Q",
+       "unit": "십억원",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202001",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202002",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202003",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202004",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202101",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202102",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202103",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202104",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202201",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202202",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202203",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202204",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202301",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202302",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202303",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202304",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202401",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202402",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202403",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202404",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202501",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202502",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202503",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202504",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202601",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202602",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "가계신용(업권별 분기) / 가계신용",
+        "org_id": "301",
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134771ACC_ITEM.1000000",
+          "name": "가계신용"
+         }
+        },
+        "period": {
+         "frequency": "Q",
+         "start": "202001",
+         "end": "202602"
+        },
+        "unit": "십억원"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "bar",
+    "kind": "bar",
+    "title": "묶음막대",
+    "chart_kind": "bar",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Q",
+       "unit": "십억원",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202001",
+        "202002",
+        "202003",
+        "202004",
+        "202101",
+        "202102",
+        "202103",
+        "202104",
+        "202201",
+        "202202",
+        "202203",
+        "202204",
+        "202301",
+        "202302",
+        "202303",
+        "202304",
+        "202401",
+        "202402",
+        "202403",
+        "202404",
+        "202501",
+        "202502",
+        "202503",
+        "202504",
+        "202601",
+        "202602"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "가계신용(업권별 분기) / 가계신용",
+       "short_label": "가계신용",
+       "frequency": "Q",
+       "unit": "십억원",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202001",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202002",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202003",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202004",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202101",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202102",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202103",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202104",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202201",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202202",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202203",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202204",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202301",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202302",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202303",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202304",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202401",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202402",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202403",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202404",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202501",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202502",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202503",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202504",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202601",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202602",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "가계신용(업권별 분기) / 가계신용",
+        "org_id": "301",
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134771ACC_ITEM.1000000",
+          "name": "가계신용"
+         }
+        },
+        "period": {
+         "frequency": "Q",
+         "start": "202001",
+         "end": "202602"
+        },
+        "unit": "십억원"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "table",
+    "kind": "table",
+    "title": "수치표",
+    "chart_kind": "table",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Q",
+       "unit": "십억원",
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "202001",
+        "202002",
+        "202003",
+        "202004",
+        "202101",
+        "202102",
+        "202103",
+        "202104",
+        "202201",
+        "202202",
+        "202203",
+        "202204",
+        "202301",
+        "202302",
+        "202303",
+        "202304",
+        "202401",
+        "202402",
+        "202403",
+        "202404",
+        "202501",
+        "202502",
+        "202503",
+        "202504",
+        "202601",
+        "202602"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "가계신용(업권별 분기) / 가계신용",
+       "short_label": "가계신용",
+       "frequency": "Q",
+       "unit": "십억원",
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "202001",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202002",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202003",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202004",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202101",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202102",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202103",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202104",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202201",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202202",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202203",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202204",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202301",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202302",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202303",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202304",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202401",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202402",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202403",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202404",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202501",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202502",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202503",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202504",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202601",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "202602",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "가계신용(업권별 분기) / 가계신용",
+        "org_id": "301",
+        "table_id": "DT_151Y001",
+        "item_id": "13103134771999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102134771ACC_ITEM.1000000",
+          "name": "가계신용"
+         }
+        },
+        "period": {
+         "frequency": "Q",
+         "start": "202001",
+         "end": "202602"
+        },
+        "unit": "십억원"
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   }
+  ],
+  "table": [
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2020년 1분기",
+    "period": "202001",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2020년 2분기",
+    "period": "202002",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2020년 3분기",
+    "period": "202003",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2020년 4분기",
+    "period": "202004",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2021년 1분기",
+    "period": "202101",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2021년 2분기",
+    "period": "202102",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2021년 3분기",
+    "period": "202103",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2021년 4분기",
+    "period": "202104",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2022년 1분기",
+    "period": "202201",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2022년 2분기",
+    "period": "202202",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2022년 3분기",
+    "period": "202203",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2022년 4분기",
+    "period": "202204",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2023년 1분기",
+    "period": "202301",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2023년 2분기",
+    "period": "202302",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2023년 3분기",
+    "period": "202303",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2023년 4분기",
+    "period": "202304",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2024년 1분기",
+    "period": "202401",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2024년 2분기",
+    "period": "202402",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2024년 3분기",
+    "period": "202403",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2024년 4분기",
+    "period": "202404",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2025년 1분기",
+    "period": "202501",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2025년 2분기",
+    "period": "202502",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2025년 3분기",
+    "period": "202503",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2025년 4분기",
+    "period": "202504",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2026년 1분기",
+    "period": "202601",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "frequency": "Q",
+    "unit": "십억원",
+    "period_label": "2026년 2분기",
+    "period": "202602",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   }
+  ],
+  "warnings": [],
+  "notices": [
+   {
+    "table": "301:DT_151Y001",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "202604",
+    "resolved_period": {
+     "frequency": "Q",
+     "start": "202001",
+     "end": "202602"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 202604까지 필요하지만, 표의 최신 수록 시점은 202602입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 202001 ~ 202602"
+   }
+  ],
+  "source": [
+   {
+    "series_id": "S001",
+    "org_id": "301",
+    "table_id": "DT_151Y001",
+    "item_id": "13103134771999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134771ACC_ITEM.1000000",
+      "name": "가계신용"
+     }
+    },
+    "period": {
+     "frequency": "Q",
+     "start": "202001",
+     "end": "202602"
+    },
+    "unit": "십억원",
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_151Y001",
+      "itmId": "13103134771999",
+      "objL1": "13102134771ACC_ITEM.1000000",
+      "prdSe": "Q",
+      "startPrdDe": "202001",
+      "endPrdDe": "202602"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.396537+00:00",
+     "raw_response_ref": "ce61dc9d994642a69627204245cc9e91"
+    }
+   }
+  ],
+  "recommendation": "질문에서 요청한 묶음막대를 먼저 보여줍니다.",
+  "blocked_views": [
+   {
+    "kind": "stacked",
+    "title": "누적막대",
+    "reason": "이 항목들을 더해 하나의 전체로 볼 수 있는지 확인되지 않았습니다. 합산 근거를 확인한 뒤 사용할 수 있습니다."
+   },
+   {
+    "kind": "percent_stacked",
+    "title": "100% 누적막대",
+    "reason": "비중을 구하려면 서로 겹치지 않는 구성 항목과 전체의 범위가 확인되어야 합니다. 현재 입력에는 그 근거가 없습니다."
+   },
+   {
+    "kind": "horizontal",
+    "title": "한 시점 가로막대",
+    "reason": "같은 주기·단위의 비교 항목이 두 개 이상 필요합니다."
+   }
+  ],
+  "quality_summary": {
+   "total_cells": 26,
+   "observed_values": 26,
+   "missing_values": 0,
+   "parse_error_values": 0,
+   "affected_series": 0
+  },
+  "synthetic": false,
+  "analysis_version": "c-analysis/2026-10-21-v3-policy",
+  "composition": null,
+  "calculation": null,
+  "chart_policy": {
+   "version": "chart-policy/2026-10-21-v1",
+   "requested": [
+    {
+     "kind": "bar",
+     "text": "막대그래프"
+    }
+   ],
+   "selected": "bar",
+   "reason": "질문에서 요청한 묶음막대를 먼저 보여줍니다.",
+   "notices": [],
+   "facts": {
+    "period_count": 26,
+    "series_count": 1,
+    "composition_verified": false
+   }
+  }
+ },
+ "issues": [],
+ "trace_ref": "2aebf37b3df54be6bf5008bfc8971cd3"
+}

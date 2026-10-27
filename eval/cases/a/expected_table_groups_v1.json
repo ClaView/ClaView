@@ -1,0 +1,2346 @@
+{
+ "version": "v1",
+ "date": "2026-10-10",
+ "rule": "정답 표 개수만큼 출력해야 정답. 정답 표가 여럿이면 모두 필요(사용자 10/10). 묶음은 표마다 하나.",
+ "sources": {
+  "golden": "reference/baseline-1006/eval/cases/golden_set_v1.json (22건, 모두 1표)",
+  "expected": "clabi claview-runs/codex-verify-cross-20261008-0407/question_checks.json (의도표 있는 218건, 검수 전 예상 질문)"
+ },
+ "status": "골든은 기준본 정답. 예상 질문은 검수 전이며 표 ID는 이전 세션 제안을 그대로 쓴다",
+ "cases": {
+  "CV-AB-01": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_200Y101"
+    ]
+   ],
+   "question": "2015~2025년 연간 실질 GDP 성장률 추이를 그래프로 보여줘."
+  },
+  "CV-AB-02": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_200Y101"
+    ]
+   ],
+   "question": "2016~2025년 연간 실질 총고정자본형성 증감률 추이를 그래프로 보여줘."
+  },
+  "CV-AB-03": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_200Y101"
+    ]
+   ],
+   "question": "2016~2025년 연간 실질 재화와 서비스의 수출 증감률 추이를 그래프로 보여줘."
+  },
+  "CV-AB-04": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_301Y013"
+    ]
+   ],
+   "question": "2005~2025년 연간 경상수지와 상품·서비스·본원소득·이전소득수지 추이를 그래프로 비교해줘."
+  },
+  "CV-AB-05": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_301Y013"
+    ]
+   ],
+   "question": "2005~2025년 연간 서비스수지와 가공·운송·여행·건설수지 추이를 그래프로 비교해줘."
+  },
+  "CV-AB-06": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_151Y001"
+    ]
+   ],
+   "question": "2008년 1분기부터 2024년 4분기까지 분기별 가계신용 잔액 추이를 그래프로 보여줘."
+  },
+  "CV-AB-07": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_121Y006"
+    ]
+   ],
+   "question": "최근 3년간 예금은행 기업대출 금리를 대기업대출·중소기업대출로 나눠 월별 꺾은선 그래프로 보여줘"
+  },
+  "CV-AB-08": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_151Y001"
+    ]
+   ],
+   "question": "2020년 이후 가계신용 잔액을 업권별로 나눠 분기별 막대그래프로 그려줘"
+  },
+  "CV-AB-09": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_161Y008"
+    ]
+   ],
+   "question": "2021년부터 2025년까지 M2 통화량(원계열, 말잔 기준)을 상품별 구성으로 나눠 연도별 누적 막대그래프로 보여줘"
+  },
+  "CV-AB-10": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_301Y015"
+    ]
+   ],
+   "question": "최근 10년간 지역별 수출 규모를 지역별로 비교하는 막대그래프를 만들어줘"
+  },
+  "CV-AB-11": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_200Y102"
+    ]
+   ],
+   "question": "2015년 이후 실질 GDP 성장률(전년동기비) 추이를 분기별 꺾은선 그래프로 보여줘"
+  },
+  "CV-AB-12": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_311Y001"
+    ]
+   ],
+   "question": "최근 5년간 우리나라 순대외금융자산 규모 추이를 분기별 꺾은선 그래프로 보여줘"
+  },
+  "CV-AB-13": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_104Y016"
+    ]
+   ],
+   "question": "최근 5년간 예금은행 대출금을 시설자금·운전자금·특별자금 용도별로 나눠 월별 그래프로 보여줘"
+  },
+  "CV-AB-14": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_501Y006"
+    ]
+   ],
+   "question": "2020년 이후 전산업 매출액영업이익률을 연도별 표로 정리해줘"
+  },
+  "CV-AB-15": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_513Y001"
+    ]
+   ],
+   "question": "최근 2년간 경제심리지수(ESI, 원계열)를 월별 그래프로 보여줘"
+  },
+  "CV-AB-16": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_404Y014"
+    ]
+   ],
+   "question": "2024년 공산품과 서비스의 생산자물가가 어떻게 달랐는지 월별로 비교해줘"
+  },
+  "CV-AB-17": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_404Y015"
+    ]
+   ],
+   "question": "2024년 신선식품 생산자물가와 신선식품을 뺀 물가를 월별 그래프로 비교해줘"
+  },
+  "CV-AB-18": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_404Y016"
+    ]
+   ],
+   "question": "2024년에 산업용 전력 가격이 어느 달에 가장 크게 변했는지 월별 그래프로 보여줘"
+  },
+  "CV-AB-19": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_401Y018"
+    ]
+   ],
+   "question": "2024년 수입 원재료와 중간재의 물가 흐름을 원화 기준으로 월별 비교해줘"
+  },
+  "CV-AB-20": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_402Y014"
+    ]
+   ],
+   "question": "2024년 수출 공산품과 농림수산품의 가격이 전년보다 얼마나 올랐는지 원화 기준 막대그래프로 비교해줘"
+  },
+  "CV-AB-21": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_405Y006"
+    ]
+   ],
+   "question": "2024년 국내에 공급된 원재료·중간재·최종재 물가 흐름을 월별로 한 그래프에서 비교해줘"
+  },
+  "CV-AB-22": {
+   "set": "golden",
+   "groups": [
+    [
+     "DT_405Y007"
+    ]
+   ],
+   "question": "2024년에 국내에서 생산해 국내에 팔거나 수출한 것들의 전체 물가 흐름을 월별로 보여줘"
+  },
+  "PC:EQ-01": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_801Y003"
+    ]
+   ],
+   "question": "지역별 어음부도율을 최근 3년간 월별로 비교해줘"
+  },
+  "PC:EQ-02": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y005"
+    ]
+   ],
+   "question": "교역조건지수 추이를 월별로 보여줘"
+  },
+  "PC:EQ-03": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_601Y003"
+    ]
+   ],
+   "question": "신용카드 이용금액을 월별로 보여줘"
+  },
+  "PC:EQ-04": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y102"
+    ],
+    [
+     "DT_200Y130"
+    ],
+    [
+     "DT_200Y128"
+    ]
+   ],
+   "question": "설비투자 증가율을 분기별로 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-05": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y101"
+    ]
+   ],
+   "question": "1인당 국민총소득 추이를 연간으로 보여줘"
+  },
+  "PC:EQ-06": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y003"
+    ]
+   ],
+   "question": "기대인플레이션율을 최근 2년 월별로 보여줘"
+  },
+  "PC:EQ-07": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y002"
+    ]
+   ],
+   "question": "소비자심리지수 최근 2년 추이를 보여줘"
+  },
+  "PC:EQ-08": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y001"
+    ]
+   ],
+   "question": "M1을 평잔, 계절조정 기준으로 최근 5년 월별로 보여줘"
+  },
+  "PC:EQ-09": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y013"
+    ]
+   ],
+   "question": "예금은행 수신금리를 잔액 기준으로 월별로 보여줘"
+  },
+  "PC:EQ-10": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y109"
+    ],
+    [
+     "DT_200Y113"
+    ]
+   ],
+   "question": "명목 GDP를 지출항목별로 연간으로 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-11": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y008"
+    ],
+    [
+     "DT_161Y006"
+    ],
+    [
+     "DT_161Y007"
+    ],
+    [
+     "DT_161Y005"
+    ]
+   ],
+   "question": "M2 추이를 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-12": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y006"
+    ],
+    [
+     "DT_121Y015"
+    ]
+   ],
+   "question": "예금은행 대출금리 추이를 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-13": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y102"
+    ],
+    [
+     "DT_200Y108"
+    ],
+    [
+     "DT_200Y110"
+    ]
+   ],
+   "question": "민간소비 증가율을 분기별로 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-14": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_151Y002"
+    ],
+    [
+     "DT_151Y005"
+    ]
+   ],
+   "question": "가계대출을 월별로 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-15": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_301Y017"
+    ]
+   ],
+   "question": "계절조정한 경상수지를 월별로 보여줘"
+  },
+  "PC:EQ-16": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_301Y015"
+    ]
+   ],
+   "question": "지역별 경상수지를 분기별로 보여줘"
+  },
+  "PC:EQ-17": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y027"
+    ]
+   ],
+   "question": "2000년부터 2005년까지 제조업 매출액영업이익률을 보여줘"
+  },
+  "PC:EQ-18": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y032"
+    ],
+    [
+     "DT_501Y031"
+    ],
+    [
+     "DT_501Y007"
+    ]
+   ],
+   "question": "2005년부터 2020년까지 전산업 부채비율 추이를 보여줘",
+   "why_multi": "기간이 한 표로 덮이지 않음"
+  },
+  "PC:EQ-19": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y005"
+    ],
+    [
+     "DT_501Y020"
+    ]
+   ],
+   "question": "2012년 중소기업 매출액증가율을 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-20": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_101Y002"
+    ]
+   ],
+   "question": "1990년대 M2 말잔 추이를 보여줘"
+  },
+  "PC:EQ-21": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_101Y002"
+    ],
+    [
+     "DT_161Y008"
+    ]
+   ],
+   "question": "2001년부터 2010년까지 M2 말잔(원계열)을 보여줘",
+   "why_multi": "기간이 한 표로 덮이지 않음"
+  },
+  "PC:EQ-22": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y001"
+    ],
+    [
+     "DT_511Y002"
+    ]
+   ],
+   "question": "2008년 소비자심리지수 흐름을 보여줘",
+   "why_multi": "기간이 한 표로 덮이지 않음"
+  },
+  "PC:EQ-23": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_131Y018"
+    ]
+   ],
+   "question": "예금은행 산업별 대출금을 기업규모별로 보여줘"
+  },
+  "PC:EQ-24": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_151Y003"
+    ]
+   ],
+   "question": "지역별 예금은행 가계대출을 비교해줘"
+  },
+  "PC:EQ-25": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y004"
+    ]
+   ],
+   "question": "차주당 가계대출 잔액을 연령별·지역별로 보여줘"
+  },
+  "PC:EQ-26": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y011"
+    ],
+    [
+     "DT_181Y012"
+    ]
+   ],
+   "question": "차주당 주택담보대출을 연령대별로 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-27": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_402Y014"
+    ]
+   ],
+   "question": "수출물가지수를 달러 기준으로 보여줘"
+  },
+  "PC:EQ-28": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_303Y001"
+    ],
+    [
+     "DT_303Y003"
+    ]
+   ],
+   "question": "수출 결제통화 중 원화 비중을 지역별로 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-29": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_151Y002"
+    ]
+   ],
+   "question": "가계대출 증가율을 보여줘"
+  },
+  "PC:EQ-30": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y101"
+    ],
+    [
+     "DT_301Y013"
+    ]
+   ],
+   "question": "GDP 대비 경상수지 비율을 보여줘",
+   "why_multi": "GDP와 경상수지 두 표(사용자 10/10)"
+  },
+  "PC:EQ-31": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y013"
+    ],
+    [
+     "DT_512Y007"
+    ]
+   ],
+   "question": "제조업 BSI 업황을 최근 1년 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-32": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y008"
+    ],
+    [
+     "DT_161Y006"
+    ]
+   ],
+   "question": "광의통화 증가율을 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "PC:EQ-33": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y004"
+    ]
+   ],
+   "question": "우리나라가 해외에 진 빚이 얼마나 되는지 보여줘"
+  },
+  "PC:EQ-34": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y013"
+    ]
+   ],
+   "question": "기업들이 체감하는 경기가 어떤지 보여줘"
+  },
+  "PC:EQ-39": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_402Y014"
+    ],
+    [
+     "DT_401Y015"
+    ]
+   ],
+   "question": "수출물가와 수입물가를 함께 비교해줘",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "PC:EQ-40": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_151Y001"
+    ],
+    [
+     "DT_200Y105"
+    ]
+   ],
+   "question": "가계신용과 명목 GDP를 한 그래프에 보여줘",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "PC:EQ-41": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y004"
+    ],
+    [
+     "DT_161Y008"
+    ]
+   ],
+   "question": "M1과 M2를 함께 비교해줘",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "PC:EQ-42": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_301Y013"
+    ],
+    [
+     "DT_301Y017"
+    ],
+    [
+     "DT_200Y101"
+    ]
+   ],
+   "question": "경상수지 추이를 보여줘",
+   "why_multi": "이전 초안에서 형제 대안(어느 것이든)으로 분류했으나 사용자 규칙(10/10)으로 모두 필요"
+  },
+  "A:CX-Q001": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y115"
+    ]
+   ],
+   "question": "국민처분가능소득과 그 처분 내역을 연간 명목 금액으로 보고 싶다."
+  },
+  "A:CX-Q002": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y137"
+    ]
+   ],
+   "question": "경제활동과 자본재 형태를 동시에 나눈 연간 명목 총고정자본형성을 찾아줘."
+  },
+  "A:CX-Q003": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y104"
+    ]
+   ],
+   "question": "경제활동별 GDP와 GNI를 계절조정한 실질 분기 금액으로 보여줘."
+  },
+  "A:CX-Q004": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y162"
+    ]
+   ],
+   "question": "2020년부터 2024년까지 제도부문별 소득계정을 분기별로 보고 싶다."
+  },
+  "A:CX-Q005": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y119"
+    ]
+   ],
+   "question": "연간 명목 자본거래 중 국외금융자산순증과 국외부채순증을 비교해줘."
+  },
+  "A:CX-Q006": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y117"
+    ]
+   ],
+   "question": "연간 명목 자본거래에서 귀중품순취득을 찾아줘."
+  },
+  "A:CX-Q007": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y103"
+    ],
+    [
+     "DT_200Y104"
+    ]
+   ],
+   "question": "계절조정 경제활동별 GDP의 명목 금액과 실질 금액을 분기별로 나란히 보여줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q008": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_103Y002"
+    ]
+   ],
+   "question": "한국은행 주요계정의 말잔 자료를 보고 싶다."
+  },
+  "A:CX-Q009": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y010"
+    ]
+   ],
+   "question": "M2를 보유한 경제주체별로 나눠 평잔 원계열을 비교해줘."
+  },
+  "A:CX-Q010": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y007"
+    ]
+   ],
+   "question": "M2 상품별 구성내역을 말잔이면서 계절조정된 계열로 찾아줘."
+  },
+  "A:CX-Q011": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_101Y002"
+    ]
+   ],
+   "question": "1998년부터 2000년까지 M2 상품별 말잔 원계열을 월별로 보여줘."
+  },
+  "A:CX-Q012": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_102Y001"
+    ]
+   ],
+   "question": "최근 본원통화 구성내역의 말잔 원계열을 찾아줘."
+  },
+  "A:CX-Q013": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y008"
+    ]
+   ],
+   "question": "월말 잔액 기준의 광의통화를 상품별로 보고 싶어. 계절조정은 하지 않은 값으로."
+  },
+  "A:CX-Q014": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y006"
+    ],
+    [
+     "DT_161Y008"
+    ]
+   ],
+   "question": "2024년 M2 상품별 원계열의 월평균 잔액과 월말 잔액을 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q015": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y004"
+    ]
+   ],
+   "question": "비은행금융기관이 새로 받은 예금의 수신금리를 찾아줘."
+  },
+  "A:CX-Q016": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y010"
+    ]
+   ],
+   "question": "예금은행 신규취급액 기준 고정금리대출과 변동금리대출 비중을 비교해줘."
+  },
+  "A:CX-Q017": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y015"
+    ]
+   ],
+   "question": "예금은행 대출금리를 신규취급액이 아니라 잔액 기준으로 찾아줘."
+  },
+  "A:CX-Q018": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y013"
+    ]
+   ],
+   "question": "2018년부터 2022년까지 예금은행 수신금리를 잔액 기준으로 연간 비교해줘."
+  },
+  "A:CX-Q019": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y011"
+    ]
+   ],
+   "question": "예금은행의 고정 및 변동금리대출 비중 중 이미 남아 있는 대출의 기준을 원해."
+  },
+  "A:CX-Q020": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y007"
+    ]
+   ],
+   "question": "종금사 할인어음 금리를 신규취급액 기준으로 보고 싶다."
+  },
+  "A:CX-Q021": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y006"
+    ],
+    [
+     "DT_121Y015"
+    ]
+   ],
+   "question": "예금은행의 새로 취급한 대출 금리와 기존 대출 잔액 금리를 나란히 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q022": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_405Y006"
+    ]
+   ],
+   "question": "국내공급물가지수를 찾아줘."
+  },
+  "A:CX-Q023": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y015"
+    ]
+   ],
+   "question": "생산자물가 중 식료품과 신선식품을 특수분류로 비교해줘."
+  },
+  "A:CX-Q024": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y014"
+    ]
+   ],
+   "question": "생산자물가를 품목별이 아니라 기본분류 기준으로 보고 싶다."
+  },
+  "A:CX-Q025": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y017"
+    ]
+   ],
+   "question": "1930년부터 1940년까지 생산자물가 총지수를 연간으로 보고 싶다."
+  },
+  "A:CX-Q026": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y014"
+    ]
+   ],
+   "question": "생산자물가지수의 공산품을 보고 싶다."
+  },
+  "A:CX-Q027": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y016"
+    ]
+   ],
+   "question": "생산자 가격에서 산업용전력을 따로 확인하고 싶다."
+  },
+  "A:CX-Q028": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_405Y006"
+    ],
+    [
+     "DT_405Y007"
+    ]
+   ],
+   "question": "국내공급물가지수와 총산출물가지수의 추이를 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q029": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y005"
+    ]
+   ],
+   "question": "교역조건지수를 찾아줘."
+  },
+  "A:CX-Q030": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_401Y018"
+    ]
+   ],
+   "question": "수입물가를 원재료와 중간재처럼 용도별로 나눠 보고 싶다."
+  },
+  "A:CX-Q031": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_402Y014"
+    ]
+   ],
+   "question": "수출물가지수를 기본분류의 달러 기준으로 보여줘."
+  },
+  "A:CX-Q032": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y004"
+    ]
+   ],
+   "question": "2021년부터 2024년까지 수입물량지수를 월별로 비교해줘."
+  },
+  "A:CX-Q033": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y001"
+    ]
+   ],
+   "question": "수출 물량이 아니라 수출 금액의 지수를 원해."
+  },
+  "A:CX-Q034": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_401Y017"
+    ]
+   ],
+   "question": "수입 가격 가운데 원유만 따로 보고 싶다."
+  },
+  "A:CX-Q035": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y001"
+    ],
+    [
+     "DT_403Y002"
+    ]
+   ],
+   "question": "수출금액지수와 수출물량지수를 같은 기간으로 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q036": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y006"
+    ]
+   ],
+   "question": "순대외채권 규모를 찾아줘."
+  },
+  "A:CX-Q037": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y003"
+    ]
+   ],
+   "question": "국제투자대조표를 통화별로 나누어 비교해줘."
+  },
+  "A:CX-Q038": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_301Y017"
+    ]
+   ],
+   "question": "경상수지는 계절조정한 계열로 보고 싶다."
+  },
+  "A:CX-Q039": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_303Y006"
+    ]
+   ],
+   "question": "2023년부터 2024년까지 수입의 지역별 국가별 원화결제를 반기별로 보고 싶다."
+  },
+  "A:CX-Q040": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_304Y102"
+    ]
+   ],
+   "question": "지식서비스 무역통계를 유형별이 아니라 산업별로 보고 싶다."
+  },
+  "A:CX-Q041": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_301Y013"
+    ]
+   ],
+   "question": "국제수지에서 가공서비스수입과 여객운임수입을 따로 확인해줘."
+  },
+  "A:CX-Q042": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y004"
+    ],
+    [
+     "DT_311Y005"
+    ]
+   ],
+   "question": "대외채무와 대외채권을 각각 찾아 나란히 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q043": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y086"
+    ]
+   ],
+   "question": "제11차 산업분류로 작성된 기업경영분석 분위수를 찾아줘."
+  },
+  "A:CX-Q044": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y007"
+    ]
+   ],
+   "question": "제11차 산업분류의 자산 자본 지표에서 업종과 기업규모를 나누어 비교해줘."
+  },
+  "A:CX-Q045": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y019"
+    ]
+   ],
+   "question": "성장성 지표를 중소기업기본법 기준의 2015~2016년 자료로 찾아줘."
+  },
+  "A:CX-Q046": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y023"
+    ]
+   ],
+   "question": "1990년부터 1997년까지 표본조사 성장성 지표를 연간으로 보고 싶다."
+  },
+  "A:CX-Q047": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y005"
+    ]
+   ],
+   "question": "최근 기업의 성장성 지표를 찾아줘."
+  },
+  "A:CX-Q048": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y006"
+    ]
+   ],
+   "question": "제11차 산업분류의 매출액영업이익률을 찾아줘."
+  },
+  "A:CX-Q049": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y001"
+    ],
+    [
+     "DT_501Y002"
+    ]
+   ],
+   "question": "제11차 산업분류 기준 재무상태표와 손익계산서를 함께 보고 싶다.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q050": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y011"
+    ]
+   ],
+   "question": "차주당 주택담보대출 신규취급액을 찾아줘."
+  },
+  "A:CX-Q051": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_131Y018"
+    ]
+   ],
+   "question": "예금은행 산업별대출금을 기업규모별로 나눠 비교해줘."
+  },
+  "A:CX-Q052": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y004"
+    ]
+   ],
+   "question": "차주당 가계대출 잔액을 연령별 지역별로 나눠 보고 싶다."
+  },
+  "A:CX-Q053": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_151Y005"
+    ]
+   ],
+   "question": "2022년부터 2024년까지 예금취급기관 가계대출을 용도별 월간으로 보고 싶다."
+  },
+  "A:CX-Q054": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y003"
+    ]
+   ],
+   "question": "연령별 지역별 대출 자료를 보고 싶다."
+  },
+  "A:CX-Q055": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_131Y018"
+    ]
+   ],
+   "question": "예금은행 산업별 기업규모별 대출에서 제조업의 합계만 보고 싶다. 하위 업종 전체는 필요 없다."
+  },
+  "A:CX-Q056": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y001"
+    ],
+    [
+     "DT_181Y002"
+    ]
+   ],
+   "question": "차주당 가계대출의 신규취급액과 잔액을 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q057": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_282Y005"
+    ]
+   ],
+   "question": "채권의 순취득액을 시가로 보고 싶다."
+  },
+  "A:CX-Q058": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_282Y006"
+    ]
+   ],
+   "question": "채권발행과 보유의 관계를 잔액 시가 기준으로 나눠 보고 싶다."
+  },
+  "A:CX-Q059": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_282Y001"
+    ]
+   ],
+   "question": "채권 발행잔액은 시가가 아니라 명목 기준으로 보여줘."
+  },
+  "A:CX-Q060": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_281Y004"
+    ]
+   ],
+   "question": "1980년부터 1990년까지 금융거래표를 찾아줘."
+  },
+  "A:CX-Q061": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_281Y002"
+    ]
+   ],
+   "question": "2024년 금융자산부채잔액표를 보고 싶다."
+  },
+  "A:CX-Q062": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_281Y001"
+    ]
+   ],
+   "question": "2009년 이후 금융거래에서 금과 SDRs를 보고 싶다."
+  },
+  "A:CX-Q063": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_282Y001"
+    ],
+    [
+     "DT_282Y002"
+    ]
+   ],
+   "question": "채권 발행잔액을 명목과 시가 기준으로 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q064": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_633Y003"
+    ]
+   ],
+   "question": "결제대금예치 통계를 찾아줘."
+  },
+  "A:CX-Q065": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_601Y003"
+    ]
+   ],
+   "question": "신용카드의 개인 이용건수와 법인 이용건수를 비교해줘."
+  },
+  "A:CX-Q066": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_633Y004"
+    ]
+   ],
+   "question": "전자지급수단은 직불이 아니라 선불 자료로 보여줘."
+  },
+  "A:CX-Q067": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_601Y003"
+    ]
+   ],
+   "question": "1998년 신용카드 이용금액을 월별로 보고 싶다."
+  },
+  "A:CX-Q068": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_602Y002"
+    ]
+   ],
+   "question": "결제시스템별이 아니라 지급수단별 통계를 원해."
+  },
+  "A:CX-Q069": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_601Y003"
+    ]
+   ],
+   "question": "개인 신용카드 발급장수가 어떻게 변했는지 보여줘."
+  },
+  "A:CX-Q070": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_633Y004"
+    ],
+    [
+     "DT_633Y006"
+    ]
+   ],
+   "question": "선불전자지급수단과 직불전자지급수단 이용을 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q071": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_513Y001"
+    ]
+   ],
+   "question": "경제심리지수를 찾아줘."
+  },
+  "A:CX-Q072": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y004"
+    ]
+   ],
+   "question": "소비자동향조사를 지역별로 나눠 보고 싶다."
+  },
+  "A:CX-Q073": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y002"
+    ]
+   ],
+   "question": "소비자동향조사에서 지역별이 아닌 전국 월간 자료를 보고 싶다."
+  },
+  "A:CX-Q074": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y001"
+    ]
+   ],
+   "question": "2000년부터 2005년까지 전국 소비자동향조사를 분기별로 보여줘."
+  },
+  "A:CX-Q075": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y002"
+    ]
+   ],
+   "question": "최근 전국 소비자동향조사를 찾아줘."
+  },
+  "A:CX-Q076": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_513Y001"
+    ]
+   ],
+   "question": "계절과 불규칙 변동을 제거한 경제심리지수를 찾아줘."
+  },
+  "A:CX-Q077": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y003"
+    ],
+    [
+     "DT_513Y001"
+    ]
+   ],
+   "question": "기대인플레이션율과 경제심리지수를 같은 기간으로 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "A:CX-Q078": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y021"
+    ]
+   ],
+   "question": "기업들이 겪는 경영애로사항을 찾아줘."
+  },
+  "A:CX-Q079": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y019"
+    ]
+   ],
+   "question": "지역별 기업경기조사의 실적을 나눠서 비교해줘."
+  },
+  "A:CX-Q080": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y015"
+    ]
+   ],
+   "question": "기업경기조사는 매출액으로 가중한 실적 지수로 보고 싶다."
+  },
+  "A:CX-Q081": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y001"
+    ]
+   ],
+   "question": "2005년 업종별 기업경기실사지수 실적을 월별로 보고 싶다."
+  },
+  "A:CX-Q082": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_514Y002"
+    ]
+   ],
+   "question": "은행 대출행태 조사에서 대출수요가 아니라 신용위험을 보고 싶다."
+  },
+  "A:CX-Q083": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_514Y001"
+    ]
+   ],
+   "question": "은행이 대출을 더 까다롭게 보는지 알고 싶어."
+  },
+  "A:CX-Q084": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y013"
+    ],
+    [
+     "DT_512Y014"
+    ]
+   ],
+   "question": "기업경기조사의 실적과 전망을 나란히 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "B:CX-Q001": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y104"
+    ]
+   ],
+   "question": "계절조정한 실질 경제활동별 GDP와 GNI를 분기로 보고 싶어."
+  },
+  "B:CX-Q002": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y105"
+    ]
+   ],
+   "question": "원계열 명목 경제활동별 GDP 및 GNI를 연간으로 찾아줘."
+  },
+  "B:CX-Q003": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y111"
+    ]
+   ],
+   "question": "제조업의 국내총생산 디플레이터를 연간으로 보고 싶어."
+  },
+  "B:CX-Q004": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y115"
+    ]
+   ],
+   "question": "국민처분가능소득을 피용자보수와 영업잉여로 나눠 보고 싶어."
+  },
+  "B:CX-Q005": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y117"
+    ]
+   ],
+   "question": "국민계정 자본거래에서 총자본축적과 순저축을 연간 명목으로 비교해줘."
+  },
+  "B:CX-Q006": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y119"
+    ]
+   ],
+   "question": "국외 자본거래의 국외금융자산순증과 국외부채순증을 명목 연간으로 보여줘."
+  },
+  "B:CX-Q007": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y136"
+    ]
+   ],
+   "question": "제조업과 건설업의 실질 총고정자본형성을 연간으로 비교해줘."
+  },
+  "B:CX-Q008": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y125"
+    ]
+   ],
+   "question": "계절조정 실질 지출항목별 성장기여도를 분기로 보여줘."
+  },
+  "B:CX-Q009": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y143"
+    ]
+   ],
+   "question": "가계의 목적별 최종소비지출을 실질 원계열로 연간 비교해줘."
+  },
+  "B:CX-Q010": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y162"
+    ]
+   ],
+   "question": "2020년부터 2024년까지 제도부문별 소득계정을 명목 분기로 보고 싶어."
+  },
+  "B:CX-Q011": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y135"
+    ],
+    [
+     "DT_200Y136"
+    ]
+   ],
+   "question": "경제활동별 총고정자본형성을 명목과 실질로 각각 연간 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "B:CX-Q012": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y151"
+    ]
+   ],
+   "question": "일반정부의 부문별 기능별 최종소비지출을 명목 연간으로 보여줘."
+  },
+  "B:CX-Q013": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_101Y002"
+    ]
+   ],
+   "question": "1995년 M2 상품별 구성내역을 말잔 원계열 월별로 보여줘."
+  },
+  "B:CX-Q014": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y008"
+    ]
+   ],
+   "question": "2024년 M2 상품별 구성내역을 말잔 원계열 월별로 보여줘."
+  },
+  "B:CX-Q015": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y005"
+    ]
+   ],
+   "question": "2024년 M2 상품별 구성내역을 평잔 계절조정계열로 찾아줘."
+  },
+  "B:CX-Q016": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y008"
+    ]
+   ],
+   "question": "2024년 말잔 원계열 M2에서 MMF 지분과 양도성예금증서를 비교해줘."
+  },
+  "B:CX-Q017": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y003"
+    ]
+   ],
+   "question": "차주당 가계대출 신규취급액을 연령별 지역별로 보여줘."
+  },
+  "B:CX-Q018": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y004"
+    ]
+   ],
+   "question": "차주당 가계대출 잔액을 연령별 지역별로 보여줘."
+  },
+  "B:CX-Q019": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_131Y018"
+    ]
+   ],
+   "question": "예금은행 제조업 대출을 기업규모별로 나눠줘."
+  },
+  "B:CX-Q020": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_132Y003"
+    ]
+   ],
+   "question": "예금은행 산업별대출금을 지역별 용도별로 비교해줘."
+  },
+  "B:CX-Q021": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_104Y017"
+    ]
+   ],
+   "question": "예금은행 예금회전율 추이를 알려줘."
+  },
+  "B:CX-Q022": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_151Y002"
+    ]
+   ],
+   "question": "예금취급기관 가계대출을 업권별 월별로 보여줘."
+  },
+  "B:CX-Q023": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_161Y007"
+    ],
+    [
+     "DT_161Y008"
+    ]
+   ],
+   "question": "2024년 M2 상품별 말잔을 원계열과 계절조정계열로 각각 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "B:CX-Q024": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_171Y004"
+    ]
+   ],
+   "question": "2024년 Lf 구성내역을 평잔 원계열로 보여줘."
+  },
+  "B:CX-Q025": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y006"
+    ]
+   ],
+   "question": "예금은행 신규취급액 기준 대출금리를 월별로 보여줘."
+  },
+  "B:CX-Q026": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y015"
+    ]
+   ],
+   "question": "예금은행 잔액 기준 대출금리를 월별로 보여줘."
+  },
+  "B:CX-Q027": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y006"
+    ]
+   ],
+   "question": "예금은행 신규취급액 기준 전세자금대출 금리를 찾아줘."
+  },
+  "B:CX-Q028": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y010"
+    ]
+   ],
+   "question": "예금은행 신규취급액의 고정 및 변동금리대출 비중을 비교해줘."
+  },
+  "B:CX-Q029": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y004"
+    ]
+   ],
+   "question": "비은행금융기관 수신금리를 신규취급액 기준으로 알려줘."
+  },
+  "B:CX-Q030": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y013"
+    ]
+   ],
+   "question": "2019년부터 2023년까지 예금은행 잔액 기준 수신금리를 연간으로 보여줘."
+  },
+  "B:CX-Q031": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y006"
+    ],
+    [
+     "DT_121Y015"
+    ]
+   ],
+   "question": "예금은행 대출금리를 신규취급액 기준과 잔액 기준으로 각각 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "B:CX-Q032": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y006"
+    ]
+   ],
+   "question": "예금은행 대출금리를 보여줘."
+  },
+  "B:CX-Q033": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y016"
+    ]
+   ],
+   "question": "2023년 산업용전력 생산자물가를 월별로 보여줘."
+  },
+  "B:CX-Q034": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y015"
+    ]
+   ],
+   "question": "2024년 신선식품 생산자물가를 월별로 보여줘."
+  },
+  "B:CX-Q035": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_401Y017"
+    ]
+   ],
+   "question": "2024년 치즈와 버터의 수입물가를 비교해줘."
+  },
+  "B:CX-Q036": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_401Y016"
+    ]
+   ],
+   "question": "수입물가지수 특수분류에서 에너지를 달러 기준으로 보여줘."
+  },
+  "B:CX-Q037": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_401Y018"
+    ]
+   ],
+   "question": "수입물가지수를 용도별 원재료와 중간재로 비교해줘."
+  },
+  "B:CX-Q038": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y002"
+    ]
+   ],
+   "question": "수출물량지수를 보여줘."
+  },
+  "B:CX-Q039": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y005"
+    ]
+   ],
+   "question": "교역조건지수를 찾아줘."
+  },
+  "B:CX-Q040": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y017"
+    ]
+   ],
+   "question": "1930년부터 1940년까지 생산자물가지수 총지수를 보여줘."
+  },
+  "B:CX-Q041": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y001"
+    ],
+    [
+     "DT_403Y002"
+    ]
+   ],
+   "question": "수출금액지수와 수출물량지수를 각각 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "B:CX-Q042": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_402Y014"
+    ]
+   ],
+   "question": "수출물가지수 기본분류를 원화 기준으로 보여줘."
+  },
+  "B:CX-Q043": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_301Y014"
+    ]
+   ],
+   "question": "서비스무역세분류통계에서 유학연수수입을 찾아줘."
+  },
+  "B:CX-Q044": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_301Y017"
+    ]
+   ],
+   "question": "계절조정 경상수지를 보여줘."
+  },
+  "B:CX-Q045": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_304Y107"
+    ]
+   ],
+   "question": "지식재산권 무역수지를 특허 및 실용신안권과 상표권으로 비교해줘."
+  },
+  "B:CX-Q046": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_303Y006"
+    ]
+   ],
+   "question": "2024년 수입 원화결제를 지역별 국가별 반기로 보여줘."
+  },
+  "B:CX-Q047": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y003"
+    ]
+   ],
+   "question": "국제투자대조표를 미달러화와 엔화로 비교해줘."
+  },
+  "B:CX-Q048": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y006"
+    ]
+   ],
+   "question": "순대외채권을 찾아줘."
+  },
+  "B:CX-Q049": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y004"
+    ]
+   ],
+   "question": "대외채무 추이를 보고 싶어."
+  },
+  "B:CX-Q050": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_301Y013"
+    ]
+   ],
+   "question": "국제수지에서 본원소득수지를 월별로 보여줘."
+  },
+  "B:CX-Q051": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y004"
+    ],
+    [
+     "DT_311Y005"
+    ]
+   ],
+   "question": "대외채무와 대외채권을 각각 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "B:CX-Q052": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_304Y102"
+    ]
+   ],
+   "question": "지식서비스 무역통계를 산업별로 보여줘."
+  },
+  "B:CX-Q053": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y005"
+    ]
+   ],
+   "question": "제11차 한국표준산업분류의 성장성 지표를 보고 싶어."
+  },
+  "B:CX-Q054": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y006"
+    ]
+   ],
+   "question": "2023년 제조업 매출액영업이익률을 제11차 한국표준산업분류로 보여줘."
+  },
+  "B:CX-Q055": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y007"
+    ]
+   ],
+   "question": "2023년 제조업 부채비율을 제11차 한국표준산업분류로 보여줘."
+  },
+  "B:CX-Q056": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y008"
+    ]
+   ],
+   "question": "제11차 한국표준산업분류 기준 자산 자본 회전율을 보여줘."
+  },
+  "B:CX-Q057": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y019"
+    ]
+   ],
+   "question": "중소기업기본법 기준 2015년 성장성 지표를 찾아줘."
+  },
+  "B:CX-Q058": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y020"
+    ]
+   ],
+   "question": "조세특례제한법 기준 2010년 성장성 지표를 찾아줘."
+  },
+  "B:CX-Q059": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y023"
+    ]
+   ],
+   "question": "1993년 표본조사 성장성 지표를 보여줘."
+  },
+  "B:CX-Q060": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y013"
+    ]
+   ],
+   "question": "2022년 현금흐름표를 보여줘."
+  },
+  "B:CX-Q061": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y080"
+    ]
+   ],
+   "question": "2001년 현금흐름표를 보여줘."
+  },
+  "B:CX-Q062": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y086"
+    ]
+   ],
+   "question": "제11차 한국표준산업분류의 기업경영 분위수를 비교해줘."
+  },
+  "B:CX-Q063": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y020"
+    ],
+    [
+     "DT_501Y019"
+    ]
+   ],
+   "question": "2014년 조세특례제한법 기준과 2015년 중소기업기본법 기준 성장성 지표를 각각 보여줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "B:CX-Q064": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y005"
+    ]
+   ],
+   "question": "기업 성장성 지표를 찾아줘."
+  },
+  "B:CX-Q065": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_281Y004"
+    ]
+   ],
+   "question": "1980년 금융거래표를 보여줘."
+  },
+  "B:CX-Q066": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_281Y001"
+    ]
+   ],
+   "question": "2024년 금융거래표를 보여줘."
+  },
+  "B:CX-Q067": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_282Y002"
+    ]
+   ],
+   "question": "채권 발행잔액을 시가 기준으로 보여줘."
+  },
+  "B:CX-Q068": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_282Y001"
+    ]
+   ],
+   "question": "채권 발행잔액을 명목 기준으로 보여줘."
+  },
+  "B:CX-Q069": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_284Y001"
+    ]
+   ],
+   "question": "금융상품 발행 채무의 잔액표에서 은행 예수금을 보여줘."
+  },
+  "B:CX-Q070": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_281Y004"
+    ],
+    [
+     "DT_281Y001"
+    ]
+   ],
+   "question": "1980년부터 2024년까지 금융거래표를 찾아줘.",
+   "why_multi": "기간이 한 표로 덮이지 않음"
+  },
+  "B:CX-Q071": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y002"
+    ]
+   ],
+   "question": "2024년 전국 주택가격전망CSI를 월별로 보여줘."
+  },
+  "B:CX-Q072": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y001"
+    ]
+   ],
+   "question": "2000년 전국 소비자동향조사를 분기로 보여줘."
+  },
+  "B:CX-Q073": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y003"
+    ]
+   ],
+   "question": "전국 기대인플레이션율을 월별로 보여줘."
+  },
+  "B:CX-Q074": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y014"
+    ]
+   ],
+   "question": "기업경기조사의 전망 지수를 찾아줘."
+  },
+  "B:CX-Q075": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_513Y001"
+    ]
+   ],
+   "question": "한국은행 ESI 경제 지수를 보여줘."
+  },
+  "B:CX-Q076": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_514Y002"
+    ]
+   ],
+   "question": "대출행태서베이 신용위험을 국내은행과 비은행금융기관으로 비교해줘."
+  },
+  "B:CX-Q077": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y020"
+    ]
+   ],
+   "question": "지역별 기업경기조사 전망을 최근 3년간 보여줘."
+  },
+  "B:CX-Q078": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_512Y013"
+    ],
+    [
+     "DT_512Y014"
+    ]
+   ],
+   "question": "기업경기조사 실적과 전망을 각각 비교해줘.",
+   "why_multi": "서로 다른 지표·기준 비교"
+  },
+  "B:CX-Q079": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_601Y003"
+    ]
+   ],
+   "question": "신용카드 개인 할부구매 이용금액을 보여줘."
+  },
+  "B:CX-Q080": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_633Y002"
+    ]
+   ],
+   "question": "전자지급결제대행 이용건수를 분기로 보여줘."
+  },
+  "B:CX-Q081": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_633Y003"
+    ]
+   ],
+   "question": "결제대금예치 이용금액을 보여줘."
+  },
+  "B:CX-Q082": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_633Y004"
+    ]
+   ],
+   "question": "선불전자지급수단 이용건수를 보여줘."
+  },
+  "B:CX-Q083": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_801Y003"
+    ]
+   ],
+   "question": "서울과 부산의 어음부도율을 월별로 비교해줘."
+  },
+  "B:CX-Q084": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_801Y003"
+    ]
+   ],
+   "question": "지역별 어음부도율을 2024년 분기별로 보여줘."
+  },
+  "B:CX-Q085": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y111"
+    ]
+   ],
+   "question": "산업마다 생산물 가격이 얼마나 달라졌는지 GDP의 가격지수로 비교하고 싶어."
+  },
+  "B:CX-Q086": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_200Y151"
+    ]
+   ],
+   "question": "중앙정부와 지방정부가 교육이나 보건에 쓰는 최종 소비를 보고 싶어."
+  },
+  "B:CX-Q087": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_131Y018"
+    ]
+   ],
+   "question": "은행이 제조업 큰 기업과 작은 기업에 빌려준 돈을 비교해줘."
+  },
+  "B:CX-Q088": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_181Y003"
+    ]
+   ],
+   "question": "새로 받은 가계 빚을 한 사람당 얼마인지 나이와 사는 곳을 함께 나눠 보고 싶어."
+  },
+  "B:CX-Q089": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y006"
+    ]
+   ],
+   "question": "은행에서 이번에 새로 받은 집 담보 대출의 이자율은 얼마야?"
+  },
+  "B:CX-Q090": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_121Y015"
+    ]
+   ],
+   "question": "은행에 이미 남아 있는 대출의 이자율을 알고 싶어."
+  },
+  "B:CX-Q091": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_403Y005"
+    ]
+   ],
+   "question": "수출품으로 수입품을 얼마나 살 수 있는지 그 여건이 달라졌나?"
+  },
+  "B:CX-Q092": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_404Y016"
+    ]
+   ],
+   "question": "공장에서 쓰는 전기의 생산자 가격 추이를 알려줘."
+  },
+  "B:CX-Q093": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_311Y004"
+    ]
+   ],
+   "question": "우리나라가 해외에 갚아야 할 빚의 규모를 보여줘."
+  },
+  "B:CX-Q094": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_501Y006"
+    ]
+   ],
+   "question": "2023년 제조업이 매출 백 원을 올리면 영업이익이 몇 원 남는지 보고 싶어."
+  },
+  "B:CX-Q095": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_511Y002"
+    ]
+   ],
+   "question": "전국 소비자들은 앞으로 집값이 어떻게 될 거라고 생각해?"
+  },
+  "B:CX-Q096": {
+   "set": "expected",
+   "groups": [
+    [
+     "DT_601Y003"
+    ]
+   ],
+   "question": "개인이 카드로 할부 구매한 금액의 추이를 보고 싶어."
+  }
+ }
+}

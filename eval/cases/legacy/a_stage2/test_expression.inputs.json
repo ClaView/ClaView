@@ -1,0 +1,31 @@
+{
+  "schema_version": "claview-a-eval/1",
+  "dataset_id": "a-stage2-20261005-test_expression",
+  "split": "test_expression",
+  "cases": [
+    {
+      "case_id": "A-E01",
+      "query": "이번에 새로 받은 예금의 예금은행 수신금리가 궁금해",
+      "query_revision": 1,
+      "prior_turns": []
+    },
+    {
+      "case_id": "A-E02",
+      "query": "이미 맡겨진 예금 잔액 기준 예금은행 수신금리를 보고 싶어",
+      "query_revision": 1,
+      "prior_turns": []
+    },
+    {
+      "case_id": "A-E03",
+      "query": "잔액 말고 신규취급액 기준 예금은행 수신 금리",
+      "query_revision": 1,
+      "prior_turns": []
+    },
+    {
+      "case_id": "A-E04",
+      "query": "예금은행 수신금리를 찾아줘",
+      "query_revision": 1,
+      "prior_turns": []
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "가계신용(업권별 분기) / 가계신용",
+    "org_id": "301",
+    "table_id": "DT_151Y001",
+    "item_id": "13103134771999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134771ACC_ITEM.1000000",
+      "name": "가계신용"
+     }
+    },
+    "period": {
+     "frequency": "Q",
+     "start": "200801",
+     "end": "202404"
+    },
+    "unit": "십억원"
+   }
+  ],
+  "relations": []
+ },
+ "issues": [],
+ "trace_ref": "ea340fc424104624ba123324d49b1958"
+}

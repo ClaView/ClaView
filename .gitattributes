@@ -1,2 +1,26 @@
 * text=auto eol=lf
 *.csv -text whitespace=cr-at-eol,-blank-at-eof
+
+# Code copied from the A, B and C shares keeps its bytes (mixed CRLF/LF) as copied.
+# New code (common/, service and API files, Docker files) uses the default text handling above.
+/modules/a/claview_a/** -text
+/modules/a/tests/** -text
+/modules/a/scripts/** -text
+/modules/b/claview_b/** -text
+/modules/b/tests/** -text
+/modules/b/scripts/** -text
+/modules/c/claview_c/c_*.py -text
+/modules/c/claview_c/chart_*.py -text
+/modules/c/claview_c/composition.py -text
+/modules/c/samples/** -text
+/pipeline/claview_pipeline/staged.py -text
+/pipeline/claview_pipeline/confirmation.py -text
+/pipeline/claview_pipeline/request_capabilities.py -text
+/pipeline/tests/staged/** -text
+/frontend/src/** -text
+/frontend/build/** -text
+/research/** -text
+/data/** -text
+/eval/** -text
+/docs/modules/** -text
+/docs/records/** -text

@@ -1,0 +1,25 @@
+{
+ "decision": "assume",
+ "tables": [
+  {
+   "org_id": "301",
+   "table_id": "DT_405Y006",
+   "table_name": "국내공급물가지수"
+  }
+ ],
+ "b_requests": [
+  {
+   "requirement_ids": [
+    "r1"
+   ],
+   "tables": [
+    {
+     "org_id": "301",
+     "table_id": "DT_405Y006",
+     "table_name": "국내공급물가지수"
+    }
+   ]
+  }
+ ],
+ "pending_question": null
+}

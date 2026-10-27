@@ -1,0 +1,771 @@
+{
+  "schema_version": "claview-ab/0.4-draft-period-augmented",
+  "dataset_id": "claview-golden-set-v1-period-augmented-13",
+  "cases": [
+    {
+      "case_id": "CV-AUG-01",
+      "query": "최근 5년간 예금규모별 계좌수를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202101",
+          "end": "202502"
+        },
+        "calendar_anchor": {
+          "frequency": "H",
+          "start": "202001",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-01-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202101",
+                "end": "202502"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window', 'calendar_anchor']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-02",
+      "query": "최근 6반기 예금규모별 계좌수를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "H",
+          "start": "202301",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-02-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202301",
+                "end": "202502"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-03",
+      "query": "2015년 이후 예금규모별 계좌수를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "year_since": {
+          "frequency": "H",
+          "start": "201501",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-03-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "201501",
+                "end": "202502"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['year_since']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-04",
+      "query": "작년 예금규모별 계좌수를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "as_of_year_based": {
+          "frequency": "H",
+          "start": "202501",
+          "end": "202502"
+        },
+        "anchor_year_based": {
+          "frequency": "H",
+          "start": "202401",
+          "end": "202402"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-04-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202401",
+                "end": "202402"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['as_of_year_based', 'anchor_year_based']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-05",
+      "query": "올해 예금규모별 계좌수를 반기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "anchor_year_fallback": {
+          "frequency": "H",
+          "start": "202501",
+          "end": "202502"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "table_name": "예금규모별 계좌수 및 금액"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-05-S1",
+              "label": "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
+              "org_id": "301",
+              "table_id": "DT_105Y001",
+              "item_id": "13103134743999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134743ACC_ITEM.1020000",
+                  "name": "저축성예금"
+                },
+                "objL2": {
+                  "code": "13102134743GUBUN_CD.A",
+                  "name": "계좌수(천좌)"
+                },
+                "objL3": {
+                  "code": "13102134743AMT_CD.A10",
+                  "name": "합계"
+                }
+              },
+              "period": {
+                "frequency": "H",
+                "start": "202501",
+                "end": "202502"
+              },
+              "unit": null
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['anchor_year_fallback']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-06",
+      "query": "최근 8분기 본원통화 현금통화를 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "sliding_window": {
+          "frequency": "Q",
+          "start": "202403",
+          "end": "202602"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_102Y001",
+              "table_name": "본원통화 구성내역(말잔, 원계열)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-06-S1",
+              "label": "본원통화 구성내역(말잔, 원계열) / 현금통화",
+              "org_id": "301",
+              "table_id": "DT_102Y001",
+              "item_id": "13103134736999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134736ACC_ITEM.ABA203",
+                  "name": "현금통화"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202403",
+                "end": "202602"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['sliding_window']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-07",
+      "query": "작년 제도부문별 소득계정을 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "as_of_year_based": {
+          "frequency": "Q",
+          "start": "202501",
+          "end": "202504"
+        },
+        "anchor_year_based": {
+          "frequency": "Q",
+          "start": "202401",
+          "end": "202404"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_200Y162",
+              "table_name": "제도부문별 소득계정(명목, 분기)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-07-S1",
+              "label": "제도부문별 소득계정(명목, 분기) / 가계 및 비영리단체(원천) / 피용자보수",
+              "org_id": "301",
+              "table_id": "DT_200Y162",
+              "item_id": "13103844575999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844575AMT_CD.142",
+                  "name": "가계 및 비영리단체(원천)"
+                },
+                "objL2": {
+                  "code": "13102844575ACC_ITEM.101",
+                  "name": "피용자보수"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202401",
+                "end": "202404"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['as_of_year_based', 'anchor_year_based']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-08",
+      "query": "올해 제도부문별 소득계정을 분기별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "anchor_year_fallback": {
+          "frequency": "Q",
+          "start": "202501",
+          "end": "202504"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_200Y162",
+              "table_name": "제도부문별 소득계정(명목, 분기)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-08-S1",
+              "label": "제도부문별 소득계정(명목, 분기) / 가계 및 비영리단체(원천) / 피용자보수",
+              "org_id": "301",
+              "table_id": "DT_200Y162",
+              "item_id": "13103844575999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102844575AMT_CD.142",
+                  "name": "가계 및 비영리단체(원천)"
+                },
+                "objL2": {
+                  "code": "13102844575ACC_ITEM.101",
+                  "name": "피용자보수"
+                }
+              },
+              "period": {
+                "frequency": "Q",
+                "start": "202501",
+                "end": "202504"
+              },
+              "unit": "십억원"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['anchor_year_fallback']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-09",
+      "query": "2018년 이후 예금은행 대기업대출 금리를 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "year_since": {
+          "frequency": "M",
+          "start": "201801",
+          "end": "202607"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "table_name": "예금은행 대출금리(신규취급액 기준)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-09-S1",
+              "label": "예금은행 대출금리(신규취급액 기준) / 대기업대출",
+              "org_id": "301",
+              "table_id": "DT_121Y006",
+              "item_id": "13103134553999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134553ACC_ITEM.BECBLA0201",
+                  "name": "대기업대출"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "201801",
+                "end": "202607"
+              },
+              "unit": "연리%"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['year_since']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-10",
+      "query": "작년 지역별 결제통화 수출을 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "as_of_year_based": {
+          "frequency": "M",
+          "start": "202501",
+          "end": "202512"
+        },
+        "anchor_year_based": {
+          "frequency": "M",
+          "start": "202401",
+          "end": "202412"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "table_name": "지역별 결제통화(수출)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-10-S1",
+              "label": "지역별 결제통화(수출) / 달러 (아세안) / 금액",
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "item_id": "13103134484999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134484ACC_CD.REGEXASEANUSD",
+                  "name": "달러 (아세안)"
+                },
+                "objL2": {
+                  "code": "13102134484AMT_RATIO_CD.AMT",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['as_of_year_based', 'anchor_year_based']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-11",
+      "query": "올해 지역별 결제통화 수출을 월별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "anchor_year_fallback": {
+          "frequency": "M",
+          "start": "202501",
+          "end": "202512"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "table_name": "지역별 결제통화(수출)"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-11-S1",
+              "label": "지역별 결제통화(수출) / 달러 (아세안) / 금액",
+              "org_id": "301",
+              "table_id": "DT_303Y001",
+              "item_id": "13103134484999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134484ACC_CD.REGEXASEANUSD",
+                  "name": "달러 (아세안)"
+                },
+                "objL2": {
+                  "code": "13102134484AMT_RATIO_CD.AMT",
+                  "name": "금액"
+                }
+              },
+              "period": {
+                "frequency": "M",
+                "start": "202501",
+                "end": "202512"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['anchor_year_fallback']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-12",
+      "query": "작년 지역별 수출 규모를 연도별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "as_of_year_based": {
+          "frequency": "Y",
+          "start": "2025",
+          "end": "2025"
+        },
+        "anchor_year_based": {
+          "frequency": "Y",
+          "start": "2024",
+          "end": "2024"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "table_name": "지역별 경상수지"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-12-S1",
+              "label": "지역별 경상수지 / 수출 / 미국",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.US",
+                  "name": "미국"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2024",
+                "end": "2024"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['as_of_year_based', 'anchor_year_based']"
+      }
+    },
+    {
+      "case_id": "CV-AUG-13",
+      "query": "올해 지역별 수출 규모를 연도별로 보여줘",
+      "as_of": "2026-10-01",
+      "policy_status": "implemented",
+      "period_candidates": {
+        "anchor_year_fallback": {
+          "frequency": "Y",
+          "start": "2025",
+          "end": "2025"
+        }
+      },
+      "expected": {
+        "decision": "select",
+        "A": {
+          "tables": [
+            {
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "table_name": "지역별 경상수지"
+            }
+          ]
+        },
+        "B": {
+          "selections": [
+            {
+              "series_id": "CV-AUG-13-S1",
+              "label": "지역별 경상수지 / 수출 / 미국",
+              "org_id": "301",
+              "table_id": "DT_301Y015",
+              "item_id": "13103134752999",
+              "dimensions": {
+                "objL1": {
+                  "code": "13102134752ACC_CD.REG1100",
+                  "name": "수출"
+                },
+                "objL2": {
+                  "code": "13102134752RG_CD.US",
+                  "name": "미국"
+                }
+              },
+              "period": {
+                "frequency": "Y",
+                "start": "2025",
+                "end": "2025"
+              },
+              "unit": "백만달러"
+            }
+          ]
+        }
+      },
+      "kosis_verification": {
+        "status": "confirmed_present",
+        "notes": "checked candidates: ['anchor_year_fallback']"
+      }
+    }
+  ]
+}

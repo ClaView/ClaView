@@ -1,0 +1,615 @@
+{
+ "stage": "C",
+ "status": "ok",
+ "result": {
+  "schema_version": "claview-c/1.1-demo",
+  "query": "2015~2025년 연간 실질 GDP 성장률 추이를 그래프로 보여줘.",
+  "default_view_id": "line",
+  "views": [
+   {
+    "view_id": "line",
+    "kind": "line",
+    "title": "선그래프",
+    "chart_kind": "line",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": null,
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+       "short_label": "경제규모 및 국민소득(명목)",
+       "frequency": "Y",
+       "unit": null,
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2015",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2016",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2017",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2018",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2019",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2025",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+        "org_id": "301",
+        "table_id": "DT_200Y101",
+        "item_id": "13103136288999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102136288ACC_ITEM.101",
+          "name": "경제규모 및 국민소득(명목)"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2015",
+         "end": "2025"
+        },
+        "unit": null
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "bar",
+    "kind": "bar",
+    "title": "묶음막대",
+    "chart_kind": "bar",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": null,
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+       "short_label": "경제규모 및 국민소득(명목)",
+       "frequency": "Y",
+       "unit": null,
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2015",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2016",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2017",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2018",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2019",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2025",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+        "org_id": "301",
+        "table_id": "DT_200Y101",
+        "item_id": "13103136288999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102136288ACC_ITEM.101",
+          "name": "경제규모 및 국민소득(명목)"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2015",
+         "end": "2025"
+        },
+        "unit": null
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   },
+   {
+    "view_id": "table",
+    "kind": "table",
+    "title": "수치표",
+    "chart_kind": "table",
+    "spec": {
+     "groups": [
+      {
+       "group_id": "G1",
+       "frequency": "Y",
+       "unit": null,
+       "series_ids": [
+        "S001"
+       ],
+       "periods": [
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025"
+       ]
+      }
+     ],
+     "series": [
+      {
+       "series_id": "S001",
+       "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+       "short_label": "경제규모 및 국민소득(명목)",
+       "frequency": "Y",
+       "unit": null,
+       "group_id": "G1",
+       "points": [
+        {
+         "period": "2015",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2016",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2017",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2018",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2019",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2020",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2021",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2022",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2023",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2024",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        },
+        {
+         "period": "2025",
+         "value": "1",
+         "raw_value": "1",
+         "value_status": "observed"
+        }
+       ],
+       "selection": {
+        "series_id": "S001",
+        "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+        "org_id": "301",
+        "table_id": "DT_200Y101",
+        "item_id": "13103136288999",
+        "dimensions": {
+         "objL1": {
+          "code": "13102136288ACC_ITEM.101",
+          "name": "경제규모 및 국민소득(명목)"
+         }
+        },
+        "period": {
+         "frequency": "Y",
+         "start": "2015",
+         "end": "2025"
+        },
+        "unit": null
+       }
+      }
+     ],
+     "requested_period": null,
+     "relations": [],
+     "connect_nulls": false,
+     "display_max_decimals": 1
+    }
+   }
+  ],
+  "table": [
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2015년",
+    "period": "2015",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2016년",
+    "period": "2016",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2017년",
+    "period": "2017",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2018년",
+    "period": "2018",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2019년",
+    "period": "2019",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2020년",
+    "period": "2020",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2021년",
+    "period": "2021",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2022년",
+    "period": "2022",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2023년",
+    "period": "2023",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2024년",
+    "period": "2024",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   },
+   {
+    "series_id": "S001",
+    "label": "주요지표(연간지표) / 경제규모 및 국민소득(명목)",
+    "frequency": "Y",
+    "unit": null,
+    "period_label": "2025년",
+    "period": "2025",
+    "value": "1",
+    "raw_value": "1",
+    "value_status": "observed"
+   }
+  ],
+  "warnings": [
+   {
+    "code": "unit_not_provided",
+    "series_id": "S001",
+    "message": "주요지표(연간지표) / 경제규모 및 국민소득(명목): 단위 미제공."
+   }
+  ],
+  "notices": [],
+  "source": [
+   {
+    "series_id": "S001",
+    "org_id": "301",
+    "table_id": "DT_200Y101",
+    "item_id": "13103136288999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102136288ACC_ITEM.101",
+      "name": "경제규모 및 국민소득(명목)"
+     }
+    },
+    "period": {
+     "frequency": "Y",
+     "start": "2015",
+     "end": "2025"
+    },
+    "unit": null,
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_200Y101",
+      "itmId": "13103136288999",
+      "objL1": "13102136288ACC_ITEM.101",
+      "prdSe": "Y",
+      "startPrdDe": "2015",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:13.778527+00:00",
+     "raw_response_ref": "5f3dc78953c441b29ea410fc532ed3e4"
+    }
+   }
+  ],
+  "recommendation": "종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다.",
+  "blocked_views": [
+   {
+    "kind": "stacked",
+    "title": "누적막대",
+    "reason": "이 항목들을 더해 하나의 전체로 볼 수 있는지 확인되지 않았습니다. 합산 근거를 확인한 뒤 사용할 수 있습니다."
+   },
+   {
+    "kind": "percent_stacked",
+    "title": "100% 누적막대",
+    "reason": "비중을 구하려면 서로 겹치지 않는 구성 항목과 전체의 범위가 확인되어야 합니다. 현재 입력에는 그 근거가 없습니다."
+   },
+   {
+    "kind": "horizontal",
+    "title": "한 시점 가로막대",
+    "reason": "같은 주기·단위의 비교 항목이 두 개 이상 필요합니다."
+   }
+  ],
+  "quality_summary": {
+   "total_cells": 11,
+   "observed_values": 11,
+   "missing_values": 0,
+   "parse_error_values": 0,
+   "affected_series": 0
+  },
+  "synthetic": false,
+  "analysis_version": "c-analysis/2026-10-21-v3-policy",
+  "composition": null,
+  "calculation": null,
+  "chart_policy": {
+   "version": "chart-policy/2026-10-21-v1",
+   "requested": [],
+   "selected": "line",
+   "reason": "종류를 지정하지 않았거나 요청한 표현을 사용할 수 없어, 시간에 따른 흐름을 비교하는 선그래프를 먼저 보여줍니다.",
+   "notices": [],
+   "facts": {
+    "period_count": 11,
+    "series_count": 1,
+    "composition_verified": false
+   }
+  }
+ },
+ "issues": [],
+ "trace_ref": "eccd487e4829498da9900697f02d389a"
+}

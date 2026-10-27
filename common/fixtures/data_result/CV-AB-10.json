@@ -1,0 +1,904 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "지역별 경상수지 / 경상수지 / 미국",
+     "org_id": "301",
+     "table_id": "DT_301Y015",
+     "item_id": "13103134752999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134752ACC_CD.REG0000",
+       "name": "경상수지"
+      },
+      "objL2": {
+       "code": "13102134752RG_CD.US",
+       "name": "미국"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y015",
+      "itmId": "13103134752999",
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.US",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.733264+00:00",
+     "raw_response_ref": "60353524289b40c6b32aff3c2981a282"
+    }
+   },
+   {
+    "series_id": "S002",
+    "selection": {
+     "series_id": "S002",
+     "label": "지역별 경상수지 / 경상수지 / 중국",
+     "org_id": "301",
+     "table_id": "DT_301Y015",
+     "item_id": "13103134752999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134752ACC_CD.REG0000",
+       "name": "경상수지"
+      },
+      "objL2": {
+       "code": "13102134752RG_CD.CN",
+       "name": "중국"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y015",
+      "itmId": "13103134752999",
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.CN",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.733264+00:00",
+     "raw_response_ref": "60353524289b40c6b32aff3c2981a282"
+    }
+   },
+   {
+    "series_id": "S003",
+    "selection": {
+     "series_id": "S003",
+     "label": "지역별 경상수지 / 경상수지 / 일본",
+     "org_id": "301",
+     "table_id": "DT_301Y015",
+     "item_id": "13103134752999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134752ACC_CD.REG0000",
+       "name": "경상수지"
+      },
+      "objL2": {
+       "code": "13102134752RG_CD.JP",
+       "name": "일본"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y015",
+      "itmId": "13103134752999",
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.JP",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.733264+00:00",
+     "raw_response_ref": "60353524289b40c6b32aff3c2981a282"
+    }
+   },
+   {
+    "series_id": "S004",
+    "selection": {
+     "series_id": "S004",
+     "label": "지역별 경상수지 / 경상수지 / EU",
+     "org_id": "301",
+     "table_id": "DT_301Y015",
+     "item_id": "13103134752999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134752ACC_CD.REG0000",
+       "name": "경상수지"
+      },
+      "objL2": {
+       "code": "13102134752RG_CD.EU",
+       "name": "EU"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y015",
+      "itmId": "13103134752999",
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.EU",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.733264+00:00",
+     "raw_response_ref": "60353524289b40c6b32aff3c2981a282"
+    }
+   },
+   {
+    "series_id": "S005",
+    "selection": {
+     "series_id": "S005",
+     "label": "지역별 경상수지 / 경상수지 / 동남아",
+     "org_id": "301",
+     "table_id": "DT_301Y015",
+     "item_id": "13103134752999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134752ACC_CD.REG0000",
+       "name": "경상수지"
+      },
+      "objL2": {
+       "code": "13102134752RG_CD.SEA",
+       "name": "동남아"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y015",
+      "itmId": "13103134752999",
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.SEA",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.733264+00:00",
+     "raw_response_ref": "60353524289b40c6b32aff3c2981a282"
+    }
+   },
+   {
+    "series_id": "S006",
+    "selection": {
+     "series_id": "S006",
+     "label": "지역별 경상수지 / 경상수지 / 중동",
+     "org_id": "301",
+     "table_id": "DT_301Y015",
+     "item_id": "13103134752999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134752ACC_CD.REG0000",
+       "name": "경상수지"
+      },
+      "objL2": {
+       "code": "13102134752RG_CD.MDA",
+       "name": "중동"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y015",
+      "itmId": "13103134752999",
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.MDA",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.733264+00:00",
+     "raw_response_ref": "60353524289b40c6b32aff3c2981a282"
+    }
+   },
+   {
+    "series_id": "S007",
+    "selection": {
+     "series_id": "S007",
+     "label": "지역별 경상수지 / 경상수지 / 중남미",
+     "org_id": "301",
+     "table_id": "DT_301Y015",
+     "item_id": "13103134752999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134752ACC_CD.REG0000",
+       "name": "경상수지"
+      },
+      "objL2": {
+       "code": "13102134752RG_CD.CSA",
+       "name": "중남미"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y015",
+      "itmId": "13103134752999",
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.CSA",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.733264+00:00",
+     "raw_response_ref": "60353524289b40c6b32aff3c2981a282"
+    }
+   },
+   {
+    "series_id": "S008",
+    "selection": {
+     "series_id": "S008",
+     "label": "지역별 경상수지 / 경상수지 / 기타",
+     "org_id": "301",
+     "table_id": "DT_301Y015",
+     "item_id": "13103134752999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134752ACC_CD.REG0000",
+       "name": "경상수지"
+      },
+      "objL2": {
+       "code": "13102134752RG_CD.ETC",
+       "name": "기타"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2016",
+      "end": "2025"
+     },
+     "unit": "백만달러"
+    },
+    "frequency": "Y",
+    "unit": "백만달러",
+    "points": [
+     {
+      "period": "2016",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2017",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2018",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2019",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2020",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2021",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2022",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2025",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 10,
+     "returned": 10,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_301Y015",
+      "itmId": "13103134752999",
+      "objL1": "13102134752ACC_CD.REG0000",
+      "objL2": "13102134752RG_CD.ETC",
+      "prdSe": "Y",
+      "startPrdDe": "2016",
+      "endPrdDe": "2025"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:16.733264+00:00",
+     "raw_response_ref": "60353524289b40c6b32aff3c2981a282"
+    }
+   }
+  ],
+  "period_notices": [
+   {
+    "table": "301:DT_301Y015",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "2026",
+    "resolved_period": {
+     "frequency": "Y",
+     "start": "2016",
+     "end": "2025"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 2026까지 필요하지만, 표의 최신 수록 시점은 2025입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 2016 ~ 2025"
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "60353524289b40c6b32aff3c2981a282"
+}

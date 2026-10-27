@@ -1,0 +1,72 @@
+{
+ "stage": "fetch",
+ "status": "ok",
+ "result": {
+  "series": [
+   {
+    "series_id": "S001",
+    "selection": {
+     "series_id": "S001",
+     "label": "수출물가지수(기본분류) / 총지수 / 원화기준",
+     "org_id": "301",
+     "table_id": "DT_402Y014",
+     "item_id": "13103134642999",
+     "dimensions": {
+      "objL1": {
+       "code": "13102134642ACC_CD.*AA",
+       "name": "총지수"
+      },
+      "objL2": {
+       "code": "13102134642CRR_CTRT_CD.W",
+       "name": "원화기준"
+      }
+     },
+     "period": {
+      "frequency": "Y",
+      "start": "2023",
+      "end": "2024"
+     },
+     "unit": "2020=100"
+    },
+    "frequency": "Y",
+    "unit": "2020=100",
+    "points": [
+     {
+      "period": "2023",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     },
+     {
+      "period": "2024",
+      "raw_value": "1",
+      "value": "1",
+      "value_status": "observed"
+     }
+    ],
+    "coverage": {
+     "expected": 2,
+     "returned": 2,
+     "missing_periods": []
+    },
+    "provenance": {
+     "params": {
+      "orgId": "301",
+      "tblId": "DT_402Y014",
+      "itmId": "13103134642999",
+      "objL1": "13102134642ACC_CD.*AA",
+      "objL2": "13102134642CRR_CTRT_CD.W",
+      "prdSe": "Y",
+      "startPrdDe": "2023",
+      "endPrdDe": "2024"
+     },
+     "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+     "fetched_at": "2026-10-25T14:45:21.407867+00:00",
+     "raw_response_ref": "d94fff8ba85c4674a2e313fdb887f93e"
+    }
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "d94fff8ba85c4674a2e313fdb887f93e"
+}

@@ -1,0 +1,44 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "예금은행 대출금(말잔) / 총대출금",
+    "org_id": "301",
+    "table_id": "DT_104Y016",
+    "item_id": "13103860883999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102860883ACC_ITEM.BDCA1",
+      "name": "총대출금"
+     }
+    },
+    "period": {
+     "frequency": "M",
+     "start": "202108",
+     "end": "202607"
+    },
+    "unit": "십억원"
+   }
+  ],
+  "relations": [],
+  "period_notices": [
+   {
+    "table": "301:DT_104Y016",
+    "status": "needs_confirmation",
+    "code": "period_requires_confirmation",
+    "requested_as_of_period": "202610",
+    "resolved_period": {
+     "frequency": "M",
+     "start": "202108",
+     "end": "202607"
+    },
+    "message": "요청하신 기준(as_of=2026-10-22)으로는 202610까지 필요하지만, 표의 최신 수록 시점은 202607입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 202108 ~ 202607"
+   }
+  ]
+ },
+ "issues": [],
+ "trace_ref": "857352baf09d40d6bca4e222a2a9a430"
+}

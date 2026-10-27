@@ -1,0 +1,30 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "국제수지 / 경상수지",
+    "org_id": "301",
+    "table_id": "DT_301Y013",
+    "item_id": "13103134519999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102134519ACC_CD.000000",
+      "name": "경상수지"
+     }
+    },
+    "period": {
+     "frequency": "Y",
+     "start": "2005",
+     "end": "2025"
+    },
+    "unit": "백만달러"
+   }
+  ],
+  "relations": []
+ },
+ "issues": [],
+ "trace_ref": "c7cf451c64dc4f35a163b7e8ed81854a"
+}

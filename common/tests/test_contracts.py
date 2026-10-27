@@ -1,0 +1,72 @@
+"""Every contract fixture parses as its contract model (common/fixtures, built from the golden 22)."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import pytest
+
+from claview_common.contracts import ARequest, BRequest, Decision, Outcome, PendingQuestion, TableRef
+
+FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
+
+
+def load(kind: str) -> list[tuple[str, dict]]:
+    files = sorted((FIXTURES / kind).glob("*.json"))
+    assert files, f"no fixtures in {kind}/ (run pipeline/scripts/build_fixtures.py)"
+    return [(f.stem, json.loads(f.read_text(encoding="utf-8"))) for f in files]
+
+
+def test_every_golden_case_has_requests():
+    names = {name for name, _ in load("a_request")}
+    assert len(names) == 22 and names == {name for name, _ in load("b_request")}
+
+
+@pytest.mark.parametrize(("name", "body"), load("a_request"))
+def test_a_request(name, body):
+    ARequest(**body)
+
+
+@pytest.mark.parametrize(("name", "body"), load("a_result"))
+def test_a_result_summary(name, body):
+    assert body["decision"] in Decision.__args__
+    tables = [TableRef(**t) for t in body["tables"]]
+    if body["decision"] in ("proceed", "assume", "partial"):
+        assert tables, name
+    if body["pending_question"]:
+        PendingQuestion(**body["pending_question"])
+
+
+@pytest.mark.parametrize(("name", "body"), load("b_request"))
+def test_b_request(name, body):
+    BRequest(**body)
+
+
+@pytest.mark.parametrize(("kind", "stage"), [("b_result", "B"), ("data_result", "fetch"), ("view", "C")])
+def test_envelopes(kind, stage):
+    for name, body in load(kind):
+        outcome = Outcome(**body)
+        assert outcome.stage == stage and outcome.status, name
+        if outcome.ok:
+            assert isinstance(outcome.result, dict), name
+
+
+def test_saved_real_data_results_have_series():
+    for name, body in load("data_result_saved"):
+        assert body["series"] and all(s["points"] for s in body["series"]), name
+
+
+def test_json_schemas_export():
+    from claview_common import contracts
+
+    for model in (
+        contracts.ARequest,
+        contracts.AResult,
+        contracts.BRequest,
+        contracts.BResult,
+        contracts.FetchResult,
+        contracts.CRequest,
+        contracts.ViewModel,
+    ):
+        assert model.model_json_schema()["title"] == model.__name__

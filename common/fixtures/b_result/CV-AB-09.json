@@ -1,0 +1,30 @@
+{
+ "stage": "B",
+ "status": "ok",
+ "result": {
+  "selections": [
+   {
+    "series_id": "S001",
+    "label": "M2 상품별 구성내역(말잔 원계열) / M2 (말잔원계열)",
+    "org_id": "301",
+    "table_id": "DT_161Y008",
+    "item_id": "13103844599999",
+    "dimensions": {
+     "objL1": {
+      "code": "13102844599ACC_ITEM.BBGA00",
+      "name": "M2 (말잔원계열)"
+     }
+    },
+    "period": {
+     "frequency": "Y",
+     "start": "2021",
+     "end": "2025"
+    },
+    "unit": "십억원"
+   }
+  ],
+  "relations": []
+ },
+ "issues": [],
+ "trace_ref": "138e398bcd3f490fb7e1bbc4f794daa7"
+}

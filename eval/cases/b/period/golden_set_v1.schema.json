@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClaView initial A/B development set 0.4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset_id", "cases"],
+  "properties": {
+    "schema_version": {"const": "claview-ab/0.4-draft"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "cases": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/case"}}
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "table": {
+      "type": "object", "additionalProperties": false,
+      "required": ["org_id", "table_id", "table_name"],
+      "properties": {"org_id": {"$ref": "#/$defs/text"}, "table_id": {"$ref": "#/$defs/text"}, "table_name": {"$ref": "#/$defs/text"}}
+    },
+    "dimension": {
+      "type": "object", "additionalProperties": false, "required": ["code", "name"],
+      "properties": {"code": {"$ref": "#/$defs/text"}, "name": {"$ref": "#/$defs/text"}}
+    },
+    "period": {
+      "type": "object", "additionalProperties": false, "required": ["frequency", "start", "end"],
+      "properties": {"frequency": {"enum": ["Y", "Q", "M"]}, "start": {"$ref": "#/$defs/text"}, "end": {"$ref": "#/$defs/text"}},
+      "allOf": [
+        {"if": {"properties": {"frequency": {"const": "Y"}}}, "then": {"properties": {"start": {"pattern": "^[0-9]{4}$"}, "end": {"pattern": "^[0-9]{4}$"}}}},
+        {"if": {"properties": {"frequency": {"const": "Q"}}}, "then": {"properties": {"start": {"pattern": "^[0-9]{4}0[1-4]$"}, "end": {"pattern": "^[0-9]{4}0[1-4]$"}}}},
+        {"if": {"properties": {"frequency": {"const": "M"}}}, "then": {"properties": {"start": {"pattern": "^[0-9]{4}(0[1-9]|1[0-2])$"}, "end": {"pattern": "^[0-9]{4}(0[1-9]|1[0-2])$"}}}}
+      ]
+    },
+    "selection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["series_id", "label", "org_id", "table_id", "item_id", "dimensions", "period", "unit"],
+      "properties": {
+        "series_id": {"$ref": "#/$defs/text"}, "label": {"$ref": "#/$defs/text"},
+        "org_id": {"$ref": "#/$defs/text"}, "table_id": {"$ref": "#/$defs/text"}, "item_id": {"$ref": "#/$defs/text"},
+        "dimensions": {"type": "object", "minProperties": 1, "additionalProperties": false, "patternProperties": {"^objL[1-8]$": {"$ref": "#/$defs/dimension"}}},
+        "period": {"$ref": "#/$defs/period"}, "unit": {"type": ["string", "null"]}
+      }
+    },
+    "case": {
+      "type": "object", "additionalProperties": false, "required": ["case_id", "query", "expected"],
+      "properties": {
+        "case_id": {"$ref": "#/$defs/text"}, "query": {"$ref": "#/$defs/text"},
+        "source": {"type": "object", "additionalProperties": false, "required": ["url", "used_part"], "properties": {"url": {"$ref": "#/$defs/text"}, "used_part": {"$ref": "#/$defs/text"}}},
+        "expected": {
+          "type": "object", "additionalProperties": false, "required": ["decision", "A", "B"],
+          "properties": {
+            "decision": {"const": "select"},
+            "A": {"type": "object", "additionalProperties": false, "required": ["tables"], "properties": {"tables": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/table"}}}},
+            "B": {"type": "object", "additionalProperties": false, "required": ["selections"], "properties": {"selections": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/selection"}}}}
+          }
+        }
+      }
+    }
+  }
+}

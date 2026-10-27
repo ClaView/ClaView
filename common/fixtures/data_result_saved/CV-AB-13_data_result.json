@@ -1,0 +1,1233 @@
+{
+  "series": [
+    {
+      "series_id": "S001",
+      "selection": {
+        "series_id": "S001",
+        "label": "예금은행 대출금(말잔) / 총대출금 > 시설자금",
+        "org_id": "301",
+        "table_id": "DT_104Y016",
+        "item_id": "13103860883999",
+        "dimensions": {
+          "objL1": {
+            "code": "13102860883ACC_ITEM.BDCA11",
+            "name": "시설자금"
+          }
+        },
+        "period": {
+          "frequency": "M",
+          "start": "202108",
+          "end": "202607"
+        },
+        "unit": "십억원"
+      },
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "202108",
+          "raw_value": "555165",
+          "value": "555165",
+          "value_status": "observed"
+        },
+        {
+          "period": "202109",
+          "raw_value": "561420.9",
+          "value": "561420.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "202110",
+          "raw_value": "566890.19999",
+          "value": "566890.19999",
+          "value_status": "observed"
+        },
+        {
+          "period": "202111",
+          "raw_value": "572464.8",
+          "value": "572464.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202112",
+          "raw_value": "576529.8",
+          "value": "576529.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202201",
+          "raw_value": "583023.3",
+          "value": "583023.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202202",
+          "raw_value": "586261",
+          "value": "586261",
+          "value_status": "observed"
+        },
+        {
+          "period": "202203",
+          "raw_value": "593173.4",
+          "value": "593173.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202204",
+          "raw_value": "599693",
+          "value": "599693",
+          "value_status": "observed"
+        },
+        {
+          "period": "202205",
+          "raw_value": "606540.7",
+          "value": "606540.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "202206",
+          "raw_value": "612184.1",
+          "value": "612184.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202207",
+          "raw_value": "619063.2",
+          "value": "619063.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202208",
+          "raw_value": "624894",
+          "value": "624894",
+          "value_status": "observed"
+        },
+        {
+          "period": "202209",
+          "raw_value": "628054",
+          "value": "628054",
+          "value_status": "observed"
+        },
+        {
+          "period": "202210",
+          "raw_value": "631739.4",
+          "value": "631739.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202211",
+          "raw_value": "635587.8",
+          "value": "635587.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202212",
+          "raw_value": "636626.5",
+          "value": "636626.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202301",
+          "raw_value": "637743.2",
+          "value": "637743.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202302",
+          "raw_value": "640165.6",
+          "value": "640165.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202303",
+          "raw_value": "643391.3",
+          "value": "643391.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202304",
+          "raw_value": "647653.7",
+          "value": "647653.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "202305",
+          "raw_value": "651831.1",
+          "value": "651831.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202306",
+          "raw_value": "657072.2",
+          "value": "657072.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202307",
+          "raw_value": "661810.4",
+          "value": "661810.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202308",
+          "raw_value": "667937.4",
+          "value": "667937.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202309",
+          "raw_value": "673260.7",
+          "value": "673260.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "202310",
+          "raw_value": "677768.1",
+          "value": "677768.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202311",
+          "raw_value": "683174",
+          "value": "683174",
+          "value_status": "observed"
+        },
+        {
+          "period": "202312",
+          "raw_value": "684802.4",
+          "value": "684802.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202401",
+          "raw_value": "687274.4",
+          "value": "687274.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202402",
+          "raw_value": "691310.4",
+          "value": "691310.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202403",
+          "raw_value": "697018.1",
+          "value": "697018.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202404",
+          "raw_value": "703499.4",
+          "value": "703499.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202405",
+          "raw_value": "709097.4",
+          "value": "709097.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202406",
+          "raw_value": "713428.3",
+          "value": "713428.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202407",
+          "raw_value": "717985.7",
+          "value": "717985.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "202408",
+          "raw_value": "723341.6",
+          "value": "723341.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202409",
+          "raw_value": "726815.6",
+          "value": "726815.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202410",
+          "raw_value": "730272.6",
+          "value": "730272.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202411",
+          "raw_value": "732295.3",
+          "value": "732295.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202412",
+          "raw_value": "731491.2",
+          "value": "731491.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202501",
+          "raw_value": "733233.4",
+          "value": "733233.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202502",
+          "raw_value": "737367.3",
+          "value": "737367.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202503",
+          "raw_value": "739313.3",
+          "value": "739313.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202504",
+          "raw_value": "743807.3",
+          "value": "743807.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202505",
+          "raw_value": "746849.9",
+          "value": "746849.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "202506",
+          "raw_value": "747403.1",
+          "value": "747403.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202507",
+          "raw_value": "751494.1",
+          "value": "751494.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202508",
+          "raw_value": "755985.5",
+          "value": "755985.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202509",
+          "raw_value": "759336.6",
+          "value": "759336.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202510",
+          "raw_value": "763240.5",
+          "value": "763240.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202511",
+          "raw_value": "766967.2",
+          "value": "766967.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202512",
+          "raw_value": "768024.4",
+          "value": "768024.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202601",
+          "raw_value": "771054.8",
+          "value": "771054.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202602",
+          "raw_value": "774137.8",
+          "value": "774137.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202603",
+          "raw_value": "777855.3",
+          "value": "777855.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202604",
+          "raw_value": "782190.2",
+          "value": "782190.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202605",
+          "raw_value": "785442.6",
+          "value": "785442.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202606",
+          "raw_value": "786283.9",
+          "value": "786283.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "202607",
+          "raw_value": "790356.4",
+          "value": "790356.4",
+          "value_status": "observed"
+        }
+      ],
+      "coverage": {
+        "expected": 60,
+        "returned": 60,
+        "missing_periods": []
+      },
+      "provenance": {
+        "params": {
+          "orgId": "301",
+          "tblId": "DT_104Y016",
+          "itmId": "13103860883999",
+          "objL1": "13102860883ACC_ITEM.BDCA11",
+          "prdSe": "M",
+          "startPrdDe": "202108",
+          "endPrdDe": "202607"
+        },
+        "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "fetched_at": "2026-10-13T08:09:21.276441+00:00",
+        "raw_response_ref": "81224169275847c8863f3feaff194662"
+      }
+    },
+    {
+      "series_id": "S002",
+      "selection": {
+        "series_id": "S002",
+        "label": "예금은행 대출금(말잔) / 총대출금 > 운전자금",
+        "org_id": "301",
+        "table_id": "DT_104Y016",
+        "item_id": "13103860883999",
+        "dimensions": {
+          "objL1": {
+            "code": "13102860883ACC_ITEM.BDCA12",
+            "name": "운전자금"
+          }
+        },
+        "period": {
+          "frequency": "M",
+          "start": "202108",
+          "end": "202607"
+        },
+        "unit": "십억원"
+      },
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "202108",
+          "raw_value": "1450181.5",
+          "value": "1450181.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202109",
+          "raw_value": "1459418.3",
+          "value": "1459418.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202110",
+          "raw_value": "1470571.5",
+          "value": "1470571.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202111",
+          "raw_value": "1478286.2",
+          "value": "1478286.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202112",
+          "raw_value": "1474171.8",
+          "value": "1474171.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202201",
+          "raw_value": "1479095.9",
+          "value": "1479095.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "202202",
+          "raw_value": "1480411.8",
+          "value": "1480411.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202203",
+          "raw_value": "1481156",
+          "value": "1481156",
+          "value_status": "observed"
+        },
+        {
+          "period": "202204",
+          "raw_value": "1487696.2",
+          "value": "1487696.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202205",
+          "raw_value": "1495684.3",
+          "value": "1495684.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202206",
+          "raw_value": "1498244.6",
+          "value": "1498244.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202207",
+          "raw_value": "1502774.1",
+          "value": "1502774.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202208",
+          "raw_value": "1505790.5",
+          "value": "1505790.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202209",
+          "raw_value": "1512200.8",
+          "value": "1512200.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202210",
+          "raw_value": "1526556",
+          "value": "1526556",
+          "value_status": "observed"
+        },
+        {
+          "period": "202211",
+          "raw_value": "1537557.5",
+          "value": "1537557.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202212",
+          "raw_value": "1529234.7",
+          "value": "1529234.7",
+          "value_status": "observed"
+        },
+        {
+          "period": "202301",
+          "raw_value": "1530955.1",
+          "value": "1530955.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202302",
+          "raw_value": "1530067.4",
+          "value": "1530067.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202303",
+          "raw_value": "1527754.1",
+          "value": "1527754.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202304",
+          "raw_value": "1529924.4",
+          "value": "1529924.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202305",
+          "raw_value": "1535526.8",
+          "value": "1535526.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202306",
+          "raw_value": "1540613.3",
+          "value": "1540613.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202307",
+          "raw_value": "1548576.5",
+          "value": "1548576.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202308",
+          "raw_value": "1554923.1",
+          "value": "1554923.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202309",
+          "raw_value": "1564887.2",
+          "value": "1564887.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202310",
+          "raw_value": "1575845.5",
+          "value": "1575845.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202311",
+          "raw_value": "1583582",
+          "value": "1583582",
+          "value_status": "observed"
+        },
+        {
+          "period": "202312",
+          "raw_value": "1581666.4",
+          "value": "1581666.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202401",
+          "raw_value": "1588480.5",
+          "value": "1588480.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202402",
+          "raw_value": "1594700.4",
+          "value": "1594700.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202403",
+          "raw_value": "1598422.3",
+          "value": "1598422.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202404",
+          "raw_value": "1609461.2",
+          "value": "1609461.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202405",
+          "raw_value": "1618100.6",
+          "value": "1618100.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202406",
+          "raw_value": "1624695.9",
+          "value": "1624695.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "202407",
+          "raw_value": "1634813.8",
+          "value": "1634813.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202408",
+          "raw_value": "1646202.1",
+          "value": "1646202.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202409",
+          "raw_value": "1653607.1",
+          "value": "1653607.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202410",
+          "raw_value": "1663080.3",
+          "value": "1663080.3",
+          "value_status": "observed"
+        },
+        {
+          "period": "202411",
+          "raw_value": "1665676.1",
+          "value": "1665676.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202412",
+          "raw_value": "1657505.1",
+          "value": "1657505.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202501",
+          "raw_value": "1665477.6",
+          "value": "1665477.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202502",
+          "raw_value": "1669814.1",
+          "value": "1669814.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202503",
+          "raw_value": "1671872.1",
+          "value": "1671872.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202504",
+          "raw_value": "1684669.9",
+          "value": "1684669.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "202505",
+          "raw_value": "1696064.9",
+          "value": "1696064.9",
+          "value_status": "observed"
+        },
+        {
+          "period": "202506",
+          "raw_value": "1697349.8",
+          "value": "1697349.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202507",
+          "raw_value": "1701689.2",
+          "value": "1701689.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202508",
+          "raw_value": "1711427.4",
+          "value": "1711427.4",
+          "value_status": "observed"
+        },
+        {
+          "period": "202509",
+          "raw_value": "1715930.5",
+          "value": "1715930.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202510",
+          "raw_value": "1722677.6",
+          "value": "1722677.6",
+          "value_status": "observed"
+        },
+        {
+          "period": "202511",
+          "raw_value": "1728891.2",
+          "value": "1728891.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202512",
+          "raw_value": "1722859.1",
+          "value": "1722859.1",
+          "value_status": "observed"
+        },
+        {
+          "period": "202601",
+          "raw_value": "1724188.5",
+          "value": "1724188.5",
+          "value_status": "observed"
+        },
+        {
+          "period": "202602",
+          "raw_value": "1731702.2",
+          "value": "1731702.2",
+          "value_status": "observed"
+        },
+        {
+          "period": "202603",
+          "raw_value": "1737781.8",
+          "value": "1737781.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202604",
+          "raw_value": "1745598",
+          "value": "1745598",
+          "value_status": "observed"
+        },
+        {
+          "period": "202605",
+          "raw_value": "1758344.8",
+          "value": "1758344.8",
+          "value_status": "observed"
+        },
+        {
+          "period": "202606",
+          "raw_value": "1771958",
+          "value": "1771958",
+          "value_status": "observed"
+        },
+        {
+          "period": "202607",
+          "raw_value": "1781444.2",
+          "value": "1781444.2",
+          "value_status": "observed"
+        }
+      ],
+      "coverage": {
+        "expected": 60,
+        "returned": 60,
+        "missing_periods": []
+      },
+      "provenance": {
+        "params": {
+          "orgId": "301",
+          "tblId": "DT_104Y016",
+          "itmId": "13103860883999",
+          "objL1": "13102860883ACC_ITEM.BDCA12",
+          "prdSe": "M",
+          "startPrdDe": "202108",
+          "endPrdDe": "202607"
+        },
+        "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "fetched_at": "2026-10-13T08:09:21.620165+00:00",
+        "raw_response_ref": "81224169275847c8863f3feaff194662"
+      }
+    },
+    {
+      "series_id": "S003",
+      "selection": {
+        "series_id": "S003",
+        "label": "예금은행 대출금(말잔) / 총대출금 > 특별자금",
+        "org_id": "301",
+        "table_id": "DT_104Y016",
+        "item_id": "13103860883999",
+        "dimensions": {
+          "objL1": {
+            "code": "13102860883ACC_ITEM.BDCA13",
+            "name": "특별자금"
+          }
+        },
+        "period": {
+          "frequency": "M",
+          "start": "202108",
+          "end": "202607"
+        },
+        "unit": "십억원"
+      },
+      "frequency": "M",
+      "unit": "십억원",
+      "points": [
+        {
+          "period": "202108",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202109",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202110",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202111",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202112",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202201",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202202",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202203",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202204",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202205",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202206",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202207",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202208",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202209",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202210",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202211",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202212",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202301",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202302",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202303",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202304",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202305",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202306",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202307",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202308",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202309",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202310",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202311",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202312",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202401",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202402",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202403",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202404",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202405",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202406",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202407",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202408",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202409",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202410",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202411",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202412",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202501",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202502",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202503",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202504",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202505",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202506",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202507",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202508",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202509",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202510",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202511",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202512",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202601",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202602",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202603",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202604",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202605",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202606",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        },
+        {
+          "period": "202607",
+          "raw_value": "0",
+          "value": "0",
+          "value_status": "observed"
+        }
+      ],
+      "coverage": {
+        "expected": 60,
+        "returned": 60,
+        "missing_periods": []
+      },
+      "provenance": {
+        "params": {
+          "orgId": "301",
+          "tblId": "DT_104Y016",
+          "itmId": "13103860883999",
+          "objL1": "13102860883ACC_ITEM.BDCA13",
+          "prdSe": "M",
+          "startPrdDe": "202108",
+          "endPrdDe": "202607"
+        },
+        "metadata_snapshot": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+        "fetched_at": "2026-10-13T08:09:21.938330+00:00",
+        "raw_response_ref": "81224169275847c8863f3feaff194662"
+      }
+    }
+  ],
+  "period_notices": [
+    {
+      "table": "301:DT_104Y016",
+      "status": "needs_confirmation",
+      "code": "period_requires_confirmation",
+      "requested_as_of_period": "202610",
+      "resolved_period": {
+        "frequency": "M",
+        "start": "202108",
+        "end": "202607"
+      },
+      "message": "요청하신 기준(as_of=2026-10-01)으로는 202610까지 필요하지만, 표의 최신 수록 시점은 202607입니다. 조회 가능한 기간으로 자료를 조회합니다.\n조회 기간: 202108 ~ 202607"
+    }
+  ]
+}

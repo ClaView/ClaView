@@ -1,0 +1,24 @@
+# Development override: source folders mounted, uvicorn reloads on change.
+#   docker compose -f docker-compose.yaml -f docker-compose.local.yaml up --build
+x-dev: &dev
+  volumes:
+    - ./common:/claview/common
+    - ./modules:/claview/modules
+    - ./pipeline:/claview/pipeline
+    - ./data:/claview/data
+    - ./eval:/claview/eval
+    - ./runs:/claview/runs
+
+services:
+  module-a:
+    <<: *dev
+    command: ["uvicorn", "claview_a_api.api:app", "--host", "0.0.0.0", "--port", "8888", "--reload", "--reload-dir", "/claview/modules/a", "--reload-dir", "/claview/common"]
+  module-b:
+    <<: *dev
+    command: ["uvicorn", "claview_b_api.api:app", "--host", "0.0.0.0", "--port", "8888", "--reload", "--reload-dir", "/claview/modules/b", "--reload-dir", "/claview/common"]
+  module-c:
+    <<: *dev
+    command: ["uvicorn", "claview_c_api.api:app", "--host", "0.0.0.0", "--port", "8888", "--reload", "--reload-dir", "/claview/modules/c", "--reload-dir", "/claview/common"]
+  pipeline:
+    <<: *dev
+    command: ["uvicorn", "claview_pipeline.api:app", "--host", "0.0.0.0", "--port", "8888", "--reload", "--reload-dir", "/claview/pipeline", "--reload-dir", "/claview/modules", "--reload-dir", "/claview/common"]
