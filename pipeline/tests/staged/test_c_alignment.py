@@ -321,6 +321,48 @@ def test_requirements_are_combined_only_when_one_chart_is_requested(make_pipelin
     assert merged[0]["run_id"] == "r-1"
 
 
+REFUSALS = ["말고", "대신", "가 아니라", "이 아니라", "아닌", "는 제외", "빼고"]
+COMBINE_PHRASES = ["한 그래프", "하나의 차트", "같은 그래프", "이중 축", "양축", "겹쳐", "한꺼번에"]
+
+
+@pytest.mark.parametrize("phrase", COMBINE_PHRASES)
+@pytest.mark.parametrize("refusal", REFUSALS)
+def test_a_refused_combine_phrase_does_not_combine(phrase, refusal):
+    from claview_pipeline.staged import COMBINE_REQUEST
+
+    assert COMBINE_REQUEST.search(f"GDP와 증감률을 {phrase}에서 보여줘")
+    assert not COMBINE_REQUEST.search(f"GDP와 증감률을 {phrase} {refusal} 각각 보여줘")
+    assert not COMBINE_REQUEST.search(f"GDP와 증감률을 {phrase}{refusal} 각각 보여줘")
+
+
+def test_a_refusal_of_one_phrase_does_not_hide_another_request():
+    from claview_pipeline.staged import COMBINE_REQUEST
+
+    assert COMBINE_REQUEST.search("한 그래프 말고 이중 축으로 보여줘")
+    assert COMBINE_REQUEST.search("이중 축 말고 한 그래프에서 겹쳐 보여줘")
+
+
+def test_refused_dual_axis_is_read_the_same_way_by_pipeline_and_c():
+    from claview_c.chart_policy import requests
+    from claview_pipeline.staged import COMBINE_REQUEST
+
+    for word in ("이중 축", "양축"):
+        for refusal in REFUSALS:
+            for query in (f"{word} {refusal} 각각 보여줘", f"{word}으로 보여줘", f"{word}도 보여줘"):
+                c_asks = any(r["kind"] == "dual_axis" for r in requests(query))
+                assert bool(COMBINE_REQUEST.search(query)) == c_asks, query
+
+
+def test_a_refused_request_keeps_one_card_per_requirement(make_pipeline):
+    pipeline = make_pipeline()
+    jobs = [
+        {"data": {"series": [make_series("S1", "십억원")], "relations": []}, "tables": [{"table_id": "A"}], "run_id": "r-1"},
+        {"data": {"series": [make_series("S1", "%", table="DT_B")], "relations": []}, "tables": [{"table_id": "B"}], "run_id": "r-2"},
+    ]
+    assert pipeline._combine_jobs("GDP와 증감률을 이중 축 말고 각각 보여줘", jobs) == jobs
+    assert len(pipeline._combine_jobs("GDP와 증감률을 이중 축으로 보여줘", jobs)) == 1
+
+
 def test_combined_requirements_render_as_one_dual_axis_card(make_pipeline, monkeypatch):
     pipeline = make_pipeline()
     state = pipeline.run(PROCEED_Q, as_of=AS_OF, through="B")
