@@ -1,4 +1,9 @@
-"""Q1/Q3 rule functions copied from the old A pipeline (commit 55fd41b), unchanged.
+"""Q1/Q3 rule functions copied from the old A pipeline (commit 55fd41b), unchanged except one rule change below.
+
+Changed for the new A (plan 36, user 2026-10-28 14:59 UTC; partly changes the Q3 decision of 2026-10-13): a bare
+"월말" is the monthly frequency and "연말"/"년말" the yearly one, with the end point (``anchor="end"``) left by
+``frequency_anchor`` as for "분기말"/"반기말". A word joined to 말잔 ("월말잔액") and a word after a digit or another
+Hangul letter ("7월말", "2024년 말", "작년 말", "전월말") are not; "월평균" stays not a frequency.
 
 Scope of the copy (the helpers Q3 needs, decided in batch A of plan 02):
 - ``nospace`` (catalog.py) for Q1.
@@ -25,14 +30,16 @@ def nospace(text: str) -> str:
 
 # (정규식, 값). 숫자 바로 뒤의 "년간"(3년간)·"분기"(1분기)·"상/하반기"는 기간이지 주기 요청이 아니다.
 # 반복어(매달·해마다·분기마다·각 월)와 단위어(월 단위로·연 주기로)도 주기 요청이다.
-# 평균·점(분기평균·분기점)은 계산 방식이나 다른 말이라 주기가 아니다. 월말·연말·월평균은 Q4 기준어·B 계산 몫.
+# 평균·점(분기평균·분기점)은 계산 방식이나 다른 말이라 주기가 아니다. 월평균은 Q4 기준어·B 계산 몫.
 # 기간 끝 반복(월말마다·분기말별로·매 반기말·각 연말)은 네 단위를 같은 규칙으로 잡고, q3가 끝 시점(anchor="end")을
-# 남긴다 (2026-10-13 Q4 마무리, Q3·Q4 공통). 반복어 없는 말은 지금 판정을 그대로 둔다: "분기말"·"반기말"은 주기 이름
-# (분기·반기)이 있어 그 주기와 끝 시점, "월말"·"연말"은 계산 방식이라 주기가 아니다(Q3 결정)
+# 남긴다 (2026-10-13 Q4 마무리, Q3·Q4 공통). 반복어 없는 "분기말"·"반기말"은 주기 이름(분기·반기)이 있어 그 주기와
+# 끝 시점이다. 반복어 없는 "월말"·"연말"·"년말"도 그 주기와 끝 시점으로 읽는다(계획 36, 2026-10-13 Q3 결정 일부 변경).
+# 말잔으로 이어지는 말(월말잔액)과 숫자·다른 글자 뒤의 말(7월말·2024년 말·작년 말·전월말)은 주기가 아니다
 _END_REPEAT = r"\s*말\s*(?:마다|별로?|단위로)"
 _END_EACH = r"(?:매|각)\s*"
+_END_BARE = r"\s*말(?!잔)"
 FREQUENCY_PATTERNS: tuple[tuple[str, str], ...] = (
-    (rf"(?<![0-9가-힣])(?:연|년)" + _END_REPEAT + rf"|{_END_EACH}(?:연|년|해)\s*말"
+    (rf"(?<![0-9가-힣])(?:연|년)" + _END_REPEAT + rf"|{_END_EACH}(?:연|년|해)\s*말|(?<![0-9가-힣])[연년]{_END_BARE}"
      r"|연간|(?:연도|년도)\s*(?:별|마다)|(?<![가-힣0-9])[연년해]\s*별|매\s*(?:연도|년도|년|해)|해\s*마다"
      r"|(?<![가-힣0-9])년\s*마다|각\s*(?:연도|년도)|(?<![가-힣0-9])(?:연도|년도|[연년])\s*단위로|[연년]단위"
      r"|(?<![가-힣0-9])[연년]\s*주기|(?<![0-9수몇])년간", "Y"),
@@ -41,7 +48,7 @@ FREQUENCY_PATTERNS: tuple[tuple[str, str], ...] = (
     (r"(?<![0-9전당])분기" + _END_REPEAT + rf"|{_END_EACH}분기\s*말"
      r"|분기\s*(?:별|마다)|매\s*분기|각\s*분기|쿼터\s*(?:별|마다)|분기\s*주기"
      r"|(?<![0-9전당])분기(?!점|\s*평균)", "Q"),
-    (r"(?<![0-9])월" + _END_REPEAT + rf"|{_END_EACH}(?:월|달)\s*말"
+    (r"(?<![0-9])월" + _END_REPEAT + rf"|{_END_EACH}(?:월|달)\s*말|(?<![0-9가-힣])월{_END_BARE}"
      r"|월별|(?<![0-9])월\s+별|달\s*별|(?<!개)월간|매\s*월(?!요)|매\s*달(?!러)|(?<![0-9])(?<!개)(?:달|월)\s*마다|각\s*(?:월|달)(?![가-힣])"
      r"|다달이|달달이|(?<![0-9])월\s*단위로|월단위|(?<![0-9])월\s*주기", "M"),
 )
