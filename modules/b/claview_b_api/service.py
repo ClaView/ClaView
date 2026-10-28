@@ -4,6 +4,7 @@
     fetch(b_result)               -> fetch stage envelope (data_result in "result")
     align(data_result, ...)       -> data_result with "alignment" (units, frequency, period, axes)
     combine_results([...])        -> one data_result from several requirements (one chart)
+    merge_frequency_choices([...])-> one frequency question for several results aligned apart
 
 Clients follow CLAVIEW_MODE: "live" uses HCX and KOSIS (keys from the environment);
 any other mode uses the synthetic model and fetch client (wiring only, not accuracy).
@@ -17,7 +18,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any
 
-from claview_b.align import AlignmentError, align, combine_results
+from claview_b.align import AlignmentError, align, combine_results, merge_frequency_choices
 from claview_b.contracts import Config, StageFailure, Trace, outcome
 from claview_b.fetch import KosisClient, build_api_request, fetch_data
 from claview_b.graphs import build_b_graph
@@ -30,7 +31,16 @@ CATALOG = settings_module.PATHS.catalog_file
 METADATA = settings_module.PATHS.meta_raw_file
 
 # Alignment of fetched results (pure functions in claview_b.align): the pipeline reaches them here.
-__all__ = ["AlignmentError", "BService", "align", "combine_results", "live_clients", "store", "synthetic_clients"]
+__all__ = [
+    "AlignmentError",
+    "BService",
+    "align",
+    "combine_results",
+    "live_clients",
+    "merge_frequency_choices",
+    "store",
+    "synthetic_clients",
+]
 
 
 class _Counting:

@@ -443,6 +443,45 @@ def frequency_choice(series_list: list[Json]) -> Json | None:
     }
 
 
+def merge_frequency_choices(choices: list[Json]) -> Json:
+    """One question for several results that are aligned separately (one per requirement).
+
+    Every result keeps its own series, but the user answers once and the answer is applied to
+    all of them, so only the options offered by every result stay. A single choice is returned
+    as it is.
+    """
+    if not choices:
+        raise AlignmentError("choice_empty", "합칠 주기 질문이 없습니다.")
+    if len(choices) == 1:
+        return copy.deepcopy(choices[0])
+    offered = [{o["option_id"] for o in c["options"]} for c in choices]
+    common = [
+        copy.deepcopy(o)
+        for o in choices[0]["options"]
+        if all(o["option_id"] in ids for ids in offered)
+    ]
+    groups, series = [], []
+    for number, choice in enumerate(choices, 1):
+        parts = ", ".join(f"{s['label']}({FREQ_NAME[s['frequency']]})" for s in choice["series"])
+        groups.append(f"[{number}] {parts}")
+        series += [{**copy.deepcopy(s), "group": number} for s in choice["series"]]
+    text = (
+        f"함께 요청한 지표의 주기가 서로 다른 묶음이 {len(choices)}개 있습니다: {' / '.join(groups)}. "
+        "어떻게 맞출까요? 고른 방법은 이 묶음들에 똑같이 적용되며, 맞추면 값이 바뀌므로 "
+        "방법을 골라 주세요(원래 값은 보존됩니다)."
+    )
+    if any("freq_sum" not in ids for ids in offered):
+        text += " 금액이 아니거나 잔액인 지표가 있는 묶음이 있어 기간 합계는 제공하지 않습니다."
+    targets = {c["target_frequency"] for c in choices}
+    return {
+        "question_id": choices[0]["question_id"],
+        "text": text,
+        "target_frequency": next(iter(targets)) if len(targets) == 1 else None,
+        "series": series,
+        "options": common,
+    }
+
+
 def align(data_result: Json, *, frequency_policy: str | None = None) -> Json:
     """Return an aligned copy of `data_result` with an `alignment` block.
 
