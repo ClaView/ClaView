@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
 
+# Minimal token rights: checkout reads the code; dorny/paths-filter reads the pull request's changed files.
+permissions:
+  contents: read
+  pull-requests: read
+
 env:
   PYTHONHASHSEED: "0"
   PYTHONPATH: common:modules/a:modules/b:modules/c:pipeline
@@ -49,6 +54,8 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.12", cache: pip}
       - run: pip install -r requirements-dev.txt
+      - run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests -q -p no:cacheprovider
+      - run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests_tl -q -p no:cacheprovider
       - run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests_legacy -q -p no:cacheprovider
       - run: python -B -X utf8 -m pytest modules/a/tests_api -q -p no:cacheprovider
 

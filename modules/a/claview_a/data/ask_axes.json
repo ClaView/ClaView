@@ -1,0 +1,38 @@
+{
+  "version": "tl-ask-axes-2026-10-28.3",
+  "decided": "user 2026-10-27 19:51 UTC: an axis that splits sibling tables is asked, not assumed",
+  "note": "Axes A asks about when sibling tables differ on them, the question names no value and the statistic is in both siblings. An axis whose values sit inside one table is not asked (B's row choice). Adding an axis is one entry here plus one test.",
+  "ask_axes": {
+    "price": "명목/실질",
+    "stock": "평잔/말잔",
+    "loan_basis": "신규취급액/잔액기준",
+    "classification": "분류체계",
+    "seasonal": "원계열/계절조정",
+    "currency": "통화",
+    "size_law": "기업규모 기준법(중소기업기본법/조세특례제한법)",
+    "survey_view": "실적/전망",
+    "survey_method": "조사방법(표본조사)",
+    "valuation": "평가기준(시가)"
+  },
+  "code_decided_kinds": [
+    "frequency",
+    "period",
+    "source"
+  ],
+  "value_forms": {
+    "decided": "user 2026-10-28 05:01 UTC: an ask option's written value is mapped to the axis value only by these explicit forms, per axis (no general suffix removal); after mapping the value must still be on the option's table, and every later comparison uses the mapped value; user 2026-10-28 05:28 UTC: '잔액' added for loan_basis option values only (never a reading of the question), and the loan_basis label sent to the model written as the card's split values (신규취급액/잔액기준): a notation contract, not a meaning rule",
+    "forms": {
+      "loan_basis": {
+        "신규취급액": [
+          "신규취급액",
+          "신규취급액 기준"
+        ],
+        "잔액기준": [
+          "잔액",
+          "잔액기준",
+          "잔액 기준"
+        ]
+      }
+    }
+  }
+}

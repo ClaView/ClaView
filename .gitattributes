@@ -6,6 +6,7 @@
 /modules/a/claview_a/** -text
 /modules/a/claview_a_legacy/** -text
 /modules/a/tests_legacy/** -text
+/modules/a/tests_tl/** -text
 /modules/a/tests/** -text
 /modules/a/scripts/** -text
 /modules/b/claview_b/** -text

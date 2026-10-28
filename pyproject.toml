@@ -11,7 +11,8 @@ target-version = "py312"
 line-length = 120
 # Code copied from the A, B and C shares keeps its own style; new service code is linted.
 extend-exclude = [
-    "modules/a/claview_a_legacy", "modules/a/tests_legacy", "modules/a/scripts",
+    "modules/a/claview_a", "modules/a/tests", "modules/a/tests_tl", "modules/a/scripts",
+    "modules/a/claview_a_legacy", "modules/a/tests_legacy",
     "modules/b/claview_b", "modules/b/tests", "modules/b/scripts",
     "modules/c/claview_c", "pipeline/claview_pipeline/staged.py", "pipeline/claview_pipeline/confirmation.py",
     "pipeline/claview_pipeline/request_capabilities.py", "pipeline/tests/staged",
@@ -22,31 +23,32 @@ extend-exclude = [
 select = ["E", "F", "I", "UP"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["claview_common", "claview_a_legacy", "claview_b", "claview_c", "claview_pipeline",
-                     "claview_a_api", "claview_b_api", "claview_c_api"]
+known-first-party = ["claview_common", "claview_a", "claview_a_legacy", "claview_b", "claview_c",
+                     "claview_pipeline", "claview_a_api", "claview_b_api", "claview_c_api"]
 
 # Module boundaries, checked in CI with `lint-imports` (PYTHONPATH as in the Makefile).
 [tool.importlinter]
-root_packages = ["claview_common", "claview_a_legacy", "claview_b", "claview_c",
+root_packages = ["claview_common", "claview_a", "claview_a_legacy", "claview_b", "claview_c",
                  "claview_a_api", "claview_b_api", "claview_c_api", "claview_pipeline"]
 include_external_packages = false
 
 [[tool.importlinter.contracts]]
 name = "Module packages (A, B, C) do not import each other"
 type = "independence"
-modules = ["claview_a_legacy", "claview_b", "claview_c"]
+# claview_a is the new A; claview_a_legacy is the 10/21 A kept unchanged for the screen until it is connected to the new A.
+modules = ["claview_a", "claview_a_legacy", "claview_b", "claview_c"]
 
 [[tool.importlinter.contracts]]
 name = "Shared code imports no module and no pipeline"
 type = "forbidden"
 source_modules = ["claview_common"]
-forbidden_modules = ["claview_a_legacy", "claview_b", "claview_c", "claview_a_api", "claview_b_api",
+forbidden_modules = ["claview_a", "claview_a_legacy", "claview_b", "claview_c", "claview_a_api", "claview_b_api",
                      "claview_c_api", "claview_pipeline"]
 
 [[tool.importlinter.contracts]]
 name = "A's package stays free of web and shared code (A's own package rules)"
 type = "forbidden"
-source_modules = ["claview_a_legacy"]
+source_modules = ["claview_a", "claview_a_legacy"]
 forbidden_modules = ["claview_common", "claview_a_api"]
 
 [[tool.importlinter.contracts]]
@@ -64,13 +66,13 @@ forbidden_modules = ["claview_b", "claview_c"]
 name = "B's API uses only B"
 type = "forbidden"
 source_modules = ["claview_b_api"]
-forbidden_modules = ["claview_a_legacy", "claview_c"]
+forbidden_modules = ["claview_a", "claview_a_legacy", "claview_c"]
 
 [[tool.importlinter.contracts]]
 name = "C's API uses only C"
 type = "forbidden"
 source_modules = ["claview_c_api"]
-forbidden_modules = ["claview_a_legacy", "claview_b"]
+forbidden_modules = ["claview_a", "claview_a_legacy", "claview_b"]
 
 [[tool.importlinter.contracts]]
 name = "Module APIs do not import the pipeline"
@@ -83,8 +85,8 @@ name = "The service flow and API reach modules only through their service layers
 type = "forbidden"
 source_modules = ["claview_pipeline.staged", "claview_pipeline.api", "claview_pipeline.confirmation",
                   "claview_pipeline.request_capabilities"]
-forbidden_modules = ["claview_a_legacy", "claview_b", "claview_c"]
+forbidden_modules = ["claview_a", "claview_a_legacy", "claview_b", "claview_c"]
 allow_indirect_imports = "True"
 
 # claview_pipeline.session/b_port/evaluate/cli (the `claview` command and the golden replay evaluation)
-# still use A's built-in B port and import claview_a/claview_b directly.
+# still use A's built-in B port and import claview_a_legacy/claview_b directly.

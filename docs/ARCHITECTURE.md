@@ -32,18 +32,20 @@ pipeline은 module-a/b/c 컨테이너를 부르지 않는다(compose에도 의�
 | `claview_b_api.service.BService.fetch(b_result)` | 조회 | `POST /b/fetch` |
 | `claview_c_api.service.present(query, data_result)` | 화면 자료 | `POST /c/present` |
 
-- A는 자기 세션 안에서 어떤 요구를 B로 넘길지 정한다. A service는 그 단계(`claview_a.agent.b_connection.connect`)를 기록용 포트로 재생해 묶음별 표만 꺼낸다(A 코드 무변경). B 실행은 pipeline이 한다.
+- A는 자기 세션 안에서 어떤 요구를 B로 넘길지 정한다. A service는 기존 A의 그 단계(`claview_a_legacy.agent.b_connection.connect`)를 기록용 포트로 재생해 묶음별 표만 꺼낸다(A 코드 무변경). B 실행은 pipeline이 한다.
 - `claview` 명령과 골든 통합 평가(`claview_pipeline.session`·`b_port`·`evaluate`)는 아직 A 안의 B 포트를 쓰는 예전 경로다. 골든 22문항에서 두 경로의 상태·단계·카드·단계 문구가 모두 같다(2026-10-26 확인).
+
+- A는 두 벌이다: 새 A `claview_a`(표 단위 경로, 공개 `run`·CLI)와 기존 A `claview_a_legacy`(10/21판). **새 A 패키지 제공 완료, 화면 연결 전**이라 위 흐름과 service는 기존 A를 쓴다. [A 기준판 문서](modules/a/A_기준판_표단위경로_20261028.md)
 
 ## 의존 규칙 (`lint-imports`, pyproject.toml)
 
 ```text
 claview_pipeline(staged, api) ──→ claview_a_api, claview_b_api, claview_c_api, claview_common   (모듈 본체 직접 import 금지)
-claview_pipeline(session, b_port, evaluate, cli) ──→ claview_a, claview_b   (CLI·골든 평가용 예전 경로)
-claview_a_api ──→ claview_a, claview_common
+claview_pipeline(session, b_port, evaluate, cli) ──→ claview_a_legacy, claview_b   (CLI·골든 평가용 예전 경로)
+claview_a_api ──→ claview_a_legacy, claview_common   (화면 연결 전)
 claview_b_api ──→ claview_b, claview_common
 claview_c_api ──→ claview_c, claview_common
-claview_a ──→ (표준 라이브러리, langgraph만. A 패키지 규칙)
+claview_a, claview_a_legacy ──→ (표준 라이브러리, langgraph만. A 패키지 규칙)
 claview_b ──→ claview_common.periods   (기간 계산)
 claview_c ──→ claview_common.{periods, settings}
 claview_common ──→ (모듈·파이프라인을 부르지 않는다)
@@ -51,7 +53,7 @@ claview_common ──→ (모듈·파이프라인을 부르지 않는다)
 
 - A·B·C 본체 패키지는 서로 import하지 않는다(independence).
 - 모듈 HTTP 계층은 자기 모듈만 쓴다. 파이프라인을 부르지 않는다.
-- A의 import 가드(`claview_a._guard`)는 A 시험 프로세스에서 `modules/a/claview_a`·`modules/a/tests` 밖의 레포 Python 소스와 다른 패키지(`claview_b` 등)를 막는다. 정적 검사는 import-linter가 한다.
+- A의 import 가드(`claview_a._guard`, 기존 A는 `claview_a_legacy._guard`)는 A 시험 프로세스에서 자기 패키지·시험 폴더 밖의 레포 Python 소스와 다른 패키지(`claview_b` 등)를 막는다. 정적 검사는 import-linter가 한다.
 
 ## 계약
 
