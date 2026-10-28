@@ -370,3 +370,126 @@ def test_combined_requirements_render_as_one_dual_axis_card(make_pipeline, monke
     assert card["defaultView"] == "dual_axis"
     assert [s["id"] for s in card["series"]] == ["R1-S1", "R2-S1"]
     assert card["tableName"] == "가 · 나"
+
+
+# ---- several jobs with different frequencies: one question for all of them ---------------
+STAGE_IDS = ("question", "table", "conditions", "fetch", "chart")
+
+
+def render_state(query="지표를 보여줘"):
+    state = {
+        "query": query,
+        "stage_outcomes": {},
+        "ui_cases": [],
+        "stages": [{"id": s, "status": "pending", "summary": ""} for s in STAGE_IDS],
+    }
+
+    def update(stage, status, summary, rows=None, listing=None, note=""):
+        state["stages"][STAGE_IDS.index(stage)] = {
+            "id": stage,
+            "status": status,
+            "summary": summary,
+            "rows": rows or [],
+        }
+
+    return state, update
+
+
+def make_job(number, *series):
+    return {
+        "data": {"series": list(series), "relations": []},
+        "tables": [{"table_id": f"DT_{number}", "table_name": f"표{number}"}],
+        "run_id": f"r-{number}",
+    }
+
+
+def two_jobs_with_mixed_frequencies():
+    flow = make_job(
+        1,
+        make_series("S1", "십억원", freq="M", label="월 결제금액", table="DT_1"),
+        make_series("S2", "십억원", freq="Q", end="202402", values=["10", "20"], label="분기 금액", table="DT_2"),
+    )
+    balance = make_job(
+        2,
+        make_series("S1", "십억원", freq="M", label="가계대출 잔액", table="DT_3"),
+        make_series("S2", "십억원", freq="Q", end="202402", values=["30", "40"], label="분기 잔액", table="DT_4"),
+    )
+    steady = make_job(3, make_series("S1", "%", label="단일 주기", table="DT_5"))
+    return flow, balance, steady
+
+
+def test_every_job_is_covered_by_one_question_that_all_of_them_allow(make_pipeline):
+    from claview_pipeline.staged import StageFailure
+
+    pipeline = make_pipeline()
+    flow, balance, steady = two_jobs_with_mixed_frequencies()
+    state, update = render_state()
+    with pytest.raises(StageFailure) as stopped:
+        pipeline._render_stage(state, [flow, balance, steady], None, update, [], [], False)
+    assert stopped.value.code == "frequency_choice_required"
+    group = state["confirmation"]["groups"][0]
+    # both jobs with a mismatch are named; the steady job is not part of the question
+    assert "월 결제금액" in group["quote"] and "가계대출 잔액" in group["quote"]
+    assert "단일 주기" not in group["quote"]
+    # 합계는 잔액이 있는 묶음이 허용하지 않으므로 질문 전체에서 빠진다
+    offered = [o["option_id"] for o in group["options"]]
+    assert offered == ["freq_mean", "freq_last", "freq_none"]
+    assert "기간 합계는 제공하지 않습니다" in state["confirmation"]["question_text"]
+    assert len(state["render_jobs"]) == 3
+
+
+def test_the_answer_reaches_every_job_with_a_mismatch_and_leaves_the_others(make_pipeline):
+    from claview_pipeline.staged import StageFailure
+
+    pipeline = make_pipeline()
+    jobs = list(two_jobs_with_mixed_frequencies())
+    state, update = render_state()
+    with pytest.raises(StageFailure):
+        pipeline._render_stage(state, jobs, None, update, [], [], False)
+    resumed, update = render_state()
+    pipeline._render_stage(resumed, state["render_jobs"], "freq_last", update, [], [], False)
+    assert resumed["status"] == "ok"
+    assert "alignment_errors" not in resumed  # no job refused the answer
+    cards = {c["runId"] if "runId" in c else i: c for i, c in enumerate(resumed["ui_cases"])}
+    assert len(resumed["ui_cases"]) == 3
+    freqs = sorted(c["freq"] for c in cards.values())
+    assert freqs == ["M", "Q", "Q"] or freqs == ["Q", "Q", "M"] or freqs.count("Q") == 2
+    quarterly = [c for c in resumed["ui_cases"] if c["freq"] == "Q"]
+    assert [s["values"] for s in quarterly[0]["series"]] == [["3", "6"], ["10", "20"]]
+    assert [s["values"] for s in quarterly[1]["series"]] == [["3", "6"], ["30", "40"]]
+
+
+def test_a_paused_run_does_not_call_the_fetch_normal_after_a_failed_requirement(make_pipeline):
+    from claview_pipeline.staged import StageFailure
+
+    pipeline = make_pipeline()
+    flow, *_ = two_jobs_with_mixed_frequencies()
+    state, update = render_state()
+    failures = [("fetch", "kosis_service_error", "error")]
+    with pytest.raises(StageFailure):
+        pipeline._render_stage(state, [flow], None, update, [], failures, False)
+    fetch = state["stages"][STAGE_IDS.index("fetch")]
+    assert fetch["status"] == "warning"
+    assert ["조회 상태", "일부 실패"] in fetch["rows"]
+    assert state["pre_failures"] == [["fetch", "kosis_service_error", "error"]]
+
+    clean, update = render_state()
+    with pytest.raises(StageFailure):
+        pipeline._render_stage(clean, [flow], None, update, [], [], False)
+    ok = clean["stages"][STAGE_IDS.index("fetch")]
+    assert ok["status"] == "completed" and ["조회 상태", "정상"] in ok["rows"]
+
+
+def test_the_resumed_run_keeps_what_b_and_the_fetch_did(make_pipeline, monkeypatch):
+    pipeline = make_pipeline()
+    crafted(monkeypatch, pipeline, *monthly_quarterly())
+    waiting = pipeline.run(PROCEED_Q, as_of=AS_OF)
+    assert waiting["status"] == "needs_confirmation"
+    assert waiting["stage_outcomes"].get("B") and waiting["trace_events"]
+    resumed = pipeline.resume(waiting, answer(waiting, "freq_mean"))
+    assert resumed["calls"] == {"HCX": 0, "KOSIS": 0}  # still no new call
+    assert resumed["stage_outcomes"]["B"] == waiting["stage_outcomes"]["B"]
+    assert resumed["stage_outcomes"]["C"]  # and C's own result of this run
+    assert resumed["b_requests"] == waiting["b_requests"]
+    assert resumed["trace_events"] == waiting["trace_events"]
+    assert "parent_trace_events" not in resumed

@@ -10,6 +10,7 @@ from claview_b.align import (
     align,
     combine_results,
     frequency_choice,
+    merge_frequency_choices,
     parse_unit,
 )
 from claview_b.metadata import periods_between
@@ -557,3 +558,55 @@ def test_combine_keeps_the_official_total_or_its_error():
     assert merged["composition_total"] == total
     assert "composition_error" not in merged
     assert "composition_total" not in combine_results([one, one])
+
+
+# ---- 여러 묶음의 주기 질문을 하나로 -----------------------------------------------------------
+def mixed_pair(label, *, unit="십억원", quarterly_unit="십억원", target="Q"):
+    monthly = make_series("S1", unit, freq="M", start="202401", end="202406", label=label)
+    other = make_series(
+        "S2", quarterly_unit, freq=target, start="202401", end="202402", label="분기 지표"
+    )
+    return [monthly, other]
+
+
+def test_merging_one_choice_returns_it_unchanged():
+    choice = frequency_choice(mixed_pair("월 결제금액"))
+    assert merge_frequency_choices([choice]) == choice
+    with pytest.raises(AlignmentError):
+        merge_frequency_choices([])
+
+
+def test_merged_choice_offers_only_what_every_group_allows():
+    flow = frequency_choice(mixed_pair("월 결제금액"))
+    balance = frequency_choice(mixed_pair("가계대출 잔액"))
+    assert "freq_sum" in [o["option_id"] for o in flow["options"]]
+    merged = merge_frequency_choices([flow, balance])
+    assert [o["option_id"] for o in merged["options"]] == ["freq_mean", "freq_last", "freq_none"]
+    assert merged["question_id"] == "frequency_alignment"
+    assert merged["target_frequency"] == "Q"
+    assert [s["group"] for s in merged["series"]] == [1, 1, 2, 2]
+    assert "월 결제금액" in merged["text"] and "가계대출 잔액" in merged["text"]
+    assert "[1]" in merged["text"] and "[2]" in merged["text"]
+    assert "기간 합계는 제공하지 않습니다" in merged["text"]
+    # the input choices are not changed
+    assert "group" not in flow["series"][0]
+
+
+def test_merged_choice_keeps_the_sum_when_every_group_allows_it():
+    one = frequency_choice(mixed_pair("월 결제금액"))
+    two = frequency_choice(mixed_pair("월 카드 이용금액"))
+    merged = merge_frequency_choices([one, two])
+    assert "freq_sum" in [o["option_id"] for o in merged["options"]]
+    assert "제공하지 않습니다" not in merged["text"]
+
+
+def test_merged_choice_has_no_single_target_frequency_when_groups_differ():
+    quarterly = frequency_choice(mixed_pair("월 결제금액"))
+    yearly = frequency_choice(
+        [
+            make_series("S1", "십억원", freq="Q", start="202401", end="202404", label="분기"),
+            make_series("S2", "십억원", freq="Y", start="2024", end="2024", label="연간"),
+        ]
+    )
+    assert yearly["target_frequency"] == "Y"
+    assert merge_frequency_choices([quarterly, yearly])["target_frequency"] is None

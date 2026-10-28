@@ -100,7 +100,7 @@ MESSAGES = {
     "no_data": "조회 응답에 값이 없습니다. 기간이나 항목을 바꿔 다시 질문해 주세요.",
     "frequency_choice_required": "함께 요청한 지표의 주기가 서로 다릅니다. 주기를 맞추는 방법을 선택해 주세요. 맞추면 값이 바뀌므로 임의로 정하지 않았습니다.",
     "alignment_period_too_short": "조회 기간이 맞추려는 주기 한 기간보다 짧아 주기를 맞출 수 없습니다. 기간을 늘려 다시 질문해 주세요.",
-    "alignment_policy_not_allowed": "선택한 방법은 이 지표에 쓸 수 없습니다(비율·지수는 합계로 바꿀 수 없음).",
+    "alignment_policy_not_allowed": "선택한 방법은 이 지표에 쓸 수 없습니다(비율·지수와 잔액 지표는 합계로 바꿀 수 없음).",
     "alignment_policy_invalid": "선택한 주기 맞춤 방법을 적용하지 못했습니다. 같은 질문을 다시 입력해 주세요.",
 }
 # 여러 요구를 한 차트에 합치라는 표현이 있을 때만 요구별 결과를 합친다(그 외에는 요구별 카드).
@@ -513,7 +513,10 @@ class Pipeline:
             "KOSIS": client.calls if client else 0,
         }
         # Diagnostics stay in the local run record only (requests carry no credential).
-        state["trace_events"] = [copy.deepcopy(e) for t in traces for e in t.events]
+        state["trace_events"] = [
+            *state.pop("parent_trace_events", []),
+            *(copy.deepcopy(e) for t in traces for e in t.events),
+        ]
         return self._finish(state, emit)
 
     # ---- A result -> B (per requirement group) -> fetch -> C -> stages ---------------
@@ -727,6 +730,7 @@ class Pipeline:
         confirmation card; the fetched data is kept so the answer needs no new HCX/KOSIS call.
         """
         aligned = []
+        choices = []
         for job in jobs:
             try:
                 data = b_service.align(job["data"], frequency_policy=policy)
@@ -735,33 +739,39 @@ class Pipeline:
                 state.setdefault("alignment_errors", []).append(str(exc))
                 continue
             if data["alignment"]["status"] == "needs_choice":
-                choice = data["alignment"]["choice"]
-                count = sum(len(j["data"].get("series", [])) for j in jobs)
-                update(
-                    "fetch",
-                    "completed",
-                    f"{count}개 계열을 실제 조회했습니다.",
-                    [
-                        ["조회 상태", "정상"],
-                        ["자료", "이번 실행의 KOSIS 응답 · 저장 샘플 대체 없음"],
-                    ],
-                )
-                update(
-                    "chart",
-                    "needs_confirmation",
-                    "주기가 다른 지표를 어떻게 맞출지 선택해 주세요.",
-                    [
-                        ["필요한 선택", "주기 맞춤 방법"],
-                        ["조회 호출", "추가 호출 없음(이미 받은 값을 사용)"],
-                    ],
-                    [o["label"] for o in choice["options"]],
-                )
-                state["confirmation"] = make_alignment_confirmation(choice)
-                state["render_jobs"] = copy.deepcopy(jobs)
-                state["fetch_partial"] = rendered_partial
-                state["pre_failures"] = [list(f) for f in failures]
-                raise StageFailure("frequency_choice_required", "needs_confirmation")
+                # Look at every job before asking: one answer is applied to all of them, so the
+                # question must cover all of them and offer only what each of them allows.
+                choices.append(data["alignment"]["choice"])
+                continue
             aligned.append((job, data))
+        if choices:
+            choice = b_service.merge_frequency_choices(choices)
+            count = sum(len(j["data"].get("series", [])) for j in jobs)
+            fetch_failed = any(f[0] == "fetch" for f in failures)
+            update(
+                "fetch",
+                "warning" if fetch_failed or rendered_partial else "completed",
+                f"{count}개 계열을 실제 조회했습니다.",
+                [
+                    ["조회 상태", "일부 실패" if fetch_failed else "정상"],
+                    ["자료", "이번 실행의 KOSIS 응답 · 저장 샘플 대체 없음"],
+                ],
+            )
+            update(
+                "chart",
+                "needs_confirmation",
+                "주기가 다른 지표를 어떻게 맞출지 선택해 주세요.",
+                [
+                    ["필요한 선택", "주기 맞춤 방법"],
+                    ["조회 호출", "추가 호출 없음(이미 받은 값을 사용)"],
+                ],
+                [o["label"] for o in choice["options"]],
+            )
+            state["confirmation"] = make_alignment_confirmation(choice)
+            state["render_jobs"] = copy.deepcopy(jobs)
+            state["fetch_partial"] = rendered_partial
+            state["pre_failures"] = [list(f) for f in failures]
+            raise StageFailure("frequency_choice_required", "needs_confirmation")
         cases = []
         for job, data in aligned:
             out = self._render(state, job, data)
@@ -833,6 +843,14 @@ class Pipeline:
         state["resume_kind"] = "alignment"
         state["as_of"] = paused["as_of"]
         state["a_state"] = paused.get("a_state")
+        # The stopped run did the B and fetch work; this run only re-aligns. Keep that record
+        # (B outcomes, requests, trace events) so the saved result still shows what B did.
+        for key, value in (paused.get("stage_outcomes") or {}).items():
+            if key != "C":
+                state["stage_outcomes"][key] = copy.deepcopy(value)
+        if paused.get("b_requests") is not None:
+            state["b_requests"] = copy.deepcopy(paused["b_requests"])
+        state["parent_trace_events"] = copy.deepcopy(paused.get("trace_events") or [])
         state["user_confirmation"] = {
             "source": "user_confirmation",
             "parent_run_id": paused["run_id"],
