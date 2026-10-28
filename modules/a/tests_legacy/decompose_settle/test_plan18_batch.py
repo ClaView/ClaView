@@ -8,10 +8,14 @@ from test_plan15_settle import layer
 from test_plan15_step5 import QUESTION
 from test_plan18_io import FakeTransport
 from claview_a_legacy import development as BATCH
+from claview_a_legacy import paths
 from claview_a_legacy.interpret.decompose_provider import LiveSource
 
 
 def test_proposed_sample_contains_only_twenty_development_questions():
+    # The sample is checked against the 417-question corpus, which lives outside the repository (paths.QUESTIONS_417).
+    if not paths.QUESTIONS_417.is_file():
+        pytest.skip("417-question corpus is not available here (outside the repository): " + paths.QUESTIONS_417.name)
     sample = BATCH.read(BATCH.SAMPLE)
     rows = BATCH.sample_rows(sample)
     assert len(rows) == 20 and all(x["dataset"] == "development" for x in rows)

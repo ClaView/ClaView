@@ -393,6 +393,14 @@ def _make_dir_link(link: Path, target: Path) -> str | None:
         return None
 
 
+def _remove_dir_link(link: Path, kind: str) -> None:
+    """Removes the link only, never its target: a junction with rmdir, a directory symlink with unlink."""
+    if kind == "junction":
+        os.rmdir(link)
+    else:
+        os.unlink(link)
+
+
 def test_link_to_old_folder_is_refused(tmp_path, refusals):
     """A junction or symlink in a temporary folder that points at modules/b is resolved to its target."""
     link = tmp_path / "old_link"
@@ -402,7 +410,7 @@ def test_link_to_old_folder_is_refused(tmp_path, refusals):
     try:
         _assert_all_refused(link / OLD_SOURCE.relative_to(B_DIR), refusals)
     finally:
-        os.rmdir(link)  # removes the link only, never the target
+        _remove_dir_link(link, kind)  # removes the link only, never the target
     assert B_DIR.is_dir()
 
 
@@ -425,7 +433,8 @@ def test_link_to_allowed_folder_stays_readable(tmp_path):
     real.mkdir()
     (real / "ok_probe.py").write_text("X = 1\n", encoding="utf-8")
     link = tmp_path / "ok_link"
-    if _make_dir_link(link, real) is None:
+    kind = _make_dir_link(link, real)
+    if kind is None:
         pytest.skip("neither a junction nor a directory symlink can be made here")
     try:
         assert (link / "ok_probe.py").read_text(encoding="utf-8") == "X = 1\n"
@@ -434,7 +443,8 @@ def test_link_to_allowed_folder_stays_readable(tmp_path):
             with open("\\\\?\\" + str(real / "ok_probe.py"), "rb") as stream:
                 assert stream.read(1) == b"X"
     finally:
-        os.rmdir(link)
+        _remove_dir_link(link, kind)
+    assert (real / "ok_probe.py").is_file()  # the target is left in place
 
 
 def test_relative_paths_outside_old_folders_stay_allowed(monkeypatch, tmp_path):
