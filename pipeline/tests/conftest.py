@@ -1,7 +1,7 @@
 """tests/pipeline bootstrap: network is blocked for the whole process before any test runs.
 
 Only A's network block is installed (not its import guard), because this suite loads
-A (claview_a) and B (claview) together. Run it as its own pytest process (README).
+A (claview_a_legacy) and B (claview) together. Run it as its own pytest process (README).
 """
 
 from __future__ import annotations
@@ -9,7 +9,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from claview_a import _guard
+from claview_a_legacy import _guard
 
 _guard.install_network_block()
 

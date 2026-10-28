@@ -1,6 +1,6 @@
 """The four outer-graph variants on a reduced set, with the real nodes (plan 04, 1-2 and 7-3; no model, no call).
 
-Runs claview_a only (the network is blocked and no old module is loaded; checked after the run): the outer graph
+Runs claview_a_legacy only (the network is blocked and no old module is loaded; checked after the run): the outer graph
 ``agent.graph.build_outer_graph(variant)`` with the real interpretation (2.1-2.7) and selection (3.1-3.8) nodes, the
 model slot off and jev off. Per case it records
 - interpretation: requirement count, certain, interpretation status, V1 status;
@@ -38,14 +38,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "modules" / "a"))
 
-from claview_a import _guard  # noqa: E402
+from claview_a_legacy import _guard  # noqa: E402
 
 _guard.install_network_block()  # transports blocked; old modules are checked after the run (no import of them)
 
-from claview_a import paths  # noqa: E402
-from claview_a.agent.graph import build_outer_graph  # noqa: E402
-from claview_a.catalog.layer import load_layer  # noqa: E402
-from claview_a.reused.table_sets import score_sets  # noqa: E402
+from claview_a_legacy import paths  # noqa: E402
+from claview_a_legacy.agent.graph import build_outer_graph  # noqa: E402
+from claview_a_legacy.catalog.layer import load_layer  # noqa: E402
+from claview_a_legacy.reused.table_sets import score_sets  # noqa: E402
 
 SETS = ("dev_mini", "check_mini")
 VARIANTS = {"straight": "straight", "router": "router", "verify_central": "central", "verify_parts": "parts"}

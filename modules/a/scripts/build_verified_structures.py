@@ -1,8 +1,8 @@
-"""Build modules/a/claview_a/data/verified_structures.json: the structure signatures the specification cases verified
+"""Build modules/a/claview_a_legacy/data/verified_structures.json: the structure signatures the specification cases verified
 (certainty check 8, decision 10/18; no model, no call).
 
-Sources: the cases of modules/a/tests/spec/test_spec_judgement.py expected certain (``certain: True``) and the cases of
-modules/a/tests/spec/test_spec_requirements.py whose judgement is expected certain. Each case runs 2.1-2.7 on its synthetic
+Sources: the cases of modules/a/tests_legacy/spec/test_spec_judgement.py expected certain (``certain: True``) and the cases of
+modules/a/tests_legacy/spec/test_spec_requirements.py whose judgement is expected certain. Each case runs 2.1-2.7 on its synthetic
 catalog with check 8 off; a case expected certain that is not certain without check 8 stops the build (the
 specification would be broken). Only signatures are written (general features, ``interpret.structure``), with the
 number of cases behind each; no case ID and no question text.
@@ -25,13 +25,13 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-sys.path[:0] = [str(ROOT / "modules" / "a"), str(ROOT / "modules" / "a" / "tests"), str(ROOT / "modules" / "a" / "tests" / "spec")]
+sys.path[:0] = [str(ROOT / "modules" / "a"), str(ROOT / "modules" / "a" / "tests_legacy"), str(ROOT / "modules" / "a" / "tests_legacy" / "spec")]
 
-from claview_a import _guard  # noqa: E402
+from claview_a_legacy import _guard  # noqa: E402
 
 _guard.install_network_block()
 
-from claview_a.interpret import structure  # noqa: E402
+from claview_a_legacy.interpret import structure  # noqa: E402
 
 os.environ[structure.POLICY_ENV] = "0"  # signatures and certainty without check 8
 
@@ -40,9 +40,9 @@ import test_spec_judgement as tj  # noqa: E402
 import test_spec_requirements as tr  # noqa: E402
 from spec_support import Layers  # noqa: E402
 
-from claview_a.interpret.pipeline import interpret_question  # noqa: E402
+from claview_a_legacy.interpret.pipeline import interpret_question  # noqa: E402
 
-SOURCES = ("modules/a/tests/spec/test_spec_judgement.py", "modules/a/tests/spec/test_spec_requirements.py")
+SOURCES = ("modules/a/tests_legacy/spec/test_spec_judgement.py", "modules/a/tests_legacy/spec/test_spec_requirements.py")
 
 
 class _Factory:

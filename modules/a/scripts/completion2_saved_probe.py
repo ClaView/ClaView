@@ -15,18 +15,18 @@ def read(path):
 
 
 def main(args):
-    from claview_a import _guard
+    from claview_a_legacy import _guard
     _guard.install_network_block()
-    from claview_a.agent.session import run_session
-    from claview_a.catalog.layer import load_layer
-    from claview_a.contract.check import check_analysis
-    from claview_a.development_reverify import (
+    from claview_a_legacy.agent.session import run_session
+    from claview_a_legacy.catalog.layer import load_layer
+    from claview_a_legacy.contract.check import check_analysis
+    from claview_a_legacy.development_reverify import (
         ARCHIVE,
         FrozenSource,
         call_file,
         store_hashes,
     )
-    from claview_a.interpret.decompose_run import DecompositionConfig
+    from claview_a_legacy.interpret.decompose_run import DecompositionConfig
 
     args.out.mkdir(parents=True, exist_ok=False)
     layer = load_layer(include_external_synonyms=False)

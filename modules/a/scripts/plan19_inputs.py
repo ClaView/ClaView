@@ -63,8 +63,8 @@ def sha256_file(path: Path) -> str:
 
 
 def _a_package(src: Path) -> str:
-    """Import name of the A package in one src folder: claview_a (plan 24 layout) or claview_v3 (older snapshots)."""
-    return "claview_a" if (src / "claview" / "a" / "__init__.py").is_file() else "claview_v3"
+    """Import name of the A package in one src folder: claview_a_legacy (plan 24 layout) or claview_v3 (older snapshots)."""
+    return "claview_a_legacy" if (src / "claview" / "a" / "__init__.py").is_file() else "claview_v3"
 
 
 def _dump(src: Path, out: Path) -> dict:
@@ -351,7 +351,7 @@ def compare(before_path: Path, after_path: Path, again_path: Path, manifest_path
     branch = None
     if branch_manifest is not None and branch_manifest.is_file():
         hashes = {x["p"].replace("\\", "/").lstrip("/"): x["h"].lower() for x in read(branch_manifest)}
-        branch = {side: {f: (hashes.get(f"modules/a/claview_a/{f}") or hashes.get(f"src/claview_v3/{f}")) == h for f, h in dump["input_files"].items()}
+        branch = {side: {f: (hashes.get(f"modules/a/claview_a_legacy/{f}") or hashes.get(f"src/claview_v3/{f}")) == h for f, h in dump["input_files"].items()}
                   for side, dump in (("before", before), ("after", after))}
     summary = {
         "stage": "plan19_inputs_stage45", "real_calls": 0,

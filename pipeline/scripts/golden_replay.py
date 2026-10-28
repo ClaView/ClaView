@@ -43,7 +43,7 @@ if str(HERE) not in sys.path:
 def _install_guard(mode: str):
     """Block every network transport in replay mode (the same guard the test suites use)."""
     if mode == "replay":
-        from claview_a import _guard
+        from claview_a_legacy import _guard
 
         _guard.install_network_block()
         return _guard

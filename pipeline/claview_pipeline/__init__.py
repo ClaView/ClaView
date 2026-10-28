@@ -1,7 +1,7 @@
-"""One flow over A (claview_a) and B (claview_b): question -> A session -> B port -> fetch.
+"""One flow over A (claview_a_legacy) and B (claview_b): question -> A session -> B port -> fetch.
 
 This package only wires existing functions together. Table selection, waiting and
-resuming are A's (claview_a.agent.session); series/period selection is B's graph,
+resuming are A's (claview_a_legacy.agent.session); series/period selection is B's graph,
 which receives the original question and A's tables (`b_port.to_table_request`).
 Nothing here calls a model or KOSIS unless the caller passes clients built with
 `live_b_clients(allow_external=True)`.

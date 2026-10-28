@@ -17,7 +17,7 @@ ps:             ; $(COMPOSE) ps
 
 # Offline test suites, one pytest process each (README 3).
 test: test-a test-b test-c test-pipeline test-api
-test-a:         ; PYTHONPATH=modules/a $(PY) -B -X utf8 -m pytest modules/a/tests -q -p no:cacheprovider
+test-a:         ; PYTHONPATH=modules/a $(PY) -B -X utf8 -m pytest modules/a/tests_legacy -q -p no:cacheprovider
 test-b:         ; PYTHONPATH=common:modules/b $(PY) -B -X utf8 -m pytest modules/b/tests -q -p no:cacheprovider
 test-c:         ; PYTHONPATH=common:modules/c $(PY) -B -X utf8 -m pytest modules/c/tests -q -p no:cacheprovider
 test-pipeline:  ; PYTHONPATH=common:modules/a:modules/b:modules/c:pipeline $(PY) -B -X utf8 -m pytest pipeline/tests -q -p no:cacheprovider

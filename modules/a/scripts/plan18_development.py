@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "modules" / "a"))
 
-from claview_a.development import main
+from claview_a_legacy.development import main
 
 if __name__ == "__main__":
     main()

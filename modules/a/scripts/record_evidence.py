@@ -1,8 +1,8 @@
 """Record mode of the evidence checks (plan 04, 4-2 and decision 3; no model, no call).
 
-Runs claview_a only (2.1-2.7, then select_tables with every check in record mode, data/evidence_filters.json) on
+Runs claview_a_legacy only (2.1-2.7, then select_tables with every check in record mode, data/evidence_filters.json) on
 the 417 questions and counts, per check, the answer groups the check would drop if it filtered, per requirement
-(claview_a.select.record.drop_record):
+(claview_a_legacy.select.record.drop_record):
 - a group is in the pool when one of its allowed tables is a candidate with indicator evidence of some requirement;
 - a check drops a group when, for some requirement holding such candidates of the group, every one of them fails
   the check (a candidate of another requirement, or one without indicator evidence, is no survival); ``touched``
@@ -32,9 +32,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import score_selection as S  # noqa: E402  (installs the network block first)
 
-from claview_a import _guard, paths  # noqa: E402
-from claview_a.catalog.layer import load_layer  # noqa: E402
-from claview_a.select.record import drop_record  # noqa: E402
+from claview_a_legacy import _guard, paths  # noqa: E402
+from claview_a_legacy.catalog.layer import load_layer  # noqa: E402
+from claview_a_legacy.select.record import drop_record  # noqa: E402
 
 DATASETS = ("golden", "development", "official")
 CHECKS = ("basis", "unit", "exclude", "frequency", "period", "region", "indicator", "cross_axis", "matched_items",

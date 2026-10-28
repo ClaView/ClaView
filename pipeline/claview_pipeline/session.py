@@ -1,7 +1,7 @@
 """Session entry points: A's interactive session with the B port passed every turn.
 
 A owns the outer graph (interpret -> select -> verify -> question_route -> wait/resume)
-and the call into B (`claview_a.agent.b_connection.connect`). A never stores the
+and the call into B (`claview_a_legacy.agent.b_connection.connect`). A never stores the
 port, so each turn hands it over again. Without a B model no port is built and A
 reports `b_port_not_configured`; B selections are never invented here.
 """
@@ -12,9 +12,9 @@ import functools
 from dataclasses import dataclass, field
 from typing import Any
 
-from claview_a.agent import session as a_session
-from claview_a.agent.b_connection import AdapterPort
-from claview_a.catalog.layer import load_layer
+from claview_a_legacy.agent import session as a_session
+from claview_a_legacy.agent.b_connection import AdapterPort
+from claview_a_legacy.catalog.layer import load_layer
 from claview_b.fetch import DataClient
 from claview_b.metadata import MetadataStore
 from claview_b.models import SelectionModel

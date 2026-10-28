@@ -1,6 +1,6 @@
 """Table-selection scores of the new interpretation + new selection on a reduced set (plan 04, 7-3; no model, no call).
 
-Runs claview_a only (2.1-2.7 then select_tables; the network is blocked and no old module is loaded) on one
+Runs claview_a_legacy only (2.1-2.7 then select_tables; the network is blocked and no old module is loaded) on one
 reduced set (eval/cases/a/mini_sets_v1.json) and scores:
 - set_exact: the old evaluation's set scoring (reused/table_sets.score_sets: every answer group matched one to one
   by a different output table, no extra table, as many tables as groups), output = the tables of every requirement
@@ -32,17 +32,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "modules" / "a"))
 
-from claview_a import _guard  # noqa: E402
+from claview_a_legacy import _guard  # noqa: E402
 
 _guard.install_network_block()  # transports blocked; old modules are checked after the run (no import of them)
 
-from claview_a import paths  # noqa: E402
-from claview_a.catalog.layer import load_layer  # noqa: E402
-from claview_a.contract.check import check_evidence, check_selections  # noqa: E402
-from claview_a.interpret.pipeline import interpret_question  # noqa: E402
-from claview_a.reused.table_sets import score_sets  # noqa: E402
-from claview_a.select.cover import DEFAULT_POLICY, POLICIES  # noqa: E402
-from claview_a.select.graph import select_tables  # noqa: E402
+from claview_a_legacy import paths  # noqa: E402
+from claview_a_legacy.catalog.layer import load_layer  # noqa: E402
+from claview_a_legacy.contract.check import check_evidence, check_selections  # noqa: E402
+from claview_a_legacy.interpret.pipeline import interpret_question  # noqa: E402
+from claview_a_legacy.reused.table_sets import score_sets  # noqa: E402
+from claview_a_legacy.select.cover import DEFAULT_POLICY, POLICIES  # noqa: E402
+from claview_a_legacy.select.graph import select_tables  # noqa: E402
 
 SETS = ("dev_mini", "check_mini")
 OPEN_DATASETS = ("golden", "development")  # datasets whose questions may be written out

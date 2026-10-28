@@ -1,6 +1,6 @@
 """Requirement draft counts of the new question interpretation on a reduced set (plan 04, 7-2; no model, no call).
 
-Runs 2.1-2.7 of claview_a (new modules only: the import guard refuses the old pipeline, the network is blocked) on
+Runs 2.1-2.7 of claview_a_legacy (new modules only: the import guard refuses the old pipeline, the network is blocked) on
 the questions of one reduced set and compares the requirement draft count with:
 - (다) the confirmed requirement expectation (eval/cases/a/requirement_expect_dev_mini.json, approved by the user):
   the main measure;
@@ -33,16 +33,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "modules" / "a"))
 
-from claview_a import _guard  # noqa: E402
+from claview_a_legacy import _guard  # noqa: E402
 
 _guard.install_network_block()  # transports blocked; old modules are checked after the run (no import of them)
 
-from claview_a import paths  # noqa: E402
-from claview_a.catalog.layer import load_layer  # noqa: E402
-from claview_a.catalog.relations import family_core  # noqa: E402
-from claview_a.contract.check import check_analysis  # noqa: E402
-from claview_a.interpret import structure  # noqa: E402
-from claview_a.interpret.pipeline import interpret_question  # noqa: E402
+from claview_a_legacy import paths  # noqa: E402
+from claview_a_legacy.catalog.layer import load_layer  # noqa: E402
+from claview_a_legacy.catalog.relations import family_core  # noqa: E402
+from claview_a_legacy.contract.check import check_analysis  # noqa: E402
+from claview_a_legacy.interpret import structure  # noqa: E402
+from claview_a_legacy.interpret.pipeline import interpret_question  # noqa: E402
 
 SETS = ("dev_mini", "check_mini")
 EXPECT = {"dev_mini": paths.CASES_DIR / "requirement_expect_dev_mini.json"}
