@@ -174,6 +174,7 @@ def frequency_condition(row: dict) -> Condition:
 
 
 def find_frequency_conditions(text: TextView) -> list[Condition]:
-    """Explicit frequencies (reused Q3 rules, unchanged) in the new shape. IDs F1, F2, ... in question order."""
+    """Explicit frequencies (reused Q3 rules; bare 월말·연말 added in plan 36) in the new shape. IDs F1, F2, ... in
+    question order."""
     rows = frequencies(text["raw"], text["norm"], text["offsets"])
     return [frequency_condition(row) for row in rows]

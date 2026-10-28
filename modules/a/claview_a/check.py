@@ -59,7 +59,9 @@ Order, per statistic:
    values; a table-level statistic otherwise). A model ask on some axes gets code asks for the
    other open axes. No basis is assumed because one sibling covers the period;
 4. periods (``periods.read_quotes``, ``periods.final_tables``) among the candidates of the decided representative
-   that pass the check; a quote that cannot be read fails, never a default;
+   that pass the check; a quote that cannot be read fails, never a default; each quoted frequency word is kept in
+   ``frequency_quotes`` with the statistics it is for, the frequency read and the point in the period ("end" for
+   월말, 분기말, 연말), record only (plan 36);
 5. the final tables are checked again (``verify_table``, basis, shares) and the route is computed.
 
 Values inside one table (currency, items) stay B's. Nothing here names a table, case or question.
@@ -81,7 +83,7 @@ from . import periods as PR
 from .cards import VALUE_FORMS, card_facts, question_words, shown_value
 from .contract import CONTRACT_VERSION as K_CONTRACT
 
-CHECK_VERSION = "tl-check-2026-10-28.14"
+CHECK_VERSION = "tl-check-2026-10-29.15"  # .15: frequency_quotes (quote, for, frequency, end point) recorded
 # ``*_unverified``: the table or ask is decided with the model's card evidence not verified (users 2026-10-28 05:37
 # and 05:42 UTC); never the same state as a verified one, and routed as ``partial``, never ``handoff``
 OUTCOMES = ("selected", "selected_unverified", "ask", "ask_unverified", "not_in_pool", "failed")
@@ -512,7 +514,7 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
     D = {sid: {"statistic": sid, "quote": s["quote"], "name": s["name"], "model_kind": None, "representative": None,
                "model_evidence": [], "item_evidence": [], "code_evidence": [], "basis": {}, "open_axes": [],
                "outcome": None, "final_tables": [], "asks": [], "corrections": [], "reasons": [], "warnings": [],
-               "verification": [], "diagnostics": [], "period": None,
+               "verification": [], "diagnostics": [], "period": None, "frequency_quotes": [],
                "citation": {"status": "verified", "problems": []}, "invalid_item_evidence": [],
                "retention": {"origin": None, "unverified": []}, "model_representative": None, "held_axes": [],
                "axis_bound_items": {}, "item_refs": {}, "option_evidence": {}, "unasked_axes": [],
@@ -801,8 +803,12 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
     for sid, d in D.items():
         if d["reasons"] or d["model_kind"] in (None, "missing"):
             continue
+        frequency_rows = [r for r in out["frequencies"] if sid in r["for"]]
         reading = PR.read_quotes([r["quote"] for r in out["periods"] if sid in r["for"]],
-                                 [r["quote"] for r in out["frequencies"] if sid in r["for"]])
+                                 [r["quote"] for r in frequency_rows])
+        # the end point of each period (월말: the month's end) is kept with its statistics; it is not the resolver's
+        # anchor and chooses no basis (plan 36)
+        d["frequency_quotes"] = PR.frequency_points(reading, frequency_rows)
         if d["asks"]:
             d["ask_feasibility"] = _ask_feasibility(d, stats[sid]["quote"], reading, lk, as_of)
             continue

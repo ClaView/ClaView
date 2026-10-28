@@ -17,6 +17,9 @@ Reading a quote (``read_quotes``; step-3 review, user 2026-10-27 21:36 UTC):
   "2023, 2024년" read as 2024 only, "2024년 1월 이후 3개월" read without "3개월"): never a default instead. Other
   leftover words are recorded only (``ignored``). The reading row keeps the quote, the rewrite, the conditions and
   the words left.
+- the end word of a frequency read with its end point ("분기말" read as the quarterly frequency with
+  ``anchor="end"``) is read with it, so it is not a word left (plan 36); a "말" with no end point read stays a leftover
+  word.
 Only when no period (or no frequency) is quoted does the resolver's own default apply (``claview_period`` policy:
 the longest frequency the table offers, the latest 10 years for Y, 5 for H and Q, 3 for M), and that is recorded.
 
@@ -46,12 +49,13 @@ from pathlib import Path
 
 from ..catalog.text import index_key, nfkc, strip_footnote
 from ..conditions.finders import find_frequency_conditions, find_period_conditions
+from ..conditions.q_rules import FREQ_END_AFTER
 from ..text.normalize import normalize_text
 from . import table_rules as P
 from ..search.families import FREQUENCY_WORDS as _FREQUENCY_WORDS
 
 
-PERIODS_VERSION = "tl-periods-2026-10-28.6"
+PERIODS_VERSION = "tl-periods-2026-10-29.7"  # .7: the end word of an end-point frequency is read (plan 36)
 MAX_STITCH = 3  # tables joined across edition boundaries for one statistic
 
 _MONTH_RANGE = re.compile(r"(\d{4})\s*년\s*(\d{1,2})\s*월?\s*[~\-–]\s*(\d{1,2})\s*월")
@@ -103,6 +107,15 @@ def leftover(view: dict, found: list[dict], kind: str) -> tuple[list[str], list[
     return changing, ignored
 
 
+def _with_end_word(view: dict, c: dict) -> dict:
+    """The condition with its span stretched over the end word right after it ("분기" + "말") when it was read with
+    the end point (``anchor="end"``), for ``leftover`` only; any other condition is returned as it is."""
+    if (c.get("attrs") or {}).get("anchor") != "end" or not c.get("span"):
+        return c
+    m = FREQ_END_AFTER.match(view["raw"], c["span"][1])
+    return {**c, "span": [c["span"][0], m.end()]} if m else c
+
+
 def _frequency_word(word: str) -> bool:
     return word in _FREQUENCY_WORDS or (word.endswith("별") and word[:-1] in _FREQUENCY_WORDS)
 
@@ -132,7 +145,8 @@ def read_quotes(period_quotes: list[str], frequency_quotes: list[str]) -> dict:
             if not found:
                 problems.append({"code": f"{kind}_unresolved", "quote": quote, "read_as": text})
                 continue
-            row["uncovered"], row["ignored"] = leftover(view, found, kind)
+            read = [_with_end_word(view, c) for c in found] if kind == "frequency" else found
+            row["uncovered"], row["ignored"] = leftover(view, read, kind)
             if row["uncovered"]:
                 problems.append({"code": f"{kind}_partially_read", "quote": quote, "read_as": text,
                                  "uncovered": row["uncovered"]})
@@ -143,6 +157,27 @@ def read_quotes(period_quotes: list[str], frequency_quotes: list[str]) -> dict:
                 conditions.append(c)
                 row["conditions"].append(c["id"])
     return {"conditions": conditions, "readings": readings, "problems": problems}
+
+
+def frequency_points(reading: dict, rows: list[dict]) -> list[dict]:
+    """One row per frequency read from the quoted frequency words ``rows`` (the model's ``frequencies`` entries, in the
+    order given to ``read_quotes``): {quote, for, frequency, point_in_period}. ``point_in_period`` is the point of each
+    period the words name ("end" for 월말, 분기말, 연말; None when not said). A quote that read nothing gives one row with
+    ``frequency`` None and its problem code. Record only: it chooses no basis (말잔/평잔), and it is not the resolver's
+    ``anchor`` (the latest data point a request counts back from)."""
+    by_id = {c["id"]: c for c in reading["conditions"]}
+    problems = {p["quote"]: p["code"] for p in reading["problems"] if p["code"].startswith("frequency_")}
+    reads = [r for r in reading["readings"] if r["kind"] == "frequency"]
+    out = []
+    for row, read in zip(rows, reads):
+        base = {"quote": row["quote"], "for": list(row["for"])}
+        found = [by_id[i] for i in read["conditions"]]
+        if not found:
+            out.append({**base, "frequency": None, "point_in_period": None,
+                        "problem": problems.get(row["quote"])})
+        for c in found:
+            out.append({**base, "frequency": c["value"], "point_in_period": (c.get("attrs") or {}).get("anchor")})
+    return out
 
 
 def conditions_of(period_quotes: list[str], frequency_quotes: list[str]) -> tuple[list[dict], list[dict]]:
