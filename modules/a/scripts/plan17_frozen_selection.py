@@ -15,12 +15,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "modules" / "a"))
 
-from claview_a import _guard
+from claview_a_legacy import _guard
 
 _guard.install_network_block()
 
-from claview_a.catalog.layer import load_layer
-from claview_a.select.graph import select_tables
+from claview_a_legacy.catalog.layer import load_layer
+from claview_a_legacy.select.graph import select_tables
 from plan15_baseline import selection_view
 
 

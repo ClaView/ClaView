@@ -29,15 +29,14 @@ as a year value is not a name to preserve).
 """
 
 from __future__ import annotations
-
 import collections
 from dataclasses import dataclass, field
-
-from ..reused.q_nodes import normalize
+from ..conditions.q_nodes import normalize
 from .loader import Catalog
 from .names import DERIVED_VARIANTS, derived_names, joiner_keys, unmarked_key
 from .roles import AxisRoleTable
 from .text import index_key, name_variants
+
 
 MIN_SPAN_CHARS = 2
 _SUB_ORDER = ("name", "no_footnote", "no_marks", "no_paren")
@@ -197,7 +196,7 @@ def build_index(catalog: Catalog, roles: AxisRoleTable | None = None, synonyms=N
 
 def _two_names_joined(name: str, names: set[str]) -> bool:
     """The name holds "A 및 B" with a name key (the catalog's own or derived) on both sides of the and-word."""
-    from ..interpret.lexicon import AND_WORD
+    from ..text.lexicon import AND_WORD
 
     words = [w for w in name.split(" ") if w]
     return any(words[k] == AND_WORD and index_key(words[k - 1]) in names and index_key(words[k + 1]) in names

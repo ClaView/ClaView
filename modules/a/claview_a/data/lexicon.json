@@ -15,7 +15,7 @@
  },
  "clause_end_request": {
   "_about": "Request verbs with a connective ending that end a clause and start another (보여주고).",
-  "words": ["보여주고", "알려주고", "찾아주고", "확인하고", "조회하고", "보여주며", "알려주며"]
+  "words": ["보여주고", "알려주고", "찾아주고", "확인하고", "조회하고", "보여주며", "알려주며", "보여주되", "알려주되"]
  },
  "connective": {
   "_about": "A predicate stem with a connective ending ends a clause (plan 04, 2-4: item clause and other clauses); the endings also end a clause of the attribution rules.",

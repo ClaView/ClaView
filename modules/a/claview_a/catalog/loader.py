@@ -3,7 +3,7 @@
 Inputs (paths in ``claview_a.paths``): ``search_catalog.json`` (the 349-table list: ID, title, catalog path) and
 ``boK_meta_raw.jsonl`` (one metadata snapshot row per table: TBL, PRD, ITM, UNIT, CMMT). Nothing is fetched.
 
-Written new for claview_a. The old loader (modules/a/claview_aflow/catalog.py) was read for reference only; unlike it this
+Written new for the current-path package (now extracted here). The old loader (src/claview/aflow/catalog.py) was read for reference only; unlike it this
 loader keeps the English names (``*_ENG``), the parent link and depth of every value, and marks unnamed axes and
 values instead of dropping them. The SHA-256 of both raw files is recorded.
 
@@ -11,14 +11,13 @@ The ITEM rows (``OBJ_ID == "ITEM"``) carry the table name and are kept apart fro
 """
 
 from __future__ import annotations
-
 import hashlib
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
-
 from .. import paths
 from .text import collapse, paren_front
+
 
 FREQ_CODE = {"년": "Y", "반기": "H", "분기": "Q", "월": "M"}
 ITEM_OBJ_ID = "ITEM"

@@ -28,16 +28,16 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "modules" / "a"))
 sys.path.insert(0, str(ROOT / "modules" / "a" / "scripts"))
 
-from claview_a import _guard  # noqa: E402
+from claview_a_legacy import _guard  # noqa: E402
 
 _guard.install_network_block()
 
-from claview_a.agent.graph import run_outer  # noqa: E402
-from claview_a.catalog.layer import load_layer  # noqa: E402
-from claview_a.reused.table_sets import score_sets  # noqa: E402
-from claview_a.select.cover import TITLE_BONUS  # noqa: E402,F401  (the bonus the negated-name code looks at)
-from claview_a.select.state import AUTO_CONDITIONS  # noqa: E402
-from claview_a.select.tables import nospace, selection_catalog  # noqa: E402
+from claview_a_legacy.agent.graph import run_outer  # noqa: E402
+from claview_a_legacy.catalog.layer import load_layer  # noqa: E402
+from claview_a_legacy.reused.table_sets import score_sets  # noqa: E402
+from claview_a_legacy.select.cover import TITLE_BONUS  # noqa: E402,F401  (the bonus the negated-name code looks at)
+from claview_a_legacy.select.state import AUTO_CONDITIONS  # noqa: E402
+from claview_a_legacy.select.tables import nospace, selection_catalog  # noqa: E402
 from score_selection import load_groups, load_questions, output_tables  # noqa: E402
 
 OUT = ROOT / "runs" / "plan11_r0"

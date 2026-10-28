@@ -1,7 +1,7 @@
 # ruff: noqa: E501  (user-facing Korean text: ruff counts full-width characters as two columns)
 """A's pending question -> the confirmation card of the UI -> A's ID-only answer.
 
-A (claview_a) owns the question: its text, its options and their effects live in the
+A (claview_a_legacy) owns the question: its text, its options and their effects live in the
 server-held A state (`state["control"]["pending_question"]`). The browser only sees the
 public question (labels, plus table facts read from the official metadata here) and
 sends back option IDs. It cannot change the question, the tables or the state.

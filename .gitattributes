@@ -4,6 +4,9 @@
 # Code copied from the A, B and C shares keeps its bytes (mixed CRLF/LF) as copied.
 # New code (common/, service and API files, Docker files) uses the default text handling above.
 /modules/a/claview_a/** -text
+/modules/a/claview_a_legacy/** -text
+/modules/a/tests_legacy/** -text
+/modules/a/tests_tl/** -text
 /modules/a/tests/** -text
 /modules/a/scripts/** -text
 /modules/b/claview_b/** -text

@@ -17,7 +17,7 @@ import json
 import sys
 from pathlib import Path
 
-from claview_a import _guard
+from claview_a_legacy import _guard
 from claview_common.settings import PATHS
 
 # Before any A, B or flow module is imported by this command line (the package __init__ is lazy).

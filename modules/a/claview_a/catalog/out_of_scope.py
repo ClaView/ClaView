@@ -9,16 +9,14 @@ All four fields are required. A term marks a fragment as type ``out_of_scope`` o
 """
 
 from __future__ import annotations
-
 import json
 from dataclasses import dataclass
 from pathlib import Path
-
 from .. import paths
 from .text import index_key
 
+
 REQUIRED_FIELDS = ("term", "reason", "source", "status")
-TERM_TYPE = "out_of_scope"
 
 
 @dataclass(frozen=True)

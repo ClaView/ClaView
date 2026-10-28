@@ -8,8 +8,8 @@ Types are rule-made suspicion marks, not judgements.
 Input:
 - cases_csv (default runs/m0_score_by_stage/cases.csv): output of scripts/score_by_stage.py (removed in plan 26). If a
   summary.json sits next to it, the totals are checked against it.
-- claview_a.paths.QUESTIONS_417 (question text, joined on case_id).
-- the catalog through claview_a.catalog.layer.load_layer (no external synonyms, no overrides).
+- claview_a_legacy.paths.QUESTIONS_417 (question text, joined on case_id).
+- the catalog through claview_a_legacy.catalog.layer.load_layer (no external synonyms, no overrides).
 
 Output (out_dir, default runs/m0_question_types):
 - cases_typed.csv: input columns plus the type columns (utf-8-sig).
@@ -33,13 +33,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "modules" / "a"))
 
-from claview_a import _guard  # noqa: E402
+from claview_a_legacy import _guard  # noqa: E402
 
 _guard.install_network_block()
 
-from claview_a import paths  # noqa: E402
-from claview_a.catalog.layer import load_layer  # noqa: E402
-from claview_a.reused import q_rules  # noqa: E402
+from claview_a_legacy import paths  # noqa: E402
+from claview_a_legacy.catalog.layer import load_layer  # noqa: E402
+from claview_a_legacy.reused import q_rules  # noqa: E402
 
 CAUSES = ("interpretation", "not_in_pool", "out_of_cards", "selection")
 DATASETS = ("golden", "development", "official")

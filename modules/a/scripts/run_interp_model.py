@@ -17,7 +17,7 @@ The set is a jsonl file of {id, template, question} rows (other fields are not r
   refused without echoing it; an exception around the calls is shown by its class name only). Requests go through
   ``RunClient`` (disk cache, 429 deferred, transient retries, ledger, stop rules; billed requests and stop rules
   carry over between runs of one --out, a stopped folder needs --resume-after-stop; see
-  modules/a/claview_a/interpret/model_calls). A question deferred by 429 keeps ``model_step: pending`` (note
+  modules/a/claview_a_legacy/interpret/model_calls). A question deferred by 429 keeps ``model_step: pending`` (note
   ``deferred_429``) and is sent again by a later run.
 replay and live write ``analyses_off.jsonl`` and ``analyses_on.jsonl`` (id, question, full analysis), ``cases.jsonl``
 and ``summary.json``. The questions of the set were used to tune the rules: results are not an independent test.
@@ -140,8 +140,8 @@ def dry(args, picked: list[dict], layer, prompt: str, prompt_sha: str, counts: d
 
 def calls(args, picked: list[dict], off: dict, layer, prompt_sha: str, counts: dict, key: str | None,
           interpret) -> dict:
-    from claview_a.interpret.model_calls import RunClient
-    from claview_a.reused.model import HcxClient
+    from claview_a_legacy.interpret.model_calls import RunClient
+    from claview_a_legacy.reused.model import HcxClient
 
     inner = HcxClient(api_key=key) if args.mode == "live" else None
     key = None  # the client keeps it; nothing else does
@@ -190,8 +190,8 @@ def calls(args, picked: list[dict], off: dict, layer, prompt_sha: str, counts: d
 def main(argv: list[str] | None = None) -> int:
     args = parse(argv)
     sys.path.insert(0, str(ROOT / "modules" / "a"))
-    from claview_a.interpret.model_calls import MAX_BILLED_CAP
-    from claview_a.reused.model import usable_api_key
+    from claview_a_legacy.interpret.model_calls import MAX_BILLED_CAP
+    from claview_a_legacy.reused.model import usable_api_key
 
     if not 1 <= args.max_billed <= MAX_BILLED_CAP:
         print(f"--max-billed must be 1..{MAX_BILLED_CAP} (billed requests of every run over --out add up; nothing "
@@ -221,14 +221,14 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _run(args, key: str | None) -> int:
-    from claview_a import _guard
+    from claview_a_legacy import _guard
 
     if args.mode != "live":
         _guard.install_network_block()  # dry and replay make no request
-    from claview_a.catalog.layer import load_layer
-    from claview_a.interpret import model_step
-    from claview_a.interpret.model_calls import estimate_tokens
-    from claview_a.interpret.pipeline import interpret_question
+    from claview_a_legacy.catalog.layer import load_layer
+    from claview_a_legacy.interpret import model_step
+    from claview_a_legacy.interpret.model_calls import estimate_tokens
+    from claview_a_legacy.interpret.pipeline import interpret_question
 
     t0 = time.time()
     args.out.mkdir(parents=True, exist_ok=True)

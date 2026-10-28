@@ -17,17 +17,14 @@ Built once per layer (``relations_of``). Nothing here names a table, case or que
 """
 
 from __future__ import annotations
-
 import collections
 import re
 from dataclasses import dataclass, field
-
 from .index import TermIndex
 from .spans import NameSpanIndex, read_particles
 from .text import index_key, name_variants, strip_parens, strip_year_range
 
-IND_TYPES = frozenset({"indicator", "series_name", "compound"})
-TGT_TYPES = frozenset({"target", "total_header"})
+
 _BRACKET = re.compile(r"\(([^()]*)\)")
 _HAS_DIGIT = re.compile(r"\d")
 LEXICAL_TOP = 5
@@ -221,6 +218,3 @@ def relations_of(layer) -> CatalogRelations:
     if "relations" not in layer._derived:
         layer._derived["relations"] = build_relations(layer)
     return layer._derived["relations"]
-
-
-__all__ = ["CatalogRelations", "IND_TYPES", "TGT_TYPES", "build_relations", "family_core", "relations_of"]

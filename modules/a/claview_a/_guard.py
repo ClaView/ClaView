@@ -24,14 +24,13 @@ Messages carry event and module names only, never addresses, URLs or headers.
 """
 
 from __future__ import annotations
-
 import os
 import socket
 import sys
 import threading
 import urllib.request
-
 from .paths import ROOT
+
 
 # Top-level packages refused with all their submodules: the other modules, the pipeline, shared code, and the
 # old "claview" package (B and the old A modules before the module layout). This package (OWN_PACKAGE) is exempt.
@@ -47,9 +46,14 @@ FORBIDDEN_DIRS: tuple = (ROOT / "modules", ROOT / "pipeline", ROOT / "common", R
 # Inside src/claview/ but not old code: this package's folder with everything in it, and the parent package's own
 # folder entry, __init__.py and its cached bytecode (not the parent's other modules).
 # modules/a/ holds this package, its tests and its scripts; the package and its tests are exempt, the scripts are not.
-# There is no parent package any more (claview_a is top level): PARENT_DIR is the package itself.
+# This package (the new A, claview_a, with the current-path code it reuses) is exempt. PARENT_DIR is the package
+# folder itself.
 OWN_DIR = ROOT / "modules" / "a" / "claview_a"
 OWN_TESTS_DIR = ROOT / "modules" / "a" / "tests"
+# Beside this package in modules/a: the table-level tests and the table-level evaluator. They are exempt too (the
+# other scripts in modules/a/scripts are not).
+EXTRA_EXEMPT_DIRS = (ROOT / "modules" / "a" / "tests_tl",
+                     ROOT / "modules" / "a" / "scripts" / "tl_eval")
 PARENT_DIR = OWN_DIR
 SOURCE_SUFFIXES: tuple[str, ...] = (".py", ".pyc", ".pyw")
 
@@ -72,9 +76,6 @@ class ForbiddenImportError(ImportError):
 
 class NetworkBlocked(RuntimeError):
     """A network transport was attempted while the guard is installed."""
-
-
-# ---------------------------------------------------------------- predicates
 
 
 # Win32 namespace prefixes, in normcase form (lower case, backslashes): \\?\UNC\, \\.\UNC\, \??\UNC\ become the
@@ -177,9 +178,10 @@ def _exempt(p: str) -> bool:
     own, parent = _EXEMPT_BASES
     if p == own or p.startswith(own.rstrip(os.sep) + os.sep):
         return True
-    tests = _norm(OWN_TESTS_DIR)
-    if tests and (p == tests or p.startswith(tests.rstrip(os.sep) + os.sep)):
-        return True
+    for extra in (OWN_TESTS_DIR, *EXTRA_EXEMPT_DIRS):
+        base = _norm(extra)
+        if base and (p == base or p.startswith(base.rstrip(os.sep) + os.sep)):
+            return True
     if p in (parent, os.path.join(parent, "__init__.py")):
         return True
     if os.path.dirname(p) == os.path.join(parent, "__pycache__") and os.path.basename(p) in _PARENT_CACHE_NAMES:
@@ -252,9 +254,6 @@ def problems() -> list[str]:
             + [f"network: {n}" for n in NETWORK_ATTEMPTS])
 
 
-# ---------------------------------------------------------------- import hook
-
-
 class ImportGuard:
     """Meta-path finder that refuses forbidden module names and modules located under forbidden folders.
 
@@ -295,9 +294,6 @@ class ImportGuard:
         if any(isinstance(loc, str) and is_under(loc, self.dirs) for loc in locations):
             self._deny(fullname, "module file under a forbidden folder")
         return None
-
-
-# ---------------------------------------------------------------- audit hook and network blocking
 
 
 def _refuse_network(event: str):

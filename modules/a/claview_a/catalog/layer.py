@@ -13,10 +13,8 @@ first use and kept on the layer.
 """
 
 from __future__ import annotations
-
 from dataclasses import dataclass, field
 from pathlib import Path
-
 from .index import TermIndex, build_index
 from .loader import Catalog, load_catalog
 from .names import CatalogNames

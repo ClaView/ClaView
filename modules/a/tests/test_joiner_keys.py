@@ -14,7 +14,7 @@ from claview_a.catalog.loader import Axis, Catalog, Item, Table
 from claview_a.catalog.names import joiner_keys
 from claview_a.catalog.spans import build_name_span_index
 from claview_a.catalog.text import paren_front
-from claview_a.interpret import lexicon as LX
+from claview_a.text import lexicon as LX
 
 
 def _catalog(rows) -> Catalog:

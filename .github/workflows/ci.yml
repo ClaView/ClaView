@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
 
+# Minimal token rights: checkout reads the code; dorny/paths-filter reads the pull request's changed files.
+permissions:
+  contents: read
+  pull-requests: read
+
 env:
   PYTHONHASHSEED: "0"
   PYTHONPATH: common:modules/a:modules/b:modules/c:pipeline
@@ -48,9 +53,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12", cache: pip}
-      - run: pip install -r requirements-dev.txt
-      - run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests -q -p no:cacheprovider
-      - run: python -B -X utf8 -m pytest modules/a/tests_api -q -p no:cacheprovider
+      - id: deps
+        run: pip install -r requirements-dev.txt
+      # Each A suite runs even when an earlier one failed (the job still fails); not after a cancel or a failed install.
+      - name: A new package (modules/a/tests)
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests -q -p no:cacheprovider
+      - name: A table-level path (modules/a/tests_tl, evaluation bundle not connected)
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests_tl -q -p no:cacheprovider
+      - name: A legacy for the screen (modules/a/tests_legacy)
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests_legacy -q -p no:cacheprovider
+      - name: A API (modules/a/tests_api)
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python -B -X utf8 -m pytest modules/a/tests_api -q -p no:cacheprovider
 
   module-b:
     needs: changes

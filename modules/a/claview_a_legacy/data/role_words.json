@@ -1,0 +1,8 @@
+{
+  "_about": [
+    "Word lists of the axis-role table (catalog/roles.py), moved out of the code (plan 11 R1b, 8절; results unchanged).",
+    "target_dictionary_suffix_drop: values of the layer-1 target axes ending with one of these words are kept out of",
+    "the target dictionary (source: scripts/eda_v3/roles.py, commit b118a64)."
+  ],
+  "target_dictionary_suffix_drop": ["대출금", "자금"]
+}

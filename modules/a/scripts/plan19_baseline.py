@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "modules" / "a"))
 
-from claview_a.development_reverify import main  # noqa: E402
+from claview_a_legacy.development_reverify import main  # noqa: E402
 
 if __name__ == "__main__":
     main()

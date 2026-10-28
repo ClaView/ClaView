@@ -1,6 +1,6 @@
 """Carry the EDA confirmation sheet's recommended decisions into the package data file as draft overrides.
 
-    PYTHONPATH=src PYTHONHASHSEED=0 .venv/Scripts/python -B -X utf8 -m claview_a.catalog.import_overrides
+    PYTHONPATH=modules/a PYTHONHASHSEED=0 .venv/Scripts/python -B -X utf8 -m claview_a.catalog.import_overrides
 
 Input: paths.CONFIRM_SHEET_RECOMMENDED (runs/eda_v3/2_axis_roles/confirm_sheet_recommended.csv, outside git).
 Output: paths.AXIS_ROLE_OVERRIDES (modules/a/claview_a/data/axis_role_overrides.csv), columns ``roles.OVERRIDE_FIELDS``:
@@ -23,18 +23,14 @@ Output: paths.AXIS_ROLE_OVERRIDES (modules/a/claview_a/data/axis_role_overrides.
 """
 
 from __future__ import annotations
-
 import csv
 import re
 import sys
 from pathlib import Path
-
 from .. import paths
-from .roles import (LEVEL_SEP, OVERRIDE_FIELDS, TRUNCATED_MARK, VALUE_OVERRIDE_ROLES, base, build_axis_roles,
-                    format_exceptions, read_csv)
+from .roles import LEVEL_SEP, OVERRIDE_FIELDS, TRUNCATED_MARK, VALUE_OVERRIDE_ROLES, base, build_axis_roles, format_exceptions, read_csv
 from .text import nfkc
 
-# ---------------------------------------------------------------- reading the free-text recommendation
 
 _ROLE_WORDS = {"합계 머리": "total_header", "지표": "indicator", "대상": "target", "기준": "basis"}
 _COMPOUND = re.compile(r"(?:지표|대상|기준)(?:\s*\+\s*(?:지표|대상|기준))+\s*결합")
@@ -108,8 +104,6 @@ def _head(text: str) -> str:
     head = _outside_groups(nfkc(text)).split(":", 1)[0].strip()
     return re.sub(r"\s*축$", "", head).strip()
 
-
-# ---------------------------------------------------------------- value exceptions inside the parentheses
 
 # A clause that names a role ("뿌리 '수입' = 지표", "총부가가치·국내총생산은 지표/합계 머리").
 _ROLE_MENTION = re.compile(r"지표|대상|기준|합계\s*머리|결합")
@@ -240,8 +234,6 @@ def machine_columns(section: str, text: str) -> dict:
     return out
 
 
-# ---------------------------------------------------------------- full table lists for cut rows
-
 _EVID_COUNT = re.compile(r"^\s*표\s*(\d+)\s*개")
 _BASIS_COUNT = re.compile(r"표\s*(\d+)\s*개")
 _EVID_LIST = re.compile(r"\(표:\s*([^()]*)\)")
@@ -315,9 +307,6 @@ def full_table_ids(row: dict, subject: str, dual: DualTables) -> tuple[str, str]
             return " / ".join(ids), f"표 ID: 잘린 목록을 {label}으로 다시 만듦({len(ids)}표)"
     return (" / ".join(shown) + f" {TRUNCATED_MARK}",
             f"표 ID: 잘린 목록을 다시 만들지 못함(확인표에 적힌 표 수 {want}); 적용하지 않음")
-
-
-# ---------------------------------------------------------------- conversion
 
 
 MACHINE_KEYS = ("role", "level_roles", "value_role", "value_exceptions")

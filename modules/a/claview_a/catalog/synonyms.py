@@ -19,14 +19,13 @@ dictionary that are not in the file cannot be seen here, so the re-judgment coun
 """
 
 from __future__ import annotations
-
 import collections
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
-
 from .. import paths
 from .text import bkey, index_key
+
 
 REQUIRED_FIELDS = ("official", "synonyms", "source", "status")
 

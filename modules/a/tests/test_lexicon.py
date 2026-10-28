@@ -5,6 +5,10 @@
 - the property lists of a class name words of that class (final request forms are request words, ...);
 - word classes that would read one word two ways share no word (a request word is no exclusion predicate, ...);
 - no Hangul word is written in the code of ``interpret/`` (docstrings and comments aside): the code names a class.
+
+Kept for the new A (2026-10-28), where the dictionary is ``claview_a.text.lexicon`` and ``interpret/`` is
+``claview_a/text/``. The check that the stages after 2.2 read only the token layer stays out: those stage modules
+were not moved (target code not moved).
 """
 
 from __future__ import annotations
@@ -16,7 +20,7 @@ from pathlib import Path
 import pytest
 
 from claview_a.catalog.text import index_key
-from claview_a.interpret import lexicon as LX
+from claview_a.text import lexicon as LX
 
 INTERPRET = Path(LX.__file__).resolve().parent
 HANGUL = re.compile(f"[{LX.HANGUL_ANY}]")
@@ -109,32 +113,3 @@ def test_no_hangul_word_in_interpret_code(path):
     tree = ast.parse(path.read_text(encoding="utf-8"))
     found = [(n.lineno, n.value) for n in _code_strings(tree) if HANGUL.search(n.value)]
     assert found == []
-
-
-# stages after 2.2 (plan 08 T1): they read the token layer (``tokens``), never the question text again
-AFTER_2_2 = ("phrases", "reading", "table", "attribution", "certainty", "settle", "grounding", "model_step",
-             "model_verify", "overrides", "structure", "terms", "nodes", "pipeline")
-TEXT_READS = frozenset({"find", "rfind", "index", "rindex", "startswith", "endswith", "split", "count", "search",
-                        "match", "finditer", "findall"})
-
-
-def _reads_text(node: ast.AST) -> bool:
-    """A call that searches the question text or a token's own words: ``raw.find(..)``, ``raw[a:b].split()``,
-    ``t.quote.find(..)``."""
-    if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr in TEXT_READS):
-        return False
-    v = node.func.value
-    if isinstance(v, ast.Subscript):
-        v = v.value
-    return (isinstance(v, ast.Name) and v.id == "raw") or (isinstance(v, ast.Attribute) and v.attr == "quote")
-
-
-@pytest.mark.parametrize("name", AFTER_2_2)
-def test_stages_after_2_2_read_the_token_layer(name):
-    """T1: no stage after 2.2 uses regular expressions, nor searches the question text or a token's words itself;
-    the token layer (tokens.py) reads them once, with the classes of the lexicon."""
-    tree = ast.parse((INTERPRET / f"{name}.py").read_text(encoding="utf-8"))
-    imports = {a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names}
-    imports |= {n.module for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) and n.module}
-    assert "re" not in imports
-    assert [n.lineno for n in ast.walk(tree) if _reads_text(n)] == []

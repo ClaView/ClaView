@@ -1,4 +1,4 @@
-"""Actual calls of the shared period package (claview_a.period_core) with a synthetic table (no catalog IDs),
+"""Actual calls of the shared period package (claview_a_legacy.period_core) with a synthetic table (no catalog IDs),
 printed as JSON. Moved from scripts/b_stage3/io_examples.py when the package moved into A (A is its only user)."""
 
 import inspect
@@ -6,7 +6,7 @@ import json
 import sys
 
 sys.stdout.reconfigure(encoding="utf-8")
-from claview_a import period_core as cp  # noqa: E402
+from claview_a_legacy import period_core as cp  # noqa: E402
 
 print("import:", cp.__name__, cp.__file__.replace("\\", "/").split("src/")[-1])
 print("signature: resolve_period_for_table" + str(inspect.signature(cp.resolve_period_for_table)))

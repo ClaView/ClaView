@@ -13,14 +13,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "modules" / "a"))
 
-from claview_a import _guard
+from claview_a_legacy import _guard
 
 _guard.install_network_block()
 
-from claview_a.agent.graph import run_outer
-from claview_a.catalog.layer import load_layer
-from claview_a.interpret.pipeline import interpret_question
-from claview_a.select.graph import select_tables
+from claview_a_legacy.agent.graph import run_outer
+from claview_a_legacy.catalog.layer import load_layer
+from claview_a_legacy.interpret.pipeline import interpret_question
+from claview_a_legacy.select.graph import select_tables
 from plan15_baseline import interpretation_view, selection_view
 from score_selection import load_questions
 

@@ -13,8 +13,8 @@ from __future__ import annotations
 import copy
 from typing import Any
 
-from claview_a.agent.assumptions import VERSION as A_ASSUMPTIONS_VERSION
-from claview_a.agent.b_connection import AdapterPort
+from claview_a_legacy.agent.assumptions import VERSION as A_ASSUMPTIONS_VERSION
+from claview_a_legacy.agent.b_connection import AdapterPort
 from claview_b.contracts import Config, StageFailure, Trace, outcome
 from claview_b.fetch import DataClient, build_api_request, fetch_data
 from claview_b.graphs import build_b_graph

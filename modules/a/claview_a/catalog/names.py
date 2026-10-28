@@ -1,7 +1,7 @@
 """Catalog name lookups for the list and exclude rules of find_conditions (detail 2.2), and the derived names of the
 term index (plan 09 P1).
 
-``CatalogNames``: port of the old Q5 helper ``_CatalogNames`` (modules/a/claview_aflow/q_nodes.py:101-140, commit 55fd41b)
+``CatalogNames``: port of the old Q5 helper ``_CatalogNames`` (src/claview/aflow/q_nodes.py:101-140, commit 55fd41b)
 onto the new catalog: classification values (ITEM rows excluded, as before) and table names. Keys drop whitespace and
 list middle dots; lookups return the value name as written in the catalog. Derived names are not part of it.
 
@@ -15,13 +15,12 @@ the way it adds ``unmarked_key``.
 """
 
 from __future__ import annotations
-
 import collections
 import re
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
-
 from .text import collapse, index_key, paren_front, strip_parens
+
 
 if TYPE_CHECKING:
     from .loader import Catalog
@@ -32,7 +31,6 @@ LIST_DOTS = "·ᆞ・"
 _DOT = re.compile(f"[{LIST_DOTS}]")
 _SPACE = re.compile(r"\s+")
 
-# ---------------------------------------------------------------- derived names (plan 09 P1)
 
 # Marks inside a name that a question writes as a space or leaves out ("가상A/가상B 지표" -> "가상A 가상B 지표").
 NAME_MARKS = "/," + LIST_DOTS
@@ -62,7 +60,7 @@ def joiner_keys(k: str) -> list[str]:
       ``unmarked_key``)
     - with both: every mark and every and-word removed
     Keys equal to ``k`` or empty are left out; the order is fixed and repeats are dropped."""
-    from ..interpret.lexicon import AND_WORD, LIST_JOINER_PARTICLES
+    from ..text.lexicon import AND_WORD, LIST_JOINER_PARTICLES
 
     k = k or ""
     and_key = index_key(AND_WORD)
@@ -122,7 +120,7 @@ def derived_names(catalog: Catalog, roles: AxisRoleTable | None = None) -> list[
       pending)
     Blocked: shorter than two letters, a filler or request word, a list word, an X-byeol word, a catalog name of its
     own (table or value)."""
-    from ..interpret.lexicon import AND_WORD, BYEOL, DERIVED_TAIL_WORDS, JOINER_PARTICLES, KNOWN_WORDS, LIST_WORDS
+    from ..text.lexicon import AND_WORD, BYEOL, DERIVED_TAIL_WORDS, JOINER_PARTICLES, KNOWN_WORDS, LIST_WORDS
 
     tables = list(catalog.tables.values())
     own: set[str] = set()  # the catalog's own name keys (and their mark-free forms)

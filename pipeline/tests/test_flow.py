@@ -14,8 +14,8 @@ import socket
 import pytest
 from synthetic_b import SyntheticFetchClient, SyntheticSelectionModel
 
-from claview_a import _guard
-from claview_a.agent.b_connection import connect
+from claview_a_legacy import _guard
+from claview_a_legacy.agent.b_connection import connect
 from claview_b.contracts import StageFailure
 from claview_pipeline import (
     NOT_RUN_FETCH_REASON,

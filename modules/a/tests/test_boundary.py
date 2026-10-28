@@ -3,6 +3,11 @@
 Counterexamples must be caught: collection-time import, already-loaded module, direct execution of old source,
 transport attempt in a child process, dynamic import, and an import at package-initialisation time.
 No old module is executed by these tests; probes either stop at the guard or use empty stand-in packages.
+
+Adapted to the new A layout (2026-10-28): the package is ``claview_a`` itself (the current-path code was moved into
+it), the shared period package sits inside it unchanged (``claview_a/periods``), and the child process runs the
+new A's entry ``claview_a.run`` (fake judge) and its moved condition rules instead of the old interpretation
+pipeline and model clients, which were not moved.
 """
 
 from __future__ import annotations
@@ -37,12 +42,10 @@ OLD_SOURCE = B_DIR / "claview_b" / "stages.py"
 
 # ---------------------------------------------------------------- static scan
 
-# Approved plan 17 shared package only; old claview/B imports remain forbidden.
+# langgraph only; old claview/B imports remain forbidden.
 ALLOWED_THIRD_PARTY = {"langgraph", "langchain_core"}
-# The shared period package, kept byte for byte inside A (claview_a.period_core): it reads its packaged policy file
-# with importlib.resources and its __init__ re-exports its API. Only these two departures from the package-code rules
-# are allowed for it; every other rule of the static scan applies.
-VENDORED = PKG / "period_core"
+# The shared period package 0.2.0, kept unchanged inside this package (its __init__ is periods/core.py).
+VENDORED = frozenset(PKG / "periods" / n for n in ("core.py", "resolver.py", "policy.py", "contract.py", "_version.py"))
 VENDORED_ALLOWED = {"from importlib import resources": "banned module importlib"}
 BANNED_MODULES = {
     "importlib", "runpy", "imp", "pkgutil", "zipimport", "inspect", "linecache", "code", "codeop",
@@ -60,7 +63,7 @@ def _has_py_constant(node) -> bool:
 
 
 def scan(text: str, depth: int = 1) -> list[str]:
-    """Problems in one module of the new package. depth = package depth (claview_a = 1, claview_a.reused = 2)."""
+    """Problems in one module of the new package. depth = package depth (claview_a = 1, claview_a.catalog = 2)."""
     out = []
     tree = ast.parse(text)
     for node in ast.walk(tree):
@@ -102,18 +105,18 @@ def _check_absolute(module: str, lineno: int) -> list[str]:
 
 
 def _package_files():
-    files = sorted(p for p in PKG.rglob("*.py") if not p.is_relative_to(VENDORED))
+    files = sorted(p for p in PKG.rglob("*.py") if p not in VENDORED and "__pycache__" not in p.parts)
     assert files, "no package files found"
     return files
 
 
 def test_package_sources_pass_static_scan():
     problems = {}
-    for path in _package_files() + sorted(VENDORED.rglob("*.py")):
+    for path in _package_files() + sorted(VENDORED):
         depth = len(path.relative_to(PKG).parts)
         text = path.read_text(encoding="utf-8")
         found = scan(text, depth)
-        if path.is_relative_to(VENDORED):
+        if path in VENDORED:
             lines = text.splitlines()
             found = [f for f in found if not any(
                 lines[int(f.split(":")[0]) - 1].strip() == stmt and f.endswith(why)
@@ -123,14 +126,21 @@ def test_package_sources_pass_static_scan():
     assert problems == {}
 
 
+# Package __init__ files with code: the public entry run, and the period module of the table-level path.
+CODE_INITS = (PKG / "__init__.py", PKG / "periods" / "__init__.py")
+
+
 def test_package_init_files_are_empty():
     inits = [p for p in _package_files() if p.name == "__init__.py"]
-    assert PKG / "__init__.py" in inits
-    assert {str(p.relative_to(ROOT)): p.read_text(encoding="utf-8").strip() for p in inits} == {
-        str(p.relative_to(ROOT)): "" for p in inits
+    assert set(CODE_INITS) <= set(inits)
+    others = [p for p in inits if p not in CODE_INITS]
+    assert {str(p.relative_to(ROOT)): p.read_text(encoding="utf-8").strip() for p in others} == {
+        str(p.relative_to(ROOT)): "" for p in others
     }
-    # claview_a is a top-level package now: there is no parent package __init__ to import first.
-    assert not (PKG.parent / "__init__.py").exists()
+    # the package __init__ holds its docstring and the public entry run only (imported on first use)
+    body = ast.parse((PKG / "__init__.py").read_text(encoding="utf-8")).body
+    assert isinstance(body[0], ast.Expr) and [type(s).__name__ for s in body[1:]] == ["FunctionDef"]
+    assert body[1].name == "run"
 
 
 @pytest.mark.parametrize("snippet", [
@@ -187,9 +197,12 @@ def test_forbidden_dirs_are_component_wise():
     cache = B_DIR / "claview_b" / "__pycache__"
     assert _guard.is_forbidden_source(cache / "__init__.probe.py") and _guard.is_forbidden_source(cache / "__init__.x.pyw")
     assert _guard.is_forbidden_source(cache / f"fetch.{sys.implementation.cache_tag}.pyc")
-    assert not _guard.is_under(PKG) and not _guard.is_under(PKG / "reused" / "x.py")
-    assert not any(_guard.is_forbidden_name(n) for n in ("claview_a", "claview_a.x", "claview_a.reused.x"))
-    # The old parent package name is refused too: claview_a no longer lives inside it.
+    assert not _guard.is_under(PKG) and not _guard.is_under(PKG / "catalog" / "x.py")
+    assert not any(_guard.is_forbidden_name(n) for n in ("claview_a", "claview_a.x", "claview_a.catalog.x"))
+    # Beside this package: the old A (claview_a_legacy) is refused; the table-level tests and evaluator are not.
+    assert _guard.is_under(SRC / "claview_a_legacy" / "x.py") and _guard.is_under(SRC / "tests_legacy" / "x.py")
+    assert not _guard.is_under(SRC / "tests_tl" / "x.py") and not _guard.is_under(SRC / "scripts" / "tl_eval" / "x.py")
+    # The old parent package name is refused too.
     assert all(_guard.is_forbidden_name(n) for n in ("claview", "claview_c", "claview_pipeline", "claview_common"))
     assert all(_guard.is_forbidden_name(n) for n in ("claview.fetch", "claview_b", "claview.aflow", "claview.ab_pipeline",
                                                      "claview.a1_graph", "claview.aflow.rules"))
@@ -380,6 +393,14 @@ def _make_dir_link(link: Path, target: Path) -> str | None:
         return None
 
 
+def _remove_dir_link(link: Path, kind: str) -> None:
+    """Removes the link only, never its target: a junction with rmdir, a directory symlink with unlink."""
+    if kind == "junction":
+        os.rmdir(link)
+    else:
+        os.unlink(link)
+
+
 def test_link_to_old_folder_is_refused(tmp_path, refusals):
     """A junction or symlink in a temporary folder that points at modules/b is resolved to its target."""
     link = tmp_path / "old_link"
@@ -389,7 +410,7 @@ def test_link_to_old_folder_is_refused(tmp_path, refusals):
     try:
         _assert_all_refused(link / OLD_SOURCE.relative_to(B_DIR), refusals)
     finally:
-        os.rmdir(link)  # removes the link only, never the target
+        _remove_dir_link(link, kind)  # removes the link only, never the target
     assert B_DIR.is_dir()
 
 
@@ -412,7 +433,8 @@ def test_link_to_allowed_folder_stays_readable(tmp_path):
     real.mkdir()
     (real / "ok_probe.py").write_text("X = 1\n", encoding="utf-8")
     link = tmp_path / "ok_link"
-    if _make_dir_link(link, real) is None:
+    kind = _make_dir_link(link, real)
+    if kind is None:
         pytest.skip("neither a junction nor a directory symlink can be made here")
     try:
         assert (link / "ok_probe.py").read_text(encoding="utf-8") == "X = 1\n"
@@ -421,7 +443,8 @@ def test_link_to_allowed_folder_stays_readable(tmp_path):
             with open("\\\\?\\" + str(real / "ok_probe.py"), "rb") as stream:
                 assert stream.read(1) == b"X"
     finally:
-        os.rmdir(link)
+        _remove_dir_link(link, kind)
+    assert (real / "ok_probe.py").is_file()  # the target is left in place
 
 
 def test_relative_paths_outside_old_folders_stay_allowed(monkeypatch, tmp_path):
@@ -496,33 +519,26 @@ CHILD_ENTRY = r'''
 import claview_a._guard as g
 g.install()
 import json, os, sys, sysconfig
-from claview_a import paths
-from claview_a.reused import judgment_runtime, model, node_contract, q_nodes, q_rules, table_sets
+from pathlib import Path
+from claview_a import paths, run
+from claview_a.conditions import finders, q_nodes, q_rules
+from claview_a.judges import Archive, FakeJudge
+from claview_a.text.normalize import normalize_text
 
 q = "2024년 1분기부터 매달 수출액을  보여줘"
 n = q_nodes.normalize(q)
 rows = q_nodes.frequencies(q, n["query"], n["offsets"])
 assert [r["value"] for r in rows] == ["M"], rows
 assert q_rules.find_periods(n["query"], None)
-
-class Rt:
-    def __init__(self, context): self.context = context
-    def override(self, **kw): return Rt(kw["context"])
-
-node = node_contract.wrap("Q1", lambda s, r: q_nodes.q1(s, r), None, node_writes={"Q1": {"query", "query_nospace", "offsets"}})
-assert node({"question": q}, Rt(None))["query"] == n["query"]
-assert table_sets.score_sets([["A"]], ["A"], ["A"], ["A"], 5)["set_exact"]
+assert q_nodes.q1({"question": q})["query"] == n["query"]
 assert paths.ROOT.name
 
-from claview_a.contract import check, shapes
-from claview_a.interpret import conditions, nodes, pipeline
-from claview_a.interpret.text import normalize_text
-from claview_a.select import evidence
 text = normalize_text(q)
-found = conditions.find_frequency_conditions(text)
-assert [c["value"] for c in found] == ["M"] and check.check_conditions(found, q) == [], found
-analysis = pipeline.interpret_question(q)  # runs inside the boundary and returns the whole Analysis (plan 04, 2.1-2.7)
-assert analysis["interpretation"] is not None and check.check_analysis(analysis, q) == [], analysis
+found = finders.find_frequency_conditions(text)
+assert [c["value"] for c in found] == ["M"], found
+# the official entry runs inside the boundary (fake judge: wiring only, no model)
+state = run(q, FakeJudge(Archive(Path(sys.argv[2]) / "calls.jsonl"), {"case_id": "child"}), as_of="2026-10-22")
+assert state["action"] in ("handoff", "ask", "fail") and state["record"] is not None, state.get("action")
 
 pkg = os.path.normcase(os.path.abspath(sys.argv[1]))
 roots = [pkg]
@@ -542,13 +558,13 @@ for name, mod in list(sys.modules.items()):
     files = [getattr(mod, "__file__", None)] + list(getattr(mod, "__path__", None) or [])
     if any(isinstance(f, str) and not inside(f) for f in files):
         bad.append(name)
-outside = sorted(m for m in sys.modules if m.startswith("claview.") and not (m == "claview_a" or m.startswith("claview_a.")))
+outside = sorted(m for m in sys.modules if m.startswith("claview") and not (m == "claview_a" or m.startswith("claview_a.")))
 print(json.dumps({"bad": sorted(bad), "problems": g.problems(), "claview": outside}))
 '''
 
 
 def test_child_runs_entry_points_inside_boundary(tmp_path):
-    result = _run_child(CHILD_ENTRY, [SRC], tmp_path, PKG)
+    result = _run_child(CHILD_ENTRY, [SRC], tmp_path, PKG, tmp_path)
     assert result.returncode == 0, result.stderr[-2000:]
     report = json.loads(result.stdout.strip().splitlines()[-1])
     assert report == {"bad": [], "problems": [], "claview": []}
@@ -557,8 +573,8 @@ def test_child_runs_entry_points_inside_boundary(tmp_path):
 CHILD_SEND = r'''
 import claview_a._guard as g
 g.install()
-import _socket, json, socket, urllib.request
-from claview_a.reused.model import HcxClient
+import _socket, json, os, socket, urllib.request
+from claview_a.transport.provider import OpenAITransport, ProviderError
 
 def attempt(fn):
     try:
@@ -588,6 +604,14 @@ def tcp_ex():
     finally:
         s.close()
 
+def transport_send():
+    # a test placeholder, never a real key; the transport keeps the cause as __context__ of ProviderError
+    os.environ["OPENAI_API_KEY"] = "test-placeholder-not-a-key"
+    try:
+        OpenAITransport().send({"model": "probe"})
+    except ProviderError as error:
+        raise (error.__context__ or error) from None
+
 def udp():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -603,7 +627,7 @@ out = {
     "raw_socket_connect": attempt(raw_connect),
     "getaddrinfo": attempt(lambda: socket.getaddrinfo("localhost", 80)),
     "urlopen": attempt(lambda: urllib.request.urlopen("http://127.0.0.1:9/")),
-    "hcx_default_opener": attempt(lambda: HcxClient("fake-key", min_interval=0).complete("T2", "s", {}, {})),
+    "openai_transport": attempt(transport_send),
 }
 print(json.dumps({"out": out, "attempts": len(g.NETWORK_ATTEMPTS)}))
 '''
@@ -631,7 +655,7 @@ def _run_pytest_with_conftest(tmp_path: Path, probe: Path, prelude: str = "") ->
 
 
 def test_probe_harness_runs_an_allowed_probe(tmp_path):
-    probe = _write_probe(tmp_path, "from claview_a.reused import q_rules  # allowed")
+    probe = _write_probe(tmp_path, "from claview_a.conditions import q_rules  # allowed")
     result = _run_pytest_with_conftest(tmp_path, probe)
     assert result.returncode == 0, (result.stdout + result.stderr)[-2000:]
 

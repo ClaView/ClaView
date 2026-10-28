@@ -24,14 +24,14 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "modules" / "a"))
 sys.path.insert(0, str(ROOT / "modules" / "a" / "scripts"))
 
-from claview_a import _guard, paths  # noqa: E402
+from claview_a_legacy import _guard, paths  # noqa: E402
 
 _guard.install_network_block()
 
-from claview_a.agent.graph import run_outer  # noqa: E402
-from claview_a.catalog.layer import load_layer  # noqa: E402
-from claview_a.select import cover, decision, facts  # noqa: E402
-from claview_a.select.refute import CODES  # noqa: E402
+from claview_a_legacy.agent.graph import run_outer  # noqa: E402
+from claview_a_legacy.catalog.layer import load_layer  # noqa: E402
+from claview_a_legacy.select import cover, decision, facts  # noqa: E402
+from claview_a_legacy.select.refute import CODES  # noqa: E402
 from score_selection import load_groups, load_questions  # noqa: E402
 
 OUT = ROOT / "runs" / "plan11_r3"

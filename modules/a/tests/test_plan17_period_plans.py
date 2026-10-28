@@ -1,10 +1,12 @@
-"""Actual shared package, synthetic metadata; no network or model calls."""
-import copy
+"""Actual shared package, synthetic metadata; no network or model calls.
+
+Kept for the new A (2026-10-28): the period helpers moved into ``claview_a.periods.table_rules``. The four tests of
+``bundle_plan`` stay out (target code not moved)."""
 from types import SimpleNamespace
 
 import pytest
 
-from claview_a.select import periods as P
+from claview_a.periods import table_rules as P
 
 
 def view(t, f="M", start="202001", end="202608"):
@@ -32,42 +34,6 @@ def test_defaults_are_resolved_by_shared_policy(freq, start, end, wanted):
     result = P.resolve(inp(), view("T", freq, start, end))
     assert result["status"] == "ok"
     assert result["applied"]["start"] == wanted
-
-
-def test_common_anchor_uses_members_not_unrelated_newer_candidates():
-    views = {"a": view("a", end="202608"), "b": view("b", end="202606"), "other": view("other", end="202610")}
-    source = inp([recent()])
-    before = copy.deepcopy(source)
-    plan = P.bundle_plan(source, views, ["a", "b"], "bundle")
-    assert plan["context"]["anchor"] == "2026-06"
-    assert plan["gaps"] == []
-    assert [r["applied"] for r in plan["results"].values()] == [
-        {"frequency": "M", "start": "202604", "end": "202606"}] * 2
-    assert source == before
-
-
-def test_quarter_and_half_stamps_are_not_treated_as_calendar_months():
-    assert P.common_anchor([view("a", "Q", "202001", "202504"), view("b", "Q", "202001", "202503")], "Q") == "2025-09"
-    assert P.table_meta(view("a", "Q", "2000 1/4", "2025 4/4"))["periods"]["Q"] == {"start": "200001", "end": "202504"}
-    assert P.common_anchor([view("a", "H", "202001", "202502")], "H") == "2025-12"
-
-
-def test_disjoint_members_do_not_claim_a_simultaneous_window():
-    views = {"a": view("a", start="202001", end="202012"), "b": view("b", start="202301", end="202312")}
-    plan = P.bundle_plan(inp(), views, list(views), "bundle")
-    assert "no_common_anchor" in plan["gaps"]
-    assert plan["context"]["anchor"] is None
-
-
-def test_closed_edition_join_preserves_request_and_assigned_share():
-    views = {"a": view("a", start="202001", end="202012"), "b": view("b", start="202101", end="202112")}
-    assigned = {"a": [{"start": "2020-01", "end": "2020-12"}],
-                "b": [{"start": "2021-01", "end": "2021-12"}]}
-    plan = P.bundle_plan(inp([closed("2020", "2021")]), views, list(views), "bundle", assigned)
-    assert plan["gaps"] == [] and plan["context"]["anchor_source"] == "table_latest"
-    for t, result in plan["results"].items():
-        assert result["periods"]["requested_months"] == [{"start": "2020-01", "end": "2021-12"}]
-        assert result["periods"]["covered_months"] == assigned[t]
 
 
 def test_outside_request_clips_and_keeps_missing_without_refresh():

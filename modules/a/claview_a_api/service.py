@@ -1,7 +1,7 @@
 """Module A's service boundary: question -> tables (and the pending question when A must ask).
 
 A still decides inside its own session which requirements are ready for B and builds the
-payload it would hand to a B port (claview_a.agent.b_connection.connect). This layer does not
+payload it would hand to a B port (claview_a_legacy.agent.b_connection.connect). This layer does not
 change that: it runs the session without a port, then replays A's connect step with a
 recording port that only captures those payloads. The pipeline then calls B with them.
 
@@ -15,10 +15,10 @@ import copy
 import functools
 from typing import Any
 
-from claview_a.agent import session as a_session
-from claview_a.agent.assumptions import VERSION as A_ASSUMPTIONS_VERSION
-from claview_a.agent.b_connection import connect
-from claview_a.catalog.layer import load_layer
+from claview_a_legacy.agent import session as a_session
+from claview_a_legacy.agent.assumptions import VERSION as A_ASSUMPTIONS_VERSION
+from claview_a_legacy.agent.b_connection import connect
+from claview_a_legacy.catalog.layer import load_layer
 
 TABLE_FIELDS = ("org_id", "table_id", "table_name")
 

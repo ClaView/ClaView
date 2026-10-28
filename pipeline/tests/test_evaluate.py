@@ -132,7 +132,7 @@ def test_command_line_blocks_the_network_before_loading_the_flow():
     code = (
         "import sys\n"
         "import claview_pipeline.cli\n"
-        "from claview_a import _guard\n"
+        "from claview_a_legacy import _guard\n"
         "loaded = [m for m in sys.modules if m.startswith(('claview_b', 'claview_pipeline.'))"
         " and m != 'claview_pipeline.cli']\n"
         "print(_guard.installed()['network'], loaded)\n"

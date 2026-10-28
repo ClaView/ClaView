@@ -1,0 +1,12 @@
+{
+  "version": "tl-support-words-2026-10-28.3",
+  "about": "Small explicit rules of the statistic support check (check.py; user 2026-10-27 21:57 UTC: confirm positive evidence for the requested indicator, not every word; no word decides by being unregistered). synonyms: a part of a word rewritten before it is looked up on the table ('대출이율' -> '대출금리'). total: a total of the indicator, met by a top-level value of the table. measure: what kind of number is wanted, met when the table shows one of the listed forms in its name, path, values or units; never omitted by being listed. quantity_suffixes: a word made of a name on the table and one of these endings ('통화량', '수출액') is met by that name. Every rule used is recorded with the request word, the rewritten word and the table's words. Vocabulary only: no table, case or question.",
+  "synonyms": {"이율": "금리", "이자율": "금리"},
+  "total": ["총액", "합계", "총계", "총량", "전체"],
+  "measure": {
+    "가격": ["가격", "물가", "지수", "단가"],
+    "잔액": ["잔액", "말잔", "평잔", "잔고"],
+    "금액": ["금액", "원", "달러"]
+  },
+  "quantity_suffixes": ["량", "액"]
+}

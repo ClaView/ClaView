@@ -18,18 +18,26 @@ boundaries:
 
 Keys are the term-index span keys plus the year-range-free form of every catalog name ("금융거래표(2009~)" ->
 "금융거래표", decision 6); those extra keys and their candidates live here, the term index is not changed.
+
+Plan 32 step 6 order 5 (``ABBREVIATION_SPANS``, on; False gives the spans before): a Latin abbreviation shorter than
+the span minimum that a catalog name writes right before its bracket ('L' of 'L(광의 유동성)') is a span where the
+question writes it as a word of its own (no Latin letter or digit right before or after it) and in the same letters
+('L', never 'l', never the 'L' of 'Lf' or 'L1'). Its candidates are the term index's rows of that key.
 """
 
 from __future__ import annotations
-
 import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-
-from ..reused.q_nodes import normalize
+from ..conditions.q_nodes import normalize
 from .index import MIN_SPAN_CHARS, TermIndex
 from .text import index_key, name_variants, strip_year_range
+
+
+ABBREVIATION_SPANS = True
+_ABBREVIATION_NAME = re.compile(r"^([A-Za-z]{1,2})\s*\(")
+_STANDALONE_LATIN = re.compile(r"(?<![A-Za-z0-9])([A-Za-z]{1,2})(?![A-Za-z0-9])")
 
 # Punctuation that ends or starts a name like whitespace does (middle dots after NFKC included).
 PUNCT = ".,?!;:()[]{}<>\"'~/·ᆞ・ㆍ-"
@@ -40,7 +48,7 @@ def read_particles(path: Path | None = None) -> tuple[str, ...]:
     """Word endings that may follow a catalog name inside one written word: the lexicon's name-boundary particles
     (data/lexicon.json, plan 08), or the "particles" of a given file."""
     if path is None:
-        from ..interpret.lexicon import NAME_BOUNDARY_PARTICLES  # the one word dictionary (no catalog import there)
+        from ..text.lexicon import NAME_BOUNDARY_PARTICLES  # the one word dictionary (no catalog import there)
 
         words = NAME_BOUNDARY_PARTICLES
     else:
@@ -99,7 +107,7 @@ class NameSpanIndex:
             self.keys = frozenset(self.index.span_keys) | frozenset(k for k in self.extra if _span_key(k))
         if not self.lengths:
             self.lengths = tuple(sorted({len(k) for k in self.keys}, reverse=True))
-        from ..interpret.lexicon import DOTS  # the one word dictionary (no catalog import there)
+        from ..text.lexicon import DOTS  # the one word dictionary (no catalog import there)
 
         self._dots = frozenset(DOTS)
         # plan 14 I8: the dot-free form of a key with middle dots -> that key (the flat text has no dots)
@@ -109,6 +117,14 @@ class NameSpanIndex:
             if u and u != k and u not in self.keys:
                 self._undotted.setdefault(u, k)
         self._lengths = tuple(sorted(set(self.lengths) | {len(u) for u in self._undotted}, reverse=True))
+        # plan 32 step 6 order 5: short keys whose catalog names write them as an abbreviation before a bracket
+        self._abbreviations: dict[str, frozenset[str]] = {}
+        for k, rows in self.index.entries.items():
+            if len(k) < MIN_SPAN_CHARS and k.isascii() and k.isalpha():
+                written = {m.group(1) for c in rows for m in [_ABBREVIATION_NAME.match(c.get("name") or "")]
+                           if m and m.group(1).lower() == k}
+                if written:
+                    self._abbreviations[k] = frozenset(written)
         alt = "|".join(re.escape(p) for p in self.particles)
         punct = re.escape(PUNCT)
         self._tail = re.compile(rf"(?:{alt})(?:[{punct}].*)?" if alt else rf"[{punct}].*")
@@ -215,10 +231,17 @@ class NameSpanIndex:
                 if i + n <= len(flat) and (sub in self.keys or sub in self._undotted):
                     cands.add((pos[i], pos[i + n - 1] + 1, sub))  # the flat form: sizes count no dots
 
+        abbreviations = set()
+        if ABBREVIATION_SPANS:  # plan 32 step 6 order 5
+            for m in _STANDALONE_LATIN.finditer(q):
+                k = m.group(1).lower()
+                if len(k) < min_chars and m.group(1) in self._abbreviations.get(k, ()):
+                    abbreviations.add((m.start(), m.end(), k))
+            cands |= abbreviations
         chosen = self._select(q, cands, word)
         out = []
         for a, b, sub in sorted(chosen):
-            k = self._key_of(q[a:b], sub)
+            k = sub if (a, b, sub) in abbreviations else self._key_of(q[a:b], sub)
             start, end = offsets[a], offsets[b - 1] + 1
             out.append({"start": start, "end": end, "quote": text[start:end], "key": k,
                         "candidates": self.candidates(k)})

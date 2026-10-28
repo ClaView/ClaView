@@ -16,11 +16,11 @@ sys.path.insert(0, str(ROOT / "modules" / "a" / "scripts"))
 def main(args):
     from score_selection import load_groups, load_questions, output_tables
 
-    from claview_a import _guard, paths
-    from claview_a.agent.session import run_session
-    from claview_a.catalog.layer import load_layer
-    from claview_a.reused.table_sets import score_sets
-    from claview_a.select.graph import select_tables
+    from claview_a_legacy import _guard, paths
+    from claview_a_legacy.agent.session import run_session
+    from claview_a_legacy.catalog.layer import load_layer
+    from claview_a_legacy.reused.table_sets import score_sets
+    from claview_a_legacy.select.graph import select_tables
 
     _guard.install_network_block()
     args.out.mkdir(parents=True, exist_ok=False)
