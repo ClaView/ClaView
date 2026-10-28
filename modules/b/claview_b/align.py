@@ -65,6 +65,14 @@ _MONEY = re.compile(r"(조|천억|백억|십억|억|천만|백만|십만|만|천
 _INDEX = re.compile(r"\d{4}\s*=\s*\d+")
 # "연리%"/"연%" are the units KOSIS uses for interest rates (52 + 2 items in the catalog).
 _RATE = {"%", "%p", "％", "연리%", "연%"}
+# Balance (stock) indicators: adding the balances of several months/quarters counts the same
+# stock again, so a period sum is not offered for them. KOSIS gives no flow/stock flag; the
+# item name is the signal (all 112 money-unit stock tables of the catalog carry one of these
+# words in their item name). 신규/증감/거래 words mark a flow even when a balance word is present.
+_BALANCE = re.compile(
+    "잔액|말잔|평잔|잔고|보유|가계신용|가계대출|대출금|국제투자대조표|대외채권|대외채무|재무상태표"
+)
+_FLOW_WORD = re.compile("신규|증감|순발행|순취득|거래")
 
 
 class AlignmentError(ValueError):
@@ -104,11 +112,18 @@ def _decimal(value) -> Decimal:
     return number
 
 
-def _format(number: Decimal) -> str:
+def _format(number: Decimal, *, exact: bool = False) -> str:
+    """Decimal text for a computed value.
+
+    Rounded to 6 decimals, but never so far that a tiny value turns into 0: a non-zero value
+    keeps at least 6 significant digits (4E-7 stays "0.0000004"). `exact=True` skips rounding,
+    for results that are exact anyway (a power-of-ten rescale of the source digits).
+    """
     with localcontext() as context:
         context.prec = 40
-        rounded = number.quantize(Decimal("0.000001")) if number != number.to_integral() else number
-        text = format(rounded.normalize(), "f")
+        if not exact and number != number.to_integral():
+            number = number.quantize(Decimal(1).scaleb(min(-6, number.adjusted() - 5)))
+        text = format(number.normalize(), "f")
     return "0" if text in {"-0", ""} else text
 
 
@@ -131,6 +146,14 @@ def _span(series: Json) -> Json:
 
 def _label(series: Json) -> str:
     return series["selection"].get("label") or series["series_id"]
+
+
+def is_balance(series: Json) -> bool:
+    """True when the series is (probably) a balance whose values must not be added up over time."""
+    selection = series["selection"]
+    names = [d.get("name") or "" for d in (selection.get("dimensions") or {}).values()]
+    text = " ".join([selection.get("label") or "", *names])
+    return bool(_BALANCE.search(text)) and not _FLOW_WORD.search(text)
 
 
 def _notice(code: str, message: str, series_ids=()) -> Json:
@@ -245,7 +268,7 @@ def _convert_units(series_list: list[Json], notices: list, conversions: list) ->
             factor = Decimal(info["scale"]) / Decimal(target)
             for point in s["points"]:
                 if point["value_status"] == "observed":
-                    point["value"] = _format(_decimal(point["value"]) * factor)
+                    point["value"] = _format(_decimal(point["value"]) * factor, exact=True)
             s["source_unit"] = s.get("unit")
             s["unit"] = target_unit
             conversions.append(
@@ -253,7 +276,7 @@ def _convert_units(series_list: list[Json], notices: list, conversions: list) ->
                     "series_id": s["series_id"],
                     "from_unit": info["unit"],
                     "to_unit": target_unit,
-                    "factor": _format(factor),
+                    "factor": _format(factor, exact=True),
                 }
             )
         names = ", ".join(_label(s) for s in members if parsed[s["series_id"]]["scale"] != target)
@@ -381,7 +404,9 @@ def frequency_choice(series_list: list[Json]) -> Json | None:
         return None
     target = min(frequencies, key=FREQ_RANK.__getitem__)
     movers = [s for s in series_list if s["frequency"] != target]
-    additive = all(parse_unit(s.get("unit"))["kind"] == "money" for s in movers)
+    money_only = all(parse_unit(s.get("unit"))["kind"] == "money" for s in movers)
+    balances = [s for s in movers if is_balance(s)]
+    additive = money_only and not balances
     name = FREQ_NAME[target]
     options = [
         {
@@ -402,9 +427,13 @@ def frequency_choice(series_list: list[Json]) -> Json | None:
         )
     options.append({"option_id": "freq_none", "label": "맞추지 않고 주기별로 따로 보기"})
     parts = ", ".join(f"{_label(s)}({FREQ_NAME[s['frequency']]})" for s in series_list)
+    text = f"함께 요청한 지표의 주기가 서로 다릅니다: {parts}. 어떻게 맞출까요? 맞추면 값이 바뀌므로 방법을 골라 주세요(원래 값은 보존됩니다)."
+    if money_only and balances:
+        names = ", ".join(_label(s) for s in balances)
+        text += f" 잔액 지표({names})는 기간 합계로 바꾸면 같은 잔액을 여러 번 더하게 되어 합계 선택지를 제공하지 않습니다."
     return {
         "question_id": "frequency_alignment",
-        "text": f"함께 요청한 지표의 주기가 서로 다릅니다: {parts}. 어떻게 맞출까요? 맞추면 값이 바뀌므로 방법을 골라 주세요(원래 값은 보존됩니다).",
+        "text": text,
         "target_frequency": target,
         "series": [
             {"series_id": s["series_id"], "label": _label(s), "frequency": s["frequency"]}
@@ -465,7 +494,7 @@ def align(data_result: Json, *, frequency_policy: str | None = None) -> Json:
             if frequency_policy not in allowed:
                 raise AlignmentError(
                     "alignment_policy_not_allowed",
-                    "금액이 아닌 지표(비율·지수 등)는 기간 합계로 바꿀 수 없습니다.",
+                    "금액이 아닌 지표(비율·지수 등)와 잔액 지표는 기간 합계로 바꿀 수 없습니다.",
                 )
             target = choice["target_frequency"]
             reports = []
@@ -541,16 +570,19 @@ def combine_results(parts: list[Json]) -> Json:
     if len(parts) == 1:
         return copy.deepcopy(parts[0])
     merged: Json = {"series": [], "relations": [], "period_notices": [], "user_periods": []}
-    seen: set[str] = set()
+    kept: dict[str, str] = {}  # selection key -> merged series id of the copy that was kept
     renamed: dict[tuple[int, str], str] = {}
+    related: set[tuple[str, str]] = set()
     for number, part in enumerate(parts, 1):
         for series in part.get("series") or []:
             key = _key(series)
-            if key in seen:
+            if key in kept:
+                # a duplicate is not copied, but relations that name it follow the kept copy
+                renamed[(number, series["series_id"])] = kept[key]
                 continue
-            seen.add(key)
             series = copy.deepcopy(series)
             new_id = f"R{number}-{series['series_id']}"
+            kept[key] = new_id
             renamed[(number, series["series_id"])] = new_id
             series["series_id"] = new_id
             series["selection"]["series_id"] = new_id
@@ -558,7 +590,8 @@ def combine_results(parts: list[Json]) -> Json:
         for relation in part.get("relations") or []:
             ancestor = renamed.get((number, relation.get("ancestor_series_id")))
             descendant = renamed.get((number, relation.get("descendant_series_id")))
-            if ancestor and descendant:
+            if ancestor and descendant and ancestor != descendant and (ancestor, descendant) not in related:
+                related.add((ancestor, descendant))
                 merged["relations"].append(
                     {
                         **copy.deepcopy(relation),
@@ -578,6 +611,12 @@ def combine_results(parts: list[Json]) -> Json:
                 "함께 표시하는 지표의 표시 기간이 서로 달라 조회된 기간을 기준으로 표시합니다.",
             )
         )
+    # The official total fetched for a composition (M2) belongs to the whole result: keep the
+    # first one found, or else the first failure note. C checks it against the merged series.
+    for field in ("composition_total", "composition_error"):
+        found = next((p[field] for p in parts if p.get(field)), None)
+        if found is not None and "composition_total" not in merged:
+            merged[field] = copy.deepcopy(found)
     if any(p.get("_synthetic") for p in parts):
         merged["_synthetic"] = True
     return merged
