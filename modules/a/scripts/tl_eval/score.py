@@ -45,7 +45,7 @@ import json
 import re
 from pathlib import Path
 
-SCORE_VERSION = "tl-score-2026-10-28.13"
+SCORE_VERSION = "tl-score-2026-10-29.20"
 VALUE_FORMS = json.loads((Path(__file__).resolve().parents[2] / "claview_a" / "data" /
                           "ask_axes.json").read_text(encoding="utf-8"))["value_forms"]["forms"]
 CITATION_FACT_CODES = ("evidence_not_on_card", "evidence_of_other_table", "evidence_normalization_ambiguous",
@@ -78,8 +78,10 @@ METRICS = {  # tl-score-2026-10-28.9 (05:58 UTC review: code_checks_right and co
                        "statistic split: right when every group holds one and none lies outside them; missing groups "
                        "(a statistic left out) and extra tables (one added) are listed; na when an ask is expected "
                        "(new in .12, user 2026-10-28 07:56 UTC: several statistics may use one table)",
-    "final_table_set": "the same on the final tables, with the confirmed period and frequency per table "
-                       "(new in .12); review when the final conditions are unconfirmed",
+    "final_table_set": "the same on the final tables, with the confirmed frequency per table and the confirmed "
+                       "period per statistic (its tables' months joined: missing, extra or repeated months fail; "
+                       "``periods`` checked like ``period``, .14) (new in .12); review when the final conditions are "
+                       "unconfirmed",
     "requirement_targets": "only for a question whose standard confirms its requirement targets (each with its "
                            "question text, answer series and allowed tables; user 2026-10-28 08:13 UTC): each target "
                            "is covered by the model statistics whose quote holds the target's text, merged or split; "
@@ -88,7 +90,9 @@ METRICS = {  # tl-score-2026-10-28.9 (05:58 UTC review: code_checks_right and co
                            "a statistic quote cannot be placed in the question); a statistic covering no target is "
                            "review; the number of output rows is never forced, and a series left out inside an "
                            "allowed table is not detectable (new in .13). model_meaning and final_full use these "
-                           "targets in place of the table groups for such a question",
+                           "targets in place of the table groups for such a question. .19: a target with qualifiers "
+                           "is covered only by a statistic whose quote or own splitter quote holds them (review "
+                           "otherwise, never placed by its table)",
     "completed": "complete: final_full right, no fact error found by the scorer's own check, no statistic left "
                  "with its card evidence unverified, and the run routed handoff or ask; review when final_full is "
                  "right but code handling is undecidable (new in .6, checked against the scorer in .7)",
@@ -107,6 +111,16 @@ SUPPORTED_PERIOD_FORMS = [re.compile(p) for p in (
     r"\d{4}년(\s*이후|\s*부터)?", r"최근\s*\d{1,2}\s*년간?", r"\d{4}년\s*(과|와|,)\s*\d{4}년", r"\d{4}년\s*[상하]반기")]
 UNSUPPORTED_PERIOD_FORMS = [re.compile(p) for p in (
     r"(한|두|세|석|네|넉)\s*(개월|달|분기|해)", r"이후\s*\d+\s*개월", r"팬데믹", r"\d{4}\s*,\s*\d{4}년")]
+# .17 (user 2026-10-28 20:24 UTC): the scorer's own fixed reading of whether a question states a frequency or a
+# period, for the condition diagnosis only (never for the path's selection). An end word is a frequency with an end
+# point; a point in time ("7월말", "2024년 말", "지난 월말") and a basis word ("월말잔액", "월말 잔액") are not.
+FREQUENCY_FORMS = re.compile(r"월별|매월|매달|월간|달마다|월마다|분기별|분기마다|매\s*분기|반기별|반기마다|연간|연도별|"
+                             r"해마다|매년|년도별|일별|매일|주별|매주")
+END_FORMS = re.compile(r"(?<![0-9가-힣])(월말|분기말|반기말|연말|년말)(?!\s*잔)")
+END_POINT_BEFORE = re.compile(r"(지난|이번|저번|전|올|작|금)\s*$")
+PERIOD_FORMS = re.compile(r"(?<!\d)\d{4}(?![\d=]|\s*=)|최근|올해|작년|지난해|재작년|금년|이후|부터|까지|"
+                          r"그동안|지금까지")  # a base-year mark (2020=100) is no period
+CONDITION_STATES = ("not_stated", "quoted", "other_field", "missing", "not_kept", "review")
 
 
 # ---------------------------------------------------------------- adapter
@@ -134,7 +148,8 @@ def adapt(state: dict) -> dict:
                               "citation": (d.get("citation") or {}).get("problems", [])}
         out["corrections"][sid] = d["corrections"]
         out["final"][sid] = {"outcome": d["outcome"], "tables": d["final_tables"], "asks": d["asks"],
-                             "representative": d["representative"]}
+                             "representative": d["representative"],
+                             "frequency_quotes": copy.deepcopy(d.get("frequency_quotes") or [])}  # .14: recorded only
         out["diagnostics"][sid] = d.get("diagnostics", [])
     return out
 
@@ -269,6 +284,143 @@ def fact_items(rec: dict, titles: dict | None = None) -> tuple[set[tuple], set[t
     return found, undecided
 
 
+def _stated(question: str) -> dict:
+    """Frequency and period expressions the question states, by the scorer's fixed forms."""
+    freq = [m.group(0) for m in FREQUENCY_FORMS.finditer(question)]
+    ends = [m.group(0) for m in END_FORMS.finditer(question) if not END_POINT_BEFORE.search(question[:m.start()])]
+    return {"frequency": freq + ends, "end": ends, "period": [m.group(0) for m in PERIOD_FORMS.finditer(question)]}
+
+
+OWN_FIELD = {"frequency": "frequencies", "period": "periods"}
+QUOTE_FIELDS = ("frequencies", "periods", "splitters", "calculations")
+PROBLEM_STATES = ("missing", "other_field", "not_kept", "review")  # summary precedence, worst first
+DIAGNOSIS_SCOPE = ("the scorer's fixed forms only (FREQUENCY_FORMS, END_FORMS, PERIOD_FORMS): a frequency or period "
+                   "written in other words is not detected and reads as not stated; a statistic is named for a "
+                   "condition only through the model's own for, never by position in the question")
+
+
+def _spans(text: str, sub: str) -> list[tuple[int, int]]:
+    out, i = [], text.find(sub) if sub else -1
+    while i >= 0:
+        out.append((i, i + len(sub)))
+        i = text.find(sub, i + 1)
+    return out
+
+
+def _occurrences(question: str) -> list[dict]:
+    """Each frequency, end and period expression the question states by the fixed forms, with its place."""
+    occ = [{"kind": kind, "text": m.group(0), "span": (m.start(), m.end()), "end": False}
+           for kind, rx in (("frequency", FREQUENCY_FORMS), ("period", PERIOD_FORMS)) for m in rx.finditer(question)]
+    occ += [{"kind": "frequency", "text": m.group(0), "span": (m.start(), m.end()), "end": True}
+            for m in END_FORMS.finditer(question) if not END_POINT_BEFORE.search(question[:m.start()])]
+    return sorted(occ, key=lambda o: o["span"])
+
+
+def _quote_rows(m: dict) -> list[dict]:
+    rows = [{"field": f, "quote": r["quote"], "for": list(r["for"])} for f in QUOTE_FIELDS for r in m.get(f, [])]
+    return rows + [{"field": "statistics", "quote": st["quote"], "for": [st["id"]]} for st in m.get("statistics", [])]
+
+
+def _cover(question: str, occ: dict, rows: list[dict]) -> tuple[list[dict], bool]:
+    """(rows whose quote spans the expression, ambiguous): ambiguous when a quote's text appears more often in the
+    question than rows quote it, so which place each row means cannot be told."""
+    hits = [r for r in rows
+            if any(a <= occ["span"][0] and occ["span"][1] <= b for a, b in _spans(question, r["quote"]))]
+    ambiguous = any(len(_spans(question, r["quote"])) > sum(1 for x in rows if x["quote"] == r["quote"]) for r in hits)
+    return hits, ambiguous
+
+
+def _not_run(rec: dict, sid: str) -> list[str] | None:
+    """Why code did not reach the periods step for ``sid`` (its stop codes, or its outcome), else None."""
+    fin = (rec.get("final") or {}).get(sid) or {}
+    if fin.get("outcome") in (None, "not_in_pool"):
+        return [fin.get("outcome") or "no_decision"]
+    reasons = [r["code"] for r in ((rec.get("checks") or {}).get(sid) or {}).get("reasons", [])]
+    return reasons or None
+
+
+def condition_details(rec: dict) -> dict:
+    """Condition diagnosis by statistic, condition and quote (.18, user 2026-10-29 04:59 UTC):
+    ``stated``: one row per expression the question states (fixed forms), with the field that quotes it and the
+    statistics of that quote's ``for`` (None when nothing quotes it and the question has more than one statistic:
+    never placed by position); state ``quoted`` / ``other_field`` / ``missing`` / ``review`` (a repeated quote
+    text whose place cannot be told).
+    ``delivered``: one row per (own-field quote, statistic in its ``for``): ``quoted`` when the statistic's final
+    record holds it (an end word with its end point), ``not_kept`` when the record lost the end point,
+    ``review`` when the word was not read, ``not_run`` (with the stop codes) when code stopped the statistic before
+    the periods step, never counted as a preservation failure. Records made before ``frequency_quotes`` existed
+    get no delivery rows. Another statistic's end point never stands in.
+    ``summary``: the six states per kind, worst first (``not_stated`` when the question states none)."""
+    m, q = rec["model"], rec["question"] or ""
+    rows, sids = _quote_rows(m), [st["id"] for st in m.get("statistics", [])]
+    stated = []
+    for occ in _occurrences(q):
+        own = [r for r in rows if r["field"] == OWN_FIELD[occ["kind"]]]
+        hits, ambiguous = _cover(q, occ, own)
+        field = OWN_FIELD[occ["kind"]] if hits else None
+        state = ("review" if ambiguous else "quoted") if hits else None
+        if not hits:
+            hits, ambiguous = _cover(q, occ, [r for r in rows if r["field"] != OWN_FIELD[occ["kind"]]])
+            field = hits[0]["field"] if hits else None
+            state = "other_field" if hits else "missing"
+        fors = sorted({x for r in hits for x in r["for"]}) if hits and not ambiguous else \
+            (sids if len(sids) == 1 else None)
+        stated.append({"kind": occ["kind"], "text": occ["text"], "span": list(occ["span"]), "end": occ["end"],
+                       "field": field, "statistics": fors, "state": state})
+    delivered = []
+    finals = rec.get("final") or {}
+    recorded = any("frequency_quotes" in (f or {}) for f in finals.values())
+    for r in m.get("frequencies", []) if recorded else []:
+        end_word = bool(END_FORMS.search(r["quote"]))
+        for sid in r["for"]:
+            got = [x for x in (finals.get(sid) or {}).get("frequency_quotes") or [] if x.get("quote") == r["quote"]]
+            row = {"kind": "frequency", "quote": r["quote"], "statistic": sid, "end": end_word}
+            stop = _not_run(rec, sid) if not got else None
+            if stop:
+                row.update(state="not_run", stop=stop)
+            elif not got:
+                row["state"] = "not_kept"
+            elif any(x.get("frequency") is None for x in got):
+                row.update(state="review", problem=got[0].get("problem"))
+            elif end_word and not any(x.get("point_in_period") == "end" for x in got):
+                row["state"] = "not_kept"
+            else:
+                row["state"] = "quoted"
+            delivered.append(row)
+    summary = {}
+    for kind in ("frequency", "period"):
+        here = [x["state"] for x in stated if x["kind"] == kind] + \
+            [x["state"] for x in delivered if x["kind"] == kind and x["state"] != "not_run"]
+        if not any(x["kind"] == kind for x in stated):
+            summary[kind] = "not_stated"
+        else:
+            summary[kind] = next((st for st in PROBLEM_STATES if st in here), "quoted")
+    return {"stated": stated, "delivered": delivered, "summary": summary, "scope": DIAGNOSIS_SCOPE}
+
+
+def condition_quotes(rec: dict) -> dict:
+    """The six states per kind (``condition_details`` summary): ``not_stated``, ``quoted``, ``other_field``,
+    ``missing``, ``not_kept``, ``review``. Never decides a meaning."""
+    return condition_details(rec)["summary"]
+
+
+def condition_problems(details: dict) -> list[dict]:
+    """The rows of ``condition_details`` with a problem, each with its statistics (None: not attributable)."""
+    out = [{"kind": x["kind"], "text": x["text"], "state": x["state"], "statistics": x["statistics"],
+            "field": x["field"]} for x in details["stated"] if x["state"] in PROBLEM_STATES]
+    return out + [{"kind": x["kind"], "text": x["quote"], "state": x["state"], "statistics": [x["statistic"]],
+                   "field": OWN_FIELD[x["kind"]]} for x in details["delivered"] if x["state"] in PROBLEM_STATES]
+
+
+def condition_counts(details: dict) -> dict:
+    """Problem counts kept apart: problem rows by state, statistics with a problem, rows no statistic is named for."""
+    probs = condition_problems(details)
+    return {"by_state": {st: sum(1 for x in probs if x["state"] == st) for st in PROBLEM_STATES},
+            "statistics": sorted({sid for x in probs for sid in x["statistics"] or []}),
+            "unattributed": sum(1 for x in probs if x["statistics"] is None),
+            "not_run": sum(1 for x in details["delivered"] if x["state"] == "not_run")}
+
+
 def ask_policy_held(case: dict) -> bool:
     """Whether an ask is due is not decided for this question: a held or proposed policy, or a standard that says so
     in its ask (``policy_undecided``, user 2026-10-28 08:13 UTC: CV-AB-10). Only the ask part is held."""
@@ -308,11 +460,16 @@ def table_sets(rec: dict, case: dict) -> dict:
         final["right"] = None if final["right"] is True else final["right"]
     elif final["right"] is True:
         bad = [r["table_id"] for r in finals if std_final.get("frequency") and r["frequency"] != std_final["frequency"]]
-        wanted = std_final.get("period")
+        # months joined per statistic (an edition split keeps one statistic's tables together, another statistic never
+        # fills a gap), missing, extra and repeated months all fail; ``periods`` is checked like ``period`` (.14)
+        wanted = std_final.get("periods") or ([std_final["period"]] if std_final.get("period") else [])
         if wanted:
-            want = sorted(set(_months(wanted["from"], wanted["to"])))
-            bad += [r["table_id"] for r in finals
-                    if sorted({x for p in (r["period"] or []) for x in _months(p["start"], p["end"])}) != want]
+            want = sorted({x for w in wanted for x in _months(w["from"], w["to"])})
+            for f in rec["final"].values():
+                rows = f.get("tables") or []
+                have = [x for r in rows for p in (r["period"] or []) for x in _months(p["start"], p["end"])]
+                if rows and sorted(have) != want:
+                    bad += [r["table_id"] for r in rows]
         if bad:
             final.update(right=False, conditions_wrong=sorted(set(bad)))
     return {"model": model, "final": final}
@@ -351,6 +508,30 @@ def _conditions(rows: list[dict], std_final: dict, titles: dict, coverage: dict 
     return d
 
 
+def ask_option_facts(rec: dict, case: dict, coverage: dict | None) -> list[dict]:
+    """Recorded only (.20): each ask option table of the model's asks and code's final asks, whether it offers the
+    confirmed frequency and covers the confirmed period (catalog coverage). Never a verdict by itself."""
+    fin = case.get("final") or {}
+    if fin.get("status") != "confirmed" or coverage is None:
+        return []
+    wanted = fin.get("periods") or ([fin["period"]] if fin.get("period") else [])
+    months = sorted({x for w in wanted for x in _months(w["from"], w["to"])})
+    out, seen = [], set()
+    rows = [(a["for"], a["axis"], o["value"], _resolve(rec, o["table"])) for a in (rec["model"] or {}).get("asks", [])
+            for o in a["options"]]
+    rows += [(sid, a["axis"], o["value"], o["table_id"]) for sid, f in (rec.get("final") or {}).items()
+             for a in f.get("asks") or [] for o in a["options"]]
+    for sid, axis, value, t in rows:
+        if not t or (sid, axis, t) in seen:
+            continue
+        seen.add((sid, axis, t))
+        span = (coverage.get(t) or {}).get(fin.get("frequency")) if fin.get("frequency") else None
+        out.append({"statistic": sid, "axis": axis, "value": value, "table": t,
+                    "offers_frequency": None if not fin.get("frequency") else span is not None,
+                    "covers_period": None if not (span and months) else span[0] <= months[0] and months[-1] <= span[1]})
+    return out
+
+
 def requirement_targets(rec: dict, case: dict, titles: dict, coverage: dict | None = None) -> dict | None:
     """Targets confirmed in the standard (``requirements``), scored per target (``METRICS``). A statistic covers a
     target when its quote, at a place it occurs in the question, holds the target's text at its place; a quote that
@@ -364,7 +545,26 @@ def requirement_targets(rec: dict, case: dict, titles: dict, coverage: dict | No
     for t in req["targets"]:
         spans = _spans(q, t["text"])
         targets.append(spans[t.get("occurrence", 1) - 1] if len(spans) >= t.get("occurrence", 1) else None)
-    unplaced, split_review, covers = [], [], {}
+    # .19 (user 2026-10-29 05:05 UTC): qualifiers are the question's own words that tell apart targets the text
+    # alone cannot place; a statistic holds one when its own quote, or a splitter quote the model wrote for it,
+    # holds it at its place. Never placed by the table it chose.
+    def place(text, occurrence):
+        got = _spans(q, text)
+        return got[occurrence - 1] if len(got) >= occurrence else None
+
+    quals = [[place(x["text"], x.get("occurrence", 1)) for x in t.get("qualifiers") or []] for t in req["targets"]]
+    shared_span = [ts is not None and any(tj != ti and targets[tj] == ts for tj in range(len(targets)))
+                   for ti, ts in enumerate(targets)]
+
+    def holds(sid, span):
+        rows = [st.get("quote") for st in m["statistics"] if st["id"] == sid] + \
+            [r["quote"] for r in m.get("splitters", []) if sid in r["for"]]
+        return span is not None and any(a <= span[0] and span[1] <= b for x in rows for a, b in _spans(q, x or ""))
+
+    def held(sid, ti):
+        return bool(quals[ti]) and all(holds(sid, sp) for sp in quals[ti])
+
+    unplaced, split_review, covers, by_qualifier = [], [], {}, []
     for s in m["statistics"]:
         places = _spans(q, s.get("quote") or "")
         if not places:
@@ -373,9 +573,29 @@ def requirement_targets(rec: dict, case: dict, titles: dict, coverage: dict | No
         per_place = [frozenset(ti for ti, ts in enumerate(targets) if ts and a <= ts[0] and ts[1] <= b)
                      for a, b in places]
         nonempty = {x for x in per_place if x}
-        if len(nonempty) > 1:
-            split_review.append(s["id"])
         covers[s["id"]] = set().union(*per_place) if per_place else set()
+        if len(nonempty) > 1:
+            # .20 (user 2026-10-29 06:20 UTC): a quote at several places is placed when the qualifiers the model
+            # wrote leave targets of one place only; otherwise it stays held
+            left = {frozenset(ti for ti in x if held(s["id"], ti)) for x in nonempty} - {frozenset()}
+            if len(left) == 1:
+                covers[s["id"]] = set(next(iter(left)))
+                by_qualifier.append(s["id"])
+            else:
+                split_review.append(s["id"])
+    # a target sharing its text with another (one item under two named tables) is covered only through its
+    # qualifiers; a statistic holding that text with no qualifier of such a target is not placed (review)
+    text_covers = {sid: set(c) for sid, c in covers.items()}
+    qualifier_review = []
+    for sid, c in text_covers.items():
+        keep = {ti for ti in c if not shared_span[ti] or not quals[ti] or held(sid, ti)}
+        needed = [ti for ti in c if shared_span[ti] and quals[ti]]
+        if needed and not keep & set(needed):
+            qualifier_review.append(sid)
+        covers[sid] = keep
+    # a statistic placed on no target leaves a target no statistic covers held, not missing: the target may be
+    # what that statistic means (named or evidenced but not quoted), which the quotes cannot place (.19)
+    placed_nowhere = [sid for sid, c in covers.items() if not c and sid not in qualifier_review]
     std_final = case["final"]
     rows_of = {sid: (rec["final"].get(sid) or {}).get("tables") or [] for sid in covers}
     out = []
@@ -383,11 +603,20 @@ def requirement_targets(rec: dict, case: dict, titles: dict, coverage: dict | No
         allowed = set(t["tables"])
         sids = [sid for sid, c in covers.items() if ti in c]
         row = {"target": t["id"], "text": t["text"], "statistics": sids}
+        unqualified = [sid for sid in qualifier_review if ti in text_covers[sid]]
+        if unqualified:
+            row["unqualified_statistics"] = unqualified
+        if len(sids) > 1:
+            row["covered_more_than_once"] = True  # recorded only: several statistics on one target are allowed
         if targets[ti] is None:
             row.update(model="review", tables="review", full="review", why="target text not in the question")
         elif not sids:
-            mark = "review" if unplaced or split_review else "missing"
+            mark = "review" if unplaced or split_review or unqualified or placed_nowhere else "missing"
             row.update(model=mark, tables=mark, full=mark)
+            if unqualified:
+                row["why"] = "a statistic holds the target text without a qualifier: not placed"
+            elif placed_nowhere and not (unplaced or split_review):
+                row["why"] = f"statistics {placed_nowhere} are placed on no target: not decidable from the quotes"
         elif any(sid in split_review for sid in sids):
             row.update(model="review", tables="review", full="review", why="a quote placed on different targets")
         else:
@@ -409,7 +638,8 @@ def requirement_targets(rec: dict, case: dict, titles: dict, coverage: dict | No
         out.append(row)
     uncovered = [sid for sid, c in covers.items() if not c]
     return {"targets": out, "unplaced_statistics": unplaced, "uncovered_statistics": uncovered,
-            "split_review": split_review, "row_count": "not forced",
+            "split_review": split_review, "qualifier_review": qualifier_review,
+            "placed_by_qualifier": by_qualifier, "row_count": "not forced",
             "limit": "a series left out inside an allowed table is not detectable"}
 
 
@@ -605,73 +835,47 @@ def _expected_ask(case: dict, titles: dict) -> dict | None:
 
 
 def _score_ask(asks: list[tuple[str, dict]], expected: dict, table_of, titles: dict) -> tuple[bool, list]:
-    """asks: [(statistic, {axis, options:[{value, table}]})]. True when exactly the expected axis is asked on one
-    statistic, each option names the value its table carries, the values are exactly the expected ones once each, and
-    each option table is allowed for its value."""
+    """asks: [(statistic, {axis, options:[{value, table}]})]. True when the expected axis is asked, at most once per
+    statistic (.15, user 2026-10-28 19:51 UTC: split statistics may each ask the axis they need; one statistic asking
+    the same axis twice is still wrong), no other axis is asked, and every ask on the axis has each option name the
+    value its table carries, the expected values exactly once each, and each option table allowed for its value."""
     problems = []
     axes = {a["axis"] for _, a in asks}
     on_axis = [(sid, a) for sid, a in asks if a["axis"] == expected["axis"]]
-    if len(on_axis) != 1:
-        problems.append(f"asks on the expected axis: {len(on_axis)}")
+    if not on_axis:
+        problems.append("asks on the expected axis: 0")
+    per_stat = [sid for sid, _ in on_axis]
+    repeated = sorted({sid for sid in per_stat if per_stat.count(sid) > 1})
+    if repeated:
+        problems.append(f"the expected axis asked more than once on statistic {repeated}")
     if axes - {expected["axis"]}:
         problems.append(f"extra axes: {sorted(axes - {expected['axis']})}")
-    for _, a in on_axis[:1]:
+    for sid, a in on_axis:
         got: dict[frozenset, list[str]] = {}
         for o in a["options"]:
             table = table_of(o)
             v = _table_value(titles, table, expected["axis"])
             named = _written_value(expected["axis"], o["value"])
             if not v or named not in v:
-                problems.append(f"option {o['value']!r} does not match its table {table}")
+                problems.append(f"{sid}: option {o['value']!r} does not match its table {table}")
             got.setdefault(v, []).append(table)
         if set(got) != set(expected["values"]):
-            problems.append(f"values {sorted(map(sorted, got))} != {sorted(map(sorted, expected['values']))}")
+            problems.append(f"{sid}: values {sorted(map(sorted, got))} != {sorted(map(sorted, expected['values']))}")
         for v, ts in got.items():
             if len(ts) != 1:
-                problems.append(f"value {sorted(v)} given {len(ts)} times")
+                problems.append(f"{sid}: value {sorted(v)} given {len(ts)} times")
             if v in expected["values"] and not set(ts) <= expected["values"][v]:
-                problems.append(f"value {sorted(v)} table {ts} not allowed")
+                problems.append(f"{sid}: value {sorted(v)} table {ts} not allowed")
     return not problems, problems
 
 
 # ---------------------------------------------------------------- scoring
 
 
-def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None) -> dict:
-    """One question. ``titles``: table -> title; ``coverage``: table -> {frequency: (first month, last month)} from the
-    catalog metadata (optional: without it the per-table coverage check is not applicable)."""
-    rep_groups = case["representative"]["confirmed_groups"]
-    std_final = case["final"]
-    ask = case["ask"]
-    policy_review = ask_policy_held(case)  # only the ask part is held
-    res = {"case_id": case["case_id"], "part": case["part"], "labels": [], "review": []}
-
-    # run information as the run recorded it
-    info = rec.get("run_info") or {}
-    res["run"] = {"verified": bool(info.get("versions")) and info.get("as_of") == rec.get("as_of") and bool(rec.get(
-        "as_of")), "info": info}
-
-    # pool: confirmed, proposed only, or missing
-    pool = set(rec["pool"])
-    hits = []
-    for gi, g in enumerate(rep_groups):
-        eq_c = {x for t in g for x in (case["representative"].get("confirmed_equivalents") or {}).get(t, [])}
-        eq_p = {x for t in g for x in (case["representative"].get("proposed_equivalents") or {}).get(t, [])}
-        hits.append(True if (set(g) | eq_c) & pool else None if eq_p & pool else False)
-    res["pool"] = {"hit": (False if False in hits else None if None in hits else True) if rep_groups else "na",
-                   "groups": hits}
-    if False in hits:
-        res["labels"].append("retrieval_miss")
-
-    if rec["error"]:
-        res["labels"].append(f"run_error:{rec['error']['stage']}:{rec['error']['code']}")
-        res.update(contract={"ok": False}, evidence_contract={"ok": False}, code_checks={"right": None},
-                   completed={"right": False if std_final["status"] == "confirmed" else "na"},
-                   model_meaning={"right": False}, table_match={"right": False},
-                   final_full={"right": False if std_final["status"] == "confirmed" else "na"}, effects={})
-        return res
-    m = rec["model"]
-
+def fact_checks(rec: dict, titles: dict, res: dict) -> tuple[dict, dict]:
+    """The scorer's own fact check of the model output against code's checks (``contract``, ``evidence_contract``,
+    ``code_checks`` and their labels, written into ``res``); shared by every standard's scoring. Returns the fact
+    errors per statistic and code's handling per statistic."""
     # model output facts (the scorer's own) against code's checks
     facts = model_facts(rec, titles)
     ask_undecided = ask_facts(rec, titles)[1]
@@ -723,15 +927,54 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
         res["labels"].append("model_output_error")
     for lab in sorted(set(checks.values())):
         res["labels"].append(lab)
-    extraction = {}
-    if std_final["status"] == "confirmed":
-        if std_final.get("period") or std_final.get("periods"):
-            extraction["period"] = "quoted" if m["periods"] else "missing"
-        if std_final.get("frequency"):
-            extraction["frequency"] = "quoted" if m["frequencies"] else "missing"
-    res["extraction"] = extraction
-    if "missing" in extraction.values():
-        res["labels"].append("model_extraction_missing")
+    return facts, checks
+
+
+def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None) -> dict:
+    """One question. ``titles``: table -> title; ``coverage``: table -> {frequency: (first month, last month)} from the
+    catalog metadata (optional: without it the per-table coverage check is not applicable)."""
+    rep_groups = case["representative"]["confirmed_groups"]
+    std_final = case["final"]
+    ask = case["ask"]
+    policy_review = ask_policy_held(case)  # only the ask part is held
+    res = {"case_id": case["case_id"], "part": case["part"], "labels": [], "review": []}
+
+    # run information as the run recorded it
+    info = rec.get("run_info") or {}
+    res["run"] = {"verified": bool(info.get("versions")) and info.get("as_of") == rec.get("as_of") and bool(rec.get(
+        "as_of")), "info": info}
+
+    # pool: confirmed, proposed only, or missing
+    pool = set(rec["pool"])
+    hits = []
+    for gi, g in enumerate(rep_groups):
+        eq_c = {x for t in g for x in (case["representative"].get("confirmed_equivalents") or {}).get(t, [])}
+        eq_p = {x for t in g for x in (case["representative"].get("proposed_equivalents") or {}).get(t, [])}
+        hits.append(True if (set(g) | eq_c) & pool else None if eq_p & pool else False)
+    res["pool"] = {"hit": (False if False in hits else None if None in hits else True) if rep_groups else "na",
+                   "groups": hits}
+    if False in hits:
+        res["labels"].append("retrieval_miss")
+
+    if rec["error"]:
+        res["labels"].append(f"run_error:{rec['error']['stage']}:{rec['error']['code']}")
+        res.update(contract={"ok": False}, evidence_contract={"ok": False}, code_checks={"right": None},
+                   completed={"right": False if std_final["status"] == "confirmed" else "na"},
+                   model_meaning={"right": False}, table_match={"right": False},
+                   final_full={"right": False if std_final["status"] == "confirmed" else "na"}, effects={})
+        return res
+    m = rec["model"]
+
+    facts, checks = fact_checks(rec, titles, res)
+    conditions = condition_details(rec)  # .18: by statistic, condition and quote
+    extraction = conditions["summary"]
+    cond_problems = condition_problems(conditions)
+    res["extraction"], res["condition_detail"] = extraction, conditions
+    res["condition_counts"] = condition_counts(conditions)
+    for state, label in (("missing", "model_extraction_missing"), ("other_field", "condition_in_other_field"),
+                         ("not_kept", "condition_not_kept")):
+        if any(x["state"] == state for x in cond_problems):
+            res["labels"].append(label)
 
     # statistics to groups, by table only
     resolve = lambda o: _resolve(rec, o["table"])  # noqa: E731
@@ -767,12 +1010,18 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
     exp_ask = _expected_ask(case, titles) if expected == "required" else None
     model_asks = [(a["for"], {"axis": a["axis"], "options": a["options"]}) for a in m["asks"]]
 
+    # .20 (user 2026-10-29 06:20 UTC): where the ask policy is held, a statistic that asked (its options outside the
+    # answer groups) leaves a group without a table: held with the policy, never "missing"
+    asked_unmapped = [sid for sid in unmapped if stat_tables[sid]["opts"] and not stat_tables[sid]["rep"]]
+    held_by_policy = policy_review and bool(asked_unmapped)
+    res["ask_option_facts"] = ask_option_facts(rec, case, coverage)
+
     # model meaning per group
     meaning = []
     for gi in range(len(rep_groups)):
         sids = per_group[gi]
         if len(sids) != 1:
-            meaning.append("review" if sids or mapping_uncertain else "missing")
+            meaning.append("review" if sids or mapping_uncertain or held_by_policy else "missing")
             continue
         sid = sids[0]
         if not stat_tables[sid]["rep"] and stat_tables[sid]["opts"] and expected == "required":
@@ -829,10 +1078,11 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
         if (expected == "required" and not policy_review) or req is not None:
             break
         if len(sids) != 1:
-            mark = "review" if sids or mapping_uncertain else "missing"
+            mark = "review" if sids or mapping_uncertain or held_by_policy else "missing"
             table_parts.append(mark)
             full_parts.append(mark)
-            detail.append({"group": gi, "status": "mapping held" if mark == "review" else "no statistic"})
+            detail.append({"group": gi, "status": "held with the ask policy" if held_by_policy and not sids else
+                           "mapping held" if mark == "review" else "no statistic"})
             continue
         sid = sids[0]
         rows = (rec["final"].get(sid) or {}).get("tables") or []
@@ -862,8 +1112,11 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
         else:
             ok, problems = _score_ask(final_asks, exp_ask, lambda o: o.get("table_id"), titles)
             others_bad = [sid for sid, o in outcomes.items() if o == "failed"]
-            ask_final = "right" if ok and not others_bad else "wrong"
-            detail.append({"ask": ask_final, "problems": problems, "failed_statistics": others_bad})
+            # .16: with one answer group, a statistic that hands off a table where the ask is due skipped the ask
+            selected_instead = [sid for sid, o in outcomes.items() if o == "selected"] if len(rep_groups) <= 1 else []
+            ask_final = "right" if ok and not others_bad and not selected_instead else "wrong"
+            detail.append({"ask": ask_final, "problems": problems, "failed_statistics": others_bad,
+                           "selected_where_ask_due": selected_instead})
         table_parts, full_parts = [ask_final], [ask_final]
     elif policy_review:
         ask_final = "review"
@@ -907,9 +1160,19 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
                                 ("scorer_evidence_errors", not res["evidence_contract"]["ok"]),
                                 ("evidence_unverified", bool(unverified)),
                                 ("route_not_verified_handoff", rec.get("route") not in ("handoff", "ask"))) if bad]
-    res["completed"] = {"right": ff if ff is not True else False if blocked else
-                        None if res["code_checks"]["right"] is None else True,
-                        "evidence_unverified": unverified, "blocked_by": blocked}
+    # .16 (user 2026-10-28 19:56 UTC): a condition that surely failed makes completion wrong even when the
+    # per-statistic selection is held (a fact or evidence error, unverified evidence, a failed route, or a final table
+    # set that misses a group or adds a table); held only when nothing failed and something could not be decided
+    sets = table_sets(rec, case)
+    if sets["final"]["right"] is False and sets["final"].get("held") is None:
+        blocked.append("final_table_set_wrong")
+    if ff is False or blocked:
+        done = False
+    elif ff is True:
+        done = None if res["code_checks"]["right"] is None else True
+    else:
+        done = ff
+    res["completed"] = {"right": done, "evidence_unverified": unverified, "blocked_by": blocked}
     if unverified:
         res["labels"].append("selected_evidence_unverified")
     res["final_detail"] = detail
@@ -927,14 +1190,26 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
         effects["ask"] = _effect(model_ask, ask_final)
     res["effects"] = effects
     corrections = [c for cs in rec["corrections"].values() for c in cs]
-    model_clean = not any(facts.values()) and "missing" not in extraction.values()
+    # .17: a condition quoted nowhere, only in another field, or unclear is the model's side (or unknown), so a
+    # worse final result is not put on the code; an end point the code did not keep stays on the code. .18: only
+    # the conditions of the item's own statistics count (one not attributable to any statistic counts for all)
+    model_side = [x for x in cond_problems if x["state"] in ("missing", "other_field", "review")]
+
+    def model_clean(sids) -> bool:
+        return not any(facts.values()) and not any(
+            x["statistics"] is None or set(x["statistics"]) & set(sids) for x in model_side)
+
+    item_sids = {f"group{d['group']}:table": [d["statistic"]] for d in detail if "group" in d and "statistic" in d}
+    item_sids.update({f"{t['target']}:table": list(t.get("statistics") or []) for t in (req or {}).get("targets", [])})
+    every = list(rec["final"])
     for item, eff in effects.items():
         if eff == "worsened":
-            res["labels"].append("code_correction_error" if model_clean else "cause_review")
+            res["labels"].append("code_correction_error" if model_clean(item_sids.get(item, every)) else
+                                 "cause_review")
         if eff == "improved" and corrections:
             res["labels"].append("code_correction_success")
     if res["model_meaning"]["right"] is True and res["final_full"]["right"] is False and not effects_worse(effects) \
-            and model_clean and "code_false_reject" not in checks.values() and "unsupported_expression" not in \
+            and model_clean(every) and "code_false_reject" not in checks.values() and "unsupported_expression" not in \
             res["labels"]:
         res["labels"].append("code_correction_error")
     res["ask_measures"] = ask_measures(rec, case, titles)
