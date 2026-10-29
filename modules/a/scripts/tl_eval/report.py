@@ -20,9 +20,10 @@ sys.path.insert(0, str(ROOT / "modules" / "a"))
 sys.path.insert(0, str(ROOT / "modules" / "a" / "scripts"))
 
 from tl_eval import files as F  # noqa: E402
+from tl_eval import indep as I  # noqa: E402
 from tl_eval import score as S  # noqa: E402
 
-REPORT_VERSION = "tl-report-2026-10-28.3"  # .3: metric definitions
+REPORT_VERSION = "tl-report-2026-10-29.4"  # .3: metric definitions; .4: half-year coverage, indep standards
 STANDARD_PATH = F.external("standard_v2.json")
 
 
@@ -40,8 +41,9 @@ def coverage_of(views: dict) -> dict:
         if f == "Q":
             m = re.search(r"(\d)/4", stamp)
             return y * 12 + (int(m.group(1)) * 3 - 1 if end else (int(m.group(1)) - 1) * 3) if m else None
-        if f == "H":
-            return None
+        if f == "H":  # '2010 1/2': first or second half (.4; before, a half-year table had no coverage)
+            m = re.search(r"(\d)/2", stamp)
+            return y * 12 + (int(m.group(1)) * 6 - 1 if end else (int(m.group(1)) - 1) * 6) if m else None
         return y * 12 + (11 if end else 0)
 
     out = {}
@@ -73,15 +75,24 @@ def evaluate(records: dict, standard: dict, titles: dict, coverage: dict | None 
         if problems:
             unverified.append({"case_id": case["case_id"], "problems": problems})
             continue
-        results.append(S.score_case(rec, case, titles, coverage))
+        results.append((I.score_case if I.is_indep(standard) else S.score_case)(rec, case, titles, coverage))
     runs = sorted({json.dumps((records[r["case_id"]].get("run_info") or {}).get("versions"), sort_keys=True)
                    for r in results})
-    return {"evaluator": {"score": S.SCORE_VERSION, "report": REPORT_VERSION}, "metrics": dict(S.METRICS),
+    indep = I.is_indep(standard)
+    return {"evaluator": {"score": S.SCORE_VERSION, "report": REPORT_VERSION,
+                          **({"indep": I.INDEP_SCORE_VERSION} if indep else {})},
+            "metrics": dict(I.METRICS if indep else S.METRICS),
             "standard": {"version": standard["version"], "sha256": standard_sha256, "as_of": standard["as_of"],
                          "sources": standard["sources"], "ask_axes": standard["ask_axes"],
                          "period_policy": standard["period_policy"]},
             "run_versions": [json.loads(x) for x in runs],
-            "not_run": not_run, "unverified": unverified, "results": results, "aggregate": S.aggregate(results)}
+            "not_run": not_run, "unverified": unverified, "results": results,
+            "aggregate": aggregate(standard, results)}
+
+
+def aggregate(standard: dict, results: list[dict]) -> dict:
+    """The aggregate of the standard's kind (an independent standard is counted by part and by type)."""
+    return I.aggregate(results) if I.is_indep(standard) else S.aggregate(results)
 
 
 def main(records_path: str, out_path: str, standard_path: str | None = None) -> dict:

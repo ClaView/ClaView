@@ -342,13 +342,54 @@ def test_the_route_is_a_pure_function_of_the_outcomes():
     assert CH.route(rec())["action"] == "fail"
 
 
-def test_the_graph_is_straight(layer):
-    from claview_a.graph import build_graph
+def test_the_graph_is_straight_but_for_one_limited_re_judgment(layer):
+    # user 2026-10-29 08:27 UTC: this test (was: the six straight edges only) now checks the one allowed branch:
+    # a re-judgment only under its conditions, at most once, no third call, no retry, within the call limit. What
+    # the straight test stopped, an unbounded re-call, stays stopped.
+    import json as _json
+
+    from claview_a.graph import JudgeError, build_graph, run
 
     g = build_graph().get_graph()
     edges = sorted((e.source, e.target) for e in g.edges)
-    assert edges == sorted([("__start__", "pool"), ("pool", "cards"), ("cards", "judge"), ("judge", "check"),
-                            ("check", "route"), ("route", "__end__")])
+    straight = [("__start__", "pool"), ("pool", "cards"), ("cards", "judge"), ("judge", "check"),
+                ("check", "route"), ("route", "__end__")]
+    branch = [("check", "research"), ("research", "judge"), ("research", "route"), ("check", "research_end"),
+              ("research_end", "route")]
+    assert edges == sorted(straight + branch)
+
+    q = "2024년에 국내에서 생산해 국내에 팔거나 수출한 것들의 전체 물가 흐름을 월별로 보여줘"
+    lost = {k: [] for k in ("statistics", "splitters", "periods", "frequencies", "calculations", "choices", "asks",
+                            "missing", "alternatives")}
+    lost["statistics"] = [{"id": "s1", "quote": "전체 물가 흐름", "name": "물가"}]
+    lost["missing"] = [{"for": ["s1"], "search_words": ["총산출물가지수"]}]
+
+    def judge_of(*answers):
+        calls = []
+
+        def judge(payload, request):
+            calls.append(1)
+            a = answers[min(len(calls), len(answers)) - 1]
+            if isinstance(a, Exception):
+                raise a
+            return _json.dumps(a, ensure_ascii=False)
+        return judge, calls
+
+    def go(judge, **kw):
+        return run(q, layer, judge, Settings("fake"), AS_OF, **kw)
+
+    judge, calls = judge_of(lost)  # off by default: the straight path, one call
+    assert go(judge)["action"] == "fail" and len(calls) == 1
+    judge, calls = judge_of(lost)  # on, missing again: two calls and the end, never a third
+    state = go(judge, research=True)
+    assert len(calls) == 2 and state["research"]["end"] == "still_missing" and state["action"] == "fail"
+    judge, calls = judge_of(JudgeError("timeout"))  # a failed first call: no retry, no re-search
+    assert go(judge, research=True)["research"]["end"] == "first_round_error" and len(calls) == 1
+    judge, calls = judge_of(lost, JudgeError("timeout"))  # a failed re-judgment: no retry
+    assert go(judge, research=True)["research"]["end"] == "second_round_error" and len(calls) == 2
+    judge, calls = judge_of(lost)  # the run's limit refuses the re-judgment: no second call
+    assert go(judge, research=True, research_budget=lambda: False)["research"]["end"] == "rejudge_call_limit"
+    assert len(calls) == 1
 
 
 def test_parse_output_is_not_acceptance(layer):
@@ -451,8 +492,12 @@ def test_a_partly_read_period_and_base_year_marks():
     got = PR.read_quotes(["2020=100"], [])
     assert got["problems"] == [] and got["conditions"] == []
     assert got["readings"][0]["base_year_removed"] == ["2020=100"]
+    # the base-year policy changed (users 2026-10-29 07:51 and 08:42 UTC). Before: "2015년 기준" taken out as a base
+    # year, one condition (2024) left. Now: how the two years relate cannot be told, so the statistic stops with
+    # period_base_year_ambiguous; 2015 is never dropped to keep 2024 alone
     got = PR.read_quotes(["2015년 기준 2024년"], [])
-    assert got["readings"][0]["base_year_removed"] == ["2015년 기준"] and len(got["conditions"]) == 1
+    assert got["readings"][0]["base_year_removed"] == []
+    assert [p["code"] for p in got["problems"]] == ["period_base_year_ambiguous"]
     got = PR.read_quotes([], ["어쩌다"])
     assert [p["code"] for p in got["problems"]] == ["frequency_unresolved"]
 
@@ -518,8 +563,14 @@ def test_two_point_years_stay_two_points_and_a_split_share_fails_explicitly(laye
                                                      {"start": "2024-01", "end": "2024-12"}]
     assert [p["code"] for p in PR.read_quotes(["2020, 2024년"], [])["problems"]] == ["period_partially_read"]
     # a base year is not turned into a period
+    # the base-year policy changed (users 2026-10-29 07:51 and 08:42 UTC). Before: "2020년 기준" taken out as a base
+    # year, no condition. Now: quoted as a period by the model, it is the observation year 2020, neither removed nor
+    # replaced by the default period. Explicit base-year marks are still taken out (the 2020=100 case above)
     base = PR.read_quotes(["2020년 기준"], [])
-    assert base["conditions"] == [] and base["readings"][0]["base_year_removed"] == ["2020년 기준"]
+    assert base["readings"][0]["base_year_removed"] == [] and base["problems"] == []
+    assert [(c["attrs"]["form"], c["attrs"]["start_expr"]["year"]) for c in base["conditions"]] == [("point", "2020")]
+    explicit = PR.read_quotes(["기준연도 2020년"], [])
+    assert explicit["conditions"] == [] and explicit["readings"][0]["base_year_removed"] == ["기준연도 2020년"]
     # points that need one edition twice around another edition cannot be one continuous share
     group = ["DT_101Y004", "DT_161Y006"]
     usable = {t: "cited_values_held" for t in group}

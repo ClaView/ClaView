@@ -21,7 +21,7 @@ pipeline은 module-a/b/c 컨테이너를 부르지 않는다. 그래서 모듈 A
 
 | 경로 | 내용 | 담당 |
 |---|---|---|
-| `modules/a/claview_a/` | **새 A(표 단위 경로). 새 A 패키지 제공 완료, 화면 연결 전.** 공개 `run`, CLI `python -m claview_a`. 표준 라이브러리·langgraph만 쓰는 패키지 규칙을 지킨다. [기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) | A |
+| `modules/a/claview_a/` | **새 A(표 단위 경로). 새 A 패키지 제공 완료, 화면 연결 전.** 공개 `run`, CLI `python -m claview_a`. 표준 라이브러리·langgraph만 쓰는 패키지 규칙을 지킨다. [기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) · [55문항 측정판](docs/modules/a/A_측정판_55문항_20261029.md) | A |
 | `modules/a/claview_a_legacy/` | 기존 A(10/21판). 화면 연결 전까지 service·staged 화면·`claview` 명령·골든 22 평가가 쓴다 | A |
 | `modules/a/claview_a_api/` | A의 service(`service.py`: pipeline이 부름)와 HTTP 계층(`api.py`: `POST /a/select`, `/a/answer`). 아직 기존 A(`claview_a_legacy`)를 부른다 | A |
 | `modules/a/{tests,tests_tl,tests_legacy,tests_api,scripts}/` | 새 A 시험(옮긴 부품 / 표 단위 경로), 기존 A 시험, API 시험, 연구·평가 도구(새 A 평가기 `scripts/tl_eval`) | A |
@@ -99,6 +99,7 @@ $env:PYTHONPATH = "common;modules/a;modules/b;modules/c;pipeline"
 
 - 모듈 A의 첫 요청은 카탈로그 적재 때문에 약 8초 걸린다(이후 요청은 빠름).
 - 새 A(2026-10-28) 시험 결과는 [A 기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) 3·5절에 있다.
+- 새 A 55문항 측정판(2026-10-29: 기간·주기 검사, 제한 재검색) 결과와 남은 한계는 [A 측정판 문서](docs/modules/a/A_측정판_55문항_20261029.md)에 있다.
 
 ## 4. 바뀐 점 (이전 zip 통합본 대비)
 

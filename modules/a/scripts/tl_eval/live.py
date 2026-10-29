@@ -53,7 +53,7 @@ from tl_eval import report as R  # noqa: E402
 from tl_eval import score as S  # noqa: E402
 from tl_eval import standard as ST  # noqa: E402
 
-LIVE_VERSION = "tl-live-2026-10-28.3"
+LIVE_VERSION = "tl-live-2026-10-29.6"  # .5: re-search, re-judge budget, call gate; .6: the key from .env
 MODEL = {"model": "gpt-6-luna", "effort": "low", "max_output_tokens": 4096}
 STAGE1 = ["SB:DA3-01", "SB:CQ1-01", "SB:CQ1-03", "SB:DA3-09", "CV-AB-05", "CV-AB-07"]
 
@@ -128,6 +128,139 @@ def gates(manifest: dict) -> list[dict]:
     return rows
 
 
+ENV_FILE = ROOT / ".env"  # the team's key file at the repository root (Git-ignored; docker compose reads it too)
+KEY_NAME = "OPENAI_API_KEY"
+
+
+def key_from_env_file(path: Path = ENV_FILE) -> str:
+    """Put the key of the team's ``.env`` into this process's environment before a live run (user 2026-10-29 09:51
+    UTC: ``.env`` is the one key source). Only the ``OPENAI_API_KEY`` line is read; the value is never returned,
+    logged, printed or written, and a value there replaces one the process already had. Returns where the key comes
+    from: ``env_file``; ``process_environment`` (the file has no value; the process's own variable is used, and the
+    run records it); ``none`` (the transport's own check then refuses the run before any call)."""
+    import os
+
+    value = ""
+    if path.is_file():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            text = line.strip()
+            if text.startswith("export "):
+                text = text[len("export "):].lstrip()
+            name, sep, rest = text.partition("=")
+            if not sep or name.strip() != KEY_NAME:
+                continue
+            rest = rest.strip()
+            if len(rest) >= 2 and rest[0] == rest[-1] and rest[0] in "'\"":
+                rest = rest[1:-1]
+            else:
+                rest = rest.split(" #", 1)[0].strip()
+            value = rest
+    if value:
+        os.environ[KEY_NAME] = value
+        return "env_file"
+    return "process_environment" if os.environ.get(KEY_NAME, "").strip() else "none"
+
+
+def research_conditions(model: dict | None = None, cases: list[str] | tuple = ()) -> dict:
+    """The re-search part of a manifest (users 2026-10-29 07:51 and 08:18 UTC): off unless a re-judge model and the
+    cases allowed to re-judge are given. At most one re-judgment per listed case, by that model, each one call
+    within the run's ``max_calls``; a case's unused re-judgment is never moved to another case or a repeat. The
+    extra-hit cap and the input limit are the code's own and are fixed here as conditions."""
+    from claview_a import contract as K
+    from claview_a.graph import RESEARCH_VERSION
+    from claview_a.pool import EXTRA_CAP
+
+    cases = list(cases)
+    if len(set(cases)) != len(cases) or bool(model) != bool(cases):
+        raise ValueError("re-judge cases repeated, or a re-judge model without cases (or cases without a model)")
+    return {"enabled": bool(cases), "version": RESEARCH_VERSION, "model": dict(model) if model else None,
+            "cases": cases, "max_rejudge_calls": len(cases), "per_case": 1, "extra_cap": EXTRA_CAP,
+            "payload_limit": K.PAYLOAD_LIMIT,
+            "rule": "only a listed case, only when every statistic of the first judgment is missing (a re-search "
+                    "signal), at most one re-judgment by the re-judge model; no third judgment, no retry"}
+
+
+def research_of(manifest: dict) -> dict:
+    """A manifest's re-search conditions (an older manifest without them: off)."""
+    return manifest.get("research") or research_conditions()
+
+
+class RejudgeBudget:
+    """The run's re-judgments, asked once before a second call: refused for a case not listed, a case that already
+    had its one, a used-up re-judge limit or the run's call limit (the graph then records ``rejudge_call_limit`` and
+    makes no call). ``for_case`` names the case being run."""
+
+    def __init__(self, research: dict, calls_now, rejudge_calls_now, max_calls: int):
+        self.research, self.calls_now, self.rejudge_calls_now = research, calls_now, rejudge_calls_now
+        self.max_calls, self.case, self.used = max_calls, None, []
+
+    def for_case(self, case_id: str) -> "RejudgeBudget":
+        self.case = case_id
+        return self
+
+    def __call__(self) -> bool:
+        if self.case not in self.research["cases"] or self.case in self.used:
+            return False
+        if self.rejudge_calls_now() >= self.research["max_rejudge_calls"] or self.calls_now() >= self.max_calls:
+            return False
+        self.used.append(self.case)
+        return True
+
+
+class CallRefused(RuntimeError):
+    """A call the run's limits do not allow, refused right before it would be sent: nothing reaches the transport
+    and nothing is used. A program fault, never a question's own judge error: the run stops."""
+
+
+class CallGate:
+    """Every model call of a run passes here right before it is sent (user 2026-10-29 09:04 UTC): the case's
+    allowance for that model (the first-judge model once per case; the re-judge model once, only for a listed
+    case), then the model's limit, then the run's limit. A call is counted when it is let through, before the judge
+    sends it, so a failed send (error, truncation, timeout) counts as used. A refusal is recorded and raised as
+    ``CallRefused``; the judge behind the gate is not called. ``for_case`` names the case being run."""
+
+    def __init__(self, manifest: dict):
+        research = research_of(manifest)
+        first = manifest["model"]["name"]
+        ids = [e["case_id"] for e in manifest["schedule"]]
+        second = research["model"]["name"] if research["enabled"] else None
+        self.allowed = {c: {first: 1, **({second: int(c in research["cases"])} if second else {})} for c in ids}
+        self.per_model = dict(manifest.get("max_calls_per_model") or {first: len(ids)})
+        self.max_calls = manifest["max_calls"]
+        self.case, self.used, self.by_model, self.refused = None, {}, {}, []
+
+    def for_case(self, case_id: str) -> None:
+        self.case = case_id
+
+    def total(self) -> int:
+        return sum(self.by_model.values())
+
+    def calls(self, model: str) -> int:
+        return self.by_model.get(model, 0)
+
+    def judge(self, model: str, inner):
+        """``inner`` (a judge) behind the gate, for calls by ``model`` (the manifest's model name)."""
+        def call(payload: dict, request: dict) -> str:
+            self._admit(model)
+            return inner(payload, request)
+        return call
+
+    def _admit(self, model: str) -> None:
+        key = (self.case, model)
+        if self.used.get(key, 0) >= self.allowed.get(self.case, {}).get(model, 0):
+            why = "case_limit"
+        elif self.calls(model) >= self.per_model.get(model, 0):
+            why = "model_limit"
+        elif self.total() >= self.max_calls:
+            why = "run_limit"
+        else:
+            self.used[key] = self.used.get(key, 0) + 1
+            self.by_model[model] = self.calls(model) + 1
+            return
+        self.refused.append({"case_id": self.case, "model": model, "reason": why})
+        raise CallRefused(f"{why}: a {model} call for {self.case} refused before sending")
+
+
 class RunStopped(RuntimeError):
     """A reliability failure: the run stops, nothing is re-run."""
 
@@ -147,6 +280,7 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None, re
         if transport is None:
             from claview_a.transport.provider import OpenAITransport
 
+            key_from_env_file()  # the team's .env, the one key source (user 2026-10-29 09:51 UTC)
             transport = OpenAITransport()
         transport.preflight()  # key present (not read out): fails before any call is sent
     elif mode == "replay":
@@ -211,7 +345,8 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None, re
     views = selection_catalog(layer).views
     report = R.evaluate(records, standard, {t: v.title for t, v in views.items()}, R.coverage_of(views), std_sha)
     results = {r["case_id"]: r for r in report["results"]}
-    report["subsets"] = {name: {"cases": ids, "aggregate": S.aggregate([results[c] for c in ids if c in results])}
+    report["subsets"] = {name: {"cases": ids, "aggregate": R.aggregate(standard, [results[c] for c in ids
+                                                                                if c in results])}
                          for name, ids in (manifest.get("subsets") or {}).items()}
     if mode == "fake":
         report["note"] = "fake judge: wiring check only, not a model result"
@@ -259,12 +394,15 @@ def main(argv: list[str]) -> None:
         every = [c["case_id"] for c in cases]
         subsets = {f"part:{p}": [c["case_id"] for c in cases if c["part"] == p]
                    for p in dict.fromkeys(c["part"] for c in cases)}
+        subsets.update({f"type:{t}": [c["case_id"] for c in cases if c.get("type") == t]
+                        for t in dict.fromkeys(c["type"] for c in cases if c.get("type"))})
         paired = {x for c in cases if (c.get("relations") or {}).get("extends")
                   for x in (c["case_id"], c["relations"]["extends"])}
         if paired:
             subsets["extension_pairs"] = [c for c in every if c in paired]
             subsets["not_paired"] = [c for c in every if c not in paired]
-        m = make_manifest(argv[1], argv[2], every, subsets=subsets, standard_file=std_file)
+        as_of = json.loads(Path(std_file or ST.OUT_V2).read_text(encoding="utf-8"))["as_of"]
+        m = make_manifest(argv[1], argv[2], every, as_of=as_of, subsets=subsets, standard_file=std_file)
         Path(argv[3]).write_text(json.dumps(m, ensure_ascii=False, indent=1), encoding="utf-8")
         print(json.dumps({"cases": len(m["cases"]), "max_calls": m["max_calls"], "subsets": {
             k: len(v) for k, v in m["subsets"].items()}, "approval": m["approval"]["live_calls"]}))
