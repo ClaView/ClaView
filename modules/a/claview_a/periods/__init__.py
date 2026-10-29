@@ -5,9 +5,15 @@ The model only quotes period and frequency words. Code reads them with the curre
 the shared resolver (``claview_period`` through ``select.periods``). Nothing here copies period rules.
 
 Reading a quote (``read_quotes``; step-3 review, user 2026-10-27 21:36 UTC):
-- base-year marks are not periods: "YYYY=100" and a year followed by "기준년"/"기준연도" or "기준" (the current
-  path's lexicon reads "2015년 기준" as a base year: ``lexicon.json`` filler.base_word) are taken out, and the removal
-  is recorded; a quote left empty by that is recorded as no period;
+- explicit base-year marks are not periods: "YYYY=100", a year followed by "기준년"/"기준연도"/"기준년도", and
+  "기준연도 YYYY년" are taken out, and the removal is recorded; a quote left with only such marks is recorded as no
+  period (user 2026-10-29 07:51 UTC: until then "YYYY년 기준" was removed too). A year followed by a lone "기준"
+  ("2024년 기준") is read as the year the model quoted as a period (``plain_standard`` recorded), also next to other
+  periods ("2023년 기준과 2024년 기준": two points; the same year twice: that year; separate quotes: each as the
+  model quoted it). Only a quoted expression in which a lone-기준 year stands directly before another period
+  ("2015년 기준 2024년", "2015년 기준으로 2024년") cannot be told apart (base year or observation year):
+  ``period_base_year_ambiguous`` with the expression, never a removal, never a default (users 08:24 and 08:42 UTC:
+  judged on the statistic's own quoted expression, never on two quotes standing next to each other);
 - a closed month or quarter range that names its year once ("2024년 1~3월", "2024년 1월~3월", "2024년 1~4분기") is
   rewritten to name the year at both ends (x20: 10 sessions dropped on it); the quote, the rewrite and the reading are
   recorded;
@@ -55,13 +61,21 @@ from . import table_rules as P
 from ..search.families import FREQUENCY_WORDS as _FREQUENCY_WORDS
 
 
-PERIODS_VERSION = "tl-periods-2026-10-29.7"  # .7: the end word of an end-point frequency is read (plan 36)
+# .8: only explicit base-year marks are removed; "YYYY년 기준" is the quoted year or ambiguous (user 2026-10-29
+# 07:51 UTC); "최근 N개 분기" reads as "최근 N분기"
+# .9: ambiguous only for a lone-기준 year directly before another period, not for every second period (08:24 UTC)
+# .10: within one quoted expression only, never from two quotes next to each other (08:42 UTC)
+PERIODS_VERSION = "tl-periods-2026-10-29.10"  # .7: the end word of an end-point frequency is read (plan 36)
 MAX_STITCH = 3  # tables joined across edition boundaries for one statistic
 
 _MONTH_RANGE = re.compile(r"(\d{4})\s*년\s*(\d{1,2})\s*월?\s*[~\-–]\s*(\d{1,2})\s*월")
 _QUARTER_RANGE = re.compile(r"(\d{4})\s*년\s*([1-4])\s*(?:분기)?\s*[~\-–]\s*([1-4])\s*분기")
-_BASE_YEAR = re.compile(r"\(?\s*\d{4}\s*=\s*100\s*\)?|\d{4}\s*년?\s*(?:기준\s*(?:년도|연도|년)|기준)(?![가-힣])"
+_BASE_YEAR = re.compile(r"\(?\s*\d{4}\s*=\s*100\s*\)?|\d{4}\s*년?\s*기준\s*(?:년도|연도|년)(?![가-힣])"
                         r"|기준\s*(?:년도|연도|년)\s*\d{4}\s*년?")
+# a year with a lone "기준" after it: a point the model quoted as a period
+_PLAIN_STANDARD = re.compile(r"\d{4}\s*년?\s*기준(?!\s*(?:년도|연도|년))(?![가-힣])")
+# ... directly before another period: base year or observation year cannot be told apart
+_STANDARD_BEFORE_PERIOD = re.compile(r"\d{4}\s*년?\s*기준(?:\s*(?:으로|의))?\s*(?=\d{4})")
 _WORD = re.compile(r"[가-힣A-Za-z0-9]+")
 _LEXICON = json.loads((Path(__file__).resolve().parents[1] / "data" / "lexicon.json").read_text(encoding="utf-8"))
 _ENDINGS = sorted(_LEXICON["particles"]["endings"], key=len, reverse=True)
@@ -120,10 +134,17 @@ def _frequency_word(word: str) -> bool:
     return word in _FREQUENCY_WORDS or (word.endswith("별") and word[:-1] in _FREQUENCY_WORDS)
 
 
+def _standard_before_period(texts: list[str]) -> list[dict]:
+    """The lone-기준 years directly before another period within one quoted period text."""
+    return [{"quote": t, "expression": m.group(0).strip() + " " + t[m.end():].strip()}
+            for t in texts for m in _STANDARD_BEFORE_PERIOD.finditer(t)]
+
+
 def read_quotes(period_quotes: list[str], frequency_quotes: list[str]) -> dict:
     """{conditions, readings, problems}: the conditions read from the quotes (IDs made unique), one reading row per
     quote {kind, quote, base_year_removed, read_as, conditions, uncovered}, and the problems
-    (``period_unresolved``, ``period_partially_read``, ``frequency_unresolved``) with their quotes."""
+    (``period_unresolved``, ``period_partially_read``, ``frequency_unresolved``, ``period_base_year_ambiguous``)
+    with their quotes."""
     conditions: list[dict] = []
     readings: list[dict] = []
     problems: list[dict] = []
@@ -137,6 +158,8 @@ def read_quotes(period_quotes: list[str], frequency_quotes: list[str]) -> dict:
                 text = normalize_quote(text) if text else text
             row = {"kind": kind, "quote": quote, "base_year_removed": removed, "read_as": text, "conditions": [],
                    "uncovered": []}
+            if kind == "period":
+                row["plain_standard"] = [m.group(0).strip() for m in _PLAIN_STANDARD.finditer(text or "")]
             readings.append(row)
             if not text:
                 continue  # only a base-year mark: no period was said
@@ -156,6 +179,10 @@ def read_quotes(period_quotes: list[str], frequency_quotes: list[str]) -> dict:
                 c["id"] = f"{c['id'][0]}{len(conditions) + 1}"
                 conditions.append(c)
                 row["conditions"].append(c["id"])
+    for row in _standard_before_period([r["read_as"] for r in readings if r["kind"] == "period" and r["read_as"]]):
+        problems.append({"code": "period_base_year_ambiguous", **row,
+                         "why": "a year with a lone 기준 directly before another period: base year or observation "
+                                "year cannot be told apart"})
     return {"conditions": conditions, "readings": readings, "problems": problems}
 
 

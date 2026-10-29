@@ -137,8 +137,10 @@ _SEP = r"\s*(?:부터|에서|~|-|–)\s*"
 _RANGE = re.compile(_yr(1) + _sub(1) + "?" + _SEP
                     + rf"(?:{_yr(2)}{_sub(2)}?|(?P<omit>{_sub(3)})(?=\s*까지))" + r"\s*(?:까지)?")
 _SINCE = re.compile(_yr(1) + _sub(1) + r"?\s*(?:이후|부터|이래)")
-_RECENT = re.compile(r"(?:최근|지난)\s*(\d{1,2})\s*(년|개월|달|분기|반기)(?:\s*(?:간|동안))?")
-_RECENT_UNIT = {"년": "year", "개월": "month", "달": "month", "분기": "quarter", "반기": "half"}
+# "최근 8개 분기"/"최근 2개 반기" are the same request as "최근 8분기"/"최근 2반기" (user 2026-10-29 07:51 UTC)
+_RECENT = re.compile(r"(?:최근|지난)\s*(\d{1,2})\s*(년|개월|달|개\s*분기|분기|개\s*반기|반기)(?:\s*(?:간|동안))?")
+_RECENT_UNIT = {"년": "year", "개월": "month", "달": "month", "분기": "quarter", "반기": "half",
+                "개분기": "quarter", "개반기": "half"}
 # 연도 별칭 시점: 올해 2분기, 작년 하반기, 작년 말, 작년 한 해, 올해 들어(→ 이후)
 _REL = re.compile(rf"(?P<a1>{_ALIAS}){_sub(1)}?(?:\s*(?P<eoy>말)(?!잔)|\s*(?P<whole>한\s*해)|\s*(?P<into>들어))?"
                   r"|(?P<olinto>올\s+들어)")
@@ -263,7 +265,7 @@ def find_periods(query: str, as_of: str | None) -> list[dict]:
         add(m, "since", _bounds(y1, u1)[0] if y1 and u1 else None, None, relative=relative)
     for m in _RECENT.finditer(query):
         if free(m):
-            amount, unit = int(m.group(1)), _RECENT_UNIT[m.group(2)]
+            amount, unit = int(m.group(1)), _RECENT_UNIT[re.sub(r"\s+", "", m.group(2))]
             start = end = None
             if as_of and unit == "year":  # 연 단위만 푼다. 월·분기·반기와 공표 지연 규칙은 D7
                 start, end = _shift_year(as_of, amount), as_of[:4]

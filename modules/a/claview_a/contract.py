@@ -60,8 +60,13 @@ def prompt_text() -> str:
 # ---------------------------------------------------------------- input
 
 
-def build_payload(question: str, cards: list[dict]) -> dict:
+def build_payload(question: str, cards: list[dict], unresolved: list[dict] | None = None) -> dict:
+    """The judge's input. ``unresolved`` (a re-judgment after a re-search only, user 2026-10-29 08:18 UTC): the
+    statistics the first judgment left missing with the condition quotes it attached to them; the first payload
+    never has the key."""
     payload = {"question": question, "cards": CARD_LEGEND + "\n" + render_cards(cards), "ask_axes": dict(ASK_AXES)}
+    if unresolved is not None:
+        payload["unresolved"] = unresolved
     size = len(canonical(payload))
     if size > PAYLOAD_LIMIT:
         raise ContractError("input_too_large", f"{size} > {PAYLOAD_LIMIT}")

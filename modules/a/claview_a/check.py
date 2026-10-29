@@ -58,6 +58,18 @@ Order, per statistic:
    asked when every sibling value has a table that passes the fact check (the statistic held where the model cited
    values; a table-level statistic otherwise). A model ask on some axes gets code asks for the
    other open axes. No basis is assumed because one sibling covers the period;
+   3b. a value the model's own splitters state for the statistic on an axis the card does not split (a single
+   table, or siblings that share or lack that value) is compared with the chosen table's title basis
+   (``stated_basis_checks``): the same value passes, another value is ``stated_basis_conflict``, a value the table
+   does not show is ``stated_basis_unverified`` (a warning, never the opposite value). Nothing is switched or asked;
+   3a. every ask option (model or code) is compared the same way on the axes other than the asked one: an option
+   of another stated value is ``stated_basis_conflict`` (stage ``ask_option``), so the ask is never passed as
+   verified; no option is replaced or added. When the model quoted one frequency that code reads, an option whose
+   value gives no table of that frequency (the option table or its frequency/edition candidates) makes the ask
+   ``ask_invalid`` (``option_frequency_unsupported``); a value whose only such tables are candidates that do not
+   keep the option's cited values by the period rule is held (``target_table_unconfirmed``, stage
+   ``ask_frequency``); both facts per candidate are in ``ask_frequency_checks``. With no readable frequency nothing
+   is removed by a default (users 2026-10-29 07:51 and 08:24 UTC);
 4. periods (``periods.read_quotes``, ``periods.final_tables``) among the candidates of the decided representative
    that pass the check; a quote that cannot be read fails, never a default; each quoted frequency word is kept in
    ``frequency_quotes`` with the statistics it is for, the frequency read and the point in the period ("end" for
@@ -80,10 +92,14 @@ from .search.families import FREQUENCY_WORDS, SIGNATURE_AXES
 from .search.tables import nospace
 
 from . import periods as PR
-from .cards import VALUE_FORMS, card_facts, question_words, shown_value
+from .cards import ASK_AXES, VALUE_FORMS, card_facts, question_words, shown_value
 from .contract import CONTRACT_VERSION as K_CONTRACT
 
-CHECK_VERSION = "tl-check-2026-10-29.15"  # .15: frequency_quotes (quote, for, frequency, end point) recorded
+# .16: a stated basis is checked on axes the card does not split too (single tables included)
+# .17: and on every ask option, on the axes other than the asked one
+# .18: ask options must give the requested frequency; the reason for a default period is recorded
+# .19: a candidate giving the frequency must keep the option's cited values (the period rule, shared)
+CHECK_VERSION = "tl-check-2026-10-29.19"  # .15: frequency_quotes (quote, for, frequency, end point) recorded
 # ``*_unverified``: the table or ask is decided with the model's card evidence not verified (users 2026-10-28 05:37
 # and 05:42 UTC); never the same state as a verified one, and routed as ``partial``, never ``handoff``
 OUTCOMES = ("selected", "selected_unverified", "ask", "ask_unverified", "not_in_pool", "failed")
@@ -426,20 +442,13 @@ def _select_periods(quote: str, rep: str, candidates: list[str], item_evidence: 
     """Usable candidates (the common check, ``verify_table``) and the final tables among them; every check is
     traced. ``reading``: ``periods.read_quotes`` of the statistic."""
     usable, why, trace = {}, {}, []
-    rep_names = PR.item_names(lk.views[rep])
     for t in candidates:
-        got = verify_table(quote, t, item_evidence, lk, retention)
+        label, got = _kept(quote, rep, t, item_evidence, lk, retention)
         trace.append(_trace(f"{stage}:period_candidate", got))
-        if not got["ok"]:  # retention_unverified included: never put in the period and edition competition
-            why[t] = got["code"]
-        elif t == rep:
-            usable[t] = "representative_checked"
-        elif item_evidence:
-            usable[t] = "cited_values_held"
-        elif PR.item_names(lk.views[t]) == rep_names:
-            usable[t] = "same_value_names"
-        else:
-            why[t] = "value_names_differ"
+        if label in USABLE:
+            usable[t] = label
+        else:  # retention_unverified included: never put in the period and edition competition
+            why[t] = label
     got = PR.final_tables(rep, candidates, usable, lk.views, reading["conditions"], as_of)
     return {"usable": usable, "not_usable": why, "trace": trace, **got}
 
@@ -447,6 +456,61 @@ def _select_periods(quote: str, rep: str, candidates: list[str], item_evidence: 
 def _candidates(rows: dict, rep: str) -> list[str]:
     return [t for t in rows if _basis(rows[t]) == _basis(rows[rep])
             and _other_words_no_time(rows[t]) == _other_words_no_time(rows[rep])]
+
+
+USABLE = ("representative_checked", "cited_values_held", "same_value_names")
+
+
+def _kept(quote: str, rep: str, t: str, item_evidence: list[str], lk: "Cards", retention: dict | None) -> tuple:
+    """Whether candidate ``t`` keeps what the model cited for ``rep`` (the rule of the period and edition choice,
+    shared): the fact check (``verify_table``, cited values and their retention), then the representative itself,
+    the cited values held, or, with no cited value, the same value names. (label, check): a label in ``USABLE``, or
+    why not (``content_unverified``, ``retention_unverified``, ``value_names_differ``, ...)."""
+    got = verify_table(quote, t, item_evidence, lk, retention)
+    if not got["ok"]:
+        return got["code"], got
+    if t == rep:
+        return "representative_checked", got
+    if item_evidence:
+        return "cited_values_held", got
+    if PR.item_names(lk.views[t]) == PR.item_names(lk.views[rep]):
+        return "same_value_names", got
+    return "value_names_differ", got
+
+
+def _requested_frequency(out: dict, sid: str) -> str | None:
+    """The one frequency the model quoted for ``sid`` and code reads (None: none quoted, unreadable or several)."""
+    quotes = [r["quote"] for r in out["frequencies"] if sid in r["for"]]
+    if not quotes:
+        return None
+    got = PR.read_quotes([], quotes)
+    values = {c["value"] for c in got["conditions"] if c["kind"] == "frequency"}
+    return next(iter(values)) if not got["problems"] and len(values) == 1 else None
+
+
+def _frequency_support(quote: str, table: str, frequency: str, evidence: dict, lk: "Cards") -> dict:
+    """Whether an option's value gives the requested frequency (users 2026-10-29 07:51 and 08:24 UTC). The option
+    table, or a frequency or edition candidate of it (same basis, same other bracket words), offers the frequency in
+    the catalog; a candidate counts only if it keeps what the model cited for the option (``_kept`` with the option's
+    valid item evidence and its retention: invalid cited items are never read as none). Two facts per candidate:
+    ``offers_frequency`` and ``items_kept``. Status: ``supported`` (a confirmed table), ``items_kept_unconfirmed``
+    (offered, keeping not confirmed: not "no frequency", not "another meaning") or ``not_offered``. No new
+    correspondence rule; nothing is added, removed or switched."""
+    rows = {r["table_id"]: r for r in lk.card_of[table]["tables"]}
+    retention = {"origin": table, "unverified": list(evidence.get("invalid_items") or [])}
+    checked = []
+    for t in _candidates(rows, table):
+        row = {"table": t, "offers_frequency": frequency in {p["frequency"] for p in rows[t].get("periods") or []}}
+        if row["offers_frequency"]:
+            label, got = _kept(quote, table, t, list(evidence.get("items") or []), lk, retention)
+            row.update(items_kept=label, confirmed=label in USABLE, cited_values_held=got.get("cited_values_held"))
+        checked.append(row)
+    confirmed = [r["table"] for r in checked if r.get("confirmed")]
+    offering = [r["table"] for r in checked if r["offers_frequency"]]
+    status = "supported" if confirmed else "items_kept_unconfirmed" if offering else "not_offered"
+    return {"table": table, "requested": frequency, "status": status, "supported": bool(confirmed),
+            "supported_by": confirmed, "offering": offering, "candidates": checked,
+            "frequencies": sorted({p["frequency"] for p in rows[table].get("periods") or []})}
 
 
 def axis_items(items: list[str], axes) -> tuple[list[str], list[str]]:
@@ -518,7 +582,7 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
                "citation": {"status": "verified", "problems": []}, "invalid_item_evidence": [],
                "retention": {"origin": None, "unverified": []}, "model_representative": None, "held_axes": [],
                "axis_bound_items": {}, "item_refs": {}, "option_evidence": {}, "unasked_axes": [],
-               "checks_done": [], "checks_not_done": []}
+               "stated_basis_checks": [], "ask_frequency_checks": [], "checks_done": [], "checks_not_done": []}
          for sid, s in stats.items()}
     checks: list[dict] = []
 
@@ -697,6 +761,25 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
                       "why": "evidence field absent in the answer's contract" if absent
                       else "no valid model evidence for these option tables"})
                 continue
+            wanted = _requested_frequency(out, sid)
+            if wanted:  # each option's value must give the requested frequency (user 2026-10-29 07:51, 08:24 UTC)
+                rows = [{"axis": a["axis"], "value": v,
+                         **_frequency_support(stats[sid]["quote"], t, wanted, d["option_evidence"][t], lk)}
+                        for v, t in opts]
+                d["ask_frequency_checks"] += rows
+                gone = [r["value"] for r in rows if r["status"] == "not_offered"]
+                if gone:
+                    fail(sid, "ask_invalid", {"axis": a["axis"],
+                                              "problems": [f"option_frequency_unsupported:{v}" for v in gone]})
+                    continue
+                held = [r for r in rows if r["status"] == "items_kept_unconfirmed"]
+                if held:  # the frequency is there, the cited values on it are not confirmed: held, never "absent"
+                    fail(sid, "target_table_unconfirmed",
+                         {"axis": a["axis"], "stage": "ask_frequency", "values": [r["value"] for r in held],
+                          "tables": [t for r in held for t in r["offering"]],
+                          "why": "a same-basis candidate gives the requested frequency, keeping the option's cited "
+                                 "values on it is not confirmed"})
+                    continue
             st = stated(question, stats, sid, a["axis"], splitters)
             if st["unresolved"]:
                 fail(sid, "basis_attribution_unresolved", {"axis": a["axis"], "values": sorted(st["values"])})
@@ -798,6 +881,82 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
             else:
                 d["basis"][axis] = {"value": list(here), "source": "model_choice",
                                     "note": "not stated by the question; the model chose this value's table"}
+        # 3a. every ask option against the basis the statistic states on the other axes (user 2026-10-29 06:20
+        # UTC): the same attribution as steps 3 and 3b (an axis the card splits by ``stated``, an unsplit axis by the
+        # model's own splitters only). An option table of another stated value is a conflict: the statistic stops,
+        # never a verified ask; a value the option table does not show is unverified (a warning); no option is
+        # replaced or added
+        if not d["reasons"] and d["asks"]:
+            split_axes = {split["axis"] for split in card["splits"]}
+            asked_axes = {a["axis"] for a in d["asks"]}
+            conflict = None
+            for a in d["asks"]:
+                for o in a["options"]:
+                    orow = lk.row[o["table_id"]]
+                    for axis in sorted(ASK_AXES):
+                        if axis in asked_axes or conflict:
+                            continue
+                        st = stated(question, stats, sid, axis, splitters)
+                        if not st["values"] or st["unresolved"] or (axis not in split_axes and
+                                                                     st["source"] != "splitter"):
+                            continue
+                        here = orow["basis"].get(axis)
+                        row = {"statistic": sid, "axis": axis, "stage": "ask_option", "ask_axis": a["axis"],
+                               "option": o["value"], "quotes": [x["quote"] for x in splitters if x["axis"] == axis
+                                                                and sid in x["for"] and basis_values(x["quote"], axis)],
+                               "stated": sorted(st["values"]), "source": st["source"], "table": o["table_id"],
+                               "table_value": list(here) if here else None,
+                               "evidence": _bracket_evidence(orow, axis), "card_splits_axis": axis in split_axes}
+                        if here is None:
+                            row["result"] = "table_value_unknown"
+                            d["warnings"].append({"code": "stated_basis_unverified", "axis": axis,
+                                                  "stated": row["stated"], "table": o["table_id"],
+                                                  "stage": "ask_option"})
+                        elif set(here) <= st["values"]:
+                            row["result"] = "match"
+                        else:
+                            row["result"] = conflict = "conflict"
+                            fail(sid, "stated_basis_conflict", {"axis": axis, "stated": row["stated"],
+                                                                "stage": "ask_option", "ask_axis": a["axis"],
+                                                                "option": o["value"], "table": o["table_id"],
+                                                                "option_value": list(here),
+                                                                "why": "an ask option of another stated value"})
+                        d["stated_basis_checks"].append(row)
+        # 3b. a stated basis on an axis the card does not split (user 2026-10-29 04:59 UTC): a single table or a
+        # card without that split is checked too. Only the model's own splitters for this statistic (their quotes
+        # passed step 1) are compared with the chosen table's title basis; a value the table does not show is
+        # unverified, never taken as the other value; nothing is switched or asked here, and value names inside
+        # the table are not read as a table basis
+        if d["reasons"] or d["model_kind"] == "ask":
+            continue
+        split_axes = {split["axis"] for split in card["splits"]}
+        for axis in sorted({s["axis"] for s in splitters if sid in s["for"]}):
+            if axis not in ASK_AXES or axis in split_axes or axis in d["basis"]:
+                continue
+            st = stated(question, stats, sid, axis, splitters)
+            if st["source"] != "splitter":
+                continue
+            here = rows[rep]["basis"].get(axis)
+            row = {"statistic": sid, "axis": axis,
+                   "quotes": [s["quote"] for s in splitters
+                              if s["axis"] == axis and sid in s["for"] and basis_values(s["quote"], axis)],
+                   "stated": sorted(st["values"]), "table": rep, "table_value": list(here) if here else None,
+                   "evidence": _bracket_evidence(rows[rep], axis), "card_splits_axis": False}
+            if here is None:
+                row["result"] = "table_value_unknown"
+                d["warnings"].append({"code": "stated_basis_unverified", "axis": axis, "stated": row["stated"],
+                                      "table": rep})
+            elif set(here) <= st["values"]:
+                row["result"] = "match"
+                d["basis"][axis] = {"value": list(here), "source": st["source"]}
+            else:
+                row["result"] = "conflict"
+                fail(sid, "stated_basis_conflict", {"axis": axis, "stated": row["stated"],
+                                                    "representative_value": list(here), "stated_value_tables": [],
+                                                    "why": "the card has no table of the stated value on this axis"})
+            d["stated_basis_checks"].append(row)
+            if row["result"] == "conflict":
+                break
 
     # 4. periods and final tables (ask options: feasibility record only)
     for sid, d in D.items():
@@ -827,7 +986,11 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
                               d["retention"])
         d["verification"] += got.pop("trace")
         d["period"].update({"candidates": candidates, "excluded": [t for t in rows if t not in candidates],
-                            "default_applied": not any(c["kind"] == "period" for c in reading["conditions"]), **got})
+                            "default_applied": not any(c["kind"] == "period" for c in reading["conditions"]),
+                            "default_reason": None if any(c["kind"] == "period" for c in reading["conditions"]) else
+                            ("only base-year marks were quoted" if any(r["kind"] == "period" for r in
+                                                                       reading["readings"])
+                             else "no period quoted"), **got})
         if got["status"] != "selected":
             fail(sid, got["reason"], got.get("detail"))
             continue
