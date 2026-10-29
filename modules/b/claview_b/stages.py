@@ -13,6 +13,14 @@ from .services import Services as Services
 from .services import bounded as bounded
 
 RELATIVE_WORDS = r"최근|이후|지금|현재|올해|작년|최신|지난"
+# 지수의 기준연도 표기("2020=100", "기준연도 2020년")는 조회 기간이 아니므로 연도 찾기에서 뺀다.
+BASE_YEAR_NOTATION = re.compile(
+    r"(?<!\d)(?:19|20)\d{2}\s*년?\s*[=＝]\s*100|기준\s*(?:연도|년도|년)\s*(?:은|는|:)?\s*(?:19|20)\d{2}\s*년?"
+)
+
+
+def stated_years(query: str) -> list[str]:
+    return re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", BASE_YEAR_NOTATION.sub(" ", query))
 
 
 PERIOD_OVER_PERIOD = (
@@ -521,7 +529,7 @@ def resolve_explicit_period(query: str, table: Json, freq: str | None) -> Json |
     """
     if freq is None or freq not in table["periods"] or re.search(RELATIVE_WORDS, query):
         return None
-    years = re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", query)
+    years = stated_years(query)
     if not years:
         return None
     if freq == "Y":
@@ -555,7 +563,7 @@ def validate_period(
         return
     if re.search(RELATIVE_WORDS, query):
         raise StageFailure("conditions_incomplete", "unresolved")
-    years = re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", query)
+    years = stated_years(query)
     if not years:
         raise StageFailure("conditions_incomplete", "unresolved")
     if end[:4] != years[-1]:
@@ -768,6 +776,11 @@ def named_parent_value(query: str, values: Json, code: str) -> str | None:
     for ancestor in reversed(values[code]["path"][:-1]):
         a = ancestor["code"]
         name = normalized(ancestor["name"])
+        # "정기예금 아래 1년 만기": the question also says what distinguishes the chosen sub-value
+        # (its name after the ancestor's name, without a footnote mark), so it asked for the sub-value.
+        rest = normalized(re.sub(r"\s*\d\)\s*$", "", values[code]["name"]))[len(name) :]
+        if name and chosen.startswith(name) and len(rest) >= 2 and rest in text:
+            continue
         if (
             a in values
             and len(name) >= 3

@@ -22,6 +22,9 @@ PATTERNS = [
 ]
 
 
+SOURCE_TABLE_VERBS=r"(?:각각|모두|함께)?(?:사용|선택|조회|이용|참고|활용|기준|골라|고르|비교)"
+
+
 def requests(query):
     q=re.sub(r"\s+","",unicodedata.normalize("NFKC",query))
     found=[];occupied=[]
@@ -29,6 +32,8 @@ def requests(query):
         for match in re.finditer(pattern,q):
             if any(match.start()<b and match.end()>a for a,b in occupied):continue
             if re.match(r"(?:가|이|는|은)?(?:말고|대신|아니라|아닌|제외|빼고)",q[match.end():]):continue
+            # '표를 각각 사용해'의 표는 자료를 가져올 통계표이고, 수치표로 보여 달라는 요청이 아니다.
+            if kind=="table" and match.group().startswith("표") and re.match(SOURCE_TABLE_VERBS,q[match.end():]):continue
             found.append((match.start(),kind,match.group()));occupied.append(match.span())
     found.sort()
     # '100% 누적막대'는 두 종류를 요청한 것이 아니다.
