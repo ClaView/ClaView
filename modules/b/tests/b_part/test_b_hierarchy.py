@@ -571,7 +571,9 @@ def test_pipeline_continues_when_the_model_repeats_a_row():
     assert [n["reason"] for n in out["result"]["expand_notices"]] == ["repeated_row_dropped"]
 
 
-def test_pipeline_still_stops_when_two_rows_differ_only_in_period():
+def test_pipeline_collapses_rows_that_differ_only_in_the_models_period():
+    # the period is resolved by B itself and canonicalize overwrites the model's period,
+    # so rows that differ only in that guess are one repeated row, not two series
     other_period = {**row("A1"), "period": {**PERIOD, "end": "2023"}}
     out = _run(
         make_tree_table(),
@@ -579,8 +581,9 @@ def test_pipeline_still_stops_when_two_rows_differ_only_in_period():
         Config(),
         query="2020년부터 2024년까지 A1 추이",
     )
-    assert out["status"] != "ok"
-    assert [i["code"] for i in out["issues"]] == ["duplicate_selection"]
+    assert out["status"] == "ok", out["issues"]
+    assert len(out["result"]["selections"]) == 1
+    assert [n["reason"] for n in out["result"]["expand_notices"]] == ["repeated_row_dropped"]
 
 
 def test_pipeline_without_lowering_has_no_expand_notices():

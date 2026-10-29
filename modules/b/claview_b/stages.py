@@ -1109,6 +1109,33 @@ def direct_children(values: Json, code: str) -> list[str]:
     ]
 
 
+def named_below(text: str, values: Json, code: str) -> list[str]:
+    """"P 아래 C·D": the most specific values below `code` that the question names.
+
+    Used when the question says "아래" and HCX expanded a container instead of picking the
+    named values. Containers ("P 아래" itself) and values with a named value below them are
+    skipped. One name is enough when its path runs through a container the question names;
+    otherwise two are required, as for direct children.
+    """
+    below_codes = [
+        c
+        for c, v in values.items()
+        if any(p["code"] == code for p in v.get("path", [])[:-1]) and not is_reference_name(v["name"])
+    ]
+    cand = [c for c in below_codes if named_in(text, values, c) and not container_marked(text, values, c)]
+    cand = [
+        c
+        for c in cand
+        if not any(c in {p["code"] for p in values[o]["path"][:-1]} for o in cand if o != c)
+    ]
+    via_container = any(
+        container_marked(text, values, p["code"])
+        for c in cand
+        for p in values[c]["path"][:-1]
+    )
+    return cand if cand and (len(cand) >= 2 or via_container) else []
+
+
 def select_named_children(
     raw: Json, query: str, table: Json, table_key: str
 ) -> tuple[Json, list[Json]]:
@@ -1144,7 +1171,12 @@ def select_named_children(
                 for c in direct_children(values, row["dimensions"][axes[0]])
                 if len(normalized(values[c]["name"])) >= 2 and normalized(values[c]["name"]) in text
             ]
-        if len(named) < 2:
+        reason = "query_names_children"
+        if len(named) < 2 and len(axes) == 1 and re.search(BELOW_MARKERS, text):
+            below_named = named_below(text, table["dimensions"][axes[0]]["values"], row["dimensions"][axes[0]])
+            if below_named:
+                named, reason = below_named, "query_names_values_below"
+        if len(named) < 2 and reason == "query_names_children":
             rows.append(row)
             continue
         axis = axes[0]
@@ -1155,7 +1187,7 @@ def select_named_children(
                 "code": row["dimensions"][axis],
                 "requested": row["expand"][axis],
                 "applied": "named_children",
-                "reason": "query_names_children",
+                "reason": reason,
                 "selected": named,
             }
         )
@@ -1171,6 +1203,120 @@ def select_named_children(
     return {**raw, "selections": rows}, notices
 
 
+# 질문이 "P 아래 C"처럼 상위 값을 묶음으로만 말할 때의 표지어. P 자체가 아니라 그 아래의 값을 원한다.
+BELOW_MARKERS = r"(?:아래|하위|밑|안의|안에서|중에서)"
+
+
+def apply_resolved_period(raw: Json, resolved_period: Json | None) -> Json:
+    """Use the period B already resolved for every row, as canonicalize does later.
+
+    With a resolved period the model's own period text carries no information (canonicalize
+    overwrites it). Doing it up front lets rows that differ only in that guessed period
+    collapse as repeats instead of ending in `duplicate_selection`.
+    """
+    if resolved_period is None:
+        return raw
+    return {
+        **raw,
+        "selections": [{**row, "period": dict(resolved_period)} for row in raw["selections"]],
+    }
+
+
+def core_name(name: str) -> str:
+    """A value name as the question would say it: no footnote mark, no leading "1."/"가." numbering."""
+    name = re.sub(r"\s*\d\)\s*$", "", name)
+    name = re.sub(r"^\s*(?:(?:[A-Za-z]-)?(?:[가-힣]|\d+)\.)+\s*", "", name)
+    return normalized(name)
+
+
+def named_in(text: str, values: Json, code: str) -> bool:
+    """The question says this value: its name (core) or, below an ancestor, what follows that ancestor's name."""
+    name = core_name(values[code]["name"])
+    if len(name) >= 2 and name in text:
+        return True
+    for ancestor in values[code].get("path", [])[:-1]:
+        ancestor_name = core_name(ancestor["name"])
+        rest = name[len(ancestor_name) :] if ancestor_name and name.startswith(ancestor_name) else ""
+        if len(rest) >= 2 and rest in text:
+            return True
+        # "기업대출 아래 대기업·중소기업": "대기업대출" says its stem; it shares its last two characters with its parent
+        stem = name[:-2] if name[-2:] == ancestor_name[-2:] and len(name) > 4 else ""
+        if len(stem) >= 2 and stem in text:
+            return True
+    return False
+
+
+def container_marked(text: str, values: Json, code: str) -> bool:
+    """The question uses this value only as a container ("순수저축성예금 아래 정기예금").
+
+    Every place the question says the name must be followed by a "아래"-type marker; a name
+    that is also asked for itself ("... 아래 정기예금 전체") is not a container.
+    """
+    name = core_name(values[code]["name"])
+    if len(name) < 2:
+        return False
+    hits = [m.end() for m in re.finditer(re.escape(name), text)]
+    if not hits:
+        return False
+    return all(re.match(r"(?:의[^·,]{0,12}?)?" + BELOW_MARKERS, text[end:]) for end in hits)
+
+
+def drop_unrequested_rows(
+    raw: Json, query: str, table: Json, table_key: str, multi_table: bool = True
+) -> tuple[Json, list[Json]]:
+    """Drop rows the question did not ask for when sibling rows differ on an axis.
+
+    HCX tends to add a lookalike or a container beside the value the question names (the
+    prompt asks it not to). On an axis where the plain rows differ:
+    1. a value used only as a container ("P 아래 C") is dropped when another value remains;
+    2. values the question does not say are dropped when at least one value it does say remains.
+    Rows that expand a value are left alone, and nothing is dropped if no row would remain.
+    Only for questions that split their indicators over several tables, where the model is
+    known to borrow another table's indicator; a one-table question may use synonyms freely.
+    """
+    if not multi_table:
+        return raw, []
+    rows = raw["selections"]
+    plain = [r for r in rows if all(m == "none" for m in r["expand"].values())]
+    if len(plain) < 2:
+        return raw, []
+    text = normalized(query)
+    notices: list[Json] = []
+    dropped_ids: set[int] = set()
+    for axis in {a for r in plain for a in r["dimensions"]}:
+        values = table["dimensions"][axis]["values"]
+        alive = [r for r in plain if id(r) not in dropped_ids]
+        codes = {r["dimensions"][axis] for r in alive}
+        if len(codes) < 2:
+            continue
+        for reason, bad in (
+            ("container_only", {c for c in codes if container_marked(text, values, c)}),
+            ("not_in_question", {c for c in codes if not named_in(text, values, c)}),
+        ):
+            alive = [r for r in plain if id(r) not in dropped_ids]
+            codes = {r["dimensions"][axis] for r in alive}
+            bad = bad & codes
+            if not bad or bad == codes:
+                continue
+            if reason == "not_in_question" and not (codes - bad):
+                continue
+            for r in alive:
+                if r["dimensions"][axis] in bad:
+                    dropped_ids.add(id(r))
+                    notices.append(
+                        {
+                            "table": table_key,
+                            "axis": axis,
+                            "code": r["dimensions"][axis],
+                            "reason": "unrequested_row_dropped",
+                            "detail": reason,
+                        }
+                    )
+    if not dropped_ids:
+        return raw, []
+    return {**raw, "selections": [r for r in rows if id(r) not in dropped_ids]}, notices
+
+
 def expand_selections(raw: Json, table: Json) -> Json:
     """Turn model selections carrying `expand` into plain per-series rows.
 
@@ -1180,6 +1326,11 @@ def expand_selections(raw: Json, table: Json) -> Json:
     "self + children" is two selections). Order follows the official metadata.
     """
     rows = []
+    explicit = {
+        json.dumps([r["item_id"], sorted(r["dimensions"].items()), r["period"]], sort_keys=True)
+        for r in raw["selections"]
+        if all(m == "none" for m in r["expand"].values())
+    }
     for row in raw["selections"]:
         axes = [a for a, mode in row["expand"].items() if mode != "none"]
         if len(axes) > 1:
@@ -1204,7 +1355,14 @@ def expand_selections(raw: Json, table: Json) -> Json:
         if not targets:
             raise StageFailure("expand_target_has_no_children")
         for target in targets:
-            rows.append({**base, "dimensions": {**row["dimensions"], axis: target}})
+            made = {**base, "dimensions": {**row["dimensions"], axis: target}}
+            key = json.dumps(
+                [made["item_id"], sorted(made["dimensions"].items()), made["period"]],
+                sort_keys=True,
+            )
+            if key in explicit:
+                continue  # the same series is also selected explicitly: one series, not two
+            rows.append(made)
     return {"selections": rows}
 
 
@@ -1453,6 +1611,7 @@ class BSteps:
             check_output(state["model_output"], state["model_schema"])
             table_meta = state["table_metadata"][key]
             raw = with_default_expand(normalize_model_periods(state["model_output"]))
+            raw = apply_resolved_period(raw, state.get("resolved_period"))
             raw, corrected = correct_to_named_value(raw, state["query"], table_meta, key)
             raw, dropped = drop_repeated_rows(raw, key)
             guarded, lowered_by_guard = apply_expand_guard(raw, state["query"], key)
@@ -1460,8 +1619,18 @@ class BSteps:
             guarded, named = select_named_children(guarded, state["query"], table_meta, key)
             guarded, promoted = promote_children_to_leaves(guarded, state["query"], table_meta, key)
             guarded, repaired = repair_unused_split(guarded, state["query"], table_meta, key)
+            guarded, unrequested = drop_unrequested_rows(
+                guarded, state["query"], table_meta, key, len(state.get("table_keys") or []) > 1
+            )
             changes = (
-                corrected + dropped + lowered_by_guard + on_leaves + named + promoted + repaired
+                corrected
+                + dropped
+                + lowered_by_guard
+                + on_leaves
+                + named
+                + promoted
+                + repaired
+                + unrequested
             )  # reported as expand_notices
             try:
                 expanded = expand_selections(guarded, table_meta)
