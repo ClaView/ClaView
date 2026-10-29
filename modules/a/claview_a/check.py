@@ -92,7 +92,7 @@ from .search.families import FREQUENCY_WORDS, SIGNATURE_AXES
 from .search.tables import nospace
 
 from . import periods as PR
-from .cards import ASK_AXES, VALUE_FORMS, card_facts, question_words, shown_value
+from .cards import ASK_AXES, VALUE_FORMS, card_facts, card_values, question_words, shown_value
 from .contract import CONTRACT_VERSION as K_CONTRACT
 
 # .16: a stated basis is checked on axes the card does not split too (single tables included)
@@ -142,15 +142,14 @@ class Cards:
         parts = {p.strip() for b in row["brackets"] for p in b.replace("·", ",").split(",") if p.strip()}
         return {"title": {row["title"], card["name"]},
                 "bracket": set(row["brackets"]) | set(row["bracket_words"]) | parts,
-                "item": {t for m in card["matched"] for it in m["items"] if table in it["tables"]
-                         for t in (it["name"], shown_value(it))}}
+                "item": {t for it in card_values(card) if table in it["tables"] for t in (it["name"], shown_value(it))}}
 
     def resolve_item(self, table: str, text: str) -> dict:
         """The catalog values a cited card text names on ``table`` (user 2026-10-28 06:42 UTC): the shown text
         (name with parent and unit) names one value; a name names every value of that name on the table, and is
         specific only when they are one (``unique``), else ``name_only_several_values``."""
         card = self.card_of[table]
-        entries = [it for m in card["matched"] for it in m["items"] if table in it["tables"]]
+        entries = [it for it in card_values(card) if table in it["tables"]]
         by_shown = [it for it in entries if shown_value(it) == text]
         if by_shown:
             it = by_shown[0]

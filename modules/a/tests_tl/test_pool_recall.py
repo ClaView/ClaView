@@ -65,9 +65,18 @@ MISSED = {
 # (legend and cards) that was the limit while values were capped at three per word is now an observation of how sizes
 # change: the questions over it are pinned as measured, so a change shows up here, but it is no limit.
 CARD_SIZE_OBSERVED = 8000
-# observed with cards .10 (catalog parent and unit shown, user 2026-10-28 06:37 UTC); with .8/.9 it was 240: CV-AB-03, 40: none
-OVER_CARD_SIZE = {"expected240": ["A:CX-Q021", "A:CX-Q044", "B:CX-Q054", "B:CX-Q055", "CV-AB-03", "CV-AB-04", "CV-AB-16",
-                                  "CV-AB-21"], "check40": ["CV-AB-21"]}
+# observed with cards .11 (catalog axes per table, small axes listed whole: plan 48, users 2026-10-29 10:40 and 11:37
+# UTC). Before, with cards .10 (catalog parent and unit shown): 240: A:CX-Q021, A:CX-Q044, B:CX-Q054, B:CX-Q055,
+# CV-AB-03, CV-AB-04, CV-AB-16, CV-AB-21; 40: CV-AB-21 (with .8/.9: 240: CV-AB-03, 40: none). The required limit is
+# unchanged and kept: the largest payload is 22,702 characters (240) and 12,306 (40), under PAYLOAD_LIMIT.
+OVER_CARD_SIZE = {"expected240": ["A:CX-Q004", "A:CX-Q019", "A:CX-Q021", "A:CX-Q032", "A:CX-Q043", "A:CX-Q044",
+                                  "A:CX-Q045", "A:CX-Q046", "A:CX-Q048", "A:CX-Q049", "A:CX-Q060", "A:CX-Q062",
+                                  "A:CX-Q067", "A:CX-Q074", "A:CX-Q078", "B:CX-Q008", "B:CX-Q010", "B:CX-Q016",
+                                  "B:CX-Q024", "B:CX-Q053", "B:CX-Q054", "B:CX-Q055", "B:CX-Q056", "B:CX-Q057",
+                                  "B:CX-Q058", "B:CX-Q062", "B:CX-Q063", "B:CX-Q069", "B:CX-Q070", "B:CX-Q092",
+                                  "CV-AB-01", "CV-AB-03", "CV-AB-04", "CV-AB-05", "CV-AB-09", "CV-AB-16", "CV-AB-21",
+                                  "PC:EQ-08", "PC:EQ-19", "PC:EQ-20"],
+                  "check40": ["CV-AB-01", "CV-AB-05", "CV-AB-09", "CV-AB-21", "SB:DA3-01"]}
 
 
 @pytest.mark.parametrize("name, rows", [("expected240", _rows), ("check40", _check40)])
