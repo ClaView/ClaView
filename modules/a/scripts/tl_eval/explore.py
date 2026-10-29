@@ -34,7 +34,7 @@ from claview_a.judges import Archive, FakeJudge, LiveJudge, now, text_sha  # noq
 from tl_eval import live as L  # noqa: E402
 from tl_eval import report as R  # noqa: E402
 
-EXPLORE_VERSION = "tl-explore-2026-10-29.4"  # .2: re-judge by another model; .3: call gate; .4: key from .env
+EXPLORE_VERSION = "tl-explore-2026-10-29.5"  # .2 re-judge model; .3 call gate; .4 key from .env; .5 key stop
 ANSWER_STATES = ("confirmed", "policy_hold", "insufficient")
 
 
@@ -157,6 +157,8 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None) ->
     research = L.research_of(manifest)
     first_max = manifest["max_calls"] - research["max_rejudge_calls"]
     gate = L.CallGate(manifest)  # every call is checked right before it is sent (user 2026-10-29 09:04 UTC)
+    if mode == "live":
+        transport = L.KeyGuard(transport, gate)  # a 401/403 stops later sends (user 2026-10-29 10:40 UTC)
     judge = gate.judge(m["name"], LiveJudge(transport, first_max, archive, ref) if mode == "live"
                        else FakeJudge(archive, ref))
     settings = K.Settings(model=m["model"], effort=m["effort"], max_output_tokens=m["max_output_tokens"])

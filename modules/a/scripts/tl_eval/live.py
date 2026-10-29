@@ -53,7 +53,7 @@ from tl_eval import report as R  # noqa: E402
 from tl_eval import score as S  # noqa: E402
 from tl_eval import standard as ST  # noqa: E402
 
-LIVE_VERSION = "tl-live-2026-10-29.6"  # .5: re-search, re-judge budget, call gate; .6: the key from .env
+LIVE_VERSION = "tl-live-2026-10-29.7"  # .5: re-search, budget, call gate; .6: key from .env; .7: key stop
 MODEL = {"model": "gpt-6-luna", "effort": "low", "max_output_tokens": 4096}
 STAGE1 = ["SB:DA3-01", "SB:CQ1-01", "SB:CQ1-03", "SB:DA3-09", "CV-AB-05", "CV-AB-07"]
 
@@ -227,7 +227,11 @@ class CallGate:
         self.allowed = {c: {first: 1, **({second: int(c in research["cases"])} if second else {})} for c in ids}
         self.per_model = dict(manifest.get("max_calls_per_model") or {first: len(ids)})
         self.max_calls = manifest["max_calls"]
-        self.case, self.used, self.by_model, self.refused = None, {}, {}, []
+        self.case, self.used, self.by_model, self.refused, self.halted = None, {}, {}, [], None
+
+    def halt(self, code: str) -> None:
+        """Refuse every later call (the key was refused: ``KeyGuard``)."""
+        self.halted = self.halted or code
 
     def for_case(self, case_id: str) -> None:
         self.case = case_id
@@ -247,7 +251,9 @@ class CallGate:
 
     def _admit(self, model: str) -> None:
         key = (self.case, model)
-        if self.used.get(key, 0) >= self.allowed.get(self.case, {}).get(model, 0):
+        if self.halted:
+            why = f"key_refused:{self.halted}"
+        elif self.used.get(key, 0) >= self.allowed.get(self.case, {}).get(model, 0):
             why = "case_limit"
         elif self.calls(model) >= self.per_model.get(model, 0):
             why = "model_limit"
@@ -259,6 +265,32 @@ class CallGate:
             return
         self.refused.append({"case_id": self.case, "model": model, "reason": why})
         raise CallRefused(f"{why}: a {model} call for {self.case} refused before sending")
+
+
+KEY_REFUSALS = ("http_401", "http_403")
+
+
+class KeyGuard:
+    """The transport of a live run, wrapped (user 2026-10-29 10:40 UTC): a 401/403 is archived and counted like any
+    failed send, then the call gate is halted, so the next attempt is refused before anything is sent and the run
+    stops instead of spending every question's call on a key problem."""
+
+    def __init__(self, inner, gate: CallGate):
+        self.inner, self.gate = inner, gate
+        self.kind = getattr(inner, "kind", None)
+
+    def preflight(self) -> None:
+        self.inner.preflight()
+
+    def send(self, request: dict) -> str:
+        from claview_a.transport.provider import ProviderError
+
+        try:
+            return self.inner.send(request)
+        except ProviderError as e:
+            if str(e) in KEY_REFUSALS:
+                self.gate.halt(str(e))
+            raise
 
 
 class RunStopped(RuntimeError):

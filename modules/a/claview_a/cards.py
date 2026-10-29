@@ -17,8 +17,14 @@ other bracket words, and every value whose name holds a question word, each valu
 cap per word, nothing left as a count only: user 2026-10-28 05:05 UTC, measured on 240 and 40 questions, every input
 under the 24,000-character limit; a question over it is refused by ``contract.build_payload``, never cut).
 
+Per table also its catalog axes (``axes``; user 2026-10-29 10:40 UTC: a breakdown the catalog has was not shown
+when no question word matched its values, Q004/Q058): every axis by its catalog name and value count, the values of an
+axis with at most ``AXIS_LIST_MAX`` of them listed whole as the catalog writes them, a larger axis by name and count
+only. Axis names and values are never guessed or renamed; choosing values inside a table stays the next step's job.
+
 ``card_facts`` gives the texts a model may cite for a table: its name, the family name, its bracket parts and words,
-and the matched values that table holds. What is shown but not citable (periods, axis lines) is display only.
+the matched values and the listed axis values that table holds. What is shown but not citable (periods, split lines,
+axis names and counts) is display only.
 
 Rendering (users 2026-10-27 20:42 and 20:45 UTC): each table of a card is written once with a card-local number
 ("t1 <table ID> | ..."); split and matched-value lines use the numbers, "전체" for every table of the card; a value
@@ -41,7 +47,8 @@ from .search.families import SIGNATURE_AXES, bracket_words, dimension_kinds
 from .search.words import STOP_TERMS, TITLE_ONLY_AXES
 from .search.tables import nospace, selection_catalog
 
-CARDS_VERSION = "tl-cards-2026-10-28.10"  # .10: matched values with their catalog parent and unit (user 2026-10-28 06:37 UTC)
+CARDS_VERSION = "tl-cards-2026-10-29.11"  # .11: catalog axes per table, small axes listed whole (user 10:40 UTC)
+AXIS_LIST_MAX = 12  # an axis with at most this many values is listed whole; a larger one by name and count
 ITEM_SOURCES = 2  # value names kept as the source of a value-level basis word
 ASK_AXES_PATH = Path(__file__).resolve().parent / "data" / "ask_axes.json"
 ASK = json.loads(ASK_AXES_PATH.read_text(encoding="utf-8"))
@@ -267,6 +274,36 @@ def _matched(views: list, words: list[str], question: str = "") -> list[dict]:
     return out
 
 
+def _axes(views: list) -> tuple[dict, list[dict]]:
+    """(per table: its catalog axes in catalog order, [{axis, count, listed, values}]; the listed values). A value
+    shows its name, with its catalog parent and unit (``shown_value``) only where the name repeats on that axis.
+    Each listed value is kept once per (name, parent, unit) with the tables that hold it and their item IDs, like a
+    matched value."""
+    per_table: dict[str, list[dict]] = {}
+    holders: dict[tuple, list[str]] = {}
+    ids: dict[tuple, dict[str, list[str]]] = {}
+    for v in views:
+        rows = []
+        for obj, name in getattr(v, "dims", None) or []:
+            items = [it for it in v.items if getattr(it, "obj_id", None) == obj and it.name_raw]
+            row = {"axis": name, "count": len(items), "listed": len(items) <= AXIS_LIST_MAX, "values": []}
+            if row["listed"]:
+                names = [it.name_raw for it in items]
+                for it in items:
+                    parent, unit = _context(v, it)
+                    k = (it.name_raw, parent, unit)
+                    entry = {"name": it.name_raw, "parent": parent, "unit": unit}
+                    row["values"].append(shown_value(entry) if names.count(it.name_raw) > 1 else it.name_raw)
+                    tables = holders.setdefault(k, [])
+                    if v.table_id not in tables:
+                        tables.append(v.table_id)
+                    ids.setdefault(k, {}).setdefault(v.table_id, []).append(getattr(it, "item_id", None))
+            rows.append(row)
+        per_table[v.table_id] = rows
+    items = [{"name": k[0], "parent": k[1], "unit": k[2], "tables": holders[k], "item_ids": ids[k]} for k in holders]
+    return per_table, items
+
+
 def shown_value(it: dict) -> str:
     """The value as the card writes it: the name, then the catalog parent and unit when there are any."""
     extra = [x for x in ((f"상위 {it['parent']}" if it.get("parent") else None),
@@ -291,23 +328,28 @@ def build_cards(question: str, pool: dict, layer) -> list[dict]:
     for n, entry in enumerate(pool["families"], start=1):
         vs = [views[t] for t in entry["members"]]
         rows = [_table_row(v) for v in vs]
+        axes, axis_items = _axes(vs)
         cards.append({"card_id": f"g{n}", "family": entry["family"], "name": family_name(vs[0].title),
                       "source": entry.get("source", "question"), "tables": rows, "splits": _splits(rows),
                       "editions": _editions(vs), "other_words": _other_words(rows),
-                      "matched": _matched(vs, words, question)})
+                      "matched": _matched(vs, words, question), "axes": axes, "axis_items": axis_items})
     return cards
+
+
+def card_values(card: dict) -> list[dict]:
+    """The values a card shows for its tables: the matched values, then the listed axis values."""
+    return [it for m in card["matched"] for it in m["items"]] + list(card.get("axis_items") or [])
 
 
 def card_facts(card: dict) -> dict[str, set[str]]:
     """Citable texts per table: its name, the family name, its bracket parts and bracket words, and the matched values
-    that this table holds (never a sibling's), each by its name and by its text as shown with its catalog parent and
-    unit (user 2026-10-28 06:42 UTC: the shown text tells apart two values of one name)."""
+    and listed axis values that this table holds (never a sibling's), each by its name and by its text as shown with
+    its catalog parent and unit (user 2026-10-28 06:42 UTC: the shown text tells apart two values of one name)."""
     out: dict[str, set[str]] = {}
     for row in card["tables"]:
         facts = {row["title"], card["name"], *row["brackets"], *row["bracket_words"]}
         facts |= {p.strip() for b in row["brackets"] for p in re.split(r"[,·]", b) if p.strip()}
-        facts |= {t for m in card["matched"] for it in m["items"] if row["table_id"] in it["tables"]
-                  for t in (it["name"], shown_value(it))}
+        facts |= {t for it in card_values(card) if row["table_id"] in it["tables"] for t in (it["name"], shown_value(it))}
         out[row["table_id"]] = facts
     return out
 
@@ -325,6 +367,11 @@ CARD_LEGEND = "\n".join([
     "한 표에 같은 이름의 항목이 여럿이면 ‹ ›까지 카드에 적힌 그대로 적어 어느 항목인지 구분한다. "
     "괄호 안 질문 낱말 목록은 찾는 데 쓴 말이지 인용 근거가 아니다. item 근거 하나에는 그 표에 적힌 항목 이름 하나를 "
     "그대로 적는다.",
+    f"항목 축 표 번호: 카탈로그의 분류 축 이름(값 개수): 값 이름 … / 다음 축. "
+    f"값이 {AXIS_LIST_MAX}개 이하인 축은 값을 모두 적고, 더 많은 축은 이름과 개수만 적는다"
+    "(그 축의 값은 맞은 항목에 나온 것만 보인다). 축 이름과 값은 카탈로그에 적힌 그대로라 "
+    "질문의 말과 다를 수 있다. 적힌 값은 그 번호의 표가 가진 항목이며 item 근거로 쓸 수 있다. "
+    "같은 축에 이름이 같은 값이 여럿이면 ‹ ›까지 적었다. 표 안에서 값을 고르는 일은 다음 단계 몫이다.",
 ])
 
 
@@ -387,6 +434,14 @@ def render_card(card: dict) -> str:
                     groups.setdefault(tuple(it["tables"]), []).append(text)
         lines.append(f"맞은 항목({', '.join(m['word'] for m in card['matched'])})")
         lines += [f"{_numbers(list(ts), num, every)}: {', '.join(names)}" for ts, names in groups.items()]
+    axes: dict[str, list[str]] = {}
+    for row in card["tables"]:
+        parts = [f"{a['axis']}({a['count']})" + (f": {', '.join(a['values'])}" if a["listed"] else "")
+                 for a in (card.get("axes") or {}).get(row["table_id"], [])]
+        if parts:
+            axes.setdefault(" / ".join(parts), []).append(row["table_id"])
+    # one line per group of tables with the same axes, marked "항목 축" so it never reads as a matched-value line
+    lines += [f"항목 축 {_numbers(ts, num, every)}: {text}" for text, ts in axes.items()]
     return "\n".join(lines)
 
 

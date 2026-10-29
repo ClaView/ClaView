@@ -45,7 +45,8 @@ import json
 import re
 from pathlib import Path
 
-SCORE_VERSION = "tl-score-2026-10-29.20"
+# .21: a card's listed axis values are item facts of its tables, as in the path (cards .11, user 10:40 UTC)
+SCORE_VERSION = "tl-score-2026-10-29.21"
 VALUE_FORMS = json.loads((Path(__file__).resolve().parents[2] / "claview_a" / "data" /
                           "ask_axes.json").read_text(encoding="utf-8"))["value_forms"]["forms"]
 CITATION_FACT_CODES = ("evidence_not_on_card", "evidence_of_other_table", "evidence_normalization_ambiguous",
@@ -135,7 +136,8 @@ def adapt(state: dict) -> dict:
            "cards": [{"card_id": c["card_id"], "name": c["name"],
                       "tables": [{"table_id": r["table_id"], "title": r["title"], "brackets": list(r["brackets"]),
                                   "bracket_words": list(r["bracket_words"])} for r in c["tables"]],
-                      "matched": copy.deepcopy(c["matched"])} for c in cards],
+                      "matched": copy.deepcopy(c["matched"]),
+                      "axis_items": copy.deepcopy(c.get("axis_items") or [])} for c in cards],
            "model": None, "checks": {}, "corrections": {}, "final": {}, "diagnostics": {},
            "route": (record.get("route") or {}).get("action"),
            "answer_contract": (record.get("parse") or {}).get("answer_contract")}
@@ -177,7 +179,8 @@ def _card_texts(rec: dict, table: str) -> dict[str, set[str]]:
                 parts = {p.strip() for b in r["brackets"] for p in re.split(r"[,·]", b) if p.strip()}
                 return {"title": {r["title"], c["name"]},
                         "bracket": set(r["brackets"]) | set(r["bracket_words"]) | parts,
-                        "item": {t for m in c["matched"] for it in m["items"] if table in it["tables"]
+                        "item": {t for it in [*(i for m in c["matched"] for i in m["items"]),
+                                              *(c.get("axis_items") or [])] if table in it["tables"]
                                  for t in (it["name"], _shown(it))}}
     return {}
 
