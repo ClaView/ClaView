@@ -25,6 +25,8 @@ def enhance(html):
 :root[data-theme="dark"]{--s13:#5eead4;--s14:#e9bda5;}
 .visual-swatch{display:inline-flex;align-items:center;flex-shrink:0;width:26px;height:14px;}
 .highcharts-container:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+.sm-grid.sm-panels{grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));}
+.sm-panels .sm-chart{height:260px;}
 </style>""")
     replace("var common = { labels: axis", "var common = { description:c.tableName+' · '+c.start+' ~ '+c.end+' · '+c.freqName, labels: axis")
     # series index는 선택된 부분집합이 아닌 원래 카드에서 찾는다.
@@ -76,4 +78,22 @@ def enhance(html):
     replace("color: s.color, name: s.name, width: width", "color: s.color, name: s.name, width: width, dash:cfg.type==='line'&&s.pattern?s.pattern.dash:[]")
     replace("context.beginPath(); context.moveTo(item.x, h + item.y);", "context.setLineDash(item.dash); context.beginPath(); context.moveTo(item.x, h + item.y);")
     replace("context.fillStyle = th.text;\n            context.fillText", "context.setLineDash([]); context.fillStyle = th.text;\n            context.fillText")
+    # 묶음 패널: C가 정한 묶음(c.panels)마다 패널 하나에 그 묶음의 계열을 함께 그린다. 묶음이 없으면 계열마다 패널이다.
+    replace("""      var grid = el('div', { class: 'sm-grid' }); box.append(grid);
+      sel.forEach(function (s) {""", """      var grid = el('div', { class: 'sm-grid' }); box.append(grid);
+      if (c.panels && c.panels.length > 1) {
+        grid.classList.add('sm-panels');
+        c.panels.forEach(function (p) {
+          var ps = sel.filter(function (s) { return p.series.indexOf(s.id) >= 0; });
+          if (!ps.length) return;
+          var units = ps.map(function (s) { return s.unit || c.unit; }).filter(function (u, i, a) { return a.indexOf(u) === i; });
+          var panelHost = el('div', { class: 'sm-chart' });
+          grid.append(el('div', { class: 'sm-cell', role: 'group', 'aria-label': p.title }, panelHost));
+          mk(panelHost, { type: c.smallType === 'bar' ? 'bar' : 'line', small: true, legend: ps.length > 1,
+            title: p.title + (units.length === 1 && units[0] !== p.title ? ' (' + units[0] + ')' : ''), unit: units.join(' · '),
+            series: ps.map(function (s) { return { name: s.name.replace(/\\s*\\([^()]*(?:왼쪽|오른쪽) 축\\)$/, ''), color: colorOf(s), pattern: CV.visualStyle(c.series.indexOf(s)), data: s.values.map(function (v) { return v == null ? null : +v; }) }; }) });
+        });
+        handle.cols = 2; return handle;
+      }
+      sel.forEach(function (s) {""")
     return html
