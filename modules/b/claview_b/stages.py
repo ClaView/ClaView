@@ -1255,7 +1255,23 @@ def container_marked(text: str, values: Json, code: str) -> bool:
     name = core_name(values[code]["name"])
     if len(name) < 2:
         return False
-    hits = [m.end() for m in re.finditer(re.escape(name), text)]
+    # "기업대출 아래 중소기업대출": the "기업대출" inside "중소기업대출" is that longer value, not a mention
+    longer = [
+        n
+        for other, v in values.items()
+        if other != code and name in (n := core_name(v["name"])) and len(n) > len(name)
+    ]
+    inside = [
+        range(m.start() + k, m.start() + k + len(name))
+        for n in longer
+        for m in re.finditer(re.escape(n), text)
+        for k in [n.index(name)]
+    ]
+    hits = [
+        m.end()
+        for m in re.finditer(re.escape(name), text)
+        if not any(m.start() in span for span in inside)
+    ]
     if not hits:
         return False
     return all(re.match(r"(?:의[^·,]{0,12}?)?" + BELOW_MARKERS, text[end:]) for end in hits)
@@ -1315,6 +1331,63 @@ def drop_unrequested_rows(
     if not dropped_ids:
         return raw, []
     return {**raw, "selections": [r for r in rows if id(r) not in dropped_ids]}, notices
+
+
+def replace_container_with_named(
+    raw: Json, query: str, table: Json, table_key: str, multi_table: bool = True
+) -> tuple[Json, list[Json]]:
+    """"P 아래 C": a plain row on the container P becomes rows on the values below P that the question names.
+
+    HCX sometimes picks only P ("원유정제처리제품") with `expand` none although the question asks
+    for what is below it ("원유정제처리제품 아래 나프타"). P is used only as a container there
+    (`container_marked`), and `named_below` finds the values the question names beneath it; the
+    row is replaced by one row per such value, other axes and the period unchanged. Rows that
+    expand, and containers with no named value below them, are left alone. Like
+    `drop_unrequested_rows`, only for questions that split their indicators over several tables.
+    """
+    if not multi_table:
+        return raw, []
+    text = normalized(query)
+    notices: list[Json] = []
+    rows: list[Json] = []
+    seen: set[str] = set()
+
+    def add(row: Json) -> None:
+        marker = json.dumps(
+            [row["item_id"], sorted(row["dimensions"].items()), row["period"]], sort_keys=True
+        )
+        if marker not in seen:
+            seen.add(marker)
+            rows.append(row)
+
+    for row in raw["selections"]:
+        replaced = False
+        if all(m == "none" for m in row["expand"].values()):
+            for axis, code in row["dimensions"].items():
+                values = table["dimensions"][axis]["values"]
+                if code not in values or not container_marked(text, values, code):
+                    continue
+                named = named_below(text, values, code)
+                if not named:
+                    continue
+                for child in named:
+                    add({**row, "dimensions": {**row["dimensions"], axis: child}})
+                    notices.append(
+                        {
+                            "table": table_key,
+                            "axis": axis,
+                            "code": code,
+                            "replaced_by": child,
+                            "reason": "container_replaced_by_named_below",
+                        }
+                    )
+                replaced = True
+                break
+        if not replaced:
+            add(row)
+    if not notices:
+        return raw, []
+    return {**raw, "selections": rows}, notices
 
 
 def expand_selections(raw: Json, table: Json) -> Json:
@@ -1619,8 +1692,12 @@ class BSteps:
             guarded, named = select_named_children(guarded, state["query"], table_meta, key)
             guarded, promoted = promote_children_to_leaves(guarded, state["query"], table_meta, key)
             guarded, repaired = repair_unused_split(guarded, state["query"], table_meta, key)
+            multi_table = len(state.get("table_keys") or []) > 1
             guarded, unrequested = drop_unrequested_rows(
-                guarded, state["query"], table_meta, key, len(state.get("table_keys") or []) > 1
+                guarded, state["query"], table_meta, key, multi_table
+            )
+            guarded, replaced = replace_container_with_named(
+                guarded, state["query"], table_meta, key, multi_table
             )
             changes = (
                 corrected
@@ -1631,6 +1708,7 @@ class BSteps:
                 + promoted
                 + repaired
                 + unrequested
+                + replaced
             )  # reported as expand_notices
             try:
                 expanded = expand_selections(guarded, table_meta)

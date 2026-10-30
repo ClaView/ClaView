@@ -11,6 +11,7 @@ from claview_b.stages import (
     expand_selections,
     named_below,
     named_in,
+    replace_container_with_named,
     select_named_children,
 )
 
@@ -108,6 +109,112 @@ def test_a_value_is_a_container_only_when_every_mention_is_followed_by_below():
     vals = values(("P", "순수저축성예금", []), ("D", "정기예금", [("P", "순수저축성예금")]))
     assert container_marked(both, vals, "P")
     assert not container_marked(both, vals, "D")  # also asked for itself ("... 아래 정기예금 전체")
+
+
+def test_a_name_inside_a_longer_value_name_is_not_a_separate_mention():
+    # "기업대출 아래 중소기업대출": the "기업대출" in "중소기업대출" is that value, not a second mention
+    text = normalized("대출금리 표의 기업대출 아래 중소기업대출을 골라줘")
+    assert container_marked(text, LOAN_VALUES, "L")
+    assert not container_marked(text, LOAN_VALUES, "L2")
+
+
+def test_the_container_is_still_asked_for_when_it_is_mentioned_on_its_own_too():
+    text = normalized("기업대출과 기업대출 아래 중소기업대출을 골라줘")
+    assert not container_marked(text, LOAN_VALUES, "L")
+
+
+def test_a_container_beside_a_value_whose_name_contains_it_is_dropped():
+    raw = {"selections": [row("L2"), row("L")]}
+    kept, notices = drop_unrequested_rows(
+        raw, "대출금리 표의 기업대출 아래 중소기업대출을 골라줘", table_of(LOAN_VALUES), "k"
+    )
+    assert codes(kept) == ["L2"]
+    assert notices[0]["detail"] == "container_only"
+
+
+# ---- 상위 항목만 고른 답을 질문이 말한 하위 항목으로 바꾸기 ---------------------
+
+REFINED = ("P", "원유정제처리제품")
+OIL_VALUES = values(
+    ("P", "원유정제처리제품", []),
+    ("N", "나프타", [REFINED]),
+    ("G", "휘발유", [REFINED]),
+    ("D", "경유", [REFINED]),
+    ("K", "등유", [REFINED]),
+)
+
+
+def test_a_container_row_becomes_the_value_the_question_names_below_it():
+    raw = {"selections": [row("P")]}
+    out, notices = replace_container_with_named(
+        raw, "원유정제처리제품 아래 나프타만 골라 비교해줘", table_of(OIL_VALUES), "k"
+    )
+    assert codes(out) == ["N"]
+    assert notices == [
+        {
+            "table": "k",
+            "axis": "objL1",
+            "code": "P",
+            "replaced_by": "N",
+            "reason": "container_replaced_by_named_below",
+        }
+    ]
+
+
+def test_every_value_named_below_the_container_gets_a_row():
+    raw = {"selections": [row("P")]}
+    out, _ = replace_container_with_named(
+        raw, "원유정제처리제품 아래 나프타·휘발유·경유 세 품목만 비교해줘", table_of(OIL_VALUES), "k"
+    )
+    assert sorted(codes(out)) == ["D", "G", "N"]
+
+
+def test_other_axes_and_the_period_of_the_row_are_kept():
+    vals = {"dimensions": {"objL1": {"values": OIL_VALUES}, "objL2": {"values": values(("W", "원화", []))}}}
+    one = {
+        "item_id": "I1",
+        "dimensions": {"objL1": "P", "objL2": "W"},
+        "period": dict(PERIOD),
+        "expand": {"objL1": "none", "objL2": "none"},
+    }
+    out, _ = replace_container_with_named(
+        {"selections": [one]}, "원유정제처리제품 아래 나프타를 원화로 보여줘", vals, "k"
+    )
+    assert out["selections"][0]["dimensions"] == {"objL1": "N", "objL2": "W"}
+    assert out["selections"][0]["period"] == PERIOD
+
+
+def test_a_row_that_already_selects_the_named_value_is_not_repeated():
+    raw = {"selections": [row("P"), row("N")]}
+    out, _ = replace_container_with_named(
+        raw, "원유정제처리제품 아래 나프타만 골라 비교해줘", table_of(OIL_VALUES), "k"
+    )
+    assert codes(out) == ["N"]
+
+
+def test_a_container_is_kept_when_the_question_names_nothing_below_it():
+    raw = {"selections": [row("P")]}
+    out, notices = replace_container_with_named(
+        raw, "원유정제처리제품 아래 품목을 보여줘", table_of(OIL_VALUES), "k"
+    )
+    assert out is raw and notices == []
+
+
+def test_a_container_the_question_asks_for_itself_is_kept():
+    raw = {"selections": [row("P")]}
+    out, notices = replace_container_with_named(
+        raw, "원유정제처리제품과 원유정제처리제품 아래 나프타를 비교해줘", table_of(OIL_VALUES), "k"
+    )
+    assert out is raw and notices == []
+
+
+def test_rows_that_expand_and_single_table_questions_are_left_alone():
+    query = "원유정제처리제품 아래 나프타만 골라줘"
+    expanding = {"selections": [row("P", "children")]}
+    assert replace_container_with_named(expanding, query, table_of(OIL_VALUES), "k")[1] == []
+    plain = {"selections": [row("P")]}
+    out, notices = replace_container_with_named(plain, query, table_of(OIL_VALUES), "k", multi_table=False)
+    assert out is plain and notices == []
 
 
 # ---- 질문에 없는 값 제거 ----------------------------------------------------
