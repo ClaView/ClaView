@@ -104,7 +104,73 @@
     CV.syncComposerPlacement(active());
     refreshExampleHint();
   }
+  // 새 A의 통계별 질문(kind a_view): 질문마다 답하고, 일부만 답해도 된다. 직접 입력은 적은 그대로 보낸다(날짜 계산 없음).
+  function aViewConfirmationEl(m){
+    var spec=m.confirmation, box=el('section',{class:'confirmation-box','aria-label':'통계별 기준 확인'});
+    var FREQ={Y:'연간',H:'반기',Q:'분기',M:'월별'};
+    var basisOnly=spec.groups.every(function(g){return g.kind==='basis_axis';});
+    box.append(el('h3',{text:basisOnly?'통계별 기준을 골라 주세요':'확인할 질문에 답해 주세요'}),el('p',{text:(basisOnly?'질문에 기준이 적혀 있지 않고 표마다 달라 A가 임의로 정하지 않았습니다. ':'')+'고른 답은 해당 통계에만 적용하고, 이미 정해진 통계는 그대로 둡니다. 답을 보내면 모델을 다시 부르지 않습니다.'}));
+    if(spec.settled&&spec.settled.length){
+      var list=el('ul',{class:'stage-note'});
+      spec.settled.forEach(function(s){list.append(el('li',{text:s.statistic+' · '+s.quote+' · '+s.label+(s.tables.length?' · '+s.tables.join(', '):'')+(s.answers.length?' · 답변: '+s.answers.join(', '):'')}));});
+      box.append(el('p',{class:'stage-note',text:'이미 정해진 통계(그대로 보존)'}),list);
+    }
+    var draft=m.confirmationDraft||(m.confirmationDraft={choices:{},texts:{}});
+    draft.texts=draft.texts||{};
+    var form=el('form'),controls=[];
+    spec.groups.forEach(function(g,gi){
+      var field=el('fieldset');field.append(el('legend',{text:'질문 '+(gi+1)+' · '+g.statistics.join(', ')+': '+(g.quote||'')}));
+      field.append(el('p',{class:'confirmation-reason',text:g.indicator}));
+      if(g.synthetic)field.append(el('p',{class:'confirmation-warning',text:'시험용 질문입니다(새 A가 만든 질문이 아님). 답은 적은 그대로 보존하며 기간을 계산하거나 채우지 않습니다.'}));
+      var grid=el('div',{class:'candidate-grid'}),name='aq-'+m.runId+'-'+g.requirement_id;
+      g.options.forEach(function(option){
+        var label=el('label',{class:'candidate-option'}),description=el('div',{class:'candidate-description'});
+        var radio=el('input',{type:'radio',name:name,value:option.option_id,'aria-label':option.label});
+        radio.checked=draft.choices[g.requirement_id]===option.option_id;controls.push(radio);
+        option.tables.forEach(function(t){
+          description.append(el('strong',{text:option.label+(t.table_id?' · '+t.table_name:'')}));
+          if(!t.table_id)return;
+          var facts=el('dl',{class:'candidate-facts'});
+          function fact(k,v){facts.append(el('div',{},el('dt',{text:k}),el('dd',{text:v})));}
+          fact('표 코드',t.table_id);
+          fact('구분 기준',t.different_axes.join(' · ')||'미제공');
+          fact('주기',t.frequencies.map(function(f){return FREQ[f]||f;}).join(' · ')||'미제공');
+          fact('수록 기간',t.coverage.map(function(c){return (FREQ[c.frequency]||c.frequency)+' '+CV.ux.period(c.start,c.frequency)+' ~ '+CV.ux.period(c.end,c.frequency);}).join(' / ')||'미제공');
+          fact('단위',t.units.join(' · ')||'항목에 따라 다름');
+          description.append(facts);
+        });
+        label.append(radio,description);grid.append(label);
+        radio.addEventListener('change',function(){draft.choices[g.requirement_id]=option.option_id;saveStore();refresh();});
+      });
+      if(g.input!=='choice'){
+        var tlabel=el('label',{class:'candidate-option'}),tradio=el('input',{type:'radio',name:name,value:'__text','aria-label':'직접 입력'});
+        var text=el('input',{type:'text',maxlength:'200',class:'a-answer-text',placeholder:'적은 그대로 전달합니다','aria-label':'직접 입력'});
+        tradio.checked=draft.choices[g.requirement_id]==='__text';text.value=draft.texts[g.requirement_id]||'';
+        controls.push(tradio,text);
+        tradio.addEventListener('change',function(){draft.choices[g.requirement_id]='__text';saveStore();refresh();});
+        text.addEventListener('input',function(){draft.choices[g.requirement_id]='__text';tradio.checked=true;draft.texts[g.requirement_id]=text.value;saveStore();refresh();});
+        tlabel.append(tradio,el('div',{class:'candidate-description'},el('strong',{text:'직접 입력'}),text));grid.append(tlabel);
+      }
+      field.append(grid);form.append(field);
+    });
+    function answers(){
+      return spec.groups.filter(function(g){var c=draft.choices[g.requirement_id];return c&&(c!=='__text'||(draft.texts[g.requirement_id]||'').trim());})
+        .map(function(g){var c=draft.choices[g.requirement_id],a={question_id:g.requirement_id,question_version:g.question_version};
+          if(c==='__text')a.text=draft.texts[g.requirement_id].trim();else a.option_id=c;return a;});
+    }
+    var button=el('button',{type:'submit',class:'continue-button',text:'고른 답으로 계속'}),hint=el('p',{class:'stage-note'});
+    function refresh(){
+      var used=!!m.resumedJobId,busy=!!S.running,n=answers().length;
+      controls.forEach(function(c){c.disabled=used||busy;});
+      button.disabled=used||busy||!n;
+      hint.textContent=used?'답변을 전달했습니다. 아래 이어 실행 결과를 확인해 주세요.':busy?'현재 실행이 끝나면 답할 수 있습니다.':
+        !n?'질문에 답해 주세요. 일부만 답해도 됩니다.':n<spec.groups.length?n+'개 질문에 답합니다. 남은 질문은 다음 단계에서 다시 묻습니다.':'버튼을 누르면 고른 답으로 표를 다시 검사하고 조회를 이어갑니다.';
+    }
+    form.addEventListener('submit',function(e){e.preventDefault();if(button.disabled)return;resumeRun(m,{session_id:spec.session_id,answers:answers()});});
+    form.append(button,hint);box.append(form);refresh();return box;
+  }
   function confirmationEl(m) {
+    if(m.confirmation.kind==='a_view')return aViewConfirmationEl(m);
     var spec=m.confirmation, box=el('section',{class:'confirmation-box','aria-label':'후보 표 확인'});
     var aligning=spec.kind==='alignment';
     box.append(el('h3',{text:aligning?'주기를 어떻게 맞출까요?':'어떤 통계표로 조회할까요?'}), el('p',{text:aligning?'함께 요청한 지표의 주기가 서로 달라 한 그래프로 보여주려면 값을 바꿔야 합니다. 방법을 고르면 이미 조회한 값으로 바로 이어서 표시하며 새로 조회하지 않습니다. 원래 값은 보존됩니다.':'아래는 데이터를 가져올 통계표 후보입니다. 표를 확인하면 항목과 기간을 정해 조회합니다. 같은 주기·단위의 여러 항목은 한 그래프에 함께 표시합니다.'}));
@@ -171,13 +237,13 @@
     var questionExample=exampleForQuery(m.inputText);
     if(questionExample&&questionExample.note)body.append(exampleNotice(questionExample));
     if(questionExample&&questionExample.note&&m.kind==='result'&&m.cases&&!m.cases.some(function(c){return c.analysisVersion;}))body.append(el('p',{class:'stage-note',text:'이 이력은 C 보완 전 저장 결과입니다. 최신 계산·누적 화면은 22건 검수 결과에서 확인하거나 새로 실행해 주세요.'}));
-    if(m.parentRunId) body.append(el('p',{class:'stage-note',text:m.resumeKind==='b_conditions'?(m.kind==='result'?'수정한 조회 조건으로 이어 실행한 결과입니다. 원래 질문과 이전 기록은 위에 남아 있습니다.':'수정한 조회 조건을 전달했습니다. 아래에서 진행 상태를 확인하세요.'):(m.resumeKind==='alignment'?'선택한 방법으로 주기를 맞춰 이어 실행합니다. 이미 조회한 값을 사용하며 새로 조회하지 않습니다.':'선택한 표로 이어 실행합니다. 아래에서 조회 조건·데이터 조회·그래프 결과를 확인하세요.')}));
+    if(m.parentRunId) body.append(el('p',{class:'stage-note',text:m.resumeKind==='b_conditions'?(m.kind==='result'?'수정한 조회 조건으로 이어 실행한 결과입니다. 원래 질문과 이전 기록은 위에 남아 있습니다.':'수정한 조회 조건을 전달했습니다. 아래에서 진행 상태를 확인하세요.'):(m.resumeKind==='alignment'?'선택한 방법으로 주기를 맞춰 이어 실행합니다. 이미 조회한 값을 사용하며 새로 조회하지 않습니다.':m.resumeKind==='a_answer'?'고른 답을 해당 통계에만 적용해 이어 실행합니다. 모델을 다시 부르지 않고 코드 검사만 다시 했습니다.':'선택한 표로 이어 실행합니다. 아래에서 조회 조건·데이터 조회·그래프 결과를 확인하세요.')}));
     else if(m.resumedJobId) body.append(el('p',{class:'stage-note',text:'이 확인에서 선택한 항목을 전달했습니다. 아래에 이어 실행 결과가 있습니다.'}));
     var progress=CV.ux.simplifyProgress(stepsEl(m)); progress.querySelector('details.steps').open=!complete&&!m.resumedJobId;
     if(complete){
       progress.classList.add('completed-progress');
       var count=m.cases.reduce(function(n,c){return n+c.series.length;},0);
-      var resultLabel=m.savedRecord?'저장 자료':'조회 완료';
+      var resultLabel=m.savedRecord?'저장 자료':m.runStatus==='partial'?'일부만 조회(아래 안내 확인)':'조회 완료';
       body.append(el('p',{class:'comparison-ready',role:'status',text:m.cases.length===1?
         resultLabel+' · '+count+'개 항목의 결과를 아래에서 확인하세요.':
         resultLabel+' · '+count+'개 항목을 주기·단위에 따라 '+m.cases.length+'개 결과로 나누었습니다.'}));
@@ -198,6 +264,17 @@
         var r=CV.createResult(c,m.cardStates[c.id],{onChange:function(s){m.cardStates[c.id]=s; saveStore();}});
         results.push(r); var slot=el('div',{class:'result'}); body.append(slot); CV.layout.renderResult(slot,r,m,{conv:cv,fresh:false});
       });
+    }
+    // A의 검사 경고(예: 기준 미확인)와 B 계약으로 넘기지 못한 연결 항목은 결과 상태와 별도로 항상 보인다.
+    if((m.aWarnings||[]).length){
+      var warnBox=el('aside',{class:'confirmation-warning a-warnings',role:'note'});
+      warnBox.append(el('strong',{text:'A 검사 경고 '+m.aWarnings.length+'건 · 조회는 진행했습니다'}));
+      var wl=el('ul');m.aWarnings.forEach(function(w){wl.append(el('li',{text:w.text||w.code}));});warnBox.append(wl);body.append(warnBox);
+    }
+    if((m.unsupportedLinks||[]).length){
+      var linkBox=el('aside',{class:'confirmation-warning a-unsupported',role:'note'});
+      linkBox.append(el('strong',{text:'현재 B 계약으로 넘기지 못한 요청 '+m.unsupportedLinks.length+'건 · 조회하지 않았습니다'}));
+      var ll=el('ul');m.unsupportedLinks.forEach(function(u){ll.append(el('li',{text:(u.statistics||[]).join(', ')+': '+u.code}));});linkBox.append(ll);body.append(linkBox);
     }
     if(m.confirmation&&!m.resumedJobId)body.append(confirmationEl(m));
     if(m.conditionEditor&&!m.resumedJobId)body.append(conditionEditorEl(m));
@@ -253,7 +330,8 @@
     var answer=body.querySelector('.answer p');if(answer)answer.textContent=CV.ux.text(m.answer);
   }
   function receiveResult(m,result){
-    m.execution.stages=result.stages;m.cases=result.ui_cases||[];m.kind=m.cases.length?'result':'stopped';
+    m.execution.stages=result.stages;m.cases=result.ui_cases||[];m.kind=m.cases.length?'result':'stopped';m.runStatus=result.status;
+    m.aWarnings=result.a_warnings||[];m.unsupportedLinks=result.unsupported_links||[];
     m.finishedAt=result.finished_at;m.runId=result.run_id;m.confirmation=result.confirmation;m.userConfirmation=result.user_confirmation;
     m.conditionEditor=result.condition_editor;m.resumeKind=result.resume_kind||m.resumeKind;
     m.answer=result.message;m.callCounts=result.calls;m.jobSettled=true;
