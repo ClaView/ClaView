@@ -7,9 +7,9 @@ Official entry: ``claview_a.run`` (``claview_a.entry.run``); command line: ``pyt
 """
 
 
-def run(question: str, judge, *, as_of: str, settings=None, layer=None) -> dict:
+def run(question: str, judge, *, as_of: str, settings=None, layer=None, **research) -> dict:
     """The official entry of the new A (``claview_a.entry.run``), imported on first use so that importing the
-    package stays light."""
+    package stays light. ``research``: the re-search arguments of ``entry.run``."""
     from .entry import run as _run
 
-    return _run(question, judge, as_of=as_of, settings=settings, layer=layer)
+    return _run(question, judge, as_of=as_of, settings=settings, layer=layer, **research)

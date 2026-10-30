@@ -5,7 +5,7 @@ A·B·C 담당자가 **한 레포에서 각자의 모듈 경로만** 고친다. 
 
 ```text
 서비스:  브라우저 → frontend(nginx :10300) ─/api/*→ pipeline(:10301)
-                                                    └ 같은 프로세스: A service → B service(요구 묶음마다) → 조회 → C service
+                                                    └ 같은 프로세스: 새 A 화면 service(AView) → B service(요청마다) → 조회 → C service
 
 모듈 시험·평가용(같은 service 코드를 HTTP로):
          module-a(:10311) /a/select·/a/answer   module-b(:10312) /b/resolve·/b/fetch·/b/run   module-c(:10313) /c/present
@@ -21,9 +21,9 @@ pipeline은 module-a/b/c 컨테이너를 부르지 않는다. 그래서 모듈 A
 
 | 경로 | 내용 | 담당 |
 |---|---|---|
-| `modules/a/claview_a/` | **새 A(표 단위 경로). 새 A 패키지 제공 완료, 화면 연결 전.** 공개 `run`, CLI `python -m claview_a`. 표준 라이브러리·langgraph만 쓰는 패키지 규칙을 지킨다. [기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) · [55문항 측정판](docs/modules/a/A_측정판_55문항_20261029.md) | A |
-| `modules/a/claview_a_legacy/` | 기존 A(10/21판). 화면 연결 전까지 service·staged 화면·`claview` 명령·골든 22 평가가 쓴다 | A |
-| `modules/a/claview_a_api/` | A의 service(`service.py`: pipeline이 부름)와 HTTP 계층(`api.py`: `POST /a/select`, `/a/answer`). 아직 기존 A(`claview_a_legacy`)를 부른다 | A |
+| `modules/a/claview_a/` | **새 A(표 단위 경로). 화면 경로에 연결(합성 판단기로 확인, 실호출 꺼짐).** 공개 `run`(재검색 인자 전달), 기준 축 답변 적용 `answers`, CLI `python -m claview_a`. 표준 라이브러리·langgraph만 쓰는 패키지 규칙을 지킨다. [기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) · [55문항 측정판](docs/modules/a/A_측정판_55문항_20261029.md) · [계획 54](docs/plans/54_새A_화면연결.md) | A |
+| `modules/a/claview_a_legacy/` | 기존 A(10/21판). 모듈 A API·옛 staged 실행기·`claview` 명령·골든 22 평가가 쓴다. 화면 경로는 쓰지 않는다(자동 대체 없음) | A |
+| `modules/a/claview_a_api/` | 새 A 화면 service(`screen.py`: 실행 설정·세션·답변), 공개 결과 어댑터(`view.py` → `claview_common.contracts.a_view.AView`), 합성 판단기. 기존 A의 service(`service.py`)와 HTTP 계층(`api.py`: `POST /a/select`, `/a/answer`)은 아직 기존 A를 부른다 | A |
 | `modules/a/{tests,tests_tl,tests_legacy,tests_api,scripts}/` | 새 A 시험(옮긴 부품 / 표 단위 경로), 기존 A 시험, API 시험, 연구·평가 도구(새 A 평가기 `scripts/tl_eval`) | A |
 | `modules/b/claview_b/`, `claview_b_api/` | B 본체(그래프·조회·합성 모델), service와 HTTP 계층(`/b/resolve`, `/b/fetch`, `/b/run`) | B |
 | `modules/c/claview_c/`, `claview_c_api/` | C 표현 로직(렌더러·분석·차트 정책), service와 HTTP 계층(`/c/present`) | C |

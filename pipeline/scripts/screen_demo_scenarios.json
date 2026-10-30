@@ -1,0 +1,43 @@
+{
+  "note": "Screen demo of the new A (plan 54): scripted A answers for a few questions, synthetic B and fetch. No model or KOSIS call. These answers are written by hand to drive the screen (asks, partial, failure, a test period question); they say nothing about a model. Other questions get the fake judge's answer (first table of the first card).",
+  "answers": {
+    "M2 통화량 2023년 보여줘": {
+      "statistics": [{"id": "s1", "quote": "M2 통화량", "name": "M2"}],
+      "periods": [{"quote": "2023년", "for": ["s1"]}],
+      "asks": [{"for": "s1", "axis": "stock", "options": [{"value": "평잔", "table": "DT_161Y013"}, {"value": "말잔", "table": "DT_161Y014"}]}]
+    },
+    "M2 통화량과 예금은행 대출금리 2024년": {
+      "statistics": [{"id": "s1", "quote": "M2 통화량", "name": "M2"}, {"id": "s2", "quote": "예금은행 대출금리", "name": "대출금리"}],
+      "periods": [{"quote": "2024년", "for": ["s1", "s2"]}],
+      "asks": [
+        {"for": "s1", "axis": "stock", "options": [{"value": "평잔", "table": "DT_161Y013"}, {"value": "말잔", "table": "DT_161Y014"}]},
+        {"for": "s2", "axis": "loan_basis", "options": [{"value": "신규취급액", "table": "DT_121Y006"}, {"value": "잔액기준", "table": "DT_121Y015"}]}
+      ]
+    },
+    "GDP 2023년 보여줘": {
+      "statistics": [{"id": "s1", "quote": "GDP", "name": "GDP"}],
+      "periods": [{"quote": "2023년", "for": ["s1"]}],
+      "asks": [
+        {"for": "s1", "axis": "seasonal", "options": [{"value": "계절조정", "table": "DT_200Y104"}, {"value": "원계열", "table": "DT_200Y106"}]},
+        {"for": "s1", "axis": "price", "options": [{"value": "명목", "table": "DT_200Y105"}, {"value": "실질", "table": "DT_200Y106"}]}
+      ]
+    },
+    "M2 통화량과 수출입물가 2024년": {
+      "statistics": [{"id": "s1", "quote": "M2 통화량", "name": "M2"}, {"id": "s2", "quote": "수출입물가", "name": "수출입물가"}],
+      "periods": [{"quote": "2024년", "for": ["s1", "s2"]}],
+      "choices": [{"for": ["s1"], "table": "DT_161Y014"}],
+      "missing": [{"for": ["s2"], "search_words": ["수출입물가지수"]}]
+    },
+    "M2 통화량 판단 실패 시험": {"judge_error": "timeout"},
+    "M2 말잔 기간 확인 시험": {
+      "statistics": [{"id": "s1", "quote": "M2 말잔", "name": "M2"}],
+      "choices": [{"for": ["s1"], "table": "DT_161Y014"}]
+    }
+  },
+  "period_questions": {
+    "M2 말잔 기간 확인 시험": [
+      {"question_id": "p:s1", "statistics": ["s1"], "text": "어느 기간을 볼까요? (시험용 질문: 기간 정책 확정 전, 답은 적은 그대로 보존만 합니다)", "input": "choice_or_text",
+       "options": [{"option_id": "p:s1:o1", "label": "질문에 기간 없음(정책 확정 후 결정)", "value": "unspecified"}]}
+    ]
+  }
+}

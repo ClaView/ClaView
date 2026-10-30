@@ -84,7 +84,7 @@ forbidden_modules = ["claview_pipeline"]
 name = "The service flow and API reach modules only through their service layers (claview_*_api)"
 type = "forbidden"
 source_modules = ["claview_pipeline.staged", "claview_pipeline.api", "claview_pipeline.confirmation",
-                  "claview_pipeline.request_capabilities"]
+                  "claview_pipeline.request_capabilities", "claview_pipeline.screen"]
 forbidden_modules = ["claview_a", "claview_a_legacy", "claview_b", "claview_c"]
 allow_indirect_imports = "True"
 

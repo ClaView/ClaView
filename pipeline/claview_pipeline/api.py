@@ -7,11 +7,12 @@ existing screen works unchanged:
 
     GET  /api/info            readiness, a per-process token, mode (no key values)
     POST /api/query           {"query"} -> 202 {"job_id"}; the run continues in a thread
-    POST /api/resume          {"job_id", "confirmation"} -> 202 {"job_id"} (answer to A's question)
+    POST /api/resume          {"job_id", "confirmation"} -> 202 {"job_id"} (answer to A's question;
+                              the new A's card takes {"session_id", "answers": [...]})
     GET  /api/jobs/{job_id}   stage events and the result so far (header X-Claview-Token)
 
-The flow runs in this process: claview_pipeline.staged calls each module's service functions
-(claview_a_api.service, claview_b_api.service, claview_c_api.service), the same code the module
+The flow runs in this process: claview_pipeline.screen (the new A through claview_a_api.screen) and
+claview_pipeline.staged (B, fetch, C) call each module's service functions, the same code the module
 APIs serve. The module-a/b/c containers are for each module's own tests and evaluation.
 """
 
@@ -31,6 +32,7 @@ from fastapi.responses import JSONResponse
 from claview_common.api import create_app
 from claview_common.settings import load, reveal
 
+from .screen import ScreenPipeline
 from .staged import Pipeline, validate_query
 
 MAX_JOBS = 30
@@ -57,13 +59,15 @@ class _State:
 
 
 def _make_runner() -> Pipeline:
+    """The screen's runner: the new A (claview_pipeline.screen). The old A is not used here and is never a fallback;
+    in live mode the new A's model calls stay off (a_live_disabled) until they go through an approved call gate."""
     cfg = load()
     if cfg.live:
-        return Pipeline(reveal(cfg.hcx_key), reveal(cfg.kosis_key))
+        return ScreenPipeline(reveal(cfg.hcx_key), reveal(cfg.kosis_key))
     from claview_b_api.service import synthetic_clients
 
     model, client = synthetic_clients()
-    return Pipeline(model=model, client=client)
+    return ScreenPipeline(model=model, client=client)
 
 
 STATE = _State()
@@ -97,7 +101,7 @@ def api_info() -> dict:
         "flow": "A->B->fetch->C (claview_pipeline)",
         "server_pid": os.getpid(),
         "busy": STATE.busy.locked(),
-        "a_mode": "rules_only",
+        "a_mode": runner.a_model_mode,
         "hcx_ready": runner.model is not None,
         "kosis_ready": runner.client is not None,
     }
