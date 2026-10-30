@@ -30,8 +30,12 @@ def default_settings() -> K.Settings:
     return K.Settings(**DEFAULT_MODEL)
 
 
-def run(question: str, judge, *, as_of: str, settings: K.Settings | None = None, layer=None) -> dict:
+def run(question: str, judge, *, as_of: str, settings: K.Settings | None = None, layer=None, research: bool = False,
+        research_budget=None, research_judge=None, research_settings: K.Settings | None = None) -> dict:
     """The state of one question: ``pool``, ``cards``, ``payload``, ``record`` (selection, asks, partial result,
-    failure), ``action`` (handoff / ask / fail) and ``run_info``."""
+    failure), ``action`` (handoff / ask / fail) and ``run_info``. The re-search arguments go to the graph unchanged
+    (``graph.run``: off by default, as before)."""
     return _graph_run(question, default_layer() if layer is None else layer, judge,
-                      default_settings() if settings is None else settings, as_of)
+                      default_settings() if settings is None else settings, as_of, research=research,
+                      research_budget=research_budget, research_judge=research_judge,
+                      research_settings=research_settings)
