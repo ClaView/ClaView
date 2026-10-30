@@ -12,7 +12,13 @@ from .search import grams, normalized
 from .services import Services as Services
 from .services import bounded as bounded
 
-RELATIVE_WORDS = r"최근|이후|지금|현재|올해|작년|최신|지난"
+RELATIVE_WORD_LIST = r"최근|이후|지금|현재|올해|작년|최신|지난"
+# "현재생활형편CSI"의 "현재"처럼 지표 이름 안에 붙은 낱말은 기간 표현이 아니다:
+# 뒤에 한글이 바로 이어지면(조사·"까지"·"기준"·"부터" 제외) 기간 표현으로 보지 않는다.
+RELATIVE_WORDS = (
+    r"최근|이후|지금|올해|작년|최신|지난|"
+    r"현재(?:(?![가-힣])|(?=은|는|의|을|를|까지|기준|부터|로|에|도|만|이(?![가-힣])|가(?![가-힣])))"
+)
 # 지수의 기준연도 표기("2020=100", "기준연도 2020년")는 조회 기간이 아니므로 연도 찾기에서 뺀다.
 BASE_YEAR_NOTATION = re.compile(
     r"(?<!\d)(?:19|20)\d{2}\s*년?\s*[=＝]\s*100|기준\s*(?:연도|년도|년)\s*(?:은|는|:)?\s*(?:19|20)\d{2}\s*년?"
@@ -21,6 +27,28 @@ BASE_YEAR_NOTATION = re.compile(
 
 def stated_years(query: str) -> list[str]:
     return re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", BASE_YEAR_NOTATION.sub(" ", query))
+
+
+def has_relative_words(query: str, table: Json | None = None) -> bool:
+    """The question uses relative-period wording ("최근/올해/현재 ..."), not a value name that contains it.
+
+    "현재 생활형편CSI"의 "현재"는 소비자동향조사의 지표 이름이므로, 표의 값 이름에 들어 있는 낱말은
+    (띄어쓰기가 달라도) 질문에서 지우고 본다.
+    """
+    text = query
+    if table is not None:
+        names: set[str] = set()
+        for dimension in table.get("dimensions", {}).values():
+            for value in dimension.get("values", {}).values():
+                name = core_name(value.get("name", ""))
+                if len(name) >= 4 and re.search(RELATIVE_WORD_LIST, name):
+                    names.add(name)
+                    stem = re.sub(r"[A-Za-z]+$", "", name)
+                    if len(stem) >= 4:
+                        names.add(stem)
+        for name in sorted(names, key=len, reverse=True):
+            text = re.sub(r"\s*".join(re.escape(ch) for ch in name), " ", text)
+    return re.search(RELATIVE_WORDS, text) is not None
 
 
 PERIOD_OVER_PERIOD = (
@@ -527,7 +555,7 @@ def resolve_explicit_period(query: str, table: Json, freq: str | None) -> Json |
     the model's own period and `validate_period` then decide as before. A period outside the
     table's coverage raises the same error `validate_period` gives.
     """
-    if freq is None or freq not in table["periods"] or re.search(RELATIVE_WORDS, query):
+    if freq is None or freq not in table["periods"] or has_relative_words(query, table):
         return None
     years = stated_years(query)
     if not years:
@@ -561,7 +589,7 @@ def validate_period(
         raise StageFailure("metadata_refresh_required", "unresolved")
     if query is None:
         return
-    if re.search(RELATIVE_WORDS, query):
+    if has_relative_words(query, table):
         raise StageFailure("conditions_incomplete", "unresolved")
     years = stated_years(query)
     if not years:
@@ -1727,7 +1755,7 @@ class BSteps:
             alternatives = state.get("frequency_alternatives", {})
             table_meta = state["table_metadata"][key]
             freq, other_freqs = decide_frequency(query, table_meta)
-            if re.search(RELATIVE_WORDS, query):
+            if has_relative_words(query, table_meta):
                 resolution = resolve_relative_period(query, table_meta, s.config, freq)
                 if resolution["status"] == "needs_confirmation":
                     # 2026-10-06 flow 변경: 조회 가능 기간을 안내(period_notices)로 저장하고
@@ -1752,7 +1780,7 @@ class BSteps:
                 found = []
                 for other in other_freqs:
                     try:
-                        if re.search(RELATIVE_WORDS, query):
+                        if has_relative_words(query, table_meta):
                             other_res = resolve_relative_period(query, table_meta, s.config, other)
                             period = (
                                 other_res.get("period") or other_res["result"]["resolved_period"]
