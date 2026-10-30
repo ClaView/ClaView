@@ -22,6 +22,13 @@ PATTERNS = [
 ]
 
 
+# "그래프를 따로 배치", "지표별로 그래프를 나눠", "차트 영역을 나눠 보여줘": 화면(패널)을 나누라는 요청.
+# 계열마다 하나씩이 아니라 묶음마다 하나(`panel_groups`)이며, 묶는 기준은 말 앞의 "단위별/표별/지표별"과 자료에서 정한다.
+PANEL_REQUEST=(r"(?:그래프|차트|패널|화면|영역)(?:영역|패널)?[을를은는]?(?:따로|별도로?|나눠|나누어|분리|분할|구분)[가-힣]*"
+               r"|(?:따로|별도로)(?:배치|표시)[가-힣]*")
+PANEL_KEYS=(("단위","unit"),("통계표","table"),("지표","indicator"),("항목","indicator"),("계열","indicator"),("종류","indicator"),(r"(?<!지)표","table"))
+UNIT_WORDING=r"단위(?:가|를|도|는)?(?:서로)?(?:다르|구분|달라|다른)"
+MEASURE_NAME=r"(?:비율|율|률|비중|지수|금리|이자|잔액|금액|액|량|수|도|가격|물가|지표|CSI|BSI)$"
 SOURCE_TABLE_VERBS=r"(?:각각|모두|함께)?(?:사용|선택|조회|이용|참고|활용|기준|골라|고르|비교)"
 
 
@@ -35,15 +42,75 @@ def requests(query):
             # '표를 각각 사용해'의 표는 자료를 가져올 통계표이고, 수치표로 보여 달라는 요청이 아니다.
             if kind=="table" and match.group().startswith("표") and re.match(SOURCE_TABLE_VERBS,q[match.end():]):continue
             found.append((match.start(),kind,match.group()));occupied.append(match.span())
+    panel_hints={}
+    for match in re.finditer(PANEL_REQUEST,q):
+        if any(match.start()<b and match.end()>a for a,b in occupied):continue
+        before=q[:match.start()];hint="auto"
+        for word,key in PANEL_KEYS:
+            if re.search(word+r"별로?$",before):hint=key;break
+        else:
+            if re.search(UNIT_WORDING,q):hint="unit"
+        found.append((match.start(),"small_multiples",match.group()));occupied.append(match.span())
+        panel_hints[match.start()]=hint
     found.sort()
     # '100% 누적막대'는 두 종류를 요청한 것이 아니다.
     if any(k=="percent_stacked" for _,k,_ in found):found=[x for x in found if x[1]!="stacked"]
     # '각각 나눠 선으로'의 선은 작은 그래프의 그리는 방식이고, 별도 레이아웃 요구가 아니다.
     if any(k=="small_multiples" for _,k,_ in found):found=[x for x in found if x[1] not in {"line","bar"}]
     result=[]
-    for _,kind,text in found:
-        if kind not in [r["kind"] for r in result]:result.append({"kind":kind,"text":text})
+    for start,kind,text in found:
+        if kind not in [r["kind"] for r in result]:
+            item={"kind":kind,"text":text}
+            if start in panel_hints:item["panel_by"]=panel_hints[start]
+            result.append(item)
     return result
+
+
+def unit_text(unit):
+    return unit if unit else "단위 미제공"
+
+
+def panel_groups(series, by="auto"):
+    """계열을 패널 묶음으로 나눈다. 정할 수 없으면 None(계열마다 한 패널로 보여준다).
+
+    by: unit(단위별) / table(통계표별) / indicator(지표별: 이름이 지표 말인 분류, 없으면 항목) / auto(단위 → 표 → 지표 순으로
+    둘 이상으로 갈리는 첫 기준). 자료에 없는 이름을 만들지 않고, 묶음 제목은 묶음이 공유하는 값(단위·표 ID·분류 값 이름)이다.
+    """
+    def partition(keyfunc, title):
+        order,groups=[],{}
+        for item in series:
+            key=keyfunc(item)
+            if key not in groups:groups[key]=[];order.append(key)
+            groups[key].append(item["series_id"])
+        if len(order)<2:return None
+        return [{"panel_id":f"P{n+1}","key":str(key),"title":title(key),"series_ids":groups[key]} for n,key in enumerate(order)]
+
+    def dimension_axes():
+        axes={}
+        for item in series:
+            for axis,value in (item["selection"].get("dimensions") or {}).items():
+                axes.setdefault(axis,{})[value.get("code")]=value.get("name") or ""
+        return {a:v for a,v in axes.items() if len(v)>=2}
+
+    def by_unit():return partition(lambda i:i.get("unit") or "",lambda k:unit_text(k or None))
+    def by_table():return partition(lambda i:i["selection"]["table_id"],lambda k:k)
+    def by_item():
+        return partition(lambda i:i["selection"]["item_id"],
+                         lambda k:next(i["label"].split(" / ")[0] for i in series if i["selection"]["item_id"]==k))
+    def by_indicator():
+        axes=dimension_axes()
+        named=[a for a,v in axes.items() if all(re.search(MEASURE_NAME,re.sub(r"[\s()（）\d]","",n)) for n in v.values())]
+        if len(named)==1:
+            axis=named[0];names=axes[axis]
+            return partition(lambda i:(i["selection"].get("dimensions") or {}).get(axis,{}).get("code"),lambda k:names.get(k) or str(k))
+        if not axes:return by_item()
+        return by_item() if not named and len({i["selection"]["item_id"] for i in series})>=2 else None
+
+    order={"unit":(by_unit,),"table":(by_table,),"indicator":(by_indicator,),"auto":(by_unit,by_table,by_indicator)}[by]
+    for make in order:
+        groups=make()
+        if groups:return groups
+    return None
 
 
 def choose(query, available, *, periods, series_count, composition=False, fallback=None):
@@ -77,6 +144,7 @@ def choose(query, available, *, periods, series_count, composition=False, fallba
             continue
         chosen=kind;selected_request=item
         break
+    panel_by=(selected_request or {}).get("panel_by")
     if selected_request:
         reason="질문에서 요청한 "+TITLES[chosen]+"를 먼저 보여줍니다."
     elif chosen == "dual_axis":
@@ -88,8 +156,10 @@ def choose(query, available, *, periods, series_count, composition=False, fallba
         reason+=" 같은 주기·단위의 모든 항목을 한 그래프에서 함께 비교합니다. 항목이 많아 복잡하면 ‘항목별 나눠 보기’나 ‘수치표’로 바꿔 보세요."
     if chosen=="percent_stacked":reason+=" 검증한 같은 시점의 공식 전체를 100% 분모로 사용합니다."
     elif chosen=="stacked":reason+=" 항목 합계를 공식 전체와 대조한 자료입니다."
-    return {"version":VERSION,"requested":wanted,"selected":chosen,"reason":reason,"notices":notices,
+    result={"version":VERSION,"requested":wanted,"selected":chosen,"reason":reason,"notices":notices,
             "facts":{"period_count":periods,"series_count":series_count,"composition_verified":composition}}
+    if chosen=="small_multiples" and panel_by:result["panel_by"]=panel_by
+    return result
 
 
 def apply(chart,query):
@@ -99,4 +169,14 @@ def apply(chart,query):
     decision=choose(query,[v["kind"] for v in chart["views"]],periods=max(counts,default=0),
                     series_count=len(chart["views"][0]["spec"]["series"]),composition=bool((chart.get("composition") or {}).get("verified")))
     chart["default_view_id"]=decision["selected"];chart["recommendation"]=decision["reason"]
+    if decision.get("panel_by"):
+        series=chart["views"][0]["spec"]["series"]
+        panels=panel_groups(series,decision["panel_by"])
+        if panels:
+            chart["views"][0]["spec"]["panels"]=panels
+            decision["panels"]=[{"panel_id":p["panel_id"],"title":p["title"],"series_ids":p["series_ids"]} for p in panels]
+            decision["reason"]+=" 묶음별로 패널을 나눕니다: "+" · ".join(p["title"] for p in panels)+"."
+            chart["recommendation"]=decision["reason"]
+        else:
+            decision["notices"].append({"code":"panel_grouping_unresolved","message":"패널을 어떤 기준으로 묶을지 자료에서 정할 수 없어 항목마다 패널을 나눠 보여줍니다."})
     chart["notices"].extend(decision["notices"]);chart["chart_policy"]=decision

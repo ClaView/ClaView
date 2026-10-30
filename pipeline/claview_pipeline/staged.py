@@ -229,6 +229,27 @@ def ui_cases(chart, data_result, run_id, tables):
                     **({"axis": axis_of[s["series_id"]]} if axes else {}),
                 }
             )
+        # 묶음 패널(C 정책이 정함): 이 카드에 남은 계열로 줄이고, 둘 이상으로 갈릴 때만 싣는다.
+        shown = {s["series_id"] for s in series}
+        panels = [
+            {
+                "id": p["panel_id"],
+                "title": names.get(p["title"], p["title"]) if p["key"] == p["title"] else p["title"],
+                "series": [i for i in p["series_ids"] if i in shown],
+            }
+            for p in spec.get("panels") or []
+        ]
+        panels = [p for p in panels if p["series"]]
+        notes = notices_text(chart["notices"])
+        if len(panels) >= 2 and default == "small_multiples":
+            # 묶음 패널이 첫 보기이면 "한 그래프의 왼쪽·오른쪽 축" 안내는 맞지 않는다(패널마다 축이 따로다).
+            notes = [
+                n.replace(
+                    "를 왼쪽·오른쪽 축에 나눠 그렸습니다. 축 눈금이 달라 선·막대의 높이를 직접 비교할 수 없습니다.",
+                    "를 패널로 나눠 그렸습니다. 패널마다 축 눈금이 달라 높이를 직접 비교할 수 없습니다.",
+                )
+                for n in notes
+            ]
         sources = [s for s in chart["source"] if s["series_id"] in group["series_ids"]]
         fetched = [
             s["provenance"].get("fetched_at") for s in sources if s["provenance"].get("fetched_at")
@@ -272,6 +293,7 @@ def ui_cases(chart, data_result, run_id, tables):
                 "kindTitles": {v["kind"]: v["title"] for v in allowed},
                 "defaultView": default,
                 "smallType": "bar" if "막대" in chart["query"] else "line",
+                **({"panels": panels} if len(panels) >= 2 else {}),
                 **(
                     {
                         "axes": [
@@ -292,7 +314,7 @@ def ui_cases(chart, data_result, run_id, tables):
                 "quality": quality,
                 "synthetic": chart["synthetic"],
                 "warnings": warnings,
-                "notices": notices_text(chart["notices"]),
+                "notices": notes,
                 "fetchedAt": max(fetched) if fetched else "조회 시각 미제공",
                 "params": {"계열별 실제 조회 조건": json.dumps(sources, ensure_ascii=False)},
                 "sourceUrl": "https://kosis.kr/",
