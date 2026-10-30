@@ -13,7 +13,11 @@ from dataclasses import dataclass
 from pathlib import Path
 
 MODES = ("synthetic", "replay", "live")
-KEY_ENVS = {"hcx": "CLOVASTUDIO_API_KEY", "openai": "OPENAI_API_KEY", "kosis": "KOSIS_API_KEY"}
+KEY_ENVS = {"openai": "OPENAI_API_KEY", "kosis": "KOSIS_API_KEY"}
+
+# The model B asks to pick items and classification values. Fixed in code (not read from the environment) so a
+# run is always the one that was measured; change it here, with a new measurement, when the model changes.
+B_MODEL_ID = "gpt-6.1-terra"
 
 # Repository root: the folder that holds data/ and eval/ (/claview in the image).
 ROOT = Path(os.environ.get("PROJECT_MAIN_DIRECTORY") or Path(__file__).resolve().parents[2])
@@ -97,10 +101,8 @@ def reveal(secret: Secret | None) -> str | None:
 class Settings:
     mode: str
     paths: Paths
-    hcx_key: Secret | None
     openai_key: Secret | None
     kosis_key: Secret | None
-    hcx_min_interval: float
 
     @property
     def live(self) -> bool:
@@ -110,7 +112,6 @@ class Settings:
         """What /health and /info may show: whether a key is set, never its value."""
         return {
             "mode": self.mode,
-            "hcx_key_set": self.hcx_key is not None,
             "openai_key_set": self.openai_key is not None,
             "kosis_key_set": self.kosis_key is not None,
         }
@@ -126,8 +127,6 @@ def load(env: Mapping[str, str] | None = None) -> Settings:
     return Settings(
         mode=mode,
         paths=Paths.under(Path(root)) if root else PATHS,
-        hcx_key=_secret(env, KEY_ENVS["hcx"]),
         openai_key=_secret(env, KEY_ENVS["openai"]),
         kosis_key=_secret(env, KEY_ENVS["kosis"]),
-        hcx_min_interval=float(env.get("HCX_MIN_INTERVAL_SEC", "35")),
     )

@@ -122,7 +122,7 @@ def test_through_a_and_through_b_stop_early(make_pipeline):
 
 def test_missing_keys_stop_at_their_stage(make_pipeline):
     no_model = make_pipeline(model=False, client=False).run(PROCEED_Q, as_of=AS_OF)
-    assert no_model["error_code"] == "hcx_key_missing"
+    assert no_model["error_code"] == "openai_key_missing"
     assert (
         stage_status(no_model)["table"] == "completed"
         and stage_status(no_model)["conditions"] == "failed"

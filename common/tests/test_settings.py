@@ -22,11 +22,20 @@ def test_project_directory_overrides_root(tmp_path):
 
 
 def test_keys_are_wrapped_and_never_shown():
-    cfg = settings.load({"CLOVASTUDIO_API_KEY": " nv-secret-value ", "KOSIS_API_KEY": "kosis-secret"})
-    assert settings.reveal(cfg.hcx_key) == "nv-secret-value" and cfg.openai_key is None
-    shown = " ".join([repr(cfg), str(cfg), f"{cfg.hcx_key}", json.dumps(cfg.public())])
+    cfg = settings.load({"OPENAI_API_KEY": " sk-secret-value ", "KOSIS_API_KEY": "kosis-secret"})
+    assert settings.reveal(cfg.openai_key) == "sk-secret-value" and settings.reveal(cfg.kosis_key) == "kosis-secret"
+    shown = " ".join([repr(cfg), str(cfg), f"{cfg.openai_key}", json.dumps(cfg.public())])
     assert "secret" not in shown.replace("Secret", "")
-    assert cfg.public() == {"mode": "synthetic", "hcx_key_set": True, "openai_key_set": False, "kosis_key_set": True}
+    assert cfg.public() == {"mode": "synthetic", "openai_key_set": True, "kosis_key_set": True}
+
+
+def test_the_hcx_key_is_not_read():
+    cfg = settings.load({"CLOVASTUDIO_API_KEY": "nv-secret-value"})
+    assert cfg.openai_key is None and "hcx" not in json.dumps(cfg.public()) and "nv-secret" not in repr(cfg)
+
+
+def test_the_b_model_id_is_fixed():
+    assert settings.B_MODEL_ID == "gpt-6.1-terra"
 
 
 @pytest.mark.parametrize("value", ["", "   ", "a b", "key\x00", "k\ney", None, 123])

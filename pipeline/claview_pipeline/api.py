@@ -30,7 +30,7 @@ from fastapi import Header, Request
 from fastapi.responses import JSONResponse
 
 from claview_common.api import create_app
-from claview_common.settings import load, reveal
+from claview_common.settings import B_MODEL_ID, load, reveal
 
 from .screen import ScreenPipeline
 from .staged import Pipeline, validate_query
@@ -63,7 +63,7 @@ def _make_runner() -> Pipeline:
     in live mode the new A's model calls stay off (a_live_disabled) until they go through an approved call gate."""
     cfg = load()
     if cfg.live:
-        return ScreenPipeline(reveal(cfg.hcx_key), reveal(cfg.kosis_key))
+        return ScreenPipeline(reveal(cfg.openai_key), reveal(cfg.kosis_key))
     from claview_b_api.service import synthetic_clients
 
     model, client = synthetic_clients()
@@ -102,7 +102,9 @@ def api_info() -> dict:
         "server_pid": os.getpid(),
         "busy": STATE.busy.locked(),
         "a_mode": runner.a_model_mode,
-        "hcx_ready": runner.model is not None,
+        "hcx_ready": runner.model is not None,  # name kept for the frontend; it means "B model ready"
+        "model_ready": runner.model is not None,
+        "b_model": B_MODEL_ID if cfg.live else "synthetic",
         "kosis_ready": runner.client is not None,
     }
 

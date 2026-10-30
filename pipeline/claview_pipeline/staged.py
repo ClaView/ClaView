@@ -84,14 +84,14 @@ MESSAGES = {
     "metadata_refresh_required": "요청 기간이 저장된 메타정보의 수록 범위를 벗어납니다. 메타 갱신 또는 기간 확인이 필요합니다.",
     "selection_count_requires_confirmation": "항목이 30개를 넘습니다. 조회할 대상을 좁혀 주세요.",
     "calculation_definition_required": "계산 기준을 먼저 확인해야 합니다. 원값을 계산 결과로 대신 표시하지 않습니다.",
-    "hcx_http_429": "HCX 호출 한도에 도달했습니다. 결과를 임의로 대신 만들지 않았습니다. 잠시 후 다시 질문해 주세요.",
-    "hcx_http_401": "HCX 인증 정보를 확인해 주세요.",
-    "hcx_http_403": "HCX 키의 권한을 확인해 주세요.",
+    "openai_http_429": "분석 모델 호출 한도에 도달했습니다. 결과를 임의로 대신 만들지 않았습니다. 잠시 후 다시 질문해 주세요.",
+    "openai_http_401": "분석 모델 인증 정보를 확인해 주세요.",
+    "openai_http_403": "분석 모델 키의 권한을 확인해 주세요.",
     "unexpected_response_period": "조회 응답의 주기가 요청 조건과 다릅니다.",
     "response_unit_conflict": "KOSIS 응답의 단위·지수 기준이 메타정보와 다릅니다. 같은 단위라고 추측하지 않고 조회 결과 표시를 중단했습니다.",
     "a_selection_unsettled": "통계표 선택에 확인이 필요합니다. 후보를 확정된 표로 간주하지 않았습니다.",
     "a_no_table": "질문에 맞는 통계표를 확정하지 못했습니다. 지표 이름이나 분류를 더 구체적으로 적어 주세요.",
-    "hcx_key_missing": "실제 B 실행에 필요한 HCX 키가 서버에 설정되지 않았습니다.",
+    "openai_key_missing": "실제 B 실행에 필요한 OpenAI 키가 서버에 설정되지 않았습니다.",
     "kosis_key_missing": "실제 자료 조회에 필요한 KOSIS 키가 서버에 설정되지 않았습니다.",
     "b_connection_error": "A와 B 사이의 전달 계약 검사를 통과하지 못했습니다. 질문을 바꿔 다시 시도해 주세요.",
     "answer_invalid": "선택한 답변을 적용하지 못했습니다. 같은 질문을 다시 입력해 주세요.",
@@ -126,7 +126,7 @@ BLOCKED_STATUSES = {"needs_confirmation", "unresolved", "unsupported", "awaiting
 # Stops that no user choice can fix: shown as failed, not as waiting for confirmation.
 HARD_STOPS = {
     "a_no_table",
-    "hcx_key_missing",
+    "openai_key_missing",
     "kosis_key_missing",
     "answer_invalid",
     "b_connection_error",
@@ -394,7 +394,7 @@ class Pipeline:
 
     def __init__(
         self,
-        hcx_key=None,
+        openai_key=None,
         kosis_key=None,
         *,
         runs_dir=PATHS.runs / "pipeline",
@@ -405,13 +405,13 @@ class Pipeline:
         # `session` (anything with a loaded `.store`) only saves reloading the catalog in tests.
         self.store = session.store if session is not None else b_service.store()
         live_model, live_client = b_service.live_clients(
-            hcx_key=hcx_key, kosis_key=kosis_key, min_interval=35, retries=0
+            openai_key=openai_key, kosis_key=kosis_key, retries=0
         )
         self.model = model or live_model
         self.client = client or live_client
         self.mode = load_settings().mode
         self.runs_dir = Path(runs_dir) if runs_dir else None
-        self.secrets = tuple(k for k in (hcx_key, kosis_key) if k)
+        self.secrets = tuple(k for k in (openai_key, kosis_key) if k)
 
     def close(self):
         for obj in (self.model, self.client):
@@ -668,8 +668,8 @@ class Pipeline:
         (stage, code, status); they make the run partial and are reported after B's own failures."""
         model, client = b.model, b.client
         if model is None:
-            update("conditions", "failed", MESSAGES["hcx_key_missing"])
-            raise StageFailure("hcx_key_missing", "unresolved")
+            update("conditions", "failed", MESSAGES["openai_key_missing"])
+            raise StageFailure("openai_key_missing", "unresolved")
         if not b_requests:
             update("table", "failed", MESSAGES["a_no_table"], listing=listing)
             raise StageFailure("a_no_table", "unresolved")

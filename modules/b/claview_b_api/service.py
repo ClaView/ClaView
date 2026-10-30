@@ -66,17 +66,17 @@ def store() -> MetadataStore:
     return MetadataStore(CATALOG, METADATA)
 
 
-def live_clients(*, hcx_key=None, openai_key=None, kosis_key=None, min_interval: float = 35, retries=None):
-    """(selection model, KOSIS client) from keys; None for a missing key (never invented)."""
-    from claview_b.models import HcxModel, OpenAIModel
+def live_clients(*, openai_key=None, kosis_key=None, retries=None):
+    """(selection model, KOSIS client) from keys; None for a missing key (never invented).
+
+    The selection model is always `settings_module.B_MODEL_ID` on OpenAI; HCX is not used here.
+    """
+    from claview_b.models import OpenAIModel
 
     # KosisClient puts the key in the query string; httpx logs full URLs at INFO.
     logging.getLogger("httpx").setLevel(logging.WARNING)
     extra = {} if retries is None else {"retries": retries}
-    if openai_key and not hcx_key:
-        model = OpenAIModel(openai_key)
-    else:
-        model = HcxModel(hcx_key, min_interval=min_interval, **extra) if hcx_key else None
+    model = OpenAIModel(openai_key, settings_module.B_MODEL_ID, **extra) if openai_key else None
     return model, (KosisClient(kosis_key) if kosis_key else None)
 
 
@@ -97,10 +97,8 @@ class BService:
         cfg = settings_module.load()
         if cfg.live:
             model, client = live_clients(
-                hcx_key=settings_module.reveal(cfg.hcx_key),
                 openai_key=settings_module.reveal(cfg.openai_key),
                 kosis_key=settings_module.reveal(cfg.kosis_key),
-                min_interval=cfg.hcx_min_interval,
             )
             return cls(model, client, cfg.mode)
         return cls(*synthetic_clients(), cfg.mode)
@@ -109,7 +107,7 @@ class BService:
         """(B envelope, model calls). A missing model is reported as a failed B stage, not invented."""
         trace = Trace()
         if self.model is None:
-            return outcome("B", failure=StageFailure("hcx_key_missing"), trace_ref=trace.run_id), 0
+            return outcome("B", failure=StageFailure("openai_key_missing"), trace_ref=trace.run_id), 0
         model = _Counting(self.model, "complete")
         services = Services(store(), None, model, Config(as_of=as_of) if as_of else Config(), trace)
         a_result = {"tables": copy.deepcopy(tables)}

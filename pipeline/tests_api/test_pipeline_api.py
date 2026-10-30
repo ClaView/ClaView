@@ -44,6 +44,7 @@ def test_health_and_info(client):
 def test_query_confirm_resume_over_http(client):
     info = client.get("/api/info").json()
     assert info["hcx_ready"] and info["kosis_ready"]
+    assert info["model_ready"] and info["b_model"] == "synthetic"
     assert info["confirmation_resume"] is True and info["b_condition_resume"] is False
     token = info["token"]
     started = post(client, "/api/query", {"query": "총고정자본형성 2023년"}, token)
