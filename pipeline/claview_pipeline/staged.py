@@ -102,6 +102,12 @@ MESSAGES = {
     "alignment_period_too_short": "조회 기간이 맞추려는 주기 한 기간보다 짧아 주기를 맞출 수 없습니다. 기간을 늘려 다시 질문해 주세요.",
     "alignment_policy_not_allowed": "선택한 방법은 이 지표에 쓸 수 없습니다(비율·지수와 잔액 지표는 합계로 바꿀 수 없음).",
     "alignment_policy_invalid": "선택한 주기 맞춤 방법을 적용하지 못했습니다. 같은 질문을 다시 입력해 주세요.",
+    # 새 A 화면 경로(claview_pipeline.screen)
+    "a_answer_required": "통계별 기준을 확인해 주세요. 고른 기준으로 A가 표를 다시 검사한 뒤 조회를 이어갑니다.",
+    "a_judge_failed": "A의 판단 단계가 실패했습니다. 결과를 임의로 대신 만들지 않았습니다. 잠시 후 다시 질문해 주세요.",
+    "a_live_disabled": "새 A 화면 경로의 실제 모델 호출은 아직 켜지 않았습니다(호출 한도 검사 연결 전). 합성 모드에서 확인해 주세요.",
+    "a_handoff_unsupported": "표는 정했지만 현재 B 계약으로 전달할 수 없는 요청이라 조회하지 않았습니다(미지원 연결 항목). 아래 사유를 확인해 주세요.",
+    "b_period_differs_from_a": "B가 고른 기간·주기가 A가 표마다 정한 기간·주기와 달라 조회하지 않았습니다(미지원 연결 항목). 조건을 바꾼 결과를 완료로 보여 주지 않습니다.",
 }
 # 여러 요구를 한 차트에 합치라는 표현이 있을 때만 요구별 결과를 합친다(그 외에는 요구별 카드).
 # "이중 축 말고 각각"처럼 표현 바로 뒤에서 거절하면 결합하지 않는다. 거절어와 조사는 C의
@@ -124,6 +130,10 @@ HARD_STOPS = {
     "kosis_key_missing",
     "answer_invalid",
     "b_connection_error",
+    "a_judge_failed",
+    "a_live_disabled",
+    "a_handoff_unsupported",
+    "b_period_differs_from_a",
 }
 
 
@@ -355,6 +365,11 @@ class _ClientProbe:
 
 
 class Pipeline:
+    # The A this runner calls (legacy A through claview_a_api.service; the new A's runner is claview_pipeline.screen).
+    a_model_mode = "rules_only"
+    a_running_text = "A(규칙 기반)가 질문을 해석하고 통계표를 고릅니다."
+    b_factory = b_service.BService
+
     def __init__(
         self,
         hcx_key=None,
@@ -429,7 +444,7 @@ class Pipeline:
             "stage_outcomes": {},
             "ui_cases": [],
             "execution_mode": "actual_pipeline",
-            "a_model_mode": "rules_only",
+            "a_model_mode": self.a_model_mode,
         }
         current = "question"
 
@@ -471,37 +486,17 @@ class Pipeline:
             if _resume_alignment:
                 self._resume_alignment(state, _resume_alignment, update, traces)
             else:
-                update("question", "running", "A(규칙 기반)가 질문을 해석하고 통계표를 고릅니다.")
+                update("question", "running", self.a_running_text)
                 capability = unsupported_request(query, self.store.catalog)
                 if capability:
                     state["capability"] = capability
                     raise StageFailure(capability["code"], capability["status"])
-                if _resume:
-                    paused, answer = _resume
-                    state["parent_run_id"] = paused["run_id"]
-                    state["resume_kind"] = "a_question"
-                    a_out = a_service.answer(paused["a_state"], answer["option_id"])
-                    a_state = a_out["state"]
-                    if a_state["response"].get("answer_error"):
-                        state["answer_error"] = a_state["response"]["answer_error"]
-                        raise StageFailure("answer_invalid", "unresolved")
-                    state["user_confirmation"] = {
-                        "source": "user_confirmation",
-                        "parent_run_id": paused["run_id"],
-                        "at": now(),
-                        "question_id": answer["question_id"],
-                        "option_id": answer["option_id"],
-                    }
+                b_requests, a_failures, listing = self._run_a(state, query, _resume, update)
+                if through == "A":
+                    state["status"] = "a_verified"
                 else:
-                    a_out = a_service.select(query, state["as_of"])
-                    a_state = a_out["state"]
-                state["a_state"] = a_state
-                state["as_of"] = a_state["as_of"]
-                state["b_requests"] = a_out["b_requests"]
-                b = b_service.BService(model, client, self.mode)
-                self._assemble(
-                    state, a_state, a_out["b_requests"], b, through, update, run_id, bool(_resume), traces
-                )
+                    b = self.b_factory(model, client, self.mode)
+                    self._run_b(state, b_requests, b, through, update, run_id, traces, listing, a_failures)
         except StageFailure as exc:
             self._fail(state, exc, update, current)
         except Exception as exc:  # noqa: BLE001 - never show a stored sample instead of a result
@@ -515,6 +510,7 @@ class Pipeline:
         state["calls"] = {
             "HCX": model.calls if model else 0,
             "KOSIS": client.calls if client else 0,
+            **state.pop("extra_calls", {}),
         }
         # Diagnostics stay in the local run record only (requests carry no credential).
         state["trace_events"] = [
@@ -523,9 +519,37 @@ class Pipeline:
         ]
         return self._finish(state, emit)
 
-    # ---- A result -> B (per requirement group) -> fetch -> C -> stages ---------------
-    def _assemble(self, state, a_state, b_requests, b, through, update, run_id, resumed, traces):
-        model, client = b.model, b.client
+    # ---- A (legacy service) -> question/table stages -------------------------------------
+    def _run_a(self, state, query, resume, update):
+        """Run A and write the question and table stages: (b_requests, A-side failures, table listing).
+
+        Raises StageFailure when A waits for an answer or decides nothing."""
+        if resume:
+            paused, answer = resume
+            state["parent_run_id"] = paused["run_id"]
+            state["resume_kind"] = "a_question"
+            a_out = a_service.answer(paused["a_state"], answer["option_id"])
+            a_state = a_out["state"]
+            if a_state["response"].get("answer_error"):
+                state["answer_error"] = a_state["response"]["answer_error"]
+                raise StageFailure("answer_invalid", "unresolved")
+            state["user_confirmation"] = {
+                "source": "user_confirmation",
+                "parent_run_id": paused["run_id"],
+                "at": now(),
+                "question_id": answer["question_id"],
+                "option_id": answer["option_id"],
+            }
+        else:
+            a_out = a_service.select(query, state["as_of"])
+            a_state = a_out["state"]
+        state["a_state"] = a_state
+        state["as_of"] = a_state["as_of"]
+        state["b_requests"] = a_out["b_requests"]
+        listing = self._report_a(state, a_state, update, bool(resume))
+        return a_out["b_requests"], [], listing
+
+    def _report_a(self, state, a_state, update, resumed):
         response, analysis = a_state["response"], a_state.get("analysis") or {}
         interp = analysis.get("interpretation") or {}
         requirements = interp.get("requirements") or []
@@ -606,26 +630,38 @@ class Pipeline:
                 ]
             ),
         )
-        if through == "A":
-            state["status"] = "a_verified"
-            return
+        return selected
+
+    def _resolve_extra(self, group, b):
+        """Extra B inputs of one request (none on the legacy path)."""
+        return {}
+
+    def _b_conditions_lost(self, state, group, b_outcome):
+        """A failure code when B's answer drops a condition A handed over (no check on the legacy path)."""
+        return None
+
+    # ---- A's requests -> B (per requirement group) -> fetch -> C -> stages ---------------
+    def _run_b(self, state, b_requests, b, through, update, run_id, traces, listing, a_failures):
+        """B for every request A hands over, then fetch and C. `a_failures`: what A did not hand over
+        (stage, code, status); they make the run partial and are reported after B's own failures."""
+        model, client = b.model, b.client
         if model is None:
             update("conditions", "failed", MESSAGES["hcx_key_missing"])
             raise StageFailure("hcx_key_missing", "unresolved")
         if not b_requests:
-            update("table", "failed", MESSAGES["a_no_table"], listing=selected)
+            update("table", "failed", MESSAGES["a_no_table"], listing=listing)
             raise StageFailure("a_no_table", "unresolved")
         # One B call per requirement group A hands over (related requirements share a call).
         results = []
         for group in b_requests:
-            b_outcome, _ = b.resolve(state["query"], group["tables"], state["as_of"])
+            b_outcome, _ = b.resolve(state["query"], group["tables"], state["as_of"], **self._resolve_extra(group, b))
             ok = b_outcome["status"] == "ok"
             result = {
                 "b_outcome": b_outcome,
                 "a_result": {"tables": copy.deepcopy(group["tables"])},
                 "selections": ((b_outcome["result"] or {}).get("selections") or []) if ok else [],
             }
-            results.append(({"status": "returned", "requirement_ids": group["requirement_ids"]}, result))
+            results.append(({"status": "returned", "requirement_ids": group["requirement_ids"], "group": group}, result))
         failures, ready = [], []
         for req, result in results:
             outcome = result.get("b_outcome") or {}
@@ -637,6 +673,9 @@ class Pipeline:
                     else outcome.get("status", "b_failed")
                 )
                 failures.append(("conditions", code, outcome.get("status") or "unresolved"))
+            elif (lost := self._b_conditions_lost(state, req["group"], outcome)) is not None:
+                # B answered, but not with the conditions A handed over: not fetched, never shown as done
+                failures.append(("conditions", lost, "unsupported"))
             else:
                 ready.append((req, result))
         listings = [
@@ -671,6 +710,7 @@ class Pipeline:
             listings,
             "\n".join(extra),
         )
+        failures.extend(a_failures)
         if through == "B":
             state["status"] = "b_verified"
             return
@@ -936,7 +976,8 @@ class Pipeline:
         }
         response["message"] = state.get("message", "실제 실행 결과입니다.")
         response["error_code"] = state.get("error_code")
-        for key in ("confirmation", "parent_run_id", "user_confirmation", "resume_kind"):
+        for key in ("confirmation", "parent_run_id", "user_confirmation", "resume_kind", "unsupported_links",
+                    "a_warnings", "handoff_notes"):
             if key in state:
                 response[key] = copy.deepcopy(state[key])
         if self.runs_dir:
