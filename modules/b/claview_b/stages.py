@@ -1128,6 +1128,13 @@ def named_below(text: str, values: Json, code: str) -> list[str]:
         for c in cand
         if not any(c in {p["code"] for p in values[o]["path"][:-1]} for o in cand if o != c)
     ]
+    # "총대출금 아래 시설자금": the same name sits under many branches; the question means the nearest one
+    depth = {c: len(values[c]["path"]) for c in cand}
+    nearest: dict[str, int] = {}
+    for c in cand:
+        token = named_token(text, values, c)
+        nearest[token] = min(nearest.get(token, depth[c]), depth[c])
+    cand = [c for c in cand if depth[c] == nearest[named_token(text, values, c)]]
     via_container = any(
         container_marked(text, values, p["code"])
         for c in cand
@@ -1229,21 +1236,28 @@ def core_name(name: str) -> str:
     return normalized(name)
 
 
-def named_in(text: str, values: Json, code: str) -> bool:
-    """The question says this value: its name (core) or, below an ancestor, what follows that ancestor's name."""
+def named_token(text: str, values: Json, code: str) -> str | None:
+    """What the question says for this value: its name (core) or, below an ancestor the question also
+    names, what follows that ancestor's name; None when the question does not say it."""
     name = core_name(values[code]["name"])
     if len(name) >= 2 and name in text:
-        return True
+        return name
     for ancestor in values[code].get("path", [])[:-1]:
         ancestor_name = core_name(ancestor["name"])
         rest = name[len(ancestor_name) :] if ancestor_name and name.startswith(ancestor_name) else ""
-        if len(rest) >= 2 and rest in text:
-            return True
+        # "원재료 아래 국내출하": "원재료국내출하" says its rest only if the question names "원재료"
+        if len(rest) >= 2 and rest in text and ancestor_name in text:
+            return rest
         # "기업대출 아래 대기업·중소기업": "대기업대출" says its stem; it shares its last two characters with its parent
         stem = name[:-2] if name[-2:] == ancestor_name[-2:] and len(name) > 4 else ""
         if len(stem) >= 2 and stem in text:
-            return True
-    return False
+            return stem
+    return None
+
+
+def named_in(text: str, values: Json, code: str) -> bool:
+    """The question says this value (`named_token`)."""
+    return named_token(text, values, code) is not None
 
 
 def container_marked(text: str, values: Json, code: str) -> bool:
@@ -1267,10 +1281,11 @@ def container_marked(text: str, values: Json, code: str) -> bool:
         for m in re.finditer(re.escape(n), text)
         for k in [n.index(name)]
     ]
+    # "순대외채권 표에서는 순대외채권 아래 단기": a name followed by "표" points at the table, not at the value
     hits = [
         m.end()
         for m in re.finditer(re.escape(name), text)
-        if not any(m.start() in span for span in inside)
+        if not any(m.start() in span for span in inside) and not text.startswith("표", m.end())
     ]
     if not hits:
         return False
@@ -1331,6 +1346,112 @@ def drop_unrequested_rows(
     if not dropped_ids:
         return raw, []
     return {**raw, "selections": [r for r in rows if id(r) not in dropped_ids]}, notices
+
+
+def drop_unnamed_expansions(
+    raw: Json, query: str, table: Json, table_key: str, multi_table: bool = True
+) -> tuple[Json, list[Json]]:
+    """Drop rows that expand a value the question neither names nor names anything below.
+
+    In a question that splits its indicators over several tables HCX spreads over containers of
+    the table ("최종재") the question does not mention. Only rows that expand are dropped here,
+    and only when another row remains; plain rows are `drop_unrequested_rows`' job.
+    """
+    if not multi_table:
+        return raw, []
+    text = normalized(query)
+    kept: list[Json] = []
+    dropped: list[Json] = []
+    for row in raw["selections"]:
+        axes = [a for a, mode in row["expand"].items() if mode != "none"]
+        values_of = {a: table["dimensions"][a]["values"] for a in axes}
+        unnamed = bool(axes) and all(
+            row["dimensions"][a] in values_of[a]
+            and not named_in(text, values_of[a], row["dimensions"][a])
+            and not any(  # a container with named values below it is `select_named_children`' job
+                named_in(text, values_of[a], c)
+                for c, v in values_of[a].items()
+                if any(p["code"] == row["dimensions"][a] for p in v.get("path", [])[:-1])
+            )
+            for a in axes
+        )
+        (dropped if unnamed else kept).append(row)
+    if not dropped or not kept:
+        return raw, []
+    notices = [
+        {
+            "table": table_key,
+            "axis": a,
+            "code": row["dimensions"][a],
+            "reason": "unnamed_expansion_dropped",
+        }
+        for row in dropped
+        for a in row["expand"]
+        if row["expand"][a] != "none"
+    ]
+    return {**raw, "selections": kept}, notices
+
+
+def drop_farther_same_name(
+    raw: Json, query: str, table: Json, table_key: str, multi_table: bool = True
+) -> tuple[Json, list[Json]]:
+    """Keep only the nearest of plain rows that say the same thing in the question.
+
+    "총대출금 아래 시설자금" names "시설자금", which also sits under 금융자금, 재정자금 and more.
+    A row is dropped when a shallower plain row matches the same words of the question and the
+    deeper one sits below a value the question does not name. Rows are compared on one axis at a
+    time with the other axes and the period equal.
+    """
+    if not multi_table:
+        return raw, []
+    text = normalized(query)
+    rows = raw["selections"]
+    plain = [r for r in rows if all(m == "none" for m in r["expand"].values())]
+    drop: set[int] = set()
+    notices: list[Json] = []
+    for axis in {a for r in plain for a in r["dimensions"]}:
+        values = table["dimensions"][axis]["values"]
+        groups: dict[str, list[Json]] = {}
+        for r in plain:
+            code = r["dimensions"].get(axis)
+            if code not in values:
+                continue
+            rest = json.dumps(
+                [r["item_id"], sorted((k, v) for k, v in r["dimensions"].items() if k != axis), r["period"]],
+                sort_keys=True,
+            )
+            token = named_token(text, values, code)
+            if token:
+                groups.setdefault(rest + "|" + token, []).append(r)
+        for group in groups.values():
+            depth = {id(r): len(values[r["dimensions"][axis]]["path"]) for r in group}
+            nearest = min(depth.values())
+            near_path = {
+                p["code"]
+                for r in group
+                if depth[id(r)] == nearest
+                for p in values[r["dimensions"][axis]]["path"]
+            }
+            for r in group:
+                # the values between the question's anchor and this row that the question does not name
+                off_branch = [
+                    p
+                    for p in values[r["dimensions"][axis]]["path"][:-1]
+                    if p["code"] not in near_path and core_name(p["name"]) not in text
+                ]
+                if depth[id(r)] > nearest and off_branch:
+                    drop.add(id(r))
+                    notices.append(
+                        {
+                            "table": table_key,
+                            "axis": axis,
+                            "code": r["dimensions"][axis],
+                            "reason": "farther_same_name_dropped",
+                        }
+                    )
+    if not drop:
+        return raw, []
+    return {**raw, "selections": [r for r in rows if id(r) not in drop]}, notices
 
 
 def replace_container_with_named(
@@ -1689,10 +1810,16 @@ class BSteps:
             raw, dropped = drop_repeated_rows(raw, key)
             guarded, lowered_by_guard = apply_expand_guard(raw, state["query"], key)
             guarded, on_leaves = lower_expand_on_leaves(guarded, table_meta, key)
+            multi_table = len(state.get("table_keys") or []) > 1
+            guarded, unnamed = drop_unnamed_expansions(
+                guarded, state["query"], table_meta, key, multi_table
+            )
             guarded, named = select_named_children(guarded, state["query"], table_meta, key)
             guarded, promoted = promote_children_to_leaves(guarded, state["query"], table_meta, key)
             guarded, repaired = repair_unused_split(guarded, state["query"], table_meta, key)
-            multi_table = len(state.get("table_keys") or []) > 1
+            guarded, farther = drop_farther_same_name(
+                guarded, state["query"], table_meta, key, multi_table
+            )
             guarded, unrequested = drop_unrequested_rows(
                 guarded, state["query"], table_meta, key, multi_table
             )
@@ -1704,9 +1831,11 @@ class BSteps:
                 + dropped
                 + lowered_by_guard
                 + on_leaves
+                + unnamed
                 + named
                 + promoted
                 + repaired
+                + farther
                 + unrequested
                 + replaced
             )  # reported as expand_notices
