@@ -49,9 +49,33 @@ def test_without_model_reports_failure_instead_of_inventing(client, monkeypatch)
     monkeypatch.setattr(api, "_service", BService(None, None, "live"))
     body = json.loads(REQUESTS[0].read_text(encoding="utf-8"))
     out = client.post("/b/resolve", json=body).json()["outcome"]
-    assert out["status"] != "ok" and out["issues"][0]["code"] == "hcx_key_missing"
+    assert out["status"] != "ok" and out["issues"][0]["code"] == "openai_key_missing"
     fetched = client.post("/b/fetch", json={"b_result": {"selections": []}}).json()["outcome"]
     assert fetched["status"] == "not_run"
+
+
+def test_live_mode_builds_the_fixed_openai_model_and_ignores_the_hcx_key(monkeypatch):
+    from claview_b.models import OpenAIModel
+    from claview_common.settings import B_MODEL_ID
+
+    monkeypatch.setenv("CLAVIEW_MODE", "live")
+    monkeypatch.setenv("OPENAI_API_KEY", "fake-openai-key-not-real")
+    monkeypatch.setenv("KOSIS_API_KEY", "fake-kosis-key-not-real")
+    monkeypatch.setenv("CLOVASTUDIO_API_KEY", "fake-hcx-key-not-real")
+    service = BService.from_env()
+    assert isinstance(service.model, OpenAIModel) and service.model.model == B_MODEL_ID == "gpt-6.1-terra"
+    service.model.close()
+    service.client.close()
+
+
+def test_live_mode_with_only_an_hcx_key_has_no_model(monkeypatch):
+    monkeypatch.setenv("CLAVIEW_MODE", "live")
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.setenv("KOSIS_API_KEY", "fake-kosis-key-not-real")
+    monkeypatch.setenv("CLOVASTUDIO_API_KEY", "fake-hcx-key-not-real")
+    service = BService.from_env()
+    assert service.model is None
+    service.client.close()
 
 
 def test_invalid_request(client):

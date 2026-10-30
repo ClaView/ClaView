@@ -134,13 +134,34 @@ def test_without_b_model_no_port_is_built(base):
 def test_live_clients_keep_httpx_request_urls_out_of_info_logs(monkeypatch):
     import logging
 
-    monkeypatch.setenv("CLOVASTUDIO_API_KEY", "fake-hcx-key-not-real")
+    monkeypatch.setenv("OPENAI_API_KEY", "fake-openai-key-not-real")
     monkeypatch.setenv("KOSIS_API_KEY", "fake-kosis-key-not-real")
     logger = logging.getLogger("httpx")
     monkeypatch.setattr(logger, "level", logging.NOTSET)
     model, client = live_b_clients(allow_external=True)  # builds clients only; sends nothing
     client.close()
     assert not logger.isEnabledFor(logging.INFO)
+
+
+def test_live_b_model_is_the_fixed_openai_model_and_ignores_the_hcx_key(monkeypatch):
+    from claview_b.models import OpenAIModel
+    from claview_common.settings import B_MODEL_ID
+
+    monkeypatch.setenv("OPENAI_API_KEY", "fake-openai-key-not-real")
+    monkeypatch.setenv("KOSIS_API_KEY", "fake-kosis-key-not-real")
+    monkeypatch.setenv("CLOVASTUDIO_API_KEY", "fake-hcx-key-not-real")
+    model, client = live_b_clients(allow_external=True)
+    client.close()
+    assert isinstance(model, OpenAIModel) and model.model == B_MODEL_ID == "gpt-6.1-terra"
+    model.close()
+
+
+def test_live_b_clients_need_the_openai_key_even_when_only_an_hcx_key_is_set(monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.setenv("KOSIS_API_KEY", "fake-kosis-key-not-real")
+    monkeypatch.setenv("CLOVASTUDIO_API_KEY", "fake-hcx-key-not-real")
+    with pytest.raises(RuntimeError, match="OPENAI_API_KEY"):
+        live_b_clients(allow_external=True)
 
 
 @pytest.mark.parametrize("flag", [False, None, "yes", 1])
