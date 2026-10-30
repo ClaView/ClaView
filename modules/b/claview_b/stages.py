@@ -1292,8 +1292,38 @@ def container_marked(text: str, values: Json, code: str) -> bool:
     return all(re.match(r"(?:의[^·,]{0,12}?)?" + BELOW_MARKERS, text[end:]) for end in hits)
 
 
+def mask_table_references(text: str, table_titles: tuple[str, ...]) -> str:
+    """Blank out the words of the question that point at another table ("M2 상품별 구성표에서는").
+
+    The question names a table by the start of its title ("M2 상품별 구성내역(말잔 원계열)" ->
+    "M2 상품별 구성표"). The first word of such a reference ("M2") is a value of other tables too
+    and must not count as a request for that value there. A stretch of the question counts as a
+    reference when it repeats the start of another table's title (4+ characters) and is directly
+    followed by "표" (up to two characters later).
+    """
+    masked = text
+    for title in table_titles:
+        head = normalized(title)
+        for start in range(len(masked)):
+            size = 0
+            while (
+                start + size < len(masked)
+                and size < len(head)
+                and masked[start + size] == head[size]
+            ):
+                size += 1
+            if size >= 4 and "표" in masked[start + size : start + size + 3]:
+                masked = masked[:start] + "§" * size + masked[start + size :]
+    return masked
+
+
 def drop_unrequested_rows(
-    raw: Json, query: str, table: Json, table_key: str, multi_table: bool = True
+    raw: Json,
+    query: str,
+    table: Json,
+    table_key: str,
+    multi_table: bool = True,
+    other_table_titles: tuple[str, ...] = (),
 ) -> tuple[Json, list[Json]]:
     """Drop rows the question did not ask for when sibling rows differ on an axis.
 
@@ -1311,7 +1341,7 @@ def drop_unrequested_rows(
     plain = [r for r in rows if all(m == "none" for m in r["expand"].values())]
     if len(plain) < 2:
         return raw, []
-    text = normalized(query)
+    text = mask_table_references(normalized(query), other_table_titles)
     notices: list[Json] = []
     dropped_ids: set[int] = set()
     for axis in {a for r in plain for a in r["dimensions"]}:
@@ -1820,8 +1850,13 @@ class BSteps:
             guarded, farther = drop_farther_same_name(
                 guarded, state["query"], table_meta, key, multi_table
             )
+            other_titles = tuple(
+                t["table_name"]
+                for t in state["a_result"].get("tables", [])
+                if t.get("table_name") and f"{t['org_id']}:{t['table_id']}" != key
+            )
             guarded, unrequested = drop_unrequested_rows(
-                guarded, state["query"], table_meta, key, multi_table
+                guarded, state["query"], table_meta, key, multi_table, other_titles
             )
             guarded, replaced = replace_container_with_named(
                 guarded, state["query"], table_meta, key, multi_table
