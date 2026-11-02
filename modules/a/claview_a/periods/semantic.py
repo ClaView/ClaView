@@ -3,8 +3,9 @@ condition shape; nothing of the quoted words is read again (``read_quotes`` stay
 
 A period row means ``range`` with ``form`` ``absolute`` (``start`` and ``end`` calendar values ``YYYY``, ``YYYY-MM``,
 ``YYYY-Qn``, ``YYYY-Hn``; ``end`` ``same`` for one point, ``open`` for an open end) or ``relative`` (``count`` and
-``unit`` counted back from the as_of calendar by the resolver), or .9 ``calendar_offset`` (a signed offset in one
-calendar unit, computed here from as_of). An incomplete user range may retain one explicit endpoint; other meanings
+``unit`` counted back from the catalog reference under the current recent-data policy), or .9 ``calendar_offset``
+(a signed offset in one calendar unit, computed here from as_of). An incomplete user range may retain one explicit
+endpoint; other meanings
 carry no values (``none``). ``read``
 ``failed``: the model could not give the expression's meaning. A frequency row gives ``value`` (``Y``/``H``/``Q``/``M``,
 ``not_stated`` or ``unreadable``) and ``anchor`` (``end``/``none``). Every statistic has one period row or more and

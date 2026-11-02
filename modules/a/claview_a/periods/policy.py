@@ -1,8 +1,8 @@
 """The shared period policy file and its loader.
 
 The policy is data, not code: the frequency order, periods per year and the default recent window
-come from `period_policy.json` shipped in this package, so A and B read the same numbers from the
-same file. `load_policy()` validates the file and fails loudly (`PolicyError`) on a missing or
+come from `period_policy.json` shipped in A. B currently has its own resolver; alignment of this
+policy does not implement a B input contract. `load_policy()` fails loudly (`PolicyError`) on a missing or
 malformed policy; nothing falls back to built-in numbers.
 """
 
@@ -17,8 +17,8 @@ from typing import Any
 
 POLICY_FILE = "period_policy.json"
 FREQUENCIES = ("Y", "H", "Q", "M")
-# what a relative or open period counts from (policy ①, plan 56 order 4): the period as_of falls in, or the latest data
-# (the rule before; a policy file without ``anchor_rule`` reads as it)
+# Calendar/open reference, plus the separate recent_anchor_rule override for recent N units.
+# A historical policy file without anchor_rule retains the old data_latest reference.
 ANCHOR_RULES = ("as_of_calendar", "data_latest")
 # what A does with no period or no frequency to go on (policy ②④, plan 56 order 5): ask the user, or the resolver's
 # default window and frequency (the rule before; a policy file without ``condition_rule`` reads as it)
@@ -39,6 +39,7 @@ class Policy:
     anchor_rule: str = "data_latest"
     relative_rules_version: str | None = None
     condition_rule: str = "resolver_default"
+    recent_anchor_rule: str | None = None
 
     def default_window(self, frequency: str) -> int:
         """Periods in the default recent window of a frequency (years x periods per year)."""
@@ -74,6 +75,8 @@ def _check(data: Any) -> None:
                 raise PolicyError(f"policy: {key}.{freq} must be a positive integer")
     if "anchor_rule" in data and data["anchor_rule"] not in ANCHOR_RULES:
         raise PolicyError("policy: anchor_rule must be as_of_calendar or data_latest")
+    if "recent_anchor_rule" in data and data["recent_anchor_rule"] not in ANCHOR_RULES:
+        raise PolicyError("policy: recent_anchor_rule must be as_of_calendar or data_latest")
     if "condition_rule" in data and data["condition_rule"] not in CONDITION_RULES:
         raise PolicyError("policy: condition_rule must be ask_condition or resolver_default")
     if "relative_rules_version" in data and not (
@@ -104,4 +107,5 @@ def load_policy(path: str | Path | None = None) -> Policy:
         anchor_rule=data.get("anchor_rule", "data_latest"),
         relative_rules_version=data.get("relative_rules_version"),
         condition_rule=data.get("condition_rule", "resolver_default"),
+        recent_anchor_rule=data.get("recent_anchor_rule"),
     )

@@ -13,15 +13,16 @@ Rules (user decisions of 2026-10-20; team decisions of 10/01, 10/02, 10/06 kept)
   supports none, it is never a reason to drop the table (single frequency, else the longest one with
   the others as alternatives, and a notice). Without any of these: the table's only frequency, else
   the longest one (assumed).
-- Period: counted against the anchor (the bundle's common latest period when given, else the
-  table's latest period), or, with ``anchor_source: as_of_calendar`` (policy ①, plan 56 order 4), the
-  period `as_of` falls in: "최근 N년" is the calendar years from the January N-1 years before as_of's
-  year, "최근 N개월/분기/반기" counts back from as_of's own period, an open end and "올해" end at as_of's
-  period, and a span that a coarser table cannot start on is not rounded (``recent_span_not_fit``).
+- Period: ``recent_anchor_rule: data_latest`` counts recent N units backwards from the table's
+  latest period or the candidate group's separate ``recent_anchor``. A monthly recent-three-year
+  request therefore contains 36 months. Calendar aliases and explicit open ends still use
+  ``anchor_source: as_of_calendar``: an open end and "올해" end at as_of's period. Closed explicit
+  dates remain fixed. The older recent-calendar rule is retained for historical policy replay.
   The part past the table's end is ``latest_unpublished`` when the table covers the request's start
   (the period handed on still ends at as_of's period), the part before its start ``past_shortfall``
-  (``periods.missing_kinds``). No period in the question -> the policy's recent
-  window (assumed). Parts outside the table's coverage are kept as `missing`; nothing overlapping at
+  (``periods.missing_kinds``). The low-level compatibility path still assumes a recent window when
+  no period is supplied; A's ``ask_condition`` caller asks first and does not use that default.
+  Parts outside the table's coverage are kept as `missing`; nothing overlapping at
   all -> `no_data_in_range`. A well-formed period this resolver cannot read, or one the
   interpretation diagnoses `unsupported` -> `period_unsupported` (never replaced by the default
   window); the old `extract_status` alone decides nothing. A structurally broken condition, one
@@ -143,11 +144,13 @@ def _months_of(expr: Json) -> tuple[int, int]:
 
 
 class _Reader:
-    """Turns period conditions into spans of one frequency against one anchor."""
+    """Turns conditions into one-frequency spans, separating calendar and recent-data anchors."""
 
-    def __init__(self, cal: _Calendar, freq: str, anchor: int, strict: bool, as_of_month: int | None = None):
+    def __init__(self, cal: _Calendar, freq: str, anchor: int, strict: bool, as_of_month: int | None = None,
+                 recent_anchor: int | None = None):
         self.cal, self.freq, self.anchor, self.strict = cal, freq, anchor, strict
         self.as_of_month = as_of_month  # set on the as_of calendar path only
+        self.recent_anchor = recent_anchor
 
     def expr_span(self, expr: Json, *, year: int | None = None) -> tuple[int, int]:
         cal, freq = self.cal, self.freq
@@ -180,7 +183,7 @@ class _Reader:
         return cal.month_index(year, first_month, freq), cal.month_index(year, last_month, freq)
 
     def calendar_first(self, amount: int, unit: str) -> int:
-        """The first period of "최근 N <unit>" on the as_of calendar: N calendar years back to January for years, N
+        """Historical recent-calendar policy: N calendar years back to January for years, N
         periods of the unit back from as_of's own one otherwise; a start this table's frequency cannot begin on is
         not rounded (``recent_span_not_fit``)."""
         cal = self.cal
@@ -219,6 +222,10 @@ class _Reader:
         base = {"id": condition["id"], "rounded": False}
         form = attrs["form"]
         relative = bool(attrs.get("relative"))
+        if form == "recent" and self.recent_anchor is not None:
+            count, rounded = self.recent_count(attrs.get("amount"), attrs.get("unit"))
+            return {**base, "first": self.recent_anchor - (count - 1), "last": self.recent_anchor,
+                    "relative": True, "open": True, "rounded": rounded}
         if form == "recent" and self.as_of_month is not None:
             first = self.calendar_first(attrs.get("amount"), attrs.get("unit"))
             return {**base, "first": first, "last": self.anchor, "relative": True, "open": True}
@@ -399,13 +406,14 @@ def _resolve_period(
     strict: bool,
     policy: Policy,
     calendar_month: int | None = None,
+    recent_anchor: int | None = None,
 ) -> Json:
     start, end = cal.index(bounds["start"], freq), cal.index(bounds["end"], freq)
     periods = _of_kind(conditions, "period")
     as_of_month = calendar_month if periods else None
     if calendar_month is not None and not periods:
         anchor = end  # the default window keeps the table's latest period until the period questions (order 5)
-    reader = _Reader(cal, freq, anchor, strict, as_of_month)
+    reader = _Reader(cal, freq, anchor, strict, as_of_month, recent_anchor)
     if periods:
         spans = [reader.span(c) for c in periods]
         source, rule = "question", "question_period"
@@ -529,7 +537,8 @@ def _resolve_period(
     relative = any(s["relative"] for s in spans)
     open_end = any(s["open"] for s in spans)
     lagging = open_end or source == "default" or cut_end
-    anchor_text = cal.text(anchor, freq)
+    only_recent = bool(periods) and all(c["attrs"]["form"] == "recent" for c in periods)
+    anchor_text = cal.text(recent_anchor if only_recent and recent_anchor is not None else anchor, freq)
     as_of_text = (
         cal.text(cal.month_index(int(as_of[:4]), int(as_of[5:7]), freq), freq) if as_of else None
     )
@@ -728,6 +737,7 @@ def resolve_period_for_table(
         freq = frequency["value"]
         bounds = periods_meta[freq]
         anchor = _anchor(cal, context, bounds, freq)
+        recent_anchor = _recent_anchor(cal, context, bounds, freq, policy)
         period = _resolve_period(
             cal,
             conditions,
@@ -740,6 +750,7 @@ def resolve_period_for_table(
             frequency["strict"],
             policy,
             _calendar_month(context),
+            recent_anchor,
         )
     except _Stop as stop:
         result.update(status=stop.status, issue={"code": stop.code, "detail": stop.detail})
@@ -786,6 +797,7 @@ def resolve_period_for_table(
                     False,
                     policy,
                     _calendar_month(context),
+                    _recent_anchor(cal, context, other_bounds, other, policy),
                 )
             except _Stop:
                 continue  # that frequency cannot show this period: not offered
@@ -803,6 +815,9 @@ def resolve_period_for_table(
                 YEAR_OVER_YEAR | PERIOD_OVER_PERIOD | EXTREMES
             )
     period_ids = [c["id"] for c in _of_kind(conditions, "period")]
+    only_recent = bool(period_ids) and all(c["attrs"]["form"] == "recent"
+                                         for c in _of_kind(conditions, "period"))
+    data_recent = only_recent and recent_anchor is not None
     result.update(
         status="ok",
         frequency=freq,
@@ -811,8 +826,10 @@ def resolve_period_for_table(
         periods=period["periods"],
         coverage={"frequency": freq, "start": bounds["start"], "end": bounds["end"]},
         anchor={
-            "period": cal.text(anchor, freq),
-            "source": (context or {}).get("anchor_source", "table_latest"),
+            "period": cal.text(recent_anchor if data_recent else anchor, freq),
+            "source": ("bundle_common" if (context or {}).get("recent_anchor")
+                       or (context or {}).get("anchor_source") == "bundle_common" else "table_latest")
+            if data_recent else (context or {}).get("anchor_source", "table_latest"),
             "bundle_id": (context or {}).get("bundle_id"),
             "simultaneous": (context or {}).get("simultaneous"),
         },
@@ -852,9 +869,19 @@ def _calendar_month(context: Json | None) -> int | None:
     return None
 
 
+def _recent_anchor(cal: _Calendar, context: Json | None, bounds: Json, freq: str, policy: Policy) -> int | None:
+    """Recent ranges use data coverage; calendar aliases and explicit dates keep their own anchor."""
+    if policy.recent_anchor_rule != "data_latest":
+        return None
+    ref = (context or {}).get("recent_anchor")
+    if not ref and (context or {}).get("anchor_source") == "bundle_common":
+        ref = context["anchor"]
+    return cal.from_month(_parse_month(ref), freq) if ref else cal.index(bounds["end"], freq)
+
+
 def _anchor(cal: _Calendar, context: Json | None, bounds: Json, freq: str) -> int:
-    """The index the relative, open and assumed periods count back from: as_of's period on the as_of calendar
-    (it may lie after the table's latest period), else the bundle's common latest or the table's latest."""
+    """The calendar/open/default reference. Recent ranges may instead use _recent_anchor; calendar aliases
+    keep as_of's period even when it lies after the table's latest data."""
     end = cal.index(bounds["end"], freq)
     if context and context.get("anchor_source") == "as_of_calendar":
         return cal.from_month(_parse_month(context["anchor"]), freq)

@@ -65,7 +65,8 @@ def test_linked_statistics_with_no_period_are_asked_once_and_answered_together(l
     assert q["statistics"] == ["s1", "s2"] and q["question_id"] == "q:s1+s2:period"
     got = by_sid(after)
     assert got["s1"]["outcome"] == got["s2"]["outcome"] == "selected"
-    assert periods(got["s1"]) == periods(got["s2"]) == [["Y", [{"start": "2022-01", "end": "2026-12"}]]]
+    # Latest-data policy (11-02): the catalog's yearly series end in 2025; the shared answer still applies once.
+    assert periods(got["s1"]) == periods(got["s2"]) == [["Y", [{"start": "2021-01", "end": "2025-12"}]]]
     # the answer changed the period only: the model output, the tables and the frequency rows stay
     assert after["record"]["model_output"] == state["record"]["model_output"]
     assert [t["table_id"] for t in got["s1"]["final_tables"]] == [PICKS["M2 통화량"]]
@@ -163,7 +164,8 @@ def test_the_stored_live_answers_ask_one_shared_period_and_answer_both(layer):
     assert q["statistics"] == ["s1", "s2"]
     got = by_sid(after)
     assert got["s1"]["outcome"] == got["s2"]["outcome"] == "selected"
-    assert periods(got["s1"]) == periods(got["s2"]) == [["M", [{"start": "2024-01", "end": "2026-10"}]]]
+    # Recheck of the stored response under the new policy, not a rewrite of the original live result.
+    assert periods(got["s1"]) == periods(got["s2"]) == [["M", [{"start": "2023-09", "end": "2026-08"}]]]
     assert after["record"]["model_output"] == state["record"]["model_output"]
 
 
@@ -228,7 +230,7 @@ def test_linked_statistics_are_asked_together_and_an_unlinked_period_stays(layer
     q, after = answer_period(state, layer, "최근 5년")
     assert q["statistics"] == ["s1", "s2"]  # s3 is not asked
     got = by_sid(after)
-    assert periods(got["s1"]) == periods(got["s2"]) == [["Y", [{"start": "2022-01", "end": "2026-12"}]]]
+    assert periods(got["s1"]) == periods(got["s2"]) == [["Y", [{"start": "2021-01", "end": "2025-12"}]]]
     assert periods(got["s3"]) == [["Y", [{"start": "2024-01", "end": "2024-12"}]]]  # unchanged by the answer
     assert got["s3"].get("condition_answers") in (None, [])
     assert after["record"]["model_output"] == state["record"]["model_output"]

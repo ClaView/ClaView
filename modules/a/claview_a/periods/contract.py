@@ -9,8 +9,10 @@ Inputs:
   never read: the resolver fills it.
 - inferred: None (the field is absent: an older A) or a list of
   {kind: "frequency", value, from_condition_id, rule} (an empty list is kept as given).
-- context: {bundle_id, anchor_source: "bundle_common" | "table_latest", anchor: "YYYY-MM" | None,
-  simultaneous?: bool}. Absent = the table's own latest period.
+- context: {bundle_id, anchor_source: "bundle_common" | "table_latest" | "as_of_calendar",
+  anchor: "YYYY-MM" | None, simultaneous?: bool, recent_anchor?: "YYYY-MM"}.
+  recent_anchor applies only to recent ranges; calendar offsets and explicit dates retain their own anchor.
+  Absent = the table's own latest period.
 - assignment: [{"start": "YYYY-MM", "end": "YYYY-MM"}] the table's share of the request (edition
   stitching): exactly one continuous segment per table (one query range per table); two or more
   are an input contract error, never filled or cut to the first. Absent = the whole request.
@@ -29,7 +31,7 @@ from typing import Any
 
 # .2: `attrs.invalid` is malformed, `extract_status` no longer decides support, one assigned
 # segment per table
-CONTRACT_VERSION = "period-contract/2026-10-31.3"  # .3: as_of_calendar anchor (plan 56 order 4)
+CONTRACT_VERSION = "period-contract/2026-11-02.4"  # .4: a separate data anchor for recent ranges
 
 STATUSES = ("ok", "unresolved", "table_unsuitable", "no_data_in_range", "invalid_input")
 SOURCES = ("question", "catalog", "default", "user")
@@ -201,6 +203,8 @@ def check_context(context: Any) -> list[str]:
         out.append("context.anchor: must be None for table_latest")
     if "simultaneous" in context and not isinstance(context["simultaneous"], bool):
         out.append("context.simultaneous: not a boolean")
+    if "recent_anchor" in context and not is_month(context["recent_anchor"]):
+        out.append("context.recent_anchor: must be YYYY-MM")
     return out
 
 

@@ -29,7 +29,9 @@ def conditions(quote):
 
 
 @pytest.mark.parametrize("row", DATA["rows"], ids=[f"{r['quote']}|{r['table']}" for r in DATA["rows"]])
-def test_the_example_table_reads_as_agreed(row):
+def test_the_example_table_reads_as_agreed(row, monkeypatch):
+    # Preserve the pre-11-02 calendar policy examples as a versioned comparison.
+    monkeypatch.setattr(R, "_POLICY", dataclasses.replace(R.default_policy(), recent_anchor_rule="as_of_calendar"))
     got = R.resolve_period_for_table(conditions(row["quote"]), DATA["tables"][row["table"]], AS_OF, context=CALENDAR)
     assert got["status"] == "ok"
     assert [got["applied"]["start"], got["applied"]["end"]] == row["applied"]
@@ -37,7 +39,8 @@ def test_the_example_table_reads_as_agreed(row):
 
 
 @pytest.mark.parametrize("row", DATA["not_fit"], ids=[r["quote"] for r in DATA["not_fit"]])
-def test_a_span_a_coarser_table_cannot_start_on_is_never_rounded(row):
+def test_a_span_a_coarser_table_cannot_start_on_is_never_rounded(row, monkeypatch):
+    monkeypatch.setattr(R, "_POLICY", dataclasses.replace(R.default_policy(), recent_anchor_rule="as_of_calendar"))
     got = R.resolve_period_for_table(conditions(row["quote"]), DATA["tables"][row["table"]], AS_OF, context=CALENDAR)
     assert (got["status"], got["issue"]["detail"]) == (row["status"], row["detail"])
 
@@ -115,8 +118,9 @@ def test_the_data_latest_rule_gives_the_rule_before(monkeypatch):
 def test_the_packaged_policy_names_the_calendar_rule():
     policy = R.default_policy()
     assert policy.anchor_rule == "as_of_calendar" and policy.relative_rules_version
-    # .3: condition_rule ask_condition added (plan 56 order 5, user 2026-10-31 17:53 item 2); records keep their own
-    assert policy.version == "period-policy/2026-10-31.3"
+    # .4 changes recent windows only; calendar offsets, explicit periods and no-default questions retain their rules.
+    assert policy.recent_anchor_rule == "data_latest"
+    assert policy.version == "period-policy/2026-11-02.4"
 
 
 def test_a_period_after_as_of_is_never_unpublished():

@@ -53,9 +53,10 @@ def test_recent_one_year_and_previous_year_are_different_requests():
     as_of = "2026-10-29"
     recent = period(form="relative", start="none", end="none", count="1", unit="Y")
     previous = {**recent, "form": "calendar_offset", "count": "-1"}
-    spans = [PR.requested_span(S.read_rows([row], [frequency()], as_of=as_of)["conditions"][0], as_of)
-             for row in (recent, previous)]
-    assert [(s["start"], s["end"]) for s in spans] == [("2026-01", "2026-10"), ("2025-01", "2025-12")]
+    conditions = [S.read_rows([row], [frequency()], as_of=as_of)["conditions"][0] for row in (recent, previous)]
+    assert PR.requested_span(conditions[0], as_of) is None  # no fabricated date without catalog information
+    spans = [PR.requested_span(c, as_of, recent_anchor="2026-08") for c in conditions]
+    assert [(s["start"], s["end"]) for s in spans] == [("2025-09", "2026-08"), ("2025-01", "2025-12")]
 
 
 @pytest.mark.parametrize("change", [

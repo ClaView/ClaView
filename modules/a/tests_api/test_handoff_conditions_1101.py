@@ -54,7 +54,8 @@ def test_an_answered_period_is_user_answer_with_the_answer_as_its_phrase():
     (request,) = view["handoff"]["ready"]
     (cond,) = V.handoff_conditions(view, request)["conditions"]
     assert (cond["period_source"], cond["period_phrase"], cond["frequency"]) == ("user_answer", "최근 5년", "Y")
-    assert cond["period"] == [{"start": "2022-01", "end": "2026-12"}]
+    # The answer stays user-authored; its recent range now ends at the table's latest yearly data.
+    assert cond["period"] == [{"start": "2021-01", "end": "2025-12"}]
 
 
 def test_a_default_source_or_an_unselected_statistic_gets_no_condition():

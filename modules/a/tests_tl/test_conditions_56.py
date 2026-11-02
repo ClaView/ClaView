@@ -2,7 +2,7 @@
 
 - The frequency first: a quoted one; else the one offered frequency that fits the requested periods (only_valid);
   none fits: ``frequency_not_fit``; several fit: a frequency question, the period kept and never asked.
-- No period: a period question (cause ``user_omitted``) with the presets' windows on the as_of calendar; '최근 3년'
+- No period: a period question (cause ``user_omitted``) with the presets' actual table windows; '최근 3년'
   and '2020년 이후' are not asked.
 - A period or frequency word outside the quotes is restored when the question has one statistic; with several its
   statistic is not known (``extraction_missing``, nothing asked).
@@ -78,7 +78,7 @@ def reply(state, q, option=1, text=None):
 # ---------------------------------------------------------------- no period: asked, never a default window
 
 
-def test_no_period_is_asked_with_the_calendar_windows_and_nothing_is_handed_on(layer):
+def test_no_period_is_asked_with_the_catalog_windows_and_nothing_is_handed_on(layer):
     state, d = go(question(word="연간으로"), layer, frequencies=["연간"])
     s = d["s1"]
     assert s["outcome"] == "ask_condition" and state["action"] == "ask" and s["final_tables"] == []
@@ -86,8 +86,11 @@ def test_no_period_is_asked_with_the_calendar_windows_and_nothing_is_handed_on(l
     (ask,) = s["condition_asks"]
     assert ask["kind"] == "period" and ask["statistics"] == ["s1"] and ask["input"] == "choice_or_text"
     presets = {o["quote"]: o["range"] for o in PR.period_options(AS_OF)}
-    assert ask["options"] and all(o["range"] == presets[o["value"]] for o in ask["options"])  # the ① calendar
-    assert presets["최근 3년"] == {"start": "2024-01", "end": "2026-10"}
+    # A recent preset has no dates before its table/frequency is known (11-02 policy); the offered option does.
+    assert presets["최근 3년"] is None
+    assert ask["options"] and all(o["range"] == o["ranges"]["Y"] for o in ask["options"])
+    assert next(o for o in ask["options"] if o["value"] == "최근 3년")["range"] == {
+        "start": "2023-01", "end": "2025-12"}
 
 
 @pytest.mark.parametrize("period", ["최근 3년", "2020년 이후"])
@@ -131,8 +134,9 @@ def test_a_quarter_on_a_yearly_table_does_not_fit_and_is_never_switched():
 
 
 @pytest.mark.parametrize("quote,fits", [("2024년 1~5월", ["M"]), ("2024년 1분기", ["Q", "M"]),
-                                        ("최근 6개월", ["M"]), ("2020년 이후", ["Y", "H", "Q", "M"])])
+                                        ("최근 6개월", ["H", "Q", "M"]), ("2020년 이후", ["Y", "H", "Q", "M"])])
 def test_frequency_fit_reads_the_start_and_a_closed_end(quote, fits):
+    # Six data-relative months fit one full half-year or two full quarters ending at that frequency's latest point.
     assert PR.valid_frequencies(PR.read_quotes([quote], [])["conditions"], ["Y", "H", "Q", "M"], AS_OF) == fits
 
 

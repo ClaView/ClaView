@@ -83,7 +83,8 @@ def test_a_renumbered_second_decision_asks_and_answers_under_the_first_id(layer)
                               "option_id": option["option_id"]}], layer)
     got = {x["statistic"]: x for x in after["record"]["decisions"]}
     assert got["s1"]["outcome"] == "selected" and got["s2"]["outcome"] == "selected"
-    assert [r["period"] for r in got["s1"]["final_tables"]] == [[{"start": "2022-01", "end": "2026-12"}]]
+    # The latest-data policy ends the answered five-year range at the catalog's latest year (2025).
+    assert [r["period"] for r in got["s1"]["final_tables"]] == [[{"start": "2021-01", "end": "2025-12"}]]
     assert [r["period"] for r in got["s2"]["final_tables"]] == [[{"start": "2023-01", "end": "2023-12"}]]
 
 

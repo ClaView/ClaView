@@ -149,7 +149,7 @@ from .quotes import quote_in_question
 # .33: a period option says the range choosing it requests, in the decided frequency or each one left (13-4)
 # .40: contract .8 periods and frequencies read from the model's structured rows (``periods.semantic``), never the quote
 # reader nor words outside the quotes; the failure kind of every ending reason recorded (BOK20 live check 11-02)
-CHECK_VERSION = "tl-check-2026-11-02.42"
+CHECK_VERSION = "tl-check-2026-11-02.43"
 # the model's failures to structure a period or frequency it quoted or to give a row: one recovery may correct them
 SEMANTIC_INTERNAL = ("period_structure_invalid", "frequency_unreadable", "period_meaning_conflict",
                      "frequency_conflict", "period_row_missing", "frequency_row_missing")
@@ -844,11 +844,21 @@ def _semantic_reading(d: dict, question: str, out: dict, ref_periods: dict | Non
     return reading
 
 
-def partial_period_problem(partials: list[dict], conditions: list[dict], as_of: str) -> str | None:
+def partial_period_problem(partials: list[dict], conditions: list[dict], as_of: str,
+                           *, spans: list[dict] | None = None) -> str | None:
     """A period answer must complete a missing boundary without replacing the supplied boundary."""
     if not partials:
         return None
-    spans = [PR.requested_span(c, as_of) for c in conditions if c["kind"] == "period"]
+    if spans is None:
+        spans = [PR.requested_span(c, as_of) for c in conditions if c["kind"] == "period"]
+    elif spans:
+        merged = []
+        for span in sorted(spans, key=lambda x: x["start"]):
+            if merged and PR.P.month(span["start"]) <= PR.P.month(merged[-1]["end"]) + 1:
+                merged[-1]["end"] = max(merged[-1]["end"], span["end"])
+            else:
+                merged.append({"start": span["start"], "end": span["end"]})
+        spans = merged
     if not spans:
         return None
     if len(spans) != 1 or spans[0] is None:
@@ -945,15 +955,16 @@ def period_ask(d: dict, quote: str, rep: str, candidates: list[str], reading: di
     options = []
     for o in PR.period_options(as_of):
         try_reading = PR.read_quotes([o["quote"]], [])
-        if partial_period_problem(reading.get("partial_periods") or [], try_reading["conditions"], as_of):
-            continue
         covered, spans, empty = [], {}, []
         for f in frequencies:
             got = _select_periods(quote, rep, candidates, d["item_evidence"], _with_frequency(try_reading, f), lk,
                                   as_of, stage, d["retention"])
             if got["status"] == "selected":
-                covered.append(f)
                 rows = [x for t in got["tables"] for x in t.get("period") or []]
+                if partial_period_problem(reading.get("partial_periods") or [], try_reading["conditions"], as_of,
+                                          spans=rows):
+                    continue
+                covered.append(f)
                 if rows:  # what choosing it requests in that frequency (policy ②: the real dates are shown)
                     spans[f] = {"start": min(x["start"] for x in rows), "end": max(x["end"] for x in rows)}
                 if _nothing_now(got):
@@ -962,12 +973,19 @@ def period_ask(d: dict, quote: str, rep: str, candidates: list[str], reading: di
             # the window stays offered (latest_unpublished keeps the table); one with nothing to fetch in the current
             # catalog says so and is never shown as a window with data (owner 11-02)
             options.append({"option_id": f"o{len(options) + 1}", "label": _window_label(o, spans, empty),
-                            "value": o["quote"], "quote": o["quote"], "range": o["range"], "frequencies": covered,
+                            "value": o["quote"], "quote": o["quote"], "range": _common_span(spans),
+                            "frequencies": covered,
                             "ranges": spans, **({"no_current_data": empty} if empty else {})})
     return {"kind": "period", "statistics": [d["statistic"]], "cause": cause,
             "input": PR.PRESETS["period"]["input"], "options": options,
             **({"partial_periods": copy.deepcopy(reading["partial_periods"])}
                if reading.get("partial_periods") else {})}
+
+
+def _common_span(spans: dict) -> dict | None:
+    """Only one actual window may be shown as the option's single range; frequency-specific ranges stay apart."""
+    values = list(spans.values())
+    return copy.deepcopy(values[0]) if values and all(x == values[0] for x in values) else None
 
 
 def _span_text(span: dict, frequency: str) -> str:
@@ -1319,7 +1337,8 @@ def group_condition_asks(D: dict, out: dict) -> None:
     for sid, d in D.items():
         for a in d.get("condition_asks") or []:
             key = rows_of(sid)
-            options = json.dumps([(o["value"], o.get("range")) for o in a["options"]], ensure_ascii=False)
+            options = json.dumps([(o["value"], o.get("range"), o.get("ranges")) for o in a["options"]],
+                                 ensure_ascii=False, sort_keys=True)
             if a["kind"] == "period" and len(linked[links.get(sid, sid)]) > 1:
                 sig = ("period", "same_as", links.get(sid, sid), options)
             else:
@@ -1370,7 +1389,8 @@ def decide_periods(d: dict, quote: str, rep: str, reading: dict, lk: Cards, as_o
                                     bool(context.get("semantic")), as_of=as_of)
         d["condition_asks"] = []
     d["period"] = {"readings": reading["readings"]}
-    if why := partial_period_problem(reading.get("partial_periods") or [], reading["conditions"], as_of):
+    if not PR.data_recent(reading["conditions"]) and (why := partial_period_problem(
+            reading.get("partial_periods") or [], reading["conditions"], as_of)):
         reading["problems"].append({"code": "period_answer_conflict", "why": why,
                                     "quote": " / ".join(p["quote"] for p in reading["partial_periods"])})
     if reading["problems"]:
@@ -1453,6 +1473,12 @@ def decide_periods(d: dict, quote: str, rep: str, reading: dict, lk: Cards, as_o
             reading = _with_frequency(reading, freq["value"])
     got = _select_periods(quote, rep, candidates, d["item_evidence"], reading, lk, as_of, stage, d["retention"])
     d["verification"] += got.pop("trace")
+    if PR.data_recent(reading["conditions"]) and got["status"] == "selected":
+        spans = [r for t in got["tables"] for r in t.get("period") or []]
+        if why := partial_period_problem(reading.get("partial_periods") or [], reading["conditions"], as_of,
+                                         spans=spans):
+            d["reasons"].append({"code": "period_answer_conflict", "detail": {"why": why}})
+            return False
     quoted = any(c["kind"] == "period" for c in reading["conditions"])
     d["period"].update({"candidates": candidates, "excluded": [t for t in rows if t not in candidates],
                         "default_applied": not quoted,
