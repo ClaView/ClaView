@@ -207,4 +207,3 @@ def test_relative_answer_checks_a_fixed_boundary_against_the_real_reference(laye
             AN.apply(state, [response], layer)
         assert exc.value.code == "answer_unreadable"
     assert state == original
-
