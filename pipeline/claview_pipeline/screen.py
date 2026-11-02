@@ -96,6 +96,16 @@ ANSWER_MESSAGES = {
 }
 
 
+def _answer_rejection_message(exc: a_screen.AnswerRejected) -> str:
+    if exc.code == "text_invalid" and exc.cause:
+        return {
+            "period_condition_not_representable": "입력한 기간은 선택한 주기와 맞지 않습니다. 주기 경계에 맞는 기간을 입력해 주세요.",
+            "malformed_condition": "유효한 연도·월·분기로 기간을 입력해 주세요.",
+            "stated_period_boundary_changed": "질문에 명시한 시작·끝을 유지하는 기간을 입력해 주세요.",
+        }.get(exc.cause, "입력한 기간을 해석하지 못했습니다. 시작과 끝을 확인해 다시 입력해 주세요.")
+    return ANSWER_MESSAGES.get(exc.code, "답변을 적용하지 못했습니다. 선택 내용을 다시 확인해 주세요.")
+
+
 def _label(view_stat: dict) -> str:
     return f"{view_stat['statistic']}: {view_stat['quote']} → {STATE_LABEL[view_stat['state']]}"
 
@@ -195,9 +205,7 @@ class ScreenPipeline(Pipeline):
         try:  # a dry run on a copy: nothing is kept, no model is called
             a_screen.answer(paused["a_checkpoint"], confirmation["session_id"], copy.deepcopy(confirmation["answers"]))
         except a_screen.AnswerRejected as exc:
-            raise ValueError(
-                ANSWER_MESSAGES.get(exc.code, "답변을 적용하지 못했습니다. 선택 내용을 다시 확인해 주세요.")
-            ) from None
+            raise ValueError(_answer_rejection_message(exc)) from None
         return {
             "kind": "a_view",
             "session_id": confirmation["session_id"],
