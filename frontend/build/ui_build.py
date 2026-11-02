@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 from paths import DIST, SRC as HERE, UI_ROOT, sha
 from example_questions import example_groups
+import brand
 
 SOURCE = UI_ROOT / "ClaView_시안A_인라인카드형_Highcharts.html"
 
@@ -207,8 +208,15 @@ def build():
     replace("r.parts.blockedNote(), r.parts.seriesList(), r.parts.chart()),",
             "r.parts.blockedNote(), r.parts.guide(), r.parts.seriesList(), r.parts.chart()),")
     replace("<title>ClaView 시안 A · Highcharts</title>",
-            "<title>ClaView · 실제 질문 연결 · Highcharts</title>")
-    replace('</style>', (HERE / 'examples.css').read_text(encoding='utf-8') + '\n' + (HERE / 'service_ux.css').read_text(encoding='utf-8') + '\n</style>')
+            "<title>ClaView · 실제 질문 연결 · Highcharts</title>\n" + brand.favicon_link())
+    # 서비스 로고: 사이드바 좌측 상단·모바일 상단바·파비콘. 이미지 파일 없이 인라인 SVG로 넣는다(CSP: img-src data: 만 허용).
+    sprite_html, logo_view_box = brand.sprite()
+    replace("<body>", "<body>\n" + sprite_html)
+    replace('<div class="brand"><span class="brand-mark" aria-hidden="true">C</span>ClaView</div>',
+            '<div class="brand">' + brand.logo_markup(logo_view_box) + '</div>')
+    replace('<span class="top-title">ClaView</span>',
+            '<span class="top-title">' + brand.logo_markup(logo_view_box) + '</span>')
+    replace('</style>', (HERE / 'examples.css').read_text(encoding='utf-8') + '\n' + (HERE / 'service_ux.css').read_text(encoding='utf-8') + '\n' + (HERE / 'brand.css').read_text(encoding='utf-8') + '\n</style>')
     replace("</style>", """
 .disclaim a {color:var(--accent);text-underline-offset:3px;}
 .confirmation-box{margin:18px 0;padding:18px;border:1px solid var(--accent);border-radius:14px;background:var(--surface);overflow-wrap:anywhere;}
