@@ -19,8 +19,24 @@ def service() -> BService:
 
 
 def _resolve(body: BRequest) -> tuple[dict, int]:
+    receiver = service()
+    if any(table.period_condition is not None for table in body.tables) and getattr(
+        receiver, "accepts_period_condition", False
+    ) is not True:
+        # Schema support alone does not mean that this B implementation applies user answers.
+        return {
+            "stage": "B",
+            "status": "unsupported",
+            "result": None,
+            "issues": [{
+                "code": "period_condition_not_supported",
+                "message": "This B implementation does not accept structured period conditions.",
+                "retryable": False,
+            }],
+            "trace_ref": None,
+        }, 0
     tables = [t.model_dump() for t in body.tables]
-    return service().resolve(body.query, tables, body.as_of)
+    return receiver.resolve(body.query, tables, body.as_of)
 
 
 @app.post("/b/resolve", response_model=BResult)
