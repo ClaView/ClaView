@@ -65,4 +65,3 @@ def test_a_frequency_outside_the_bounded_recent_span_stays_a_frequency():
     row, = period_rows(got)
     assert row["quote"] == "2025년까지 최근 3개년"
     assert [value for value, _, _ in q_rules.find_frequencies(quote)] == ["M"]
-

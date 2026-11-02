@@ -63,4 +63,3 @@ def test_quarter_boundary_rejection_can_be_corrected_in_the_same_session(base):
     assert table["frequency"] == "Q" and table["period_source"] == "user_answer"
     assert judge.calls == 1
     assert corrected["calls"]["HCX"] == corrected["calls"]["KOSIS"] == 0
-

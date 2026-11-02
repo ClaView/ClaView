@@ -93,4 +93,3 @@ def test_legacy_request_needs_no_new_capability(monkeypatch, endpoint):
         response = client.post(endpoint, json=payload)
     assert response.status_code == 200 and response.json()["outcome"]["status"] == "ok"
     assert receiver.received == [BRequest.model_validate(payload).model_dump()]
-
