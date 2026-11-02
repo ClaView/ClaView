@@ -218,6 +218,8 @@ def term_score(terms: list[str], name: str) -> int:
 
 def build_b_context(query: str, table: Json, config: Config) -> Json:
     """Shortlist large axes without removing required axes or ancestor context."""
+    # `unit_supplement` is for the unit fill after the model answered; the model never reads it
+    table = {k: v for k, v in table.items() if k != "unit_supplement"}
     full_size = len(
         json.dumps(
             {"table": table, "schema": build_b_schema(table, config)},

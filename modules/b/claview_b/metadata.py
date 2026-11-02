@@ -50,8 +50,33 @@ def normalize_period(value: str, frequency: str) -> str:
         raise _b_failure(exc) from None
 
 
+def load_unit_supplement(path: Path | None) -> dict[str, Json]:
+    """표별 단위 보완표: KOSIS가 단위를 비워 보내는 표에 확인된 단위를 채운다(없으면 빈 dict).
+
+    {"tables": {"301:DT_511Y002": {"unit": "지수", "basis": "근거", "source": "출처"}}}
+    API나 메타데이터에 단위가 있는 표에는 적용하지 않는다(`selected_unit`).
+    """
+    if path is None or not path.is_file():
+        return {}
+    try:
+        tables = json.loads(path.read_text(encoding="utf-8-sig"))["tables"]
+        for key, entry in tables.items():
+            if not re.fullmatch(r"\d+:\w+", key) or not str(entry["unit"]).strip() or not entry["basis"]:
+                raise ValueError(key)
+    except (KeyError, TypeError, ValueError, AttributeError):
+        raise StageFailure("invalid_unit_supplement") from None
+    return tables
+
+
 class MetadataStore:
-    def __init__(self, catalog_path: Path, metadata_path: Path):
+    def __init__(
+        self, catalog_path: Path, metadata_path: Path, unit_supplement_path: Path | None = None
+    ):
+        if unit_supplement_path is None:  # data/raw/<메타>.jsonl 옆의 data/mappings/runtime/
+            unit_supplement_path = (
+                Path(metadata_path).parent.parent / "mappings" / "runtime" / "unit_supplement.json"
+            )
+        self.unit_supplement = load_unit_supplement(unit_supplement_path)
         self.snapshot = fingerprint(metadata_path)
         self.catalog_snapshot = fingerprint(catalog_path)
         documents = json.loads(catalog_path.read_text(encoding="utf-8-sig"))["documents"]
@@ -160,6 +185,8 @@ class MetadataStore:
                 }
         if not table["items"] or not table["periods"]:
             raise StageFailure("metadata_incomplete", "unresolved")
+        if key in self.unit_supplement:
+            table["unit_supplement"] = self.unit_supplement[key]
         self.cache[key] = table
         return table
 
@@ -171,6 +198,8 @@ def selected_unit(table: Json, item_id: str, dimensions: Json) -> str | None:
     units = {v["unit"] for v in values if v["unit"]}
     if not units:
         units = set(table["units"])
+    if not units and table.get("unit_supplement"):
+        units = {table["unit_supplement"]["unit"]}  # API·메타 단위가 모두 없을 때만
     if len(units) > 1:
         raise StageFailure("unit_conflict", "unresolved")
     return next(iter(units)) if units else None
