@@ -18,6 +18,8 @@ from claview_a.pool import build_pool
 from claview_a.search.tables import selection_catalog
 
 AS_OF = "2026-10-22"
+# the fixed inputs here are of contract .3 (plan 56 order 6-3b: contract .4 is the current one)
+OLD = "tl-contract-2026-10-28.3"
 LOAN = "2024년 1~3월 예금은행 가계대출 금리를 신규취급액 기준으로 월별로 보여줘"
 LOAN_OPEN = "2024년 1~3월 예금은행 가계대출 금리를 월별로 보여줘"
 M2_OPEN = "2024년 1~3월 M2 총액을 월별로 보여줘"
@@ -396,7 +398,7 @@ def test_parse_output_is_not_acceptance(layer):
     cards = cards_of(LOAN, layer)
     out = loan_choice(cards, ref(cards, "예금은행 대출금리", loan_basis="신규취급액"),
                       [{"kind": "item", "text": "없는 항목"}])
-    parsed = parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards)
+    parsed = parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards, OLD)
     assert parsed["problems"] == []
     record = CH.check(LOAN, cards, parsed, selection_catalog(layer).views, AS_OF)
     assert record["decisions"][0]["outcome"] == "selected_unverified"  # 05:37 UTC: never "selected"
@@ -485,6 +487,30 @@ def test_a_period_quote_that_cannot_be_read_fails_and_never_falls_back_to_a_defa
     assert not d["s1"]["final_tables"] and state["action"] == "fail"
 
 
+def test_a_period_the_user_did_not_decide_is_asked_in_contract_4(layer):
+    """Plan 56 order 6-3b (user 2026-10-31 17:53 UTC): the same question answered to contract .4, the model saying the
+    user did not decide the range (meaning user_undecided): the statistic's period is asked, no default is applied,
+    nothing is handed on. The answer above (contract .3) still reads as period_unresolved. A synthetic judgment: the
+    code path, not the model's reading."""
+    q = "팬데믹 이전 예금은행 가계대출 금리를 신규취급액 기준으로 월별로 보여줘"
+    cards = cards_of(q, layer)
+    out = loan_choice(cards, ref(cards, "예금은행 대출금리", loan_basis="신규취급액"),
+                      [{"kind": "bracket", "text": "신규취급액 기준"}])
+    out["periods"] = [{"quote": "팬데믹 이전", "for": ["s1"], "meaning": "user_undecided", "refers_to": []}]
+    out["aggregations"] = []
+    text = json.dumps(fill_option_evidence(out, cards), ensure_ascii=False)
+
+    def judge(payload, request):
+        return text
+
+    judge.answer_contract = "tl-contract-2026-10-28.4"  # an answer written to contract .4 (.6 is current)
+    state = run(q, layer, judge, Settings("fake"), AS_OF)
+    s = state["record"]["decisions"][0]
+    assert s["outcome"] == "ask_condition" and s["reasons"] == [] and not s["final_tables"]
+    assert [(a["kind"], a["cause"]) for a in s["condition_asks"]] == [("period", "unreadable_range")]
+    assert s["period"]["default_applied"] is False and state["action"] == "ask"
+
+
 def test_a_partly_read_period_and_base_year_marks():
     got = PR.read_quotes(["2023, 2024년"], [])
     assert [p["code"] for p in got["problems"]] == ["period_partially_read"]
@@ -503,16 +529,18 @@ def test_a_partly_read_period_and_base_year_marks():
 
 
 def test_no_period_applies_the_resolvers_default_and_records_it(layer):
+    # plan 56 order 5 (policy ②, user 2026-10-31 17:02). Before: selected, default_applied True, the newest edition on
+    # the resolver's default window (results[new].source "default"). Now a question whose period cannot be decided is
+    # asked: default_applied False, cause user_omitted, one period question, no default period decided or handed on.
     q = M2_SET
     cards = cards_of(q, layer)
     old_ref, old, new = _old_edition_ref(cards)
     out = m2_choice(cards, old_ref, None, [{"kind": "item", "text": "M2(평잔 원계열)"}])
-    _, d = go(q, out, layer)
+    state, d = go(q, out, layer)
     s = d["s1"]
-    assert s["outcome"] == "selected" and s["period"]["default_applied"] is True
-    assert [t["table_id"] for t in s["final_tables"]] == [new]
-    assert s["period"]["anchor"] is not None  # every candidate compared on one common anchor
-    assert s["period"]["results"][new]["source"] == "default"
+    assert s["outcome"] == "ask_condition" and s["period"]["default_applied"] is False
+    assert s["period"]["cause"] == "user_omitted" and s["final_tables"] == []
+    assert "period" in [a["kind"] for a in s["condition_asks"]] and state["action"] == "ask"
 
 
 def test_too_many_tables_and_missing_data_are_told_apart(layer, monkeypatch):
@@ -701,7 +729,9 @@ def test_ask_feasibility_marks_an_unreadable_period(layer):
         for axis, vals in (("stock", ("평잔", "말잔")), ("seasonal", ("원계열", "계절조정")))]
     state, d = go(q, out, layer)
     s = d["s1"]
-    assert s["outcome"] == "ask" and state["action"] == "ask"
+    # plan 56 order 8 (bundle 7, ⑥, registered policy change): an unreadable period leaves every option
+    # unconfirmed: held, never asked as executable. Before: ask
+    assert s["outcome"] == "failed" and [r["code"] for r in s["reasons"]] == ["target_table_unconfirmed"]
     assert {f["status"] for f in s["ask_feasibility"]} == {"unreadable"}
     assert s["ask_feasibility"][0]["problems"][0]["code"] == "period_unresolved"
 

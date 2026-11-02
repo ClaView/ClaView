@@ -1,7 +1,10 @@
 {
-  "policy_version": "period-policy/2026-10-21.1",
-  "about": "Shared period policy of ClaView A and B (user decisions of 2026-10-20). Frequencies longest first; default_recent_years is the window assumed when a question names no period.",
+  "policy_version": "period-policy/2026-10-31.3",
+  "about": "Shared period policy of ClaView A (user decisions of 2026-10-20; policy ① of 2026-10-30 for anchor_rule). Frequencies longest first; default_recent_years is the window assumed when a question names no period. anchor_rule: what a relative or open period counts from (as_of_calendar: the period as_of falls in; data_latest: the table's or the bundle's latest data, the rule before). condition_rule (policy ②④, plan 56 order 5): with no period or no frequency to go on, ask_condition asks the user and applies no default; resolver_default is the rule before (default_recent_years and the resolver's frequency default).",
   "frequency_order": ["Y", "H", "Q", "M"],
   "periods_per_year": {"Y": 1, "H": 2, "Q": 4, "M": 12},
-  "default_recent_years": {"Y": 10, "H": 5, "Q": 5, "M": 3}
+  "default_recent_years": {"Y": 10, "H": 5, "Q": 5, "M": 3},
+  "anchor_rule": "as_of_calendar",
+  "relative_rules_version": "relative-calendar/2026-10-31.1",
+  "condition_rule": "ask_condition"
 }

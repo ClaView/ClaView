@@ -46,7 +46,25 @@ import re
 from pathlib import Path
 
 # .21: a card's listed axis values are item facts of its tables, as in the path (cards .11, user 10:40 UTC)
-SCORE_VERSION = "tl-score-2026-10-29.21"
+# .22: a standard may mark each expectation item (representative, ask, period_frequency) confirmed, insufficient or
+# policy_hold (``expectation_items``, plan 52, user 2026-10-29 16:08 UTC); an unconfirmed item is held, never right
+# or wrong, and confirmed fact, contract and evidence errors still fail. Standards without it score as before.
+# .23: ask options of several cards are no problem for a record of the policy that allows them (check .29 and later,
+# plan 56 order 8, ⑨); older records are scored by their own rule
+SCORE_VERSION = "tl-score-2026-11-02.24"
+SEVERAL_CARDS_FROM = ("2026-10-31", 29)  # the first check version that allows ask options of several cards
+
+
+def several_cards_allowed(rec: dict) -> bool:
+    """Whether the record's check version allows ask options of several cards (``SEVERAL_CARDS_FROM``)."""
+    v = ((rec.get("run_info") or {}).get("versions") or {}).get("check") or ""
+    m = re.fullmatch(r"tl-check-(\d{4}-\d{2}-\d{2})\.(\d+)", v)
+    return bool(m) and (m.group(1), int(m.group(2))) >= SEVERAL_CARDS_FROM
+ITEM_HELD_STATES = ("insufficient", "policy_hold")
+# answer contracts whose ask options carry evidence (a list, plan 56 order 6-3; the scorer reads no code of the path)
+OPTION_EVIDENCE_CONTRACTS = ("tl-contract-2026-10-28.3", "tl-contract-2026-10-28.4", "tl-contract-2026-10-28.5",
+                             "tl-contract-2026-10-28.6", "tl-contract-2026-10-28.7", "tl-contract-2026-10-28.8",
+                             "tl-contract-2026-10-28.9")
 VALUE_FORMS = json.loads((Path(__file__).resolve().parents[2] / "claview_a" / "data" /
                           "ask_axes.json").read_text(encoding="utf-8"))["value_forms"]["forms"]
 CITATION_FACT_CODES = ("evidence_not_on_card", "evidence_of_other_table", "evidence_normalization_ambiguous",
@@ -218,7 +236,7 @@ def ask_facts(rec: dict, titles: dict | None = None) -> tuple[dict[tuple, set[st
         if any(t is None for t in tables):
             probs.add("option_not_in_pool")
             continue
-        if len({card_of.get(t) for t in tables}) != 1:
+        if len({card_of.get(t) for t in tables}) != 1 and not several_cards_allowed(rec):
             probs.add("options_in_several_cards")
         if len(set(tables)) != len(tables):
             probs.add("same_table_twice")
@@ -424,10 +442,20 @@ def condition_counts(details: dict) -> dict:
             "not_run": sum(1 for x in details["delivered"] if x["state"] == "not_run")}
 
 
+def item_held(case: dict, item: str) -> str | None:
+    """The state of one expectation item the standard marks unconfirmed (``insufficient`` or ``policy_hold`` in
+    ``expectation_items``, .22), else None: such an item is held. A standard without it holds nothing here (the
+    golden standards' own ``item_status`` records sources and is not read)."""
+    state = ((case.get("expectation_items") or {}).get(item) or {}).get("state")
+    return state if state in ITEM_HELD_STATES else None
+
+
 def ask_policy_held(case: dict) -> bool:
     """Whether an ask is due is not decided for this question: a held or proposed policy, or a standard that says so
-    in its ask (``policy_undecided``, user 2026-10-28 08:13 UTC: CV-AB-10). Only the ask part is held."""
-    return case["new_policy"]["status"] in ("proposed", "hold") or case["ask"]["expected"] == "policy_undecided"
+    in its ask (``policy_undecided``, user 2026-10-28 08:13 UTC: CV-AB-10), or an ask item marked unconfirmed
+    (.22). Only the ask part is held."""
+    return case["new_policy"]["status"] in ("proposed", "hold") or case["ask"]["expected"] == "policy_undecided" \
+        or item_held(case, "ask") is not None
 
 
 def table_sets(rec: dict, case: dict) -> dict:
@@ -435,7 +463,8 @@ def table_sets(rec: dict, case: dict) -> dict:
     and the final tables are compared with the answer groups as sets. Not a statistic mapping: a statistic's own
     meaning is never judged here."""
     groups = case["representative"]["confirmed_groups"]
-    if case["ask"]["expected"] == "required" or not groups:
+    # .22: an expected ask whose item is unconfirmed holds only the ask; the tables are still scored as sets
+    if (case["ask"]["expected"] == "required" and item_held(case, "ask") is None) or not groups:
         return {"model": {"right": "na"}, "final": {"right": "na"}}
     m = rec.get("model") or {"choices": []}
 
@@ -475,6 +504,11 @@ def table_sets(rec: dict, case: dict) -> dict:
                     bad += [r["table_id"] for r in rows]
         if bad:
             final.update(right=False, conditions_wrong=sorted(set(bad)))
+    rep_held = item_held(case, "representative")
+    if rep_held:  # .22: the allowed tables are not confirmed: neither a right nor a wrong table set
+        for x in (model, final):
+            if x["right"] is not None:
+                x.update(right=None, held=f"representative_{rep_held}")
     return {"model": model, "final": final}
 
 
@@ -682,7 +716,7 @@ def ask_measures(rec: dict, case: dict, titles: dict) -> dict:
             if any(x == axis for _, x in asked):
                 errors += [["question", "/".join(sorted(v)), "value_left_out"] for v in exp["values"] if v not in seen]
         out["option_meaning_errors"] = errors if exp is not None or not axis else "review"
-    if rec.get("answer_contract") not in (None, "tl-contract-2026-10-28.3") and m["asks"]:
+    if rec.get("answer_contract") not in (None, *OPTION_EVIDENCE_CONTRACTS) and m["asks"]:
         out["option_evidence_errors"] = "not_measurable"
     else:
         ev = []
@@ -1038,6 +1072,9 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
         st = [_rep_status(case, t, gi) for t in stat_tables[sid]["rep"]] or \
             [_rep_status(case, t, gi) for t in stat_tables[sid]["opts"]]
         meaning.append("right" if st and all(x == "right" for x in st) else "review" if "review" in st else "wrong")
+    rep_held = item_held(case, "representative")
+    if rep_held:  # .22: allowed tables not confirmed: a group's table is held, never right, wrong or missing
+        meaning = ["review" if x in ("right", "wrong", "missing") else x for x in meaning]
     req = requirement_targets(rec, case, titles, coverage)
     if req is not None:
         meaning = [t["model"] for t in req["targets"]] + ["review" for _ in req["uncovered_statistics"]]
@@ -1081,7 +1118,7 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
         if (expected == "required" and not policy_review) or req is not None:
             break
         if len(sids) != 1:
-            mark = "review" if sids or mapping_uncertain or held_by_policy else "missing"
+            mark = "review" if sids or mapping_uncertain or held_by_policy or rep_held else "missing"
             table_parts.append(mark)
             full_parts.append(mark)
             detail.append({"group": gi, "status": "held with the ask policy" if held_by_policy and not sids else
@@ -1094,6 +1131,8 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
             t_ok = "review" if policy_review else "wrong"  # an ask where a table is expected
         else:
             t_ok = "wrong" if not rows or "other" in tstat else "review" if "review" in tstat else "right"
+        if rep_held and t_ok in ("right", "wrong"):
+            t_ok = "review"  # .22: the period and frequency below are still scored when confirmed
         table_parts.append(t_ok)
         d = {"group": gi, "statistic": sid, "tables": t_ok}
         if std_final["status"] == "confirmed":
@@ -1218,9 +1257,45 @@ def score_case(rec: dict, case: dict, titles: dict, coverage: dict | None = None
     res["ask_measures"] = ask_measures(rec, case, titles)
     sets = table_sets(rec, case)
     res["model_table_set"], res["final_table_set"] = sets["model"], sets["final"]
+    if case.get("expectation_items"):  # .22: per-item verdicts and their effect on completion
+        res["items"] = item_verdicts(case, res, model_ask, detail)
+        held = [k for k, v in res["items"].items() if v["verdict"] == "held"]
+        # completion stays about the final result: only the final side's confirmed items can fail it here
+        wrong = [k for k in ("period_frequency", "final_tables") if res["items"][k]["verdict"] == "wrong"]
+        done = res["completed"]
+        if wrong and done["right"] is not False:
+            done.update(right=False, wrong_items=wrong)
+        elif held and done["right"] in (True, "na") and not done["blocked_by"]:
+            done.update(right=None, held_items=held)
     res["diagnostics"] = rec["diagnostics"]  # recorded only; never read above
     res["labels"] = list(dict.fromkeys(res["labels"]))
     return res
+
+
+def item_verdicts(case: dict, res: dict, model_ask: str, detail: list[dict]) -> dict:
+    """.22: one verdict per item the standard writes in ``expectation_items``: right / wrong / review / na,
+    or ``held`` for an unconfirmed item (never counted right or wrong). The representative is the model's table set
+    against the allowed groups, the ask is the model's ask against the expected one, the period and frequency are the
+    final rows' months and frequency; ``final_tables`` (editions and extra tables of the final rows) is derived."""
+    def mark(x) -> str:
+        return {True: "right", False: "wrong", None: "review"}.get(x, "na")
+
+    out = {}
+    for item in ("representative", "ask", "period_frequency"):
+        state = ((case.get("expectation_items") or {}).get(item) or {}).get("state")
+        if item_held(case, item) or (item == "period_frequency" and case["final"]["status"] != "confirmed"):
+            out[item] = {"state": state, "verdict": "held"}
+            continue
+        if item == "representative":
+            verdict = mark(res["model_table_set"]["right"])
+        elif item == "ask":
+            verdict = model_ask if model_ask in ("right", "wrong", "review") else "na"
+        else:
+            marks = [d[k] for d in detail for k in ("period", "frequency") if d.get(k)]
+            verdict = "wrong" if "wrong" in marks else "right" if marks else "na"
+        out[item] = {"state": state, "verdict": verdict}
+    out["final_tables"] = {"state": "derived", "verdict": mark(res["final_table_set"]["right"])}
+    return out
 
 
 def effects_worse(effects: dict) -> bool:
@@ -1304,4 +1379,10 @@ def aggregate(results: list[dict]) -> dict:
             "review": [r["case_id"] for r in rows if r["review"]],
             "ask_measures": _ask_totals(rows),
         }
+        item_rows = [r for r in rows if r.get("items")]
+        if item_rows:  # .22: denominators per expectation item (held never counted)
+            out[part]["items"] = {
+                k: {v: sum(1 for r in item_rows if r["items"][k]["verdict"] == v)
+                    for v in ("right", "wrong", "review", "na", "held")}
+                for k in ("representative", "ask", "period_frequency", "final_tables")}
     return out

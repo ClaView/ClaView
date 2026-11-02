@@ -17,6 +17,9 @@ from claview_a.transport.canonical import canonical
 
 LOAN = "2024년 1~3월 예금은행 가계대출 금리를 월별로 보여줘"
 M2 = "2024년 1~3월 M2 총액을 월별로 보여줘"
+# the fixed inputs here are of contract .3 (plan 56 order 6-3b: contract .4 is the current one)
+OLD = "tl-contract-2026-10-28.3"
+
 
 
 @pytest.fixture(scope="module")
@@ -51,7 +54,8 @@ def answer(by_value: dict) -> dict:
 def test_the_payload_holds_the_question_the_legend_once_the_cards_and_the_ask_axes(loan):
     cards, _, _ = loan
     payload = K.build_payload(LOAN, cards)
-    assert set(payload) == {"question", "cards", "ask_axes"}
+    # plan 56 order 6-3b: the request carries each ask axis's values (contract .4: a splitter value is one of them)
+    assert set(payload) == {"question", "cards", "ask_axes", "basis_values"}
     assert payload["question"] == LOAN and payload["ask_axes"] == ASK_AXES
     assert payload["cards"].startswith(CARD_LEGEND) and payload["cards"].count("카드 읽는 법") == 1
     for card in cards:
@@ -87,7 +91,7 @@ def _objects(schema):
 
 
 def test_the_schema_is_strict_everywhere():
-    schema = K.output_schema()
+    schema = K.output_schema(OLD)  # the schema of the fixed inputs here (contract .3); .4: test_contract4_63
     for obj in _objects(schema):
         assert obj["additionalProperties"] is False and obj["required"] == list(obj["properties"])
     assert set(schema["properties"]) == set(empty())
@@ -123,7 +127,7 @@ def test_the_prompt_and_the_legend_say_the_choice_is_a_representative_not_the_fi
 
 def test_a_good_answer_parses_and_its_card_references_resolve(loan):
     cards, card, by_value = loan
-    got = K.parse_output(json.dumps(fill_option_evidence(answer(by_value), cards), ensure_ascii=False), cards)
+    got = K.parse_output(json.dumps(fill_option_evidence(answer(by_value), cards), ensure_ascii=False), cards, OLD)
     assert got["problems"] == []
     back = {f"{card['card_id']}.{n}": t for t, n in table_numbers(card).items()}
     assert got["tables"] == {ref: back[ref] for ref in by_value.values()}
@@ -136,7 +140,7 @@ def test_a_choice_by_real_table_id_is_accepted(loan):
     real = refs(cards)[next(iter(by_value.values()))]
     out["asks"] = []
     out["choices"] = [{"for": ["s1"], "table": real, "evidence": [{"kind": "bracket", "text": "신규취급액 기준"}]}]
-    got = K.parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards)
+    got = K.parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards, OLD)
     assert got["tables"] == {real: real} and got["problems"] == []
 
 
@@ -146,7 +150,7 @@ def test_an_unknown_reference_is_a_problem_not_a_crash(loan):
     out["asks"] = []
     out["choices"] = [{"for": ["s1"], "table": "g99.t1", "evidence": [{"kind": "title", "text": "x"}]}]
     out["alternatives"] = [{"for": ["s1"], "table": "DT_000Y000", "why": "x"}]
-    got = K.parse_output(json.dumps(fill_option_evidence(out, cards)), cards)
+    got = K.parse_output(json.dumps(fill_option_evidence(out, cards)), cards, OLD)
     assert {p["ref"] for p in got["problems"]} == {"g99.t1", "DT_000Y000"}
     assert got["tables"]["g99.t1"] is None and {p["code"] for p in got["problems"]} == {"table_ref_unknown"}
 
@@ -186,7 +190,7 @@ def test_a_broken_answer_names_its_failure(loan, break_it, code):
     broken = break_it(copy.deepcopy(answer(by_value)))
     text = broken if isinstance(broken, str) else json.dumps(fill_option_evidence(broken, cards), ensure_ascii=False)
     with pytest.raises(K.ContractError) as e:
-        K.parse_output(text, cards)
+        K.parse_output(text, cards, OLD)
     assert e.value.code == code
 
 
@@ -215,7 +219,7 @@ def test_a_structure_error_is_rejected_with_its_code(loan, break_it, code):
     broken = break_it(copy.deepcopy(answer(by_value)), by_value)
     text = broken if isinstance(broken, str) else json.dumps(fill_option_evidence(broken, cards), ensure_ascii=False)
     with pytest.raises(K.ContractError) as e:
-        K.parse_output(text, cards)
+        K.parse_output(text, cards, OLD)
     assert e.value.code == code
 
 
@@ -232,7 +236,7 @@ def test_one_statistic_may_be_asked_on_several_axes(layer):
             first.setdefault(vals[0], f"{card['card_id']}.{num[t]}")
         out["asks"].append({"for": "s1", "axis": axis,
                             "options": [{"value": v, "table": ref} for v, ref in first.items()]})
-    got = K.parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards)
+    got = K.parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards, OLD)
     assert got["problems"] == [] and len(got["output"]["asks"]) == 2
     assert all(t is not None for t in got["tables"].values())
 
@@ -240,4 +244,5 @@ def test_one_statistic_may_be_asked_on_several_axes(layer):
 def test_the_good_answers_still_parse(loan):
     cards, _, by_value = loan
     for out in (answer(by_value), chosen(answer(by_value), by_value), missed(answer(by_value))):
-        assert K.parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards)["problems"] == []
+        assert K.parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards,
+                              OLD)["problems"] == []

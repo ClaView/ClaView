@@ -1,0 +1,5 @@
+{
+  "version": "edition-relations/2026-10-31.1",
+  "about": "Known relations between editions of a statistic (plan 56 order 7, policy ⑦). Empty: no relation has been researched yet. A relation names two tables and what it allows; with none, a replacement or a stitch needs the preservation evidence and is marked unverified. Fields of an entry: tables (two table IDs), series, items, basis, frequency, period, source, allows (false: a confirmed incompatibility), allows_replacement, allows_stitch.",
+  "relations": []
+}

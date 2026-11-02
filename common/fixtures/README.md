@@ -12,6 +12,8 @@
 | `data_result/` | 조회 봉투. **합성 조회**(값 "1") 결과 | C 모양 확인 |
 | `data_result_saved/` | C가 저장해 둔 **실제 KOSIS 조회 결과** 4건(payload, 봉투 아님) | C 화면·계산 개발 |
 | `view/` | C 봉투(차트·카드) | 프론트·회귀 확인 |
+| `a_view/` | 새 A 화면 계약의 focus·출처 예시. 직접 만든 합성 자료 | A→화면·B 전달 계약 확인 |
 
 - 합성 결과는 배선·모양 확인용이다. 정확도 근거로 쓰지 않는다.
 - 계약(`common/claview_common/contracts`)이 바뀌면 이 샘플을 다시 만들고 `common/tests`가 통과하는지 확인한다.
+- `a_view/`는 `pipeline/scripts/build_a_view_fixtures.py`로 별도 생성한다. 옛 A 골든 22 생성기와 섞지 않는다.

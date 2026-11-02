@@ -54,6 +54,25 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(skip)
 
 
+# Contract .4 (plan 56 order 6-3b): the fixed inputs of the tests written before it are of contract .3. Their judges
+# (lambdas and plain classes that name no contract) are read with .3 for the test session only; tests of contract .4
+# name it on their judges or pass it to parse_output. The product path reads an undeclared judge with the current
+# contract (graph.UNDECLARED_CONTRACT), and a stored answer with its record's.
+OLD_FIXED_INPUT_CONTRACT = "tl-contract-2026-10-28.3"
+
+
+@pytest.fixture(autouse=True)
+def _old_fixed_inputs(monkeypatch):
+    from claview_a import graph
+
+    monkeypatch.setattr(graph, "UNDECLARED_CONTRACT", OLD_FIXED_INPUT_CONTRACT)
+
+
+def pytest_report_header(config):
+    return (f"tests_tl: judges that name no contract are read with {OLD_FIXED_INPUT_CONTRACT} "
+            "(fixed inputs of the old shape)")
+
+
 @pytest.fixture(scope="session")
 def layer():
     from claview_a.catalog.layer import load_layer

@@ -1,5 +1,7 @@
 # A→B 표 목록 계약
 
+이 문서는 기존 A 포트 경로의 설명이다. 새 A 화면 경로의 대상 요약과 원문 인용 분리는 [새 A focus와 출처](A_focus_출처.md)를 따른다. B가 받는 선택 문자열 `focus`의 모양과 100자 제한은 같다.
+
 코드: `pipeline/claview_pipeline/b_port.py`(요청·결과·검사), `modules/a/claview_a/agent/b_connection.py`(A의 `AdapterPort`, `connect`). 판본 상수: `TABLE_LIST_CONTRACT = "flow-table-list/2026-10-23.1"`(포트 자체 모양이며 B 계약 판본이 아니다).
 
 ## 언제 부르나

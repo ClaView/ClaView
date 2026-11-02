@@ -46,8 +46,9 @@ from .search.words import TOKEN_TAIL, WORD_RE
 from .search.families import SIGNATURE_AXES, bracket_words, dimension_kinds
 from .search.words import STOP_TERMS, TITLE_ONLY_AXES
 from .search.tables import nospace, selection_catalog
+from .catalog_scope import matches as catalog_scope_matches
 
-CARDS_VERSION = "tl-cards-2026-10-29.11"  # .11: catalog axes per table, small axes listed whole (user 10:40 UTC)
+CARDS_VERSION = "tl-cards-2026-11-02.12"  # exact numbered catalog selectors remain visible on large axes
 AXIS_LIST_MAX = 12  # an axis with at most this many values is listed whole; a larger one by name and count
 ITEM_SOURCES = 2  # value names kept as the source of a value-level basis word
 ASK_AXES_PATH = Path(__file__).resolve().parent / "data" / "ask_axes.json"
@@ -321,6 +322,16 @@ def _other_words(rows: list[dict]) -> list[str]:
 # ---------------------------------------------------------------- cards
 
 
+def _catalog_matches(question: str, views: list) -> list[dict]:
+    rows = []
+    for view in views:
+        items = {item.item_id: item for item in view.items}
+        for row in catalog_scope_matches(question, view):
+            parent, unit = _context(view, items[row["item_id"]])
+            rows.append({**row, "parent": parent, "unit": unit})
+    return rows
+
+
 def build_cards(question: str, pool: dict, layer) -> list[dict]:
     views = selection_catalog(layer).views
     words = question_words(question)
@@ -332,13 +343,19 @@ def build_cards(question: str, pool: dict, layer) -> list[dict]:
         cards.append({"card_id": f"g{n}", "family": entry["family"], "name": family_name(vs[0].title),
                       "source": entry.get("source", "question"), "tables": rows, "splits": _splits(rows),
                       "editions": _editions(vs), "other_words": _other_words(rows),
-                      "matched": _matched(vs, words, question), "axes": axes, "axis_items": axis_items})
+                      "matched": _matched(vs, words, question), "axes": axes, "axis_items": axis_items,
+                      "catalog_matches": _catalog_matches(question, vs)})
     return cards
 
 
 def card_values(card: dict) -> list[dict]:
     """The values a card shows for its tables: the matched values, then the listed axis values."""
-    return [it for m in card["matched"] for it in m["items"]] + list(card.get("axis_items") or [])
+    values = [it for m in card["matched"] for it in m["items"]] + list(card.get("axis_items") or [])
+    for row in card.get("catalog_matches", []):
+        if not any(row["item_id"] in it.get("item_ids", {}).get(row["table_id"], []) for it in values):
+            values.append({"name": row["value"], "parent": row.get("parent"), "unit": row.get("unit"),
+                           "tables": [row["table_id"]], "item_ids": {row["table_id"]: [row["item_id"]]}})
+    return values
 
 
 def card_facts(card: dict) -> dict[str, set[str]]:
@@ -442,6 +459,9 @@ def render_card(card: dict) -> str:
             axes.setdefault(" / ".join(parts), []).append(row["table_id"])
     # one line per group of tables with the same axes, marked "항목 축" so it never reads as a matched-value line
     lines += [f"항목 축 {_numbers(ts, num, every)}: {text}" for text, ts in axes.items()]
+    for match in card.get("catalog_matches", []):
+        lines.append(f"질문과 일치하는 분류값 {num[match['table_id']]}: {match['axis']} / {match['value']} "
+                     "(선택·제외의 뜻과 적용 통계는 원질문에서 판단)")
     return "\n".join(lines)
 
 

@@ -180,6 +180,7 @@ NEGATION_WORDS = tuple(_NG["words"])
 BASIS_NEGATION_PARTICLES = tuple(_NG["basis_particles"])
 BASIS_NEGATION_WORDS = tuple(_NG["basis_words"])
 DESIGNATION_NEGATION = tuple(_NG["designation"])
+BASIS_SCOPE = {k: tuple(v) for k, v in _NG["basis_scope"].items()}  # plan 55: whose negation it is
 
 EXCLUSION = LEX["exclusion"]
 EXCLUDE_VERBS = tuple(EXCLUSION["verbs"])

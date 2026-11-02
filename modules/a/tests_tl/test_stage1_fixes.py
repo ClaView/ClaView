@@ -25,6 +25,8 @@ from claview_a.search.tables import selection_catalog  # noqa: E402
 from tl_eval import score as S  # noqa: E402
 
 AS_OF = "2026-10-22"
+# the fixed inputs here are of contract .3 (plan 56 order 6-3b: contract .4 is the current one)
+OLD = "tl-contract-2026-10-28.3"
 M2 = "2024년 1~3월 M2 총액을 평잔·원계열 기준으로 월별로 보여줘"
 LOAN = "2024년 1~3월 예금은행 가계대출 금리를 신규취급액 기준으로 월별로 보여줘"
 LOAN_OPEN = "2024년 1~3월 예금은행 가계대출 금리를 월별로 보여줘"
@@ -55,7 +57,7 @@ def ref_of(cards, table):
 
 
 def decide(question, cards, out, views):
-    parsed = parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards)
+    parsed = parse_output(json.dumps(fill_option_evidence(out, cards), ensure_ascii=False), cards, OLD)
     rec = CH.check(question, cards, parsed, views, AS_OF)
     return {d["statistic"]: d for d in rec["decisions"]}
 

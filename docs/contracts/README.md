@@ -4,6 +4,7 @@
 
 | 문서 | 사이 | 코드 |
 |---|---|---|
+| [새 A focus와 출처](A_focus_출처.md) | 새 A → AView → B의 기존 focus | `claview_a/contract.py`, `focus.py`, `claview_a_api/view.py` |
 | [A→B 표 목록](A_to_B_표목록.md) | A 세션 → 포트 → B | `pipeline/claview_pipeline/b_port.py`, `modules/a/claview_a/agent/b_connection.py` |
 | [B 결과(b_result)](B_결과.md) | B 그래프 → 조회 | `modules/b/claview_b/stages.py`(validate), `modules/b/claview_b/contracts.py`(outcome) |
 | [조회 결과(data_result)](조회_결과.md) | 조회 → (C) | `modules/b/claview_b/fetch.py`(fetch_data, normalize_rows) |

@@ -126,6 +126,7 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None) ->
             key_source = L.key_from_env_file()  # the team's .env, the one key source (user 2026-10-29 09:51 UTC)
             transport = OpenAITransport()
         transport.preflight()
+        transport = L.guarded(transport, manifest["run_id"])[0]  # a 401/403 halts the key (plan 56 order 3)
     elif mode != "fake":
         raise ValueError(mode)
     if layer is None:
@@ -142,9 +143,9 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None) ->
     (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
     archive, ref = Archive(out_dir / "calls.jsonl"), {}
     models = {m["name"]: m for m in manifest["models"]}
-    judges = {n: (LiveJudge(transport, manifest["max_calls_per_model"], archive, ref) if mode == "live"
-                  else FakeJudge(archive, ref)) for n in models}
-    records, started, stopped, total = {}, now(), None, 0
+    judges = {n: (LiveJudge(transport, manifest["max_calls_per_model"], archive, ref, credential_ref=L.CREDENTIAL)
+                  if mode == "live" else FakeJudge(archive, ref)) for n in models}
+    records, started, stopped, total, ledgers = {}, now(), None, 0, {}
     from tl_eval import score as S
 
     try:
@@ -160,7 +161,10 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None) ->
             before = judge.calls
             m = models[e["model"]]
             settings = K.Settings(model=m["model"], effort=m["effort"], max_output_tokens=m["max_output_tokens"])
-            state = graph_run(by_case[e["case_id"]]["question"], layer, judge, settings, as_of_of[e["case_id"]])
+            ledgers[key] = ledger = L.entry_ledger(by_case[e["case_id"]]["question"])
+            L.bind([judge], ledger)
+            state = graph_run(by_case[e["case_id"]]["question"], layer, judge, settings, as_of_of[e["case_id"]],
+                              ledger=ledger)
             used = judge.calls - before
             total += used
             if used > 1:
@@ -177,7 +181,8 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None) ->
         (out_dir / "records.json").write_text(json.dumps(records, ensure_ascii=False, indent=1), encoding="utf-8")
         run_row = {"run_id": manifest["run_id"], "mode": mode, "started": started, "finished": now(),
                    "stopped": stopped, "gates": checks, "calls": total, "max_calls": manifest["max_calls"],
-                   "calls_per_model": {n: j.calls for n, j in judges.items()}, "key_source": key_source}
+                   "calls_per_model": {n: j.calls for n, j in judges.items()}, "key_source": key_source,
+                   "ledgers": {k: v.summary()["by_slot"] for k, v in ledgers.items()}}
         (out_dir / "run.json").write_text(json.dumps(run_row, ensure_ascii=False, indent=1), encoding="utf-8")
     summary = summarize(manifest, records, archive.rows, layer)
     if mode == "fake":

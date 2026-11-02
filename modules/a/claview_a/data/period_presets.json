@@ -1,0 +1,18 @@
+{
+  "version": "period-presets/2026-10-31.1",
+  "about": "Presets of A's condition questions (plan 56 order 5, policy ②④). period.windows: the recommended windows offered when a question names no period; each quote is read by the period reader on the as_of calendar (policy ①) to give the option's range, and the user may type another period instead. frequency.labels: the option label of each frequency, also the word the period reader reads as that frequency. Nothing here is applied without the user's answer.",
+  "period": {
+    "input": "choice_or_text",
+    "text_key": "condition.period",
+    "windows": [
+      {"key": "recent_3y", "quote": "최근 3년"},
+      {"key": "recent_5y", "quote": "최근 5년"},
+      {"key": "recent_10y", "quote": "최근 10년"}
+    ]
+  },
+  "frequency": {
+    "input": "choice",
+    "text_key": "condition.frequency",
+    "labels": {"Y": "연간", "H": "반기별", "Q": "분기별", "M": "월별"}
+  }
+}

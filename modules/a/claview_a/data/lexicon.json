@@ -93,11 +93,30 @@
   "source_endings": ["에서"]
  },
  "negation": {
-  "_about": ["words: phrase negation ('A가 아니라 B', 'A 말고 B'). basis: the negation read after a basis word (old q4:", "particles, then one of the words; a word may hold a space). designation: words that make a designation", "clause ambiguous (2-4 rule 1)."],
+  "_about": ["words: phrase negation ('A가 아니라 B', 'A 말고 B'). basis: the negation read after a basis word (old q4:", "particles, then one of the words; a word may hold a space). designation: words that make a designation", "clause ambiguous (2-4 rule 1).", "basis_scope (plan 55): whose negation a negation near a basis value is (search/basis.py):",
+   "not_only, additive: forms that do not negate the value ('N뿐 아니라', 'N 말고도'); noun_negations: negations of a",
+   "noun; value_joiners: particles joining two values besides the coordinator class ('원화나 달러화',",
+   "'원계열이든 계절조정이든', '원화도 달러화도'); modifier_closings: closing particles that are also a verb's",
+   "modifier ending ('보는 게', '담은 표'); modifier_negations: noun negations that also follow a verb's modifier",
+   "('보는 대신'); nominal_endings: bound nouns written onto a verb ('고른게 아니라'); other_negations: negations",
+   "besides the words, read only as a negation in the clause, never as an exclusion ('제외하면 안 돼',",
+   "'제외할 필요까지는 없어', '싫고'); concessive: an exclusion conceded ('제외해도 돼', '없이도 돼'): not read; also:",
+   "the particle of a value added to the one before ('원계열 말고 계절조정도'); anaphors: words that take up the value",
+   "after a clause mark ('계절조정, 그건 빼고'): the clause goes on."],
   "words": ["아니라", "아니고", "아닌", "말고", "대신"],
   "basis_particles": ["을", "를", "이", "가", "은", "는"],
-  "basis_words": ["뺀", "빼고", "제외", "아니", "아닌", "하지 않", "안 한"],
-  "designation": ["말고", "않", "빼고", "빼서", "빼면", "제외", "아닌"]
+  "basis_words": ["뺀", "빼고", "제외", "아니", "아닌", "하지 않", "안 한", "안 된"],
+  "designation": ["말고", "않", "빼고", "빼서", "빼면", "제외", "아닌"],
+  "basis_scope": {"not_only": ["뿐", "만"], "not_only_negations": ["아니라", "아니고"], "double_stems": ["제외하", "제외", "빼"],
+                  "prohibitive": ["말", "마"], "permissive": ["아도 돼", "아도 된", "아도 되", "아도 괜찮"],
+                  "noun_negations": ["아니라", "아니고", "아닌", "말고", "대신"], "closing_particles": ["을", "를", "은", "는", "이", "가", "으로", "로"],
+                  "between_endings": ["로"], "additive": ["말고도"], "also": ["도"],
+                  "value_joiners": ["이나", "나", "이든", "든", "도"], "modifier_closings": ["은", "는"],
+                  "modifier_negations": ["대신"], "nominal_endings": ["것", "거", "게", "건", "걸"],
+                  "other_negations": ["안 돼", "안 되", "안 됩", "안 해", "수 없", "못", "곤란", "싫", "필요까지는 없", "필요까진 없",
+                                      "필욘 없", "상관 없", "관계 없"],
+                  "concessive": ["도 돼", "도 된", "도 되", "도 괜찮"],
+                  "anaphors": ["그건", "그거", "그것", "그걸", "이건", "이거", "이것", "이걸", "저건", "저거", "그 계열", "그 값", "그쪽"]}
  },
  "exclusion": {
   "_about": ["Exclusion predicates (2.2, plan 05 E): verbs in regular-expression alternation order (the order decides", "overlaps), the particles before them, the ending and verbs that negate them ('제외하지 말고': negated_ending", "+ negated_by), the suffix 이외, the source and tails of a calculation definition in brackets and the", "complement hints. existence: the existence-negation predicate ('X는 필요 없어', '필요가 없어',", "'필요는 없어'): a noun of 'nouns', one of 'particles' or none, then the negative stem; 'forms' are its", "written forms, read by the request words as no request (one reading of the predicate's polarity)."],

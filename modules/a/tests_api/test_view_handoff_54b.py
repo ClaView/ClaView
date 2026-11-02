@@ -110,12 +110,14 @@ def test_warnings_keep_every_field_and_the_axis_label():
     assert got[1] == {"code": "calculation_quote_not_in_question", "detail": "증감"}
 
 
-Q = "2024년 수출 공산품 가격을 원화 기준으로 보여줘"
+# plan 56 order 5 (policy ④, user 2026-10-31 17:53 item 1): the warning is checked here, not the frequency: the
+# question and the made-up answer quote 연간 with the period (before, the longest frequency was assumed)
+Q = "2024년 연간 수출 공산품 가격을 원화 기준으로 보여줘"
 # an ask on the classification axis; the model's own splitter states a currency the option tables' titles do not show
 # (check step 3a: stated_basis_unverified, a warning)
 SCRIPT = {Q: {"statistics": [{"id": "s1", "quote": "수출 공산품 가격", "name": "수출물가"}],
               "splitters": [{"quote": "원화 기준", "axis": "currency", "for": ["s1"]}],
-              "periods": [{"quote": "2024년", "for": ["s1"]}],
+              "periods": [{"quote": "2024년", "for": ["s1"]}], "frequencies": [{"quote": "연간", "for": ["s1"]}],
               "asks": [{"for": "s1", "axis": "classification",
                         "options": [{"value": "기본분류", "table": "DT_402Y014"},
                                     {"value": "품목별", "table": "DT_402Y016"}]}]}}

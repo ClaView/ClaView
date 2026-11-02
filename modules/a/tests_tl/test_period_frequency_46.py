@@ -222,15 +222,19 @@ def test_the_quoted_year_is_used_through_the_graph(layer):
 
 
 def test_why_a_default_period_applies_is_recorded(layer):
+    # plan 56 order 5 (policy ②, user 2026-10-31 17:02). Before: default_applied True with default_reason "only
+    # base-year marks were quoted" / "no period quoted". Now neither question has a period to go on: the period is
+    # asked (cause user_omitted), default_applied False, default_reason None, no default period decided or handed on.
     q = "실질 원계열 국내총생산에 대한 지출을 2020=100 기준으로 연간으로 보여줘"
     _, d = go(q, GDP, lambda card: output(GDP, [("실질", "price"), ("원계열", "seasonal")], "2020=100", "연간",
                                           ref(card, price="실질", seasonal="원계열")[0]), layer)
-    assert d["period"]["default_applied"] is True
-    assert d["period"]["default_reason"] == "only base-year marks were quoted"
+    assert d["outcome"] == "ask_condition" and d["period"]["default_applied"] is False
+    assert d["period"]["default_reason"] is None and d["period"]["cause"] == "user_omitted"
     q = "실질 원계열 국내총생산에 대한 지출을 연간으로 보여줘"
     _, d = go(q, GDP, lambda card: output(GDP, [("실질", "price"), ("원계열", "seasonal")], None, "연간",
                                           ref(card, price="실질", seasonal="원계열")[0]), layer)
-    assert d["period"]["default_applied"] is True and d["period"]["default_reason"] == "no period quoted"
+    assert d["outcome"] == "ask_condition" and d["period"]["default_applied"] is False
+    assert d["period"]["default_reason"] is None and d["period"]["cause"] == "user_omitted"
 
 
 # ---------------------------------------------------------------- 2. "최근 N개 분기"
@@ -287,14 +291,21 @@ def seasonal_ask(card, frequency=None, **basis):
 
 
 def test_annual_request_an_option_value_without_annual_tables_makes_the_ask_invalid(layer):
+    # plan 56 order 8 (bundle 7, ⑥ and ④ supplement, users 2026-10-31 21:54): the 계절조정 option has no annual
+    # table but a finer one, so its annual values need an aggregation whose method is not confirmed: unconfirmed,
+    # never unsupported, and the other option is not chosen for it. Held. Before order 8: ask_invalid,
+    # option_frequency_unsupported; order 8-1: auto_decided.
     q = "2024년 연간 실질 국내총생산에 대한 지출을 보여줘"
     state, d = go(q, GDP, lambda card: output(GDP, [("실질", "price")], "2024년", "연간",
                                               asks=[seasonal_ask(card, price="실질")]), layer)
-    assert codes(d) == ["ask_invalid"] and problems(d) == ["option_frequency_unsupported:계절조정"]
+    assert codes(d) == ["target_table_unconfirmed"] and d["asks"] == []
+    assert not [c for c in d["corrections"] if c["code"] == "auto_decided"]
+    assert [(o["value"], o["status"], o["why"]) for o in d["reasons"][0]["detail"]["options"]] == [
+        ("원계열", "supported", []), ("계절조정", "unconfirmed", ["frequency"])]
     rows = {r["value"]: r for r in d["ask_frequency_checks"]}
     assert rows["원계열"]["supported"] is True and rows["계절조정"]["supported"] is False
     assert rows["계절조정"]["requested"] == "Y" and rows["계절조정"]["supported_by"] == []
-    assert d["asks"] == [] and d["final_tables"] == [] and state["action"] == "fail"
+    assert d["asks"] == [] and d["final_tables"] == []
     no_switch_or_add(d)
 
 
@@ -322,8 +333,15 @@ def test_unstated_or_unreadable_frequency_removes_no_alternative(layer):
     for q, frequency in cases:
         _, d = go(q, GDP, lambda card, frequency=frequency: output(
             GDP, [("실질", "price")], "2024년", frequency, asks=[seasonal_ask(card, price="실질")]), layer)
-        assert d["outcome"] == "ask" and d["ask_frequency_checks"] == [], q
-        assert [o["value"] for a in d["asks"] for o in a["options"]] == ["원계열", "계절조정"], q
+        assert d["ask_frequency_checks"] == [], q
+        if frequency is None:
+            assert d["outcome"] == "ask", q
+            assert [o["value"] for a in d["asks"] for o in a["options"]] == ["원계열", "계절조정"], q
+        else:  # plan 56 order 8 (bundle 7, ⑥, registered): an unreadable frequency leaves both options
+            # unconfirmed: held, none removed. Before: ask
+            assert codes(d) == ["target_table_unconfirmed"], q
+            assert [(o["value"], o["status"]) for o in d["reasons"][0]["detail"]["options"]] == [
+                ("원계열", "unconfirmed"), ("계절조정", "unconfirmed")], q
 
 
 def test_stated_seasonal_basis_without_annual_tables_is_unmet_never_switched(layer):
@@ -405,7 +423,10 @@ def test_title_only_evidence_counts_when_the_candidate_has_the_same_value_names(
         return output(name, [("말잔", "stock")], "2024년", "분기별", asks=[("seasonal", options)])
 
     state, d = go(q, name, build, layer)
-    assert d["outcome"] == "ask" and codes(d) == []
+    # plan 56 order 8 (bundle 7, ⑥, registered policy change): the 계절조정 option has the frequency but not
+    # 2024 (its period check fails), so 원계열 is chosen by ⑥-나 (auto_decided). Before: ask. The frequency
+    # check rows below are as before.
+    assert d["outcome"] == "selected" and codes(d) == [] and d["basis"]["seasonal"]["source"] == "auto_decided"
     rows = {r["value"]: r for r in d["ask_frequency_checks"]}
     assert rows["원계열"]["status"] == "supported" and rows["원계열"]["table"] in rows["원계열"]["supported_by"]
     assert rows["계절조정"]["status"] == "supported"
@@ -447,6 +468,8 @@ def test_another_open_axis_is_still_asked_when_one_axis_has_a_single_annual_valu
     assert d["outcome"] == "ask" and codes(d) == [] and "seasonal" in d["unasked_axes"]
     assert {r["value"]: r["supported"] for r in d["ask_frequency_checks"]} == {"명목": True, "실질": True}
     # the same question with the seasonal axis also asked: that ask's 계절조정 option gives no annual table
+    # (plan 56 order 8, ⑥ and ④ supplement, users 21:54: its annual values need an unconfirmed aggregation, so it is
+    # unconfirmed and the statistic is held, never chosen. Before order 8: ask_invalid; order 8-1: auto_decided)
     _, d = go(q, GDP, lambda card: output(GDP, (), "2024년", "연간",
                                           asks=[price_ask(card), seasonal_ask(card, price="실질")]), layer)
-    assert codes(d) == ["ask_invalid"] and problems(d) == ["option_frequency_unsupported:계절조정"]
+    assert codes(d) == ["target_table_unconfirmed"] and "seasonal" not in d["basis"]
