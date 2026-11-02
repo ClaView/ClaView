@@ -87,7 +87,7 @@ from ..search.families import FREQUENCY_WORDS as _FREQUENCY_WORDS
 # .16: the three edition judgments, the relation status and the relation file (plan 56 order 7)
 # .17: the edition reasons (edition_relation_conflict, edition_evidence_insufficient) and the judgments trace
 # .18: the latest month held elsewhere on the card bounds the latest-unpublished months (plan 56 order 8)
-PERIODS_VERSION = "tl-periods-2026-11-02.19"  # .19: recent windows use the catalog data reference
+PERIODS_VERSION = "tl-periods-2026-11-02.20"  # .20: recent windows accept exact stated-unit conversions
 MAX_STITCH = 3  # tables joined across edition boundaries for one statistic
 
 _MONTH_RANGE = re.compile(r"(\d{4})\s*년\s*(\d{1,2})\s*월?\s*[~\-–]\s*(\d{1,2})\s*월")

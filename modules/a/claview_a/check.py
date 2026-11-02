@@ -149,7 +149,7 @@ from .quotes import quote_in_question
 # .33: a period option says the range choosing it requests, in the decided frequency or each one left (13-4)
 # .40: contract .8 periods and frequencies read from the model's structured rows (``periods.semantic``), never the quote
 # reader nor words outside the quotes; the failure kind of every ending reason recorded (BOK20 live check 11-02)
-CHECK_VERSION = "tl-check-2026-11-02.43"
+CHECK_VERSION = "tl-check-2026-11-02.44"
 # the model's failures to structure a period or frequency it quoted or to give a row: one recovery may correct them
 SEMANTIC_INTERNAL = ("period_structure_invalid", "frequency_unreadable", "period_meaning_conflict",
                      "frequency_conflict", "period_row_missing", "frequency_row_missing")
@@ -1450,6 +1450,14 @@ def decide_periods(d: dict, quote: str, rep: str, reading: dict, lk: Cards, as_o
             # is never offered): the fitting frequencies a candidate covers the period in
             tried = {f: _select_periods(quote, rep, candidates, d["item_evidence"], _with_frequency(reading, f), lk,
                                         as_of, "frequency_option", d["retention"]) for f in freq["valid"]}
+            if PR.data_recent(reading["conditions"]) and reading.get("partial_periods"):
+                for f, trial in tried.items():
+                    if trial["status"] != "selected":
+                        continue
+                    spans = [r for t in trial["tables"] for r in t.get("period") or []]
+                    if why := partial_period_problem(reading["partial_periods"], reading["conditions"], as_of,
+                                                     spans=spans):
+                        tried[f] = {"status": "failed", "reason": "period_answer_conflict", "detail": {"why": why}}
             covering = [f for f, got in tried.items() if got["status"] == "selected"]
             freq.update(fitting=list(freq["valid"]), valid=covering)
             if not covering:  # no fitting frequency gives the period: nothing to ask, the period's reason stands

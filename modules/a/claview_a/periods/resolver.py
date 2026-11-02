@@ -200,7 +200,7 @@ class _Reader:
             raise _Stop("table_unsuitable", "table_unsuitable", "recent_span_not_fit")
         return first
 
-    def recent_count(self, amount: int, unit: str) -> tuple[int, bool]:
+    def recent_count(self, amount: int, unit: str, *, allow_exact_units: bool = False) -> tuple[int, bool]:
         """Periods of `freq` a "최근 N <unit>" covers, and whether it was rounded up."""
         per_year = self.cal.per_year
         unit_freq = RECENT_UNITS.get(unit)
@@ -208,6 +208,10 @@ class _Reader:
             raise _unresolved("period_unsupported", "recent_amount_or_unit")
         if unit_freq == "Y":
             return amount * per_year[self.freq], False
+        # The current recent-data policy accepts complete stated periods regardless of the unit's spelling:
+        # six months are exactly two quarters. Keep the older strict path unchanged for historical replay.
+        if allow_exact_units and self.strict and (amount * per_year[self.freq]) % per_year[unit_freq] == 0:
+            return amount * per_year[self.freq] // per_year[unit_freq], False
         if per_year[self.freq] % per_year[unit_freq] == 0:  # the same or a finer frequency
             return amount * per_year[self.freq] // per_year[unit_freq], False
         if self.strict:
@@ -223,7 +227,7 @@ class _Reader:
         form = attrs["form"]
         relative = bool(attrs.get("relative"))
         if form == "recent" and self.recent_anchor is not None:
-            count, rounded = self.recent_count(attrs.get("amount"), attrs.get("unit"))
+            count, rounded = self.recent_count(attrs.get("amount"), attrs.get("unit"), allow_exact_units=True)
             return {**base, "first": self.recent_anchor - (count - 1), "last": self.recent_anchor,
                     "relative": True, "open": True, "rounded": rounded}
         if form == "recent" and self.as_of_month is not None:
