@@ -248,6 +248,13 @@ def fetch_data(b_result: Json, store: MetadataStore, client: DataClient, trace: 
             rows = client.fetch(build_api_request(selection), trace)
             result, problems = normalize_rows(selection, rows, store.snapshot)
             result["provenance"]["raw_response_ref"] = trace.run_id
+            if (
+                selection["unit"] is not None
+                and not any(isinstance(r, dict) and r.get("UNIT_NM") for r in rows)
+                and f"{selection['org_id']}:{selection['table_id']}"
+                in getattr(store, "unit_supplement", {})
+            ):
+                result["provenance"]["unit_source"] = "supplement"  # API가 비워 보낸 단위를 보완표로 채움
             series.append(result)
             for code in problems:
                 issues.append(
