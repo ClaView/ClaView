@@ -49,7 +49,8 @@ docker compose down                        # 중지
 - 화면: http://localhost:10300/ · 파이프라인 API 문서: http://localhost:10301/docs · 모듈 API 문서: http://localhost:10311/docs (A), `10312`(B), `10313`(C)
 - 개발(소스 마운트 + 자동 재시작): `docker compose -f docker-compose.yaml -f docker-compose.local.yaml up --build`
 - 골든 통합 평가: `docker compose -f docker-compose.yaml -f docker-compose.eval.yaml run --rm eval-pipeline`
-- `CLAVIEW_MODE=synthetic`: B는 합성 모델(첫 항목·첫 분류값), 조회는 합성 값 "1". **배선 확인용이며 정확도가 아니다.** `live`는 HCX·KOSIS를 실제로 부른다. 호출 수·비용 승인 뒤에만 켠다(AGENTS.md).
+- `CLAVIEW_MODE=synthetic`: B는 합성 모델(첫 항목·첫 분류값), 조회는 합성 값 "1". **배선 확인용이며 정확도가 아니다.** `live`는 B의 선택 모델(`gpt-6.1-terra`, OpenAI)과 KOSIS를 실제로 부른다. 호출 수·비용 승인 뒤에만 켠다(AGENTS.md). 새 A 화면 경로는 live에서 A의 모델 호출이 꺼져 있어 1단계에서 `a_live_disabled`로 멈춘다(호출 한도 검사 연결 전). B만 live로 확인하려면 B 모듈 API(`/b/resolve`)에 표를 직접 넘긴다.
+- live 준비 확인: `.env`에 `CLAVIEW_MODE=live`, `OPENAI_API_KEY`, `KOSIS_API_KEY`를 채우고(키는 채팅·로그에 쓰지 않는다) `docker compose up -d --force-recreate --wait`로 컨테이너를 다시 만든다. `.env`는 컨테이너를 만들 때 한 번만 읽는다. `curl -s http://localhost:10301/api/info`에서 `claview_mode`, `model_ready`, `kosis_ready`, `b_model`을 확인한다(`hcx_ready`는 이름만 남은 `model_ready`와 같은 값).
 - 의존성은 루트 `requirements.txt` 하나다. 모든 백엔드 서비스가 같은 이미지(`claview-backend`)를 쓰고 실행 명령만 다르다.
 
 ## 3. 로컬 시험 (Docker 없이, Python 3.12)
@@ -115,7 +116,7 @@ $env:PYTHONPATH = "common;modules/a;modules/b;modules/c;pipeline"
 - A의 `agent/b_connection`(A가 B를 부르는 구조) 제거는 A 담당 작업이다. 지금 A API는 이 단계를 기록용 포트로 재생해 B 요청을 꺼낸다(A 코드 무변경).
 - 모듈별 평가 러너(`make eval-a/b/c`, 기준선 비교 리포트)와 GitHub Actions의 Docker 스모크는 설계안 6단계다.
 - LLM 호출·카탈로그 읽기·기간 계산·경로/키 읽기가 모듈마다 중복되어 있다. 공통 모듈로 옮기는 설계와 순서: [공통 모듈 이전 설계](docs/design/공통모듈_이전_설계.md)(A 패키지 규칙 완화 결정 필요).
-- 실제 KOSIS·HCX로는 이 구조를 확인하지 않았다.
+- 실제 KOSIS·OpenAI로 화면 전체 흐름(A→B→조회→C)을 확인하지 않았다. B 선택 단계만 live로 확인했다(2026-11-02, 골든 CV-BC-02 두 표 일치, [기록](docs/modules/b/research/B_모델_교체_GPT_고정_및_후속개선_기록_20261102.md)).
 
 ## 6. 프로젝트 목표
 

@@ -50,6 +50,6 @@ git commit -m "B: ..." && git push -u origin b/period-fix                       
 ## 6. 하지 않는 것
 
 - 키·토큰을 코드·compose·로그·이슈에 쓰지 않는다. `.env`(Git 제외)에만 둔다.
-- 승인 없이 실제 HCX·OpenAI·KOSIS를 부르지 않는다(`CLAVIEW_MODE=live`).
+- 승인 없이 실제 OpenAI·KOSIS를 부르지 않는다(`CLAVIEW_MODE=live`).
 - `.venv`, `runs/`, `dist/`, 스크린샷 같은 생성물을 커밋하지 않는다. 실험 코드는 `research/<담당>/`나 자기 모듈의 `scripts/`에 둔다.
 - 평가셋 정답(`eval/cases/`)을 리뷰 없이 바꾸지 않는다.
