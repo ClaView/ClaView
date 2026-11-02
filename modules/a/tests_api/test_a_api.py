@@ -1,4 +1,4 @@
-"""POST /a/select and /a/answer over the fixtures (rules only, no model, no network)."""
+"""Legacy /a/legacy/select and /a/legacy/answer fixtures (rules only, no model, no network)."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ def test_health(client):
 
 @pytest.mark.parametrize("name", CASES)
 def test_select_matches_fixture(client, name):
-    response = client.post("/a/select", json=fixture("a_request", name))
+    response = client.post("/a/legacy/select", json=fixture("a_request", name))
     assert response.status_code == 200
     body = response.json()
     expected = fixture("a_result", name)
@@ -40,13 +40,13 @@ def test_select_matches_fixture(client, name):
 
 
 def test_waiting_question_then_answer(client):
-    first = client.post("/a/select", json={"query": WAIT_Q, "as_of": "2026-10-22"}).json()
+    first = client.post("/a/legacy/select", json={"query": WAIT_Q, "as_of": "2026-10-22"}).json()
     assert first["decision"] == "awaiting_answer" and first["pending_question"]["options"]
     option = first["pending_question"]["options"][0]["option_id"]
-    second = client.post("/a/answer", json={"state": first["state"], "option_id": option})
+    second = client.post("/a/legacy/answer", json={"state": first["state"], "option_id": option})
     assert second.status_code == 200 and second.json()["decision"] != "awaiting_answer"
-    assert client.post("/a/answer", json={"state": {}, "option_id": option}).status_code == 400
+    assert client.post("/a/legacy/answer", json={"state": {}, "option_id": option}).status_code == 400
 
 
 def test_invalid_request(client):
-    assert client.post("/a/select", json={"query": ""}).status_code == 422
+    assert client.post("/a/legacy/select", json={"query": ""}).status_code == 422

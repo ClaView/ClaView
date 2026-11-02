@@ -1,4 +1,4 @@
-"""Module A (question -> tables). POST /a/select, POST /a/answer."""
+"""Legacy Module A (question -> tables). POST /a/legacy/select, POST /a/legacy/answer."""
 
 from __future__ import annotations
 
@@ -59,5 +59,5 @@ class AResult(BaseModel):
     b_requests: list[BRequestGroup] = Field(default_factory=list)  # one B call per requirement group
     pending_question: PendingQuestion | None = None
     response: dict[str, Any]  # A's full public response (selections, analysis, assumptions)
-    state: dict[str, Any]  # checkpoint: send back unchanged to /a/answer
+    state: dict[str, Any]  # legacy checkpoint: send back unchanged to /a/legacy/answer
     meta: Meta | None = None

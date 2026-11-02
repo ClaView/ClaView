@@ -5,16 +5,16 @@ The pipeline's screen path calls only this for A; it never falls back to the old
 - ``select`` runs the official entry ``claview_a.run`` with the run profile given explicitly (first judgment
   ``gpt-6.1-terra``, one re-search with a re-judgment by ``gpt-6.1-sol``; the entry's default model is not used),
   then returns the AView and the server-held checkpoint.
-- ``answer`` applies the user's replies to the checkpoint: basis-axis answers through ``claview_a.answers`` (code
-  checks again, no model call), period answers only kept as given (raw text, statistics, source) for a later period
-  policy. The original question, ``as_of`` and the run info are kept; every applied batch raises the session's
+- ``answer`` applies the user's replies through ``claview_a.answers`` and checks the selected tables and conditions
+  again without a model call. Raw answers and their target statistics and sources are retained.
+  The original question, ``as_of`` and the run info are kept; every applied batch raises the session's
   question version, so a stale, repeated or forged reply is refused before anything changes.
 
 Judges: ``synthetic_judges`` (wiring only) or a caller's own. ``live_judges`` is off by default (``LiveDisabled``, no
 transport made): only an approval record named by ``CLAVIEW_A_LIVE_APPROVAL`` opens it, within that record's questions
 and limits, with the run records on (``live_gate``, plan 56 order 13-1).
-Period questions are not made by A today: a caller may hand in a supplier (tests and the screen demo only), and its
-questions are marked ``synthetic``.
+A makes period and frequency questions according to its policies. A caller may additionally supply synthetic
+questions for offline wiring tests; these are marked ``synthetic``.
 """
 
 from __future__ import annotations
@@ -190,7 +190,7 @@ def layer():
 def select(query: str, as_of: str, judges: Judges, period_questions: Callable | None = None,
            store: RunStore | None = None, lineage: dict | None = None) -> dict:
     """{view, checkpoint} of one question. ``period_questions(view) -> [question]``: a test supplier's period
-    questions (marked synthetic); None for the real path (A makes none today). ``store`` (plan 56 order 10): the run
+    questions (marked synthetic); None for A's own questions. ``store`` (plan 56 order 10): the run
     records; the original question's ledger is on disk and shared by every session of it, so a new session or a
     restart never resets its budget. ``lineage`` ``{session_id}``: the previous session of the same question (a
     reworded one included); its record must be there, else nothing is called (``RunRecordError``)."""
