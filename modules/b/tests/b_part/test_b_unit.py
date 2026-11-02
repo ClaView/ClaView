@@ -321,18 +321,42 @@ def test_resolve_relative_period_clamps_to_table_coverage():
     assert "?" not in result["result"]["message"]
 
 
-def test_resolve_relative_period_last_year_notice_informs_without_asking():
+def test_resolve_relative_period_last_year_is_the_as_of_calendar_year():
+    """2026-11-02: "작년" is as_of's previous calendar year, not the year before the table's latest
+    year. An annual table ending 2025 answers "작년"(as_of 2026) with 2025, not 2024."""
     table = make_table(periods={"Y": {"start": "2010", "end": "2025"}})
-    # "작년" on a table that starts after last year -> clamped, notice for last year
-    short = make_table(periods={"Y": {"start": "2025", "end": "2025"}})
+    result = resolve_relative_period("작년 연도별", table, Config(as_of="2026-10-01"))
+    assert result == {
+        "status": "resolved",
+        "period": {"frequency": "Y", "start": "2025", "end": "2025"},
+    }
+
+
+def test_resolve_relative_period_last_year_partly_in_the_table_is_cut_with_a_notice():
+    table = make_table(periods={"Q": {"start": "202001", "end": "202602"}})
+    result = resolve_relative_period("작년 분기별", table, Config(as_of="2027-03-01"))
+    assert result["status"] == "needs_confirmation"
+    assert result["result"]["resolved_period"] == {"frequency": "Q", "start": "202601", "end": "202602"}
+    assert "작년(2026년)" in result["result"]["message"]
+    assert "?" not in result["result"]["message"]
+
+
+def test_resolve_relative_period_last_year_missing_from_the_table_uses_the_latest_year():
+    short = make_table(periods={"Y": {"start": "2010", "end": "2024"}})
     result = resolve_relative_period("작년 연도별", short, Config(as_of="2026-10-01"))
     assert result["status"] == "needs_confirmation"
-    assert "작년(2024년)" in result["result"]["message"]
+    assert result["result"]["resolved_period"] == {"frequency": "Y", "start": "2024", "end": "2024"}
+    assert result["result"]["requested_as_of_period"] == "2025"
+    assert "작년(2025년)" in result["result"]["message"]
+    assert "2024" in result["result"]["message"]
     assert "?" not in result["result"]["message"]
-    # fully covered last year -> nothing to notice
-    assert resolve_relative_period("작년 연도별", table, Config(as_of="2026-10-01"))["status"] == (
-        "resolved"
-    )
+
+
+def test_resolve_relative_period_last_year_before_the_table_starts_stops():
+    after = make_table(periods={"Y": {"start": "2026", "end": "2026"}})
+    with pytest.raises(StageFailure) as exc:
+        resolve_relative_period("작년 연도별", after, Config(as_of="2026-10-01"))
+    assert exc.value.code == "metadata_refresh_required"
 
 
 def test_resolve_relative_period_unparseable_wording_stays_unresolved():
