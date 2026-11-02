@@ -28,7 +28,7 @@ Q = "2024년 월별 M2 상품별 구성내역을 말잔 원계열로 보여줘"
 
 def test_the_current_contract_is_4_and_3_is_read_only_as_a_legacy_one():
     # Contract .8 structures the period and frequency meaning; all earlier responses keep their declared shape.
-    assert K.CONTRACT_VERSION == "tl-contract-2026-10-28.9" and "tl-contract-2026-10-28.4" in K.EARLIER_CONTRACTS
+    assert K.CONTRACT_VERSION == "tl-contract-2026-10-28.10" and "tl-contract-2026-10-28.4" in K.EARLIER_CONTRACTS
     assert OLD in K.LEGACY_CONTRACTS
     assert OLD in K.OPTION_EVIDENCE_CONTRACTS and K.CONTRACT_VERSION in K.OPTION_EVIDENCE_CONTRACTS
     assert K.PROMPT_VERSION.startswith("tl-prompt-")

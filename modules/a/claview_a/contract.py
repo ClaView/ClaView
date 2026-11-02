@@ -46,7 +46,8 @@ from .transport.canonical import canonical
 # 11-02, user 02:37 UTC: the model structures, the code computes and checks)
 # .9: calendar offsets distinct from recent windows, incomplete user bounds and unsupported meanings distinct from
 # internal interpretation errors. The row shape stays the same; older schemas keep their own enum sets.
-CONTRACT_VERSION = "tl-contract-2026-10-28.9"
+# .10: a recent range may name its calendar end; the code computes the start from the count and unit.
+CONTRACT_VERSION = "tl-contract-2026-10-28.10"
 # answers written to an older contract, read only by the replay path that names it (user 2026-10-28 06:47 UTC)
 LEGACY_CONTRACTS = ("tl-contract-2026-10-28.2",  # no evidence field on ask options
                     "tl-contract-2026-10-28.3")  # no polarity, period meaning or aggregation fields
@@ -55,21 +56,26 @@ EARLIER_CONTRACTS = ("tl-contract-2026-10-28.4",  # no average basis
                      "tl-contract-2026-10-28.5",  # no changes of a re-judgment
                      "tl-contract-2026-10-28.6",  # no grounded table-specific focus
                      "tl-contract-2026-10-28.7",  # periods and frequencies quoted only (read by the quote reader)
-                     "tl-contract-2026-10-28.8")  # structured periods without calendar offsets or partial bounds
+                     "tl-contract-2026-10-28.8",  # structured periods without calendar offsets or partial bounds
+                     "tl-contract-2026-10-28.9")  # relative ranges have no explicit calendar endpoint
 CHANGES_CONTRACTS = ("tl-contract-2026-10-28.6", "tl-contract-2026-10-28.7", "tl-contract-2026-10-28.8",
-                     "tl-contract-2026-10-28.9")
-FOCUS_CONTRACTS = ("tl-contract-2026-10-28.7", "tl-contract-2026-10-28.8", "tl-contract-2026-10-28.9")
+                     "tl-contract-2026-10-28.9", "tl-contract-2026-10-28.10")
+FOCUS_CONTRACTS = ("tl-contract-2026-10-28.7", "tl-contract-2026-10-28.8", "tl-contract-2026-10-28.9",
+                   "tl-contract-2026-10-28.10")
 # the contracts whose period and frequency rows carry the model's structured meaning (``periods.semantic``)
-SEMANTIC_PERIOD_CONTRACTS = ("tl-contract-2026-10-28.8", "tl-contract-2026-10-28.9")
+SEMANTIC_PERIOD_CONTRACTS = ("tl-contract-2026-10-28.8", "tl-contract-2026-10-28.9", "tl-contract-2026-10-28.10")
+# Calendar offsets and incomplete user bounds started in .9; bounded recent ranges started in .10.
+CALENDAR_PERIOD_CONTRACTS = ("tl-contract-2026-10-28.9", "tl-contract-2026-10-28.10")
+BOUNDED_RECENT_CONTRACTS = ("tl-contract-2026-10-28.10",)
 # the contracts whose ask options carry evidence (a list, never one version compared: plan 56 order 6-3)
 OPTION_EVIDENCE_CONTRACTS = ("tl-contract-2026-10-28.3", "tl-contract-2026-10-28.4", "tl-contract-2026-10-28.5",
                              "tl-contract-2026-10-28.6", "tl-contract-2026-10-28.7", "tl-contract-2026-10-28.8",
-                             "tl-contract-2026-10-28.9")
+                             "tl-contract-2026-10-28.9", "tl-contract-2026-10-28.10")
 # the instructions' own version (the prompt text is also hashed in the run info)
 # .2: the average basis and quotes that state it (plan 56 6-3c); .3: the re-judgment of the targets only and its
 # changes, an ask only when the meaning differs and two grounded alternatives remain, options of other cards (plan 56
 # orders 9 and 12, ⑥-다); .6: periods and frequencies structured by meaning, one row of each per statistic (contract .8)
-PROMPT_VERSION = "tl-prompt-2026-11-02.9"
+PROMPT_VERSION = "tl-prompt-2026-11-03.10"
 POLARITIES = ("required", "any_of", "excluded", "allowed", "undetermined", "unreadable", "not_basis")
 PERIOD_MEANINGS = ("range", "latest_available", "same_as", "user_undecided")
 # contract .8: an excluded period (a first-stage limit, as before) and a period the user did not state
@@ -181,7 +187,7 @@ def output_schema(contract: str = CONTRACT_VERSION) -> dict:
     if contract in SEMANTIC_PERIOD_CONTRACTS:  # contract .8: the meaning of each period and frequency, structured
         meanings = SEMANTIC_PERIOD_MEANINGS
         forms = PERIOD_FORMS
-        if contract == "tl-contract-2026-10-28.9":
+        if contract in CALENDAR_PERIOD_CONTRACTS:
             meanings = (*meanings, "unsupported")
             forms = (*forms, "calendar_offset")
         fields["periods"] = _arr(_obj({"quote": s, "for": ids, "meaning": _enum(meanings),

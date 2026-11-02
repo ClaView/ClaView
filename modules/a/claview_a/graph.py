@@ -15,8 +15,8 @@ output contract. A missing answer is a re-search signal, not a confirmed absence
 The model is a callable handed in through the run config
 (``configurable.judge``: payload, request -> response text), so tests and replays give a fake one and a live run
 gives the provider; this module never reaches the network itself. The judge's expected failures arrive as
-``JudgeError`` and are recorded (``record.error``, route ``fail``) with no retry. The router reads the record's outcomes and picks one
-action (``check.route``); the edges after a check and after a re-search are separate pure functions of the state
+``JudgeError`` and are recorded (``record.error``, route ``fail``) with no retry. The router reads the record's
+outcomes and picks one action (``check.route``); the edges after a check and after a re-search are pure state functions
 (``after_check``, ``after_research``). Limits and safety stay outside them (the payload limit in
 ``contract.build_payload``, the extra-hit cap in ``pool``, the re-judge budget the runner hands in).
 
@@ -29,13 +29,12 @@ from typing import Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from .search.tables import selection_catalog
-
 from . import check as CH
 from . import contract as K
 from .cards import build_cards
-from .pool import EXTRA_CAP, build_pool, pool_tables
 from .catalog_scope import contains as scope_contains
+from .pool import EXTRA_CAP, build_pool, pool_tables
+from .search.tables import selection_catalog
 
 # .6: the rejudge targets, a re-search when some statistics are missing, the per-statistic merge (plan 56 order 9)
 GRAPH_VERSION = "tl-graph-2026-10-31.6"  # .4: one optional re-search after a wholly missing first round; .5: ledger
@@ -51,7 +50,7 @@ RESEARCH_VERSION = "tl-research-2026-10-29.2"  # .2: own judge and settings; unr
 # frequency and anchor, same-period references); only the rows the first round failed to structure (by the code's
 # check, never the model's word) may be corrected, recorded in ``condition_corrections``; a statistic with applied
 # user answers is never taken from a second round (BOK20 live check 11-02, owner 02:37 and 02:47 UTC)
-REJUDGE_VERSION = "tl-rejudge-2026-11-02.11"
+REJUDGE_VERSION = "tl-rejudge-2026-11-03.12"  # .12: preserve a bounded recent range under its answer contract
 # .8: a merged focus limit is checked before recovery and after adoption; shared-limit facts accompany targets
 # .7: scope fact errors share the existing recovery slot; .6: fixed statistics referable; .5: the whole ID map at
 # once; .2: corrections sent (contract .6), changes with reasons
@@ -238,24 +237,27 @@ def _semantic(record: dict) -> bool:
     return (record.get("parse") or {}).get("answer_contract") in K.SEMANTIC_PERIOD_CONTRACTS
 
 
-def _row_problems(out: dict, sid: str, as_of: str | None = None) -> list[dict]:
+def _row_problems(out: dict, sid: str, as_of: str | None = None,
+                  answer_contract: str = K.CONTRACT_VERSION) -> list[dict]:
     """The code's internal errors for this statistic, independent of an earlier table or scope failure."""
     from .periods import semantic as SP
 
     periods = [r for r in out["periods"] if sid in r["for"]]
     got = SP.read_rows([r for r in periods if r.get("meaning") != "same_as"] or periods,
-                       [r for r in out["frequencies"] if sid in r["for"]], **({"as_of": as_of} if as_of else {}))
+                       [r for r in out["frequencies"] if sid in r["for"]], answer_contract=answer_contract,
+                       **({"as_of": as_of} if as_of else {}))
     if not [r for r in periods if r.get("meaning") != "same_as"] and periods:
         got["problems"] = [p for p in got["problems"] if p["code"] != "period_row_missing"]
     return [p for p in got["problems"] if p["code"] in CH.SEMANTIC_INTERNAL]
 
 
-def _row_errors(row: dict, kind: str, as_of: str | None) -> list[str]:
+def _row_errors(row: dict, kind: str, as_of: str | None,
+                answer_contract: str = K.CONTRACT_VERSION) -> list[str]:
     """Validate one typed row. A sibling's failure or a group conflict never invalidates this row."""
     from .periods import semantic as SP
 
     got = SP.read_rows([row] if kind == "periods" else [], [row] if kind == "frequencies" else [],
-                       **({"as_of": as_of} if as_of else {}))
+                       answer_contract=answer_contract, **({"as_of": as_of} if as_of else {}))
     prefix = "period_" if kind == "periods" else "frequency_"
     return sorted({p["code"] for p in got["problems"] if p["code"].startswith(prefix)
                    and p["code"] in CH.SEMANTIC_INTERNAL})
@@ -297,16 +299,17 @@ def _semantic_plan(first: dict, second: dict, sid: str, other: str) -> tuple[lis
              if (matched := _match(first, second, s["id"])) is not None}
     normalized = _rename_refs(second["model_output"], names)
     normalized_sid = names.get(other, other)
-    problems = _row_problems(first["model_output"], sid, first.get("as_of"))
-    internal = bool(problems)
     version = (first.get("parse") or {}).get("answer_contract")
-    repair_absence = version == "tl-contract-2026-10-28.9" and internal
+    second_version = (second.get("parse") or {}).get("answer_contract")
+    problems = _row_problems(first["model_output"], sid, first.get("as_of"), version)
+    internal = bool(problems)
+    repair_absence = version in K.CALENDAR_PERIOD_CONTRACTS and internal
     lost, changes = [], []
     for kind in ("periods", "frequencies"):
         mine = [r for r in first["model_output"][kind] if sid in r["for"]]
         theirs = [r for r in normalized[kind] if normalized_sid in r["for"]]
         unused = set(range(len(theirs)))
-        errors = [_row_errors(r, kind, first.get("as_of")) for r in mine]
+        errors = [_row_errors(r, kind, first.get("as_of"), version) for r in mine]
         explicit = [r for r in mine if not _absence(r, kind)]
         declarations = [r for r, err in zip(mine, errors) if not err and _absence(r, kind)]
         deferred = []
@@ -316,7 +319,7 @@ def _semantic_plan(first: dict, second: dict, sid: str, other: str) -> tuple[lis
                 deferred.append((row, err))
                 continue
             matches = [i for i in unused if SP.structured_key(theirs[i], kind) == SP.structured_key(row, kind)
-                       and not _row_errors(theirs[i], kind, second.get("as_of"))]
+                       and not _row_errors(theirs[i], kind, second.get("as_of"), second_version)]
             if matches:
                 unused.remove(matches[0])
             else:
@@ -338,7 +341,7 @@ def _semantic_plan(first: dict, second: dict, sid: str, other: str) -> tuple[lis
                     continue
                 if repair_absence and len(declarations) == len(mine):
                     replacements = [i for i in unused if not _absence(theirs[i], kind)
-                                    and not _row_errors(theirs[i], kind, second.get("as_of"))
+                                    and not _row_errors(theirs[i], kind, second.get("as_of"), second_version)
                                     and quote_in_question(theirs[i]["quote"], first.get("question") or "")]
                     if replacements:
                         changes.append({"statistic": sid, "kind": kind, "scope": "row", "quote": row["quote"],
@@ -356,7 +359,7 @@ def _semantic_plan(first: dict, second: dict, sid: str, other: str) -> tuple[lis
                     compatible = new.get("meaning") == row.get("meaning")
                 else:
                     compatible = new.get("value") in SP.UNITS
-                if compatible and not _row_errors(new, kind, second.get("as_of")) and \
+                if compatible and not _row_errors(new, kind, second.get("as_of"), second_version) and \
                         _corresponding_quote(first.get("question") or "", row["quote"], new["quote"]):
                     candidates.append(i)
             exact = [i for i in candidates if theirs[i]["quote"] == row["quote"]]
@@ -371,7 +374,7 @@ def _semantic_plan(first: dict, second: dict, sid: str, other: str) -> tuple[lis
         if not mine:
             # A required row omitted entirely can be restored, with source and code checks.
             accepted = [i for i in unused if quote_in_question(theirs[i]["quote"], first.get("question") or "")
-                        and not _row_errors(theirs[i], kind, second.get("as_of"))]
+                        and not _row_errors(theirs[i], kind, second.get("as_of"), second_version)]
             if accepted:
                 changes.append({"statistic": sid, "kind": kind, "scope": "missing_rows", "first": [],
                                 "second": [theirs[i] for i in sorted(accepted)],
@@ -646,7 +649,8 @@ def rejudge_input(record: dict, targets: list[dict]) -> list[dict]:
                                 for k in ("splitters", "periods", "frequencies", "calculations")},
                      # contract .8: its structured period and frequency rows, and the code's problems with them
                      **({"conditions": {k: [r for r in out[k] if sid in r["for"]] for k in ("periods", "frequencies")},
-                         "condition_problems": _row_problems(out, sid, record.get("as_of"))}
+                         "condition_problems": _row_problems(out, sid, record.get("as_of"),
+                                                             (record.get("parse") or {}).get("answer_contract"))}
                         if _semantic(record) else {}),
                      "facts": [{k: v for k, v in f.items() if k in ("code", "axis", "candidates", "problems")}
                                for f in d.get("rejudge_targets") or []] +
@@ -867,10 +871,8 @@ def run_info(as_of: str, settings: K.Settings) -> dict:
     request date, the catalog files, the ask axes and the shared period policy, the model settings."""
     import hashlib
 
+    from . import cards, check, contract, paths, periods, pool
     from .periods import core as claview_period
-    from . import paths
-
-    from . import cards, check, contract, periods, pool
 
     if not _CATALOG_SHA:
         for name, path in (("search_catalog", paths.CATALOG_SEARCH), ("meta_raw", paths.CATALOG_META_RAW)):

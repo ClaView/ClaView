@@ -87,7 +87,7 @@ from ..search.families import FREQUENCY_WORDS as _FREQUENCY_WORDS
 # .16: the three edition judgments, the relation status and the relation file (plan 56 order 7)
 # .17: the edition reasons (edition_relation_conflict, edition_evidence_insufficient) and the judgments trace
 # .18: the latest month held elsewhere on the card bounds the latest-unpublished months (plan 56 order 8)
-PERIODS_VERSION = "tl-periods-2026-11-02.20"  # .20: recent windows accept exact stated-unit conversions
+PERIODS_VERSION = "tl-periods-2026-11-03.21"  # .21: bounded recent windows preserve their explicit endpoint
 MAX_STITCH = 3  # tables joined across edition boundaries for one statistic
 
 _MONTH_RANGE = re.compile(r"(\d{4})\s*년\s*(\d{1,2})\s*월?\s*[~\-–]\s*(\d{1,2})\s*월")
@@ -496,6 +496,8 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
             results = {t: resolve(conditions, views[t], as_of, context=context) for t in candidates}
     report = _report(results, usable)
     base = {"results": report, "anchor": anchor}
+    bounded_recent = any(c.get("kind") == "period" and c["attrs"].get("form") == "recent"
+                         and c["attrs"].get("end_expr") for c in conditions)
     bad = [r for r in results.values() if r["status"] in ("invalid_input", "unresolved")]
     if bad and len(bad) == len(results):
         code = (bad[0].get("issue") or {}).get("code") or bad[0]["status"]
@@ -527,6 +529,12 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
                                                   "frequency": results[t].get("frequency"), **status,
                                                   **({"latest_unpublished": unpublished} if unpublished else {})}],
                 "reason": None, "detail": None, **tie, **base}
+    if bounded_recent and any(k.get("kind") == "after_as_of" for r in results.values()
+                              for k in (r.get("periods") or {}).get("missing_kinds") or []):
+        # Full candidates have already been selected above. A missing future interval must not
+        # become successful merely because the stitch fallback shortens it to available history.
+        return {"status": "failed", "tables": [], "reason": "period_not_covered",
+                "detail": "after_as_of", **base}
     requested = next((_months((r.get("periods") or {}).get("requested_months")) for r in results.values()
                       if (r.get("periods") or {}).get("requested_months")), [])
     frequencies = {results[t].get("frequency") for t in order if t in usable and results[t].get("frequency")}
@@ -616,19 +624,21 @@ def requested_span(condition: dict, as_of: str, *, recent_anchor: str | None = N
     """One period condition's monthly range. Recent ranges require their actual catalog reference; without it
     None is returned, never an as_of preview presented as a resolved date. Other expressions retain the calendar
     interpretation. open_end marks a since or recent span rather than a closed endpoint the user named."""
-    month = {"id": "F0", "kind": "frequency", "value": "M", "attrs": {"value": "M", "anchor": None}}
     context = _calendar(as_of)
     if data_recent([condition]):
-        if recent_anchor is None:
+        if recent_anchor is None and not condition["attrs"].get("end_expr"):
             return None  # a data-relative window has no actual dates until its catalog reference is known
-        context["recent_anchor"] = recent_anchor
-    got = resolve([condition, month], _FULL_M, as_of, context=context)
+        if recent_anchor is not None:
+            context["recent_anchor"] = recent_anchor
+    # This is a monthly projection, not a user-stated monthly frequency. The single-frequency
+    # card lets the resolver project calendar units without rejecting a quoted quarter as a conflict.
+    got = resolve([condition], _FULL_M, as_of, context=context)
     rows = (got.get("periods") or {}).get("requested_months") or []
     if got["status"] != "ok" or len(rows) != 1:
         return None
     attrs = condition.get("attrs") or {}
     return {"start": rows[0]["start"], "end": rows[0]["end"],
-            "open_end": bool(attrs.get("open_end")) or attrs.get("form") == "recent"}
+            "open_end": bool(attrs.get("open_end")) or (attrs.get("form") == "recent" and not attrs.get("end_expr"))}
 
 
 def frequency_fit(conditions: list[dict], frequency: str, as_of: str) -> bool:
@@ -647,6 +657,11 @@ def frequency_fit(conditions: list[dict], frequency: str, as_of: str) -> bool:
                 return False
             if amount * width % step:
                 return False
+            end = attrs.get("end_expr")
+            if end:
+                span = requested_span(c, as_of)
+                if span is None or (P.month(span["end"]) % 12 + 1) % step:
+                    return False
             continue
         span = requested_span(c, as_of)
         if span is None:

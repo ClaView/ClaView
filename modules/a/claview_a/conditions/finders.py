@@ -4,8 +4,8 @@ Kinds (shapes.ConditionKind): period, frequency, basis, unit, breakdown, exclude
 Each finder returns candidates of its kind in the new ``conditions`` shape, IDs numbered per kind in question order;
 ``find_conditions`` takes them all and settles overlaps between kinds.
 
-- period: the reused Q2 rules (``reused/q_rules.find_periods``, regular expressions unchanged) wrapped into the new
-  shape. A period keeps its structure as written and is not resolved to dates (2.2, plan 04 decision 13).
+- period: the reused Q2 rules (``q_rules.find_periods``) wrapped into the condition shape, including a counted
+  range with a written end. A period keeps its written structure rather than resolved dates (plan 04 decision 13).
 - frequency: the reused Q3 rules (stretch 1).
 - basis, calc, unit, breakdown, exclude: the old Q4/Q5 rules ported in ``condition_rules`` (condition vocabulary in
   ``data/condition_words.json``, grammar words in ``data/lexicon.json``); comparison bases and calculation requests
@@ -55,7 +55,8 @@ _YEAR_PART = re.compile(q_rules._yr(9))  # a four-digit year with an optional �
 _SUB_PART = re.compile(q_rules._sub(9))  # quarter, month or half below the year, optional end mark
 _SUB_GROUPS = (("q", "Q"), ("m", "M"), ("h", "H"))
 _PERIOD_PATTERNS = {  # which reused pattern a row of each form came from, in the order find_periods tries them
-    "range": (q_rules._RANGE,), "since": (q_rules._SINCE, q_rules._REL), "recent": (q_rules._RECENT,),
+    "range": (q_rules._RANGE,), "since": (q_rules._SINCE, q_rules._REL),
+    "recent": (q_rules._RECENT_END_FIRST, q_rules._RECENT_END_LAST, q_rules._RECENT),
     "point": (q_rules._REL, q_rules._REL_MQ, q_rules._POINT),
 }
 # Unit words of the month/quarter relatives (지난달, 이번 분기) and the end mark (분기말, 작년 말): data file.
@@ -112,6 +113,9 @@ def _period_attrs(text: TextView, query: str, row: dict) -> dict:
         start = _end(text, query, m, 1)
         end = _end(text, query, m, 3 if g.get("omit") else 2)
         ends = [1, 3 if g.get("omit") else 2]
+    elif m.re in (q_rules._RECENT_END_FIRST, q_rules._RECENT_END_LAST):
+        end = _end(text, query, m, 1)
+        ends = [1]
     elif m.re is q_rules._SINCE or m.re is q_rules._POINT:
         start = _end(text, query, m, 1)
         ends = [1]

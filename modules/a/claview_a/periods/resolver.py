@@ -226,6 +226,19 @@ class _Reader:
         base = {"id": condition["id"], "rounded": False}
         form = attrs["form"]
         relative = bool(attrs.get("relative"))
+        if form == "recent" and attrs.get("end_expr"):
+            # The stated endpoint is part of the request, never clipped to catalog coverage.
+            end = attrs["end_expr"]
+            if not end.get("year") or end.get("alias"):
+                raise _unresolved("period_unsupported", "recent_end_requires_calendar_value")
+            year = int(end["year"])
+            last_month = _months_of(end)[1]
+            last = self.expr_span(end)[1]
+            if self.cal.months(last, self.freq)[1] != year * 12 + last_month - 1:
+                raise _Stop("table_unsuitable", "table_unsuitable", "recent_end_not_fit")
+            count, rounded = self.recent_count(attrs.get("amount"), attrs.get("unit"), allow_exact_units=True)
+            return {**base, "first": last - (count - 1), "last": last,
+                    "relative": True, "open": False, "rounded": rounded}
         if form == "recent" and self.recent_anchor is not None:
             count, rounded = self.recent_count(attrs.get("amount"), attrs.get("unit"), allow_exact_units=True)
             return {**base, "first": self.recent_anchor - (count - 1), "last": self.recent_anchor,

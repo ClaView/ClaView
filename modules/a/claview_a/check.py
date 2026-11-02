@@ -149,7 +149,7 @@ from .quotes import quote_in_question
 # .33: a period option says the range choosing it requests, in the decided frequency or each one left (13-4)
 # .40: contract .8 periods and frequencies read from the model's structured rows (``periods.semantic``), never the quote
 # reader nor words outside the quotes; the failure kind of every ending reason recorded (BOK20 live check 11-02)
-CHECK_VERSION = "tl-check-2026-11-02.44"
+CHECK_VERSION = "tl-check-2026-11-03.45"
 # the model's failures to structure a period or frequency it quoted or to give a row: one recovery may correct them
 SEMANTIC_INTERNAL = ("period_structure_invalid", "frequency_unreadable", "period_meaning_conflict",
                      "frequency_conflict", "period_row_missing", "frequency_row_missing")
@@ -710,6 +710,8 @@ def _frequency_decision(reading: dict, candidates: list[str], lk: Cards, as_of: 
     quoted = list(dict.fromkeys(c["value"] for c in reading["conditions"] if c["kind"] == "frequency"))
     base = {"valid": valid, "offered": offered}
     if quoted:
+        if len(quoted) == 1 and quoted[0] in offered and quoted[0] not in valid:
+            return {"value": quoted[0], "source": "question", "reason": "not_fit", **base}
         return {"value": quoted[0] if len(quoted) == 1 else None, "source": "question", "reason": "confirmed_quote",
                 **base}
     if not valid:
@@ -802,14 +804,15 @@ def _semantic_rows(d: dict, out: dict, ref_periods: dict | None = None) -> list[
 
 
 def _semantic_reading(d: dict, question: str, out: dict, ref_periods: dict | None = None,
-                      as_of: str | None = None) -> dict:
+                      as_of: str | None = None, answer_contract: str | None = None) -> dict:
     """Contract .8: the conditions of statistic ``d`` from the model's structured rows (``periods.semantic``) and the
     user's condition answers (read as the answers always were). No word outside the quotes is restored: words the old
     reader finds there are recorded in ``period_audit`` only (they change no state)."""
     sid = d["statistic"]
     rows = _semantic_rows(d, out, ref_periods)
     frows = [r for r in out["frequencies"] if sid in r["for"]]
-    reading = SP.read_rows([r for r in rows if _meaning(r) != "same_as"] or rows, frows, as_of=as_of)
+    reading = SP.read_rows([r for r in rows if _meaning(r) != "same_as"] or rows, frows, as_of=as_of,
+                           answer_contract=answer_contract)
     d["partial_periods"] = copy.deepcopy(reading.get("partial_periods") or [])
     if not [r for r in rows if _meaning(r) != "same_as"] and rows:
         # a same_as row with no usable reference reads no range (asked as before), never a missing row
@@ -869,7 +872,7 @@ def partial_period_problem(partials: list[dict], conditions: list[dict], as_of: 
 
 
 def condition_reading(d: dict, question: str, out: dict, polar: bool = False, ref_periods: dict | None = None,
-                      semantic: bool = False, as_of: str | None = None) -> dict:
+                      semantic: bool = False, as_of: str | None = None, answer_contract: str | None = None) -> dict:
     """``periods.read_quotes`` of statistic ``d`` with the condition rule ``ask_condition``: the model's quotes, the
     user's condition answers (``condition_answers``, read as quotes) and the words the reader finds outside every
     quote of every field, restored only when the question has one statistic. Writes ``frequency_quotes``, and
@@ -877,7 +880,7 @@ def condition_reading(d: dict, question: str, out: dict, polar: bool = False, re
     (contract .8): the model's structured rows instead (``_semantic_reading``); the quote reader is for older
     answers."""
     if semantic:
-        return _semantic_reading(d, question, out, ref_periods, as_of=as_of)
+        return _semantic_reading(d, question, out, ref_periods, as_of=as_of, answer_contract=answer_contract)
     sid = d["statistic"]
     answers = d.get("condition_answers") or []
     pq = _period_rows(d, out, polar, ref_periods) + [a["quote"] for a in answers if a["kind"] == "period"]
@@ -1386,7 +1389,8 @@ def decide_periods(d: dict, quote: str, rep: str, reading: dict, lk: Cards, as_o
     polar = bool(asking and context.get("polar"))
     if asking:
         reading = condition_reading(d, context["question"], context["out"], polar, context.get("ref_periods"),
-                                    bool(context.get("semantic")), as_of=as_of)
+                                    bool(context.get("semantic")), as_of=as_of,
+                                    answer_contract=context.get("answer_contract"))
         d["condition_asks"] = []
     d["period"] = {"readings": reading["readings"]}
     if not PR.data_recent(reading["conditions"]) and (why := partial_period_problem(
@@ -2406,7 +2410,8 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
             continue
         frequency_rows = [r for r in out["frequencies"] if sid in r["for"]]
         if semantic:  # contract .8: the model's structured rows (frequency points written by the reading)
-            reading = _semantic_reading(d, question, out, parsed.get("reference_periods"), as_of=as_of)
+            reading = _semantic_reading(d, question, out, parsed.get("reference_periods"), as_of=as_of,
+                                        answer_contract=parsed.get("answer_contract"))
         else:
             reading = PR.read_quotes([r["quote"] for r in out["periods"] if sid in r["for"]],
                                      [r["quote"] for r in frequency_rows])
@@ -2434,7 +2439,8 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
             continue
         decide_periods(d, stats[sid]["quote"], d["representative"], reading, lk, as_of, "choice",
                        {"question": question, "out": out, "polar": polar, "semantic": semantic,
-                        "ref_periods": parsed.get("reference_periods")})
+                        "ref_periods": parsed.get("reference_periods"),
+                        "answer_contract": parsed.get("answer_contract")})
     group_condition_asks(D, out)
     same_table_periods(D, out)
 
