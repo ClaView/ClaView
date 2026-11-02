@@ -622,7 +622,7 @@ def validate_period(
 # Words that ask for a breakdown ("~별", "세부", ...). `expand` is only honored when the
 # question has one; otherwise the model's expand is lowered to none (see apply_expand_guard).
 BREAKDOWN_WORDS = (
-    r"세부|세분|하위|구성|내역|분해|나눠|나누어|쪼개|상세|"
+    r"세부|세분|하위|구성|내역|(?<!구)분해|나눠|나누어|쪼개|상세|"
     r"(모든|전체|각)\s*(항목|분류|업권|지역|산업|업종|품목)"
 )
 # "...별" that only names a time unit ("월별", "분기별") is a frequency, not a breakdown.
@@ -637,12 +637,24 @@ STAGE_LIMIT_WORDS = (
 )
 
 
+# 그래프 배치를 지시하는 말("지표별로 그래프를 나눠줘", "그래프를 따로 배치")은 값을 세분하라는 요청이 아니다.
+LAYOUT_WORDING = (
+    r"(?:[가-힣]+별로?\s*)?(?:그래프|차트|패널|화면)[을를]?\s*(?:따로|나눠|나누어|분리|구분)[가-힣]*|"
+    r"(?:따로|별도로)\s*(?:배치|표시)[가-힣]*"
+)
+
+
+def without_layout_wording(query: str) -> str:
+    return re.sub(LAYOUT_WORDING, " ", query)
+
+
 def asks_to_split_by(query: str) -> bool:
     """True for a "~별" wording that is not just a time unit ("업권별", not "월별")."""
     return bool(split_words(query))
 
 
 def asks_for_breakdown(query: str) -> bool:
+    query = without_layout_wording(query)
     return bool(re.search(BREAKDOWN_WORDS, query)) or asks_to_split_by(query)
 
 
@@ -852,10 +864,51 @@ def excluded_named_value(query: str, values: Json, code: str) -> str | None:
     return found[0] if len(found) == 1 else None
 
 
+def code_free_name(name: str) -> str:
+    """`core_name` without a leading industry code ("C 제조업" -> "제조업", "C10 식료품" -> "식료품")."""
+    return re.sub(r"^[a-z]\d{0,6}(?=[가-힣])", "", core_name(name))
+
+
+def named_shorter_value(query: str, values: Json, code: str) -> str | None:
+    """Rule C: the chosen name adds words the question never says to a value it names ("제조업" -> `제조업 대기업`).
+
+    The question names exactly one other value in full (industry codes ignored: "C 제조업"),
+    the chosen value's name starts with that name, and what the chosen name adds (2+ characters)
+    is not in the question.
+    """
+    text = normalized(query)
+    chosen = core_name(values[code]["name"])
+    if not chosen or named_in(text, values, code) or chosen.endswith("이외"):
+        return None  # "X이외" is an exclusion value: rule B decides it, not this rule
+    found = []
+    for c, v in values.items():
+        name = code_free_name(v["name"])
+        if (
+            c != code
+            and len(name) >= 3
+            and name in text
+            and not re.search(re.escape(name) + r"\s*" + EXCLUDING_WORDS, query)
+            and chosen.startswith(name)
+            and len(chosen) - len(name) >= 2
+            and not (grams(chosen[len(name) :]) & grams(text))  # 질문이 어떤 식으로든 말한 낱말이면 손대지 않음
+            and not is_reference_name(v["name"])
+            and not any(  # a longer value that holds this name is the one the question says
+                c2 not in (c, code)
+                and len(code_free_name(v2["name"])) > len(name)
+                and name in code_free_name(v2["name"])
+                and code_free_name(v2["name"]) in text
+                for c2, v2 in values.items()
+            )
+        ):
+            found.append(c)
+    return found[0] if len(found) == 1 else None
+
+
 PICK_CORRECTIONS = (
     (named_longer_value, "query_names_longer_value"),
     (named_parent_value, "query_names_parent_value"),
     (excluded_named_value, "query_excludes_named_value"),
+    (named_shorter_value, "query_names_shorter_value"),
 )
 PICK_CORRECTION_REASONS = tuple(reason for _rule, reason in PICK_CORRECTIONS)
 
@@ -1004,7 +1057,7 @@ def split_words(query: str) -> list[str]:
     """The "~별" words of the question that are not time units ("지역별" -> "지역")."""
     return [
         token
-        for token in re.findall(r"([가-힣]+)별", query)
+        for token in re.findall(r"([가-힣]+)별", without_layout_wording(query))
         if token not in TIME_UNIT_TOKENS and not token.endswith(TIME_UNIT_SUFFIXES)
     ]
 
@@ -1139,7 +1192,7 @@ def direct_children(values: Json, code: str) -> list[str]:
     ]
 
 
-def named_below(text: str, values: Json, code: str) -> list[str]:
+def named_below(text: str, values: Json, code: str, single_ok: bool = False) -> list[str]:
     """"P 아래 C·D": the most specific values below `code` that the question names.
 
     Used when the question says "아래" and HCX expanded a container instead of picking the
@@ -1170,7 +1223,7 @@ def named_below(text: str, values: Json, code: str) -> list[str]:
         for c in cand
         for p in values[c]["path"][:-1]
     )
-    return cand if cand and (len(cand) >= 2 or via_container) else []
+    return cand if cand and (single_ok or len(cand) >= 2 or via_container) else []
 
 
 def select_named_children(
@@ -1365,8 +1418,6 @@ def drop_unrequested_rows(
     Only for questions that split their indicators over several tables, where the model is
     known to borrow another table's indicator; a one-table question may use synonyms freely.
     """
-    if not multi_table:
-        return raw, []
     rows = raw["selections"]
     plain = [r for r in rows if all(m == "none" for m in r["expand"].values())]
     if len(plain) < 2:
@@ -1382,7 +1433,8 @@ def drop_unrequested_rows(
             continue
         for reason, bad in (
             ("container_only", {c for c in codes if container_marked(text, values, c)}),
-            ("not_in_question", {c for c in codes if not named_in(text, values, c)}),
+            # 한 표짜리 질문은 동의어로 말할 수 있어 "질문에 없는 값"은 걸러내지 않는다
+            ("not_in_question", {c for c in codes if multi_table and not named_in(text, values, c)}),
         ):
             alive = [r for r in plain if id(r) not in dropped_ids]
             codes = {r["dimensions"][axis] for r in alive}
@@ -1560,6 +1612,112 @@ def replace_container_with_named(
                             "code": code,
                             "replaced_by": child,
                             "reason": "container_replaced_by_named_below",
+                        }
+                    )
+                replaced = True
+                break
+        if not replaced:
+            add(row)
+    if not notices:
+        return raw, []
+    return {**raw, "selections": rows}, notices
+
+
+def drop_container_beside_named_children(
+    raw: Json, query: str, table: Json, table_key: str
+) -> tuple[Json, list[Json]]:
+    """"P 중 C·D": the plain row on P is dropped when the rows on C and D are there.
+
+    The question says P only to name what C and D belong to ("국내 소비지출 중 내구재·서비스"; the
+    wording "중" is read in the question as written, with its spaces), and the other rows differ from
+    P's row only on that axis, with values below P that the question names. Other axes and the
+    period must match. A row is never dropped when no named value below P is selected.
+    """
+    rows = raw["selections"]
+    plain = [r for r in rows if all(m == "none" for m in r["expand"].values())]
+    if len(plain) < 2:
+        return raw, []
+    text = normalized(query)
+    dropped: set[int] = set()
+    notices: list[Json] = []
+    for row in plain:
+        for axis, code in row["dimensions"].items():
+            values = table["dimensions"][axis]["values"]
+            if code not in values:
+                continue
+            name = re.sub(r"\s*\d\)\s*$", "", values[code]["name"]).strip()
+            if not re.search(re.escape(name) + r"\s*(?:중에서|중(?!소)|아래|하위|밑)", query):
+                continue
+            mates = [
+                o
+                for o in plain
+                if o is not row
+                and o["dimensions"].get(axis) not in (None, code)
+                and {a: c for a, c in o["dimensions"].items() if a != axis}
+                == {a: c for a, c in row["dimensions"].items() if a != axis}
+                and o["period"] == row["period"]
+                and o["item_id"] == row["item_id"]
+                and any(p["code"] == code for p in values[o["dimensions"][axis]]["path"][:-1])
+                and named_in(text, values, o["dimensions"][axis])
+            ]
+            if mates and id(row) not in dropped:
+                dropped.add(id(row))
+                notices.append(
+                    {
+                        "table": table_key,
+                        "axis": axis,
+                        "code": code,
+                        "reason": "unrequested_row_dropped",
+                        "detail": "container_beside_named_children",
+                    }
+                )
+            break
+    if not dropped:
+        return raw, []
+    return {**raw, "selections": [r for r in rows if id(r) not in dropped]}, notices
+
+
+def replace_unnamed_container(
+    raw: Json, query: str, table: Json, table_key: str
+) -> tuple[Json, list[Json]]:
+    """A plain row on a value the question never says becomes rows on the values below it that it names.
+
+    HCX picks the parent of the value the question names ("총투자" for "총자본형성"). The picked
+    value is not in the question at all, `named_below` finds the values beneath it that are, and
+    the row is replaced by one row per such value. Rows that expand are left alone.
+    """
+    text = normalized(query)
+    notices: list[Json] = []
+    rows: list[Json] = []
+    seen: set[str] = set()
+
+    def add(row: Json) -> None:
+        marker = json.dumps(
+            [row["item_id"], sorted(row["dimensions"].items()), row["period"]], sort_keys=True
+        )
+        if marker not in seen:
+            seen.add(marker)
+            rows.append(row)
+
+    for row in raw["selections"]:
+        replaced = False
+        if all(m == "none" for m in row["expand"].values()):
+            for axis, code in row["dimensions"].items():
+                values = table["dimensions"][axis]["values"]
+                if code not in values or named_in(text, values, code):
+                    continue
+                named = named_below(text, values, code, single_ok=True)
+                if not named:
+                    continue
+                for child in named:
+                    add({**row, "dimensions": {**row["dimensions"], axis: child}})
+                    notices.append(
+                        {
+                            "table": table_key,
+                            "axis": axis,
+                            "code": code,
+                            "replaced_by": child,
+                            "reason": "unnamed_container_replaced_by_named_below",
                         }
                     )
                 replaced = True
@@ -1891,6 +2049,12 @@ class BSteps:
             guarded, replaced = replace_container_with_named(
                 guarded, state["query"], table_meta, key, multi_table
             )
+            guarded, beside = drop_container_beside_named_children(
+                guarded, state["query"], table_meta, key
+            )
+            guarded, unnamed_replaced = replace_unnamed_container(
+                guarded, state["query"], table_meta, key
+            )
             changes = (
                 corrected
                 + dropped
@@ -1903,6 +2067,8 @@ class BSteps:
                 + farther
                 + unrequested
                 + replaced
+                + beside
+                + unnamed_replaced
             )  # reported as expand_notices
             try:
                 expanded = expand_selections(guarded, table_meta)
