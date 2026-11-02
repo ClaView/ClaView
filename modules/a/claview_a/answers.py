@@ -36,7 +36,7 @@ from . import periods as PR
 from .cards import ASK_AXES
 from .periods.contract import check_conditions
 
-ANSWERS_VERSION = "tl-answers-2026-11-02.4"  # .4: semantic model rows stay off the legacy quote-reader path
+ANSWERS_VERSION = "tl-answers-2026-11-02.6"  # .6: validate recent answers against their supported frequencies
 ANSWER_SOURCE = "user_answer"
 ERRORS = ("no_reply", "reply_shape", "stale_question", "duplicate_reply", "question_not_pending",
           "option_not_offered", "no_record", "answer_unreadable")
@@ -85,6 +85,7 @@ def questions(state: dict) -> list[dict]:
                                if a.get("partial_periods") else {}),
                             "options": [{"option_id": f"{qid}:{o['option_id']}", "value": o["value"],
                                          "label": o["label"], "quote": o["quote"], "range": o.get("range"),
+                                         **({"ranges": copy.deepcopy(o["ranges"])} if o.get("ranges") else {}),
                                          "table_id": None} for o in a["options"]]})
             out += _basis_questions(d, "condition")  # the basis asks that do not wait for the answer (⑥)
             continue
@@ -112,7 +113,53 @@ def _basis_questions(d: dict, screen: str = "ask") -> list[dict]:
     return out
 
 
-def _validate(state: dict, replies) -> list[tuple[dict, dict]]:
+def _answer_partial_problem(state: dict, q: dict, conditions: list[dict], layer, *, option: dict | None = None,
+                            frequency_answers: dict[str, str] | None = None) -> str | None:
+    """Check an incomplete explicit boundary against the actual catalog-relative window before applying it."""
+    partials = q.get("partial_periods") or []
+    if not partials or not PR.data_recent(conditions):
+        return CH.partial_period_problem(partials, conditions, state["as_of"])
+    lk = CH.Cards(state["cards"], selection_catalog(layer).views)
+    decisions = {d["statistic"]: d for d in state["record"]["decisions"]}
+    for sid in q["statistics"]:
+        d = decisions[sid]
+        rep = d["representative"]
+        if rep is None:
+            return "partial_period_reference_unresolved"
+        rows = {r["table_id"]: r for r in lk.card_of[rep]["tables"]}
+        candidates = CH._candidates(rows, rep)
+        frequency = d.get("frequency") or {}
+        selected = (frequency_answers or {}).get(sid) or frequency.get("value")
+        frequencies = [selected] if selected else frequency.get("valid", [])
+        shown = (option or {}).get("ranges") or {}
+        if shown:
+            if selected and selected not in shown:
+                return "period_option_frequency_not_offered"
+            frequencies = [f for f in frequencies if f in shown]
+        if not frequencies:
+            return "partial_period_reference_unresolved"
+        problem = "partial_period_reference_unresolved"
+        for f in frequencies:
+            reading = CH._with_frequency({"conditions": conditions}, f)
+            got = CH._select_periods(d["quote"], rep, candidates, d["item_evidence"], reading, lk, state["as_of"],
+                                     "answer_boundary", d["retention"])
+            if got["status"] != "selected":
+                continue
+            spans = [r for t in got["tables"] for r in t.get("period") or []]
+            if why := CH.partial_period_problem(partials, conditions, state["as_of"], spans=spans):
+                problem = why
+                continue
+            if f in shown and (not spans or shown[f] != {
+                    "start": min(s["start"] for s in spans), "end": max(s["end"] for s in spans)}):
+                problem = "period_option_range_changed"
+                continue
+            break
+        else:
+            return problem
+    return None
+
+
+def _validate(state: dict, replies, layer) -> list[tuple[dict, dict]]:
     if not (state.get("record") or {}).get("decisions"):
         raise AnswerError("no_record")
     if not isinstance(replies, list) or not replies:
@@ -121,6 +168,7 @@ def _validate(state: dict, replies) -> list[tuple[dict, dict]]:
     pending = {q["question_id"]: q for q in questions(state)}
     seen: set[str] = set()
     out = []
+    period_checks = []
     for r in replies:
         if not isinstance(r, dict) or set(r) not in ({"question_id", "question_version", "option_id"},
                                                      {"question_id", "question_version", "text"}):
@@ -142,25 +190,32 @@ def _validate(state: dict, replies) -> list[tuple[dict, dict]]:
                                   (got["problems"][0].get("code") if got["problems"] else None) or "no_period_read")
             if check_conditions(got["conditions"]):
                 raise AnswerError("answer_unreadable", "malformed_condition")
-            if why := CH.partial_period_problem(q.get("partial_periods") or [], got["conditions"], state["as_of"]):
-                raise AnswerError("answer_unreadable", why)
-            out.append((q, {"option_id": None, "value": r["text"], "quote": r["text"], "text": r["text"]}))
+            option = {"option_id": None, "value": r["text"], "quote": r["text"], "text": r["text"]}
+            period_checks.append((q, got["conditions"], option))
+            out.append((q, option))
             continue
         option = next((o for o in q["options"] if o["option_id"] == r["option_id"]), None)
         if option is None or option.get("selectable") is False:  # an unconfirmed option is never chosen (⑥)
             raise AnswerError("option_not_offered")
         if q.get("partial_periods"):
             got = PR.read_quotes([option["quote"]], [])
-            if why := CH.partial_period_problem(q["partial_periods"], got["conditions"], state["as_of"]):
-                raise AnswerError("answer_unreadable", why)
+            period_checks.append((q, got["conditions"], option))
         out.append((q, option))
+    # Validate the full batch without mutating it: a period can be answered together with its frequency, in either
+    # order. When the frequency is still undecided, a supporting one suffices; the next check filters its choices.
+    frequency_answers = {sid: option["value"] for q, option in out if q["kind"] == "frequency"
+                         for sid in q["statistics"]}
+    for q, conditions, option in period_checks:
+        if why := _answer_partial_problem(state, q, conditions, layer, option=option,
+                                          frequency_answers=frequency_answers):
+            raise AnswerError("answer_unreadable", why)
     return out
 
 
 def apply(state: dict, replies: list[dict], layer) -> dict:
     """A new state with the replies applied (the given state is not changed). ``replies``: ``{question_id,
     question_version, option_id}`` each, for pending questions of the current version, at most one per question."""
-    checked = _validate(state, replies)
+    checked = _validate(state, replies, layer)
     current = question_version(state)
     new = copy.deepcopy(state)
     if "record_before_answers" not in new:
@@ -175,6 +230,7 @@ def apply(state: dict, replies: list[dict], layer) -> dict:
             row = {"question_id": q["question_id"], "question_version": current, "statistics": list(q["statistics"]),
                    "kind": q["kind"], "option_id": option["option_id"], "value": option["value"],
                    "quote": option["quote"], "text": option.get("text"), "range": option.get("range"),
+                   **({"ranges": copy.deepcopy(option["ranges"])} if option.get("ranges") else {}),
                    "source": ANSWER_SOURCE}
             for sid in q["statistics"]:
                 d = by_sid[sid]
@@ -201,12 +257,18 @@ def apply(state: dict, replies: list[dict], layer) -> dict:
         d["basis"][q["axis"]] = {"value": [option["value"]], "source": ANSWER_SOURCE, "question_id": q["question_id"]}
         log["rows"].append(row)
         touched.append(q["statistic"])
-    done = [sid for sid in dict.fromkeys(conditioned) if not by_sid[sid]["condition_asks"]]
+    # A completed partial period can rule out frequencies whose recent windows move its fixed boundary. Refresh
+    # those frequency choices now, rather than leaving the old card until the user answers an invalid choice.
+    refresh = {sid for q, _ in checked if q["kind"] == "period" and q.get("partial_periods")
+               for sid in q["statistics"]}
+    done = [sid for sid in dict.fromkeys(conditioned)
+            if not by_sid[sid]["condition_asks"] or (sid in refresh and all(
+                a["kind"] == "frequency" for a in by_sid[sid]["condition_asks"]))]
     if any(not by_sid[sid]["asks"] for sid in touched) or done:
         lk = CH.Cards(new["cards"], selection_catalog(layer).views)
         for sid in dict.fromkeys(touched + done):
             d = by_sid[sid]
-            if d.get("condition_asks"):  # a period or frequency answer still to come: the basis answer waits
+            if d.get("condition_asks") and sid not in refresh:  # another answer is pending: the basis answer waits
                 continue
             if d["asks"]:
                 if sid in done:  # the period answered first: the option statuses on it (⑥)

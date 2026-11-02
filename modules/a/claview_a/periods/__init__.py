@@ -1,8 +1,7 @@
 """Period and frequency of a statistic, and the final tables among a representative's candidates (plan 37, step 3).
 
-The model only quotes period and frequency words. Code reads them with the current path's condition rules
-(``interpret.conditions.find_period_conditions`` / ``find_frequency_conditions``) and resolves them per table with
-the shared resolver (``claview_period`` through ``select.periods``). Nothing here copies period rules.
+The current model structures period and frequency meaning; older answers and typed user answers use the quote
+reader. Code resolves either condition shape per table with the period resolver. Nothing here copies its arithmetic.
 
 Reading a quote (``read_quotes``; step-3 review, user 2026-10-27 21:36 UTC):
 - explicit base-year marks are not periods: "YYYY=100", a year followed by "기준년"/"기준연도"/"기준년도", and
@@ -38,11 +37,12 @@ the longest frequency the table offers, the latest 10 years for Y, 5 for H and Q
 Final selection (``final_tables``) among the candidates code may switch to; ``usable`` names the ones whose content is
 verified by the caller (``check``), the others are only reported. Every candidate is resolved against the same
 request: a request that counts from an anchor uses one common anchor. With the policy's ``anchor_rule``
-``as_of_calendar`` (policy ①, plan 56 order 4) a quoted relative or open period counts from the period as_of falls in;
+``as_of_calendar`` a calendar-relative or explicit open period counts from the period as_of falls in;
 the part after a candidate's latest period is ``latest_unpublished`` (the candidate still covers the request when no
 other candidate covers that part, and the period handed on ends at as_of's period); a request that starts before every
 usable candidate fails ``period_not_covered`` with detail ``past_shortfall``. A request with no period keeps the latest end of the usable candidates in the chosen frequency
-(the rule before, also for ``data_latest``). Then:
+(the rule before, also for ``data_latest``). The separate ``recent_anchor_rule: data_latest`` uses a candidate
+group's latest reference for recent N units; it does not move calendar aliases or explicit dates. Then:
 - one usable table that covers the request: that table (the newest of several that do; plan 53, user 2026-10-30
   02:07 UTC: among those tied on the newest end the representative stays when it is usable and covers the request,
   since the candidates' order is no priority; a tie is recorded as ``tie``. A newer candidate still wins, and the
@@ -87,7 +87,7 @@ from ..search.families import FREQUENCY_WORDS as _FREQUENCY_WORDS
 # .16: the three edition judgments, the relation status and the relation file (plan 56 order 7)
 # .17: the edition reasons (edition_relation_conflict, edition_evidence_insufficient) and the judgments trace
 # .18: the latest month held elsewhere on the card bounds the latest-unpublished months (plan 56 order 8)
-PERIODS_VERSION = "tl-periods-2026-10-31.18"  # .7: the end word of an end-point frequency is read (plan 36)
+PERIODS_VERSION = "tl-periods-2026-11-02.20"  # .20: recent windows accept exact stated-unit conversions
 MAX_STITCH = 3  # tables joined across edition boundaries for one statistic
 
 _MONTH_RANGE = re.compile(r"(\d{4})\s*년\s*(\d{1,2})\s*월?\s*[~\-–]\s*(\d{1,2})\s*월")
@@ -399,6 +399,14 @@ def _calendar_context(rep: str, conditions: list[dict], as_of: str) -> dict | No
     return {"bundle_id": f"tl:{rep}", "anchor_source": "as_of_calendar", "anchor": as_of[:7]}
 
 
+def data_recent(conditions: list[dict]) -> bool:
+    """At least one recent range uses the data anchor, not a calendar alias or a stated date."""
+    from .resolver import default_policy
+
+    return default_policy().recent_anchor_rule == "data_latest" and any(
+        c.get("kind") == "period" and (c.get("attrs") or {}).get("form") == "recent" for c in conditions)
+
+
 EDITION_RELATIONS = json.loads((Path(__file__).resolve().parents[1] / "data" / "edition_relations.json")
                                .read_text(encoding="utf-8"))
 
@@ -461,6 +469,23 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
     calendar = _calendar_context(rep, conditions, as_of)  # any quoted period: its unpublished end is told apart
     results = {t: resolve(conditions, views[t], as_of, context=calendar) for t in candidates}
     anchor = calendar["anchor"] if calendar else None
+    contexts = {t: calendar for t in candidates}
+    if calendar and data_recent(conditions):
+        # Editions of one statistic must compete for the same recent window. An old edition must not win by
+        # moving its own window backwards. A known later edition still bounds this window when its content
+        # cannot yet be confirmed; that case stays unresolved rather than selecting stale data.
+        latest = latest_month([views[t] for t in candidates])
+        for f, end in (held_elsewhere or {}).items():
+            latest[f] = max(latest.get(f, end), end)
+        for t, result in results.items():
+            f = result.get("frequency")
+            if f in latest:
+                contexts[t] = {**calendar, "recent_anchor": P.month_text(latest[f])}
+        results = {t: resolve(conditions, views[t], as_of, context=contexts[t]) for t in candidates}
+        only_recent = all(c.get("kind") != "period" or c["attrs"]["form"] == "recent" for c in conditions)
+        anchors = {c["recent_anchor"] for c in contexts.values() if c and c.get("recent_anchor")}
+        if only_recent:
+            anchor = next(iter(anchors)) if len(anchors) == 1 else None
     request = {"conditions": conditions}
     if P.anchored_request(request) and not calendar:
         freqs = {results[t].get("frequency") for t in candidates if t in usable and results[t].get("frequency")}
@@ -534,7 +559,7 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
                     return {"status": "failed", "tables": [], "reason": "stitch_check_failed",
                             "detail": f"{t}: its share is not one continuous range", **base}
                 again = resolve(conditions, views[t], as_of, assignment=assignment,
-                                context=calendar or ({"bundle_id": f"tl:{rep}", "anchor_source": "bundle_common",
+                                context=contexts[t] or ({"bundle_id": f"tl:{rep}", "anchor_source": "bundle_common",
                                                       "anchor": anchor} if anchor else None))
                 if not _full(again) or again.get("frequency") not in frequencies:
                     return {"status": "failed", "tables": [], "reason": "stitch_check_failed",
@@ -587,12 +612,17 @@ def _calendar(as_of: str) -> dict:
     return {"bundle_id": "tl:fit", "anchor_source": "as_of_calendar", "anchor": as_of[:7]}
 
 
-def requested_span(condition: dict, as_of: str) -> dict | None:
-    """{start, end (YYYY-MM), open_end} of one period condition read monthly on the as_of calendar (policy ①), or
-    None when it cannot be read so. ``open_end``: the request ends at as_of's period (a since, a recent span), not at
-    a closed end the user named."""
+def requested_span(condition: dict, as_of: str, *, recent_anchor: str | None = None) -> dict | None:
+    """One period condition's monthly range. Recent ranges require their actual catalog reference; without it
+    None is returned, never an as_of preview presented as a resolved date. Other expressions retain the calendar
+    interpretation. open_end marks a since or recent span rather than a closed endpoint the user named."""
     month = {"id": "F0", "kind": "frequency", "value": "M", "attrs": {"value": "M", "anchor": None}}
-    got = resolve([condition, month], _FULL_M, as_of, context=_calendar(as_of))
+    context = _calendar(as_of)
+    if data_recent([condition]):
+        if recent_anchor is None:
+            return None  # a data-relative window has no actual dates until its catalog reference is known
+        context["recent_anchor"] = recent_anchor
+    got = resolve([condition, month], _FULL_M, as_of, context=context)
     rows = (got.get("periods") or {}).get("requested_months") or []
     if got["status"] != "ok" or len(rows) != 1:
         return None
@@ -602,13 +632,21 @@ def requested_span(condition: dict, as_of: str) -> dict | None:
 
 
 def frequency_fit(conditions: list[dict], frequency: str, as_of: str) -> bool:
-    """Whether ``frequency`` can show the requested periods as asked (plan 56 order 5): each period starts on a
-    period boundary of the frequency and a closed end ends on one; an open or relative end only has to reach the
-    period as_of falls in, which any frequency does. A period that cannot be read monthly fits nothing. No period:
-    every frequency fits (the period is asked for separately)."""
+    """Whether frequency can express the requested window without rounding. Recent-data lengths must contain an
+    integral number of its periods; actual coverage is checked later. Calendar ranges must start on its boundary
+    and a closed end must finish on one. No period fits every frequency and is asked for separately."""
     step = _MONTHS_PER[frequency]
     for c in conditions:
         if c.get("kind") != "period":
+            continue
+        if data_recent([c]):
+            attrs = c["attrs"]
+            width = {"year": 12, "half": 6, "quarter": 3, "month": 1}.get(attrs.get("unit"))
+            amount = attrs.get("amount")
+            if not isinstance(amount, int) or isinstance(amount, bool) or amount < 1 or width is None:
+                return False
+            if amount * width % step:
+                return False
             continue
         span = requested_span(c, as_of)
         if span is None:
@@ -655,12 +693,15 @@ def unquoted_conditions(question: str, quoted: list[str]) -> dict[str, list[str]
 
 
 def period_options(as_of: str) -> list[dict]:
-    """The options of a period question (policy ②): the presets' windows, each {key, label, quote, range} with the
-    range read on the as_of calendar (policy ①), the same reading as a quoted period."""
+    """The preset intents. A recent option has no dates until period_ask resolves its actual catalog/frequency
+    reference. Other preset expressions retain their calendar dates. No option is an implicit answer."""
     out = []
     for w in PRESETS["period"]["windows"]:
         got = read_quotes([w["quote"]], [])
         span = requested_span(got["conditions"][0], as_of) if len(got["conditions"]) == 1 else None
+        if span is None and data_recent(got["conditions"]):
+            out.append({"key": w["key"], "label": w["quote"], "quote": w["quote"], "range": None})
+            continue
         if span is None:
             raise ValueError(f"period preset {w['key']} does not read as one period")
         out.append({"key": w["key"], "label": f"{w['quote']} ({span['start']}~{span['end']})", "quote": w["quote"],
