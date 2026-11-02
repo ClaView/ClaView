@@ -38,6 +38,11 @@ surfaced and fixed a separate, previously-unexercised bug: "작년" names one
 closed, already-finished year, so its own end must stop at that year's own
 year-end rather than running on to the table's current latest period
 (fixed alongside, same commit).
+
+2026-11-02 change (team decision, supersedes the "작년" half of the above): "작년" is the closed
+calendar year before the as-of year, not the year before the table's latest year (an annual table
+ending 2025 answered "작년" with 2024 although 작년 is 2025). The four "작년" cases therefore expect
+their `as_of_year_based` candidate. "올해" keeps the table's latest year as its anchor.
 """
 
 from __future__ import annotations

@@ -12,11 +12,11 @@ from .search import grams, normalized
 from .services import Services as Services
 from .services import bounded as bounded
 
-RELATIVE_WORD_LIST = r"최근|이후|지금|현재|올해|작년|최신|지난"
+RELATIVE_WORD_LIST = r"최근|이후|지금|현재|올해|금년|이번|작년|최신|지난"
 # "현재생활형편CSI"의 "현재"처럼 지표 이름 안에 붙은 낱말은 기간 표현이 아니다:
 # 뒤에 한글이 바로 이어지면(조사·"까지"·"기준"·"부터" 제외) 기간 표현으로 보지 않는다.
 RELATIVE_WORDS = (
-    r"최근|이후|지금|올해|작년|최신|지난|"
+    r"최근|이후|지금|올해|금년|이번\s*(?:달|분기|반기|해|년)|작년|최신|지난|"
     r"현재(?:(?![가-힣])|(?=은|는|의|을|를|까지|기준|부터|로|에|도|만|이(?![가-힣])|가(?![가-힣])))"
 )
 # 지수의 기준연도 표기("2020=100", "기준연도 2020년")는 조회 기간이 아니므로 연도 찾기에서 뺀다.
@@ -27,28 +27,6 @@ BASE_YEAR_NOTATION = re.compile(
 
 def stated_years(query: str) -> list[str]:
     return re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", BASE_YEAR_NOTATION.sub(" ", query))
-
-
-def has_relative_words(query: str, table: Json | None = None) -> bool:
-    """The question uses relative-period wording ("최근/올해/현재 ..."), not a value name that contains it.
-
-    "현재 생활형편CSI"의 "현재"는 소비자동향조사의 지표 이름이므로, 표의 값 이름에 들어 있는 낱말은
-    (띄어쓰기가 달라도) 질문에서 지우고 본다.
-    """
-    text = query
-    if table is not None:
-        names: set[str] = set()
-        for dimension in table.get("dimensions", {}).values():
-            for value in dimension.get("values", {}).values():
-                name = core_name(value.get("name", ""))
-                if len(name) >= 4 and re.search(RELATIVE_WORD_LIST, name):
-                    names.add(name)
-                    stem = re.sub(r"[A-Za-z]+$", "", name)
-                    if len(stem) >= 4:
-                        names.add(stem)
-        for name in sorted(names, key=len, reverse=True):
-            text = re.sub(r"\s*".join(re.escape(ch) for ch in name), " ", text)
-    return re.search(RELATIVE_WORDS, text) is not None
 
 
 PERIOD_OVER_PERIOD = (
@@ -293,51 +271,189 @@ def model_table(table: Json, full_table: Json | None = None) -> Json:
     return {**table, "dimensions": dimensions}
 
 
+# ---------------------------------------------------------------------------------------------
+# Period wording -> frequency / period (all in code, never left to the model).
+# ---------------------------------------------------------------------------------------------
+
+# "최근 3년", "최근 8개 분기", "최근 3개년", "지난 6개월": a count of years / half-years / quarters / months.
+COUNT_PATTERN = re.compile(r"(최근|지난)\s*(\d+)\s*(?:(?:개\s*)?(년도|년|반기|분기)|(개월|달))")
+COUNT_UNIT_MONTHS = {"년도": 12, "년": 12, "반기": 6, "분기": 3, "개월": 1, "달": 1}
+UNIT_FREQUENCY = {"년도": "Y", "년": "Y", "반기": "H", "분기": "Q", "개월": "M", "달": "M"}
+MONTHS_PER_PERIOD = {"Y": 12, "H": 6, "Q": 3, "M": 1}
+
+# 상반기·하반기·"상·하반기": half of a year, not the word "반기" (which asks for half-year periods).
+HALF_OF_YEAR = re.compile(r"(?:상\s*[·ㆍ/,.]\s*하|상|하)\s*반기")
+# "월급", "월세", "월평균": the word 월 inside another word is not a monthly-frequency cue
+# (a digit before it -- "3월평균" -- still is one).
+WEAK_MONTH = re.compile(r"(?<!\d)(?<!\d )월\s?(?:급|세|평균|소득|급여|임금|수입|지출|정액|납입)")
+MONTH_CUE_PATTERN = re.compile(
+    r"\d\s*월|월\s*(?:별|간|마다|단위|기준|중|말|초|동안)|매\s*월|"
+    r"(?:어느|몇|한|매|최근|지난|이번|저번)\s*\d*\s*달(?!러)"
+)
+YEAR_CUE_PATTERN = re.compile(r"연간|연\s*도\s*별|년\s*도\s*별|연\s*별|매\s*년|해마다|연\s*단위|년\s*단위|연도\s*단위")
+
+_YEAR = r"((?:19|20)\d{2})"
+_SUB = r"(?:\s*(\d{1,2})\s*(월|분기|반기))?"
+EXPLICIT_END = re.compile(_YEAR + r"\s*년" + _SUB + r"\s*까지")
+OPEN_START = re.compile(_YEAR + r"\s*년" + _SUB + r"\s*(이후|부터)")
+# "현재까지", "최근까지": the end is "today", not a stated end.
+TODAY_END = re.compile(r"(?:현재|지금|최근|오늘|최신)\s*까지")
+
+# "1~3월", "3월", "2분기", "1~2분기", "상반기": the part of a year the question names.
+SUB_TOKEN = re.compile(
+    r"(?P<half>(?:상\s*[·ㆍ/,.]\s*하|상|하)\s*반기)"
+    r"|(?<!\d)(?P<a>\d{1,2})\s*(?:[~∼\-–—]\s*(?P<b>\d{1,2})\s*)?(?P<u>월|분기|반기)"
+)
+SUB_LIMIT = {"월": 12, "분기": 4, "반기": 2}
+SUB_MONTHS = {"월": 1, "분기": 3, "반기": 6}
+COMPARISON_AFTER = re.compile(r"\s*(?:대비|보다|에\s*비해|와\s*비교|과\s*비교|동기)")
+
+# Frequencies from the longest period to the shortest: the default when a question never says
+# which one it wants and the table offers several (the others are returned as alternatives).
+FREQUENCY_ORDER = ("Y", "H", "Q", "M")
+# kept for importers of the old name
+MONTH_CUE = r"(어느|몇|한|매|최근|지난)\s*\d*\s*달(?!러)"
+
+
+def _mask(pattern: re.Pattern, text: str) -> str:
+    return pattern.sub(lambda m: " " * len(m.group(0)), text)
+
+
+def _period_text(query: str) -> str:
+    """The question without count expressions ("최근 8분기") and index base years ("2020=100"),
+    same length as the original so positions still line up."""
+    return _mask(COUNT_PATTERN, _mask(BASE_YEAR_NOTATION, query))
+
+
+# "1분기", "2~3반기": a part of a year, not the frequency (the same as 상반기/하반기 below)
+DIGIT_PART = re.compile(r"\d{1,2}\s*(?:[~∼\-–—]\s*\d{1,2}\s*)?(?:분기|반기)")
+# "지난 분기", "이번 달": a calendar period asked for, which says the frequency only when nothing else does
+CLOSED_WORD = re.compile(r"(?:지난|이번|저번)\s*(?:분기|반기|달(?!러)|해)")
+
+
+def _cue_in(text: str) -> str | None:
+    if "반기" in text:
+        return "H"
+    if "분기" in text:
+        return "Q"
+    if MONTH_CUE_PATTERN.search(text):
+        return "M"
+    if YEAR_CUE_PATTERN.search(text):
+        return "Y"
+    return None
+
+
+def _frequency_cue(query: str) -> tuple[str | None, bool]:
+    """The frequency the wording itself names (None when it names none), and whether it mentions
+    상반기/하반기. A count ("최근 6개월") is a range, not a frequency, and neither is a named part of a
+    year ("2024년 1분기 월별" says 월별, "상반기 월별" says 월별), so those are left out here."""
+    text = COUNT_PATTERN.sub(" ", query)
+    half_of_year = HALF_OF_YEAR.search(text) is not None
+    text = WEAK_MONTH.sub(" ", DIGIT_PART.sub(" ", HALF_OF_YEAR.sub(" ", text)))
+    return _cue_in(CLOSED_WORD.sub(" ", text)) or _cue_in(text), half_of_year
+
+
 def infer_frequency(query: str, table: Json) -> str | None:
     """Best-effort frequency the query itself states, falling back to the
     table's own frequency when it reports only one (the query then has
     nothing to disambiguate -- "최근 10년간 ... 비교하는 막대그래프" never says
     "연도별", but a table with only annual data has no other reading)."""
-    if "반기" in query:
-        return "H"
-    if "분기" in query:
-        return "Q"
-    if "월" in query:
-        return "M"
-    if "연간" in query or "연도별" in query:
-        return "Y"
+    stated, half_of_year = _frequency_cue(query)
+    if stated is None and half_of_year and "H" in table["periods"]:
+        stated = "H"
+    if stated:
+        return stated
     if len(table["periods"]) == 1:
         return next(iter(table["periods"]))
     return None
 
 
-# Frequencies from the longest period to the shortest: the default when a question never says
-# which one it wants and the table offers several (the others are returned as alternatives).
-FREQUENCY_ORDER = ("Y", "H", "Q", "M")
-# "어느 달에", "몇 달", "한 달": a month cue without the word "월" ("달러" is not one).
-MONTH_CUE = r"(어느|몇|한|매|최근|지난)\s*\d*\s*달(?!러)"
+def _sub_tokens(text: str) -> list[tuple[int, int, int]]:
+    """(position, first month, last month) of every named part of a year in `text`."""
+    tokens = []
+    for m in SUB_TOKEN.finditer(text):
+        if m.group("half"):
+            label = re.sub(r"[\s·ㆍ/,.]", "", m.group("half"))
+            first, last = (1, 12) if label == "상하반기" else (1, 6) if label == "상반기" else (7, 12)
+            tokens.append((m.start(), first, last))
+            continue
+        unit = m.group("u")
+        a = int(m.group("a"))
+        b = int(m.group("b")) if m.group("b") else a
+        if not (1 <= a <= SUB_LIMIT[unit] and 1 <= b <= SUB_LIMIT[unit]) or b < a:
+            continue
+        step = SUB_MONTHS[unit]
+        tokens.append((m.start(), (a - 1) * step + 1, b * step))
+    return tokens
+
+
+def _month_tokens(num: str | None, unit: str | None) -> tuple[int, int] | None:
+    if not num or not unit:
+        return None
+    n = int(num)
+    if not 1 <= n <= SUB_LIMIT[unit]:
+        return None
+    step = SUB_MONTHS[unit]
+    return (n - 1) * step + 1, n * step
+
+
+def _slot(freq: str, year: int, month: int) -> int:
+    """Index of the period of `freq` that holds this calendar month."""
+    if freq == "Y":
+        return year
+    width = WIDTHS[freq]
+    return year * width + (month - 1) // (12 // width)
+
+
+def _start_slot(freq: str, year: int, month: int) -> int | None:
+    """Index of the period of `freq` that starts in this month; None when none does."""
+    return None if (month - 1) % MONTHS_PER_PERIOD[freq] else _slot(freq, year, month)
+
+
+def _end_slot(freq: str, year: int, month: int) -> int | None:
+    """Index of the period of `freq` that ends in this month; None when none does."""
+    return None if month % MONTHS_PER_PERIOD[freq] else _slot(freq, year, month)
+
+
+def _span_indices(freq: str, start: tuple[int, int], end: tuple[int, int]) -> tuple[int, int] | None:
+    """Period indices of `freq` covering exactly (year, month) .. (year, month); None when the span does
+    not start and end on period boundaries (a quarter cannot show "2월", a year cannot show a half)."""
+    first, last = _start_slot(freq, *start), _end_slot(freq, *end)
+    return None if first is None or last is None else (first, last)
+
+
+def _fits(freq: str, tokens: list[tuple[int, int, int]]) -> bool:
+    step = MONTHS_PER_PERIOD[freq]
+    return all((first - 1) % step == 0 and last % step == 0 for _pos, first, last in tokens)
 
 
 def decide_frequency(query: str, table: Json) -> tuple[str | None, list[str]]:
     """The frequency to answer in, plus the other frequencies the table could also show.
 
-    A frequency the question states wins ("연간", "분기별", "월별", "어느 달"). Otherwise a
+    A frequency the question states wins ("연간", "분기별", "월별", "어느 달", "최근 8분기"). Otherwise a
     table with one frequency has no other reading. When the question is silent and the table
     has several, the longest one is the default and the rest are alternatives (the caller
-    prepares them so the user can switch without another model call).
+    prepares them so the user can switch without another model call). A named part of a year
+    ("상반기", "1~3월") narrows the default to the frequencies that can show exactly that part.
     """
-    stated = None
-    if "반기" in query:
+    stated, half_of_year = _frequency_cue(query)
+    if stated is None and half_of_year and "H" in table["periods"]:
         stated = "H"
-    elif "분기" in query:
-        stated = "Q"
-    elif "월" in query or re.search(MONTH_CUE, query):
-        stated = "M"
-    elif "연간" in query or "연도별" in query:
-        stated = "Y"
+    if stated is None:
+        count = COUNT_PATTERN.search(query)
+        if count:
+            unit_freq = UNIT_FREQUENCY[count.group(3) or count.group(4)]
+            # "최근 8분기" names quarters; "최근 3년" names a range only (the default stays as before)
+            if unit_freq != "Y" and unit_freq in table["periods"]:
+                stated = unit_freq
     if stated:
         return stated, []
     available = [f for f in FREQUENCY_ORDER if f in table["periods"]]
+    tokens = _sub_tokens(_period_text(query))
+    if tokens:
+        fitting = [f for f in available if _fits(f, tokens)]
+        if fitting:
+            available = fitting
     if len(available) == 1:
         return available[0], []
     if not available:
@@ -376,45 +492,158 @@ def _as_of_period(as_of: str, freq: str) -> str:
     return f"{year}{month:02d}"
 
 
+def _last_month(period: str, freq: str) -> tuple[int, int]:
+    """(year, month) in which a period of `freq` ends."""
+    year = int(period[:4])
+    if freq == "Y":
+        return year, 12
+    return year, int(period[4:6]) * MONTHS_PER_PERIOD[freq]
+
+
+def _stated_open_start(query: str) -> tuple[int, tuple[int, int] | None, str] | None:
+    """(year, named month span, "이후" or "부터") when the question asks "2020년부터"/"2020년 3월 이후": a start with
+    no stated end. None when it has an end ("2020년부터 2024년까지", "1월부터 6월까지") or is not one."""
+    text = _period_text(query)
+    match = OPEN_START.search(text)
+    if not match:
+        return None
+    if match.group(4) == "부터":
+        if len(stated_years(query)) != 1 or "까지" in TODAY_END.sub(" ", text):
+            return None
+    return int(match.group(1)), _month_tokens(match.group(2), match.group(3)), match.group(4)
+
+
+def has_relative_words(query: str, table: Json | None = None) -> bool:
+    """The question uses relative-period wording ("최근/올해/현재 ..."), not a value name that contains it.
+
+    "현재 생활형편CSI"의 "현재"는 소비자동향조사의 지표 이름이므로, 표의 값 이름에 들어 있는 낱말은
+    (띄어쓰기가 달라도) 질문에서 지우고 본다. "2020년부터"처럼 끝을 말하지 않은 열린 기간도
+    표의 최신 시점을 끝으로 삼아야 하므로 상대 기간 표현으로 본다.
+    """
+    text = query
+    if table is not None:
+        names: set[str] = set()
+        for dimension in table.get("dimensions", {}).values():
+            for value in dimension.get("values", {}).values():
+                name = core_name(value.get("name", ""))
+                if len(name) >= 4 and re.search(RELATIVE_WORD_LIST, name):
+                    names.add(name)
+                    stem = re.sub(r"[A-Za-z]+$", "", name)
+                    if len(stem) >= 4:
+                        names.add(stem)
+        for name in sorted(names, key=len, reverse=True):
+            text = re.sub(r"\s*".join(re.escape(ch) for ch in name), " ", text)
+    return re.search(RELATIVE_WORDS, text) is not None or _stated_open_start(text) is not None
+
+
+# One calendar period named by a word: (label, pattern, unit, offset from the as-of period).
+CLOSED_PERIODS = (
+    ("작년", r"작년", "year", -1),
+    ("지난해", r"지난\s*해|지난\s*년도", "year", -1),
+    ("지난 반기", r"지난\s*반기", "half", -1),
+    ("이번 반기", r"이번\s*반기", "half", 0),
+    ("지난 분기", r"지난\s*분기", "quarter", -1),
+    ("이번 분기", r"이번\s*분기", "quarter", 0),
+    ("지난달", r"지난\s*달(?!러)|저번\s*달", "month", -1),
+    ("이번 달", r"이번\s*달(?!러)", "month", 0),
+)
+THIS_YEAR = r"올해|금년|이번\s*해|이번\s*년도?"
+UNIT_MONTHS_SPAN = {"year": 12, "half": 6, "quarter": 3, "month": 1}
+
+
+def _unit_window(unit: str, year: int, month: int) -> tuple[tuple[int, int], tuple[int, int]]:
+    """(first, last) (year, month) of the calendar year / half / quarter / month holding (year, month)."""
+    size = UNIT_MONTHS_SPAN[unit]
+    first = (month - 1) // size * size + 1
+    return (year, first), (year, first + size - 1)
+
+
+def _shift_unit(unit: str, year: int, month: int, offset: int) -> tuple[int, int]:
+    size = UNIT_MONTHS_SPAN[unit]
+    slot = year * (12 // size) + (month - 1) // size + offset
+    year, sub = divmod(slot, 12 // size)
+    return year, sub * size + 1
+
+
+def _describe_window(first: tuple[int, int], last: tuple[int, int]) -> str:
+    """"2025년", "2026년 하반기", "2026년 3분기", "2026년 9월", "2025년 3~8월" for a span inside one year."""
+    year, month = first
+    size = last[1] - month + 1
+    if size == 12:
+        return f"{year}년"
+    if size == 6 and month in (1, 7):
+        return f"{year}년 {'상' if month == 1 else '하'}반기"
+    if size == 3 and (month - 1) % 3 == 0:
+        return f"{year}년 {(month - 1) // 3 + 1}분기"
+    if size == 1:
+        return f"{year}년 {month}월"
+    return f"{year}년 {month}~{last[1]}월"
+
+
+def _closed_period(query: str, as_of: str) -> tuple[str, str, tuple[int, int], tuple[int, int], bool] | None:
+    """The one calendar period a word such as 작년, 지난달, 지난 분기, 이번 달 names, as
+    (label, unit, first (year, month), last (year, month), part named) -- `part named` is True when the
+    question narrows 작년 to a part of that year ("작년 3분기"); None when no such word is in the question.
+
+    Raises conditions_incomplete when the question names two different ones, or only names one as the
+    baseline of a comparison ("지난달보다") -- that is not the period being asked for.
+    """
+    text = _period_text(query)
+    found = []
+    for label, pattern, unit, offset in CLOSED_PERIODS:
+        for match in re.finditer(pattern, text):
+            if unit != "year" and COMPARISON_AFTER.match(text, match.end()):
+                continue
+            found.append((match.start(), match.end(), label, unit, offset))
+    if not found:
+        return None
+    if len({(unit, offset) for _s, _e, _l, unit, offset in found}) > 1:
+        raise StageFailure("conditions_incomplete", "unresolved")
+    pos, end, label, unit, offset = found[0]
+    as_of_year, as_of_month = int(as_of[:4]), int(as_of[5:7])
+    year, month = _shift_unit(unit, as_of_year, as_of_month, offset)
+    first, last = _unit_window(unit, year, month)
+    part = False
+    if unit == "year":
+        # "작년 3분기", "지난해 1~3월": the named part of that year
+        tokens = [t for t in _sub_tokens(text) if t[0] >= end]
+        if tokens:
+            first, last, part = (year, tokens[0][1]), (year, tokens[-1][2]), True
+    return label, unit, first, last, part
+
+
 def resolve_relative_period(
     query: str, table: Json, config: Config, freq: str | None = None
 ) -> Json:
-    """Deterministically resolves "최근/이후/올해/작년" wording against the
+    """Deterministically resolves "최근 N / ...부터 / 올해 / 작년 / 지난달" wording against the
     table's own metadata coverage -- in code, never left to the model.
 
-    Returns {"status": "resolved", "period": {...}} when the table's latest
-    recorded period already covers what "오늘(as_of)" would literally imply,
-    or {"status": "needs_confirmation", "code", "result"} carrying the
-    resolved period and a user-facing notice when the table's actual coverage
-    lags behind that (BOK tables routinely lag by weeks to months, so this is
-    the common case, not an edge case). Flow (team decision 2026-10-06): the
-    caller (BSteps.context) stores this as a period notice and CONTINUES with
-    the resolved period to selection and fetch; the notice only informs the
-    user which period is actually available and never asks whether to go on.
+    Returns {"status": "resolved", "period": {...}} when the table covers what the wording asks
+    for, or {"status": "needs_confirmation", "code", "result"} carrying the resolved period and a
+    user-facing notice when the table's coverage lags behind that (BOK tables routinely lag by weeks
+    to months, so this is the common case, not an edge case). Flow (team decision 2026-10-06): the
+    caller (BSteps.context) stores this as a period notice and CONTINUES with the resolved period to
+    selection and fetch; the notice only informs the user which period is actually available and never
+    asks whether to go on.
 
-    Every branch below computes its intended start relative to the table's
-    own anchor (`anchor_idx`/`anchor_year`, derived from the table's actual
-    latest recorded period) -- never from `config.as_of` -- so that "오늘"
-    always means "today, as far as this table's own data goes," the same
-    policy decision the team made 2026-10-01 for "최근 N년"/"YYYY년 이후"
-    (see the comment on the "최근 N" branch below) and extended 2026-10-02
-    to "올해"/"작년" for the same reason: an anchor computed from
-    config.as_of would ask for periods no table can ever have (annual
-    tables cannot have data for the as_of year until that year ends), which
-    these two branches used to do, and which was never a data problem to
-    report -- it was this function asking for the wrong thing. Because
-    every branch's start is now anchor-relative, start_idx can never exceed
-    anchor_idx by construction, so the StageFailure below is now unreachable
-    from any of them; it stays in place only as a safety net for a future
-    branch that might not maintain that invariant. `config.as_of` is still
-    used, further down, purely to phrase the user-facing confirmation
-    message ("today's real period is X, but this table only has Y") -- it
-    never again decides which period is actually returned.
+    Two kinds of wording, two anchors:
 
-    Raises StageFailure("conditions_incomplete", "unresolved") for wording
-    this function does not confidently parse (bare "지금/현재/최신", or "지난"
-    with no attached count) -- same fail-closed behavior as before, just
-    narrower: only wording it cannot resolve is refused, not all of it.
+    * Open-ended ("최근 N", "YYYY년 이후/부터", "올해/금년") count back from / run up to the table's own
+      latest recorded period (`anchor_idx`), never from `config.as_of` -- "today, as far as this table's
+      own data goes" (team decisions 2026-10-01 / 2026-10-02). "2025년까지 최근 3년" ends at the stated
+      end (or the table's latest period when that comes first).
+    * One closed calendar period ("작년", "지난해", "지난달", "지난 분기", "지난 반기", "이번 달/분기/반기")
+      is a fixed span of the as-of calendar (team decision 2026-11-02; before that "작년" was the year
+      before the TABLE's latest year, which gave 2024 for an annual table ending 2025 when 작년 is 2025).
+      Part of it beyond the table's end or before its start is cut off with a notice; a period entirely
+      after the table's end is replaced by the same kind of period that holds the table's latest
+      period, with a notice. A period entirely before the table's start stops (metadata_refresh_required).
+
+    A count of months/quarters/years that does not divide into whole periods of the frequency
+    ("최근 5개월 분기별") is refused, not approximated.
+
+    Raises StageFailure("conditions_incomplete", "unresolved") for wording this function does not
+    confidently parse (bare "지금/현재/최신/최근", or "지난" with no attached count or period).
     """
     if freq is None:
         freq, _alternatives = decide_frequency(query, table)
@@ -424,110 +653,140 @@ def resolve_relative_period(
     anchor_idx = period_number(bounds["end"], freq)
     anchor_year = int(bounds["end"][:4])
     coverage_start_idx = period_number(bounds["start"], freq)
+    literal_end = _as_of_period(config.as_of, freq)
 
-    is_last_year = False
-    count_match = re.search(r"(최근|지난)\s*(\d+)\s*(년|개월|달|분기|반기)", query)
-    year_match = re.search(r"((?:19|20)\d{2})년\s*이후", query)
+    text = _period_text(query)
+    note: str | None = None  # notice text of the branches that word their own
+    truncated = False
+    lag_check = True  # open-ended "up to today": a table older than as_of is worth a notice
+    requested = literal_end
+    count_match = COUNT_PATTERN.search(query)
+    open_start = _stated_open_start(query)
     if count_match:
         n = int(count_match.group(2))
-        unit = count_match.group(3)
-        per_unit = {
-            "Y": {"년": 1},
-            "H": {"년": 2, "반기": 1},
-            "Q": {"년": 4, "분기": 1},
-            "M": {"년": 12, "개월": 1, "달": 1},
-        }.get(freq, {})
-        if unit not in per_unit:
+        unit = count_match.group(3) or count_match.group(4)
+        months = n * COUNT_UNIT_MONTHS[unit]
+        # "최근 N년/분기/반기/개월"은 주기(Y/H/Q/M)와 단위에 관계없이 모두 같은 규칙임: 표가 실제로
+        # 가진 최신 기간(앵커)을 포함해 거꾸로 N개 기간만큼 센다(슬라이딩 윈도우). "5년치 반기"=10개,
+        # "5년치 분기"=20개, "5년치 월"=60개, "6개월 분기별"=2개. 예외 규칙을 두지 않는 것이 팀 결정임
+        # (2026-10-06 반기·분기 통일, golden_set_v1_axis3_*가 모든 주기에서 고정). 주기 단위로
+        # 나누어떨어지지 않으면(5개월 분기별) 근사하지 않고 중단함.
+        if n <= 0 or months % MONTHS_PER_PERIOD[freq]:
             raise StageFailure("conditions_incomplete", "unresolved")
-        # "최근 N년/분기/반기/개월"은 주기(Y/H/Q/M)와 단위에 관계없이 모두 같은
-        # 규칙임: 표가 실제로 가진 최신 기간(앵커)을 포함해 거꾸로 N*주기당
-        # 개수만큼 센다(슬라이딩 윈도우). "5년치 반기"=10개, "5년치 분기"=20개,
-        # "5년치 월"=60개. 예외 규칙을 두지 않는 것이 팀 결정임.
-        #   - 2026-10-06 반기(H): count-back으로 확정.
-        #   - 2026-10-06 분기(Q): 기존의 달력 연도 정렬 예외(앵커 연도-N의 1분기부터,
-        #     golden CV-AB-12 단일 사례 기반, 2026-10 결정)를 폐지하고 같은 규칙으로
-        #     통일. CV-AB-12 골든 기대 기간도 202101→202103으로 정정함.
-        # 이용자가 기대한 기간(as_of)의 데이터가 아직 없으면 아래
-        # needs_confirmation 단계에서 그 사실을 알림.
-        # golden_set_v1_axis3_*가 모든 주기에서 이 규칙을 고정함.
-        start_idx = anchor_idx - (n * per_unit[unit] - 1)
-    elif year_match:
-        start_idx = period_number(_year_start(freq, int(year_match.group(1))), freq)
-    elif "올해" in query:
-        # anchor_year(표의 실제 최신 수록 연도) 기준 -- config.as_of 기준으로
-        # 계산하면 당장 다가온 해의 데이터가 아직 없는 표(연간 표는 전부가
-        # 그렇다)에서 매번 StageFailure로 막혀버렸던 문제를 "작년"과 동일한
-        # 완만한 처리(필요시 needs_confirmation)로 바꾼 것(팀 결정, 2026-10-02).
+        count = months // MONTHS_PER_PERIOD[freq]
+        end_idx = anchor_idx
+        stated_end = EXPLICIT_END.search(text)
+        if stated_end:
+            # "2025년까지 최근 3년": the end is the stated one (the table's latest period if that is earlier)
+            year = int(stated_end.group(1))
+            span = _month_tokens(stated_end.group(2), stated_end.group(3))
+            last_month = span[1] if span else 12
+            wanted_end = _end_slot(freq, year, last_month)
+            if wanted_end is None:
+                raise StageFailure("conditions_incomplete", "unresolved")
+            lag_check = False
+            requested = _index_to_period(wanted_end, freq)
+            if wanted_end < coverage_start_idx:
+                raise StageFailure("metadata_refresh_required", "unresolved")
+            if wanted_end > anchor_idx:
+                truncated = True
+                note = (
+                    f"요청하신 끝({requested})이 표의 최신 수록 시점({bounds['end']})보다 뒤여서 "
+                    "조회 가능한 기간으로 자료를 조회합니다."
+                )
+            else:
+                end_idx = wanted_end
+        start_idx = end_idx - (count - 1)
+    elif open_start:
+        year, span, kind = open_start
+        first_month = span[0] if span else 1
+        start_idx = _start_slot(freq, year, first_month)
+        if start_idx is None:
+            raise StageFailure("conditions_incomplete", "unresolved")
+        if kind == "부터":
+            # "2020년부터 ... 전년 대비": the comparison needs the periods before the stated start too
+            # ("이후" never did, and "전년동기비" in an indicator name must not start it earlier)
+            start_idx -= detect_baseline_extension(query, freq)
+        end_idx = anchor_idx
+    elif re.search(THIS_YEAR, text):
+        # anchor_year(표의 실제 최신 수록 연도) 기준 -- config.as_of 기준으로 계산하면 당장 다가온 해의
+        # 데이터가 아직 없는 표(연간 표는 전부가 그렇다)에서 매번 막혀버렸던 문제를 완만한 처리로
+        # 바꾼 것(팀 결정, 2026-10-02).
         start_idx = period_number(_year_start(freq, anchor_year), freq)
-    elif "작년" in query:
-        is_last_year = True
-        start_idx = period_number(_year_start(freq, anchor_year - 1), freq)
+        end_idx = anchor_idx
     else:
-        raise StageFailure("conditions_incomplete", "unresolved")
+        closed = _closed_period(query, config.as_of)
+        if closed is None:
+            raise StageFailure("conditions_incomplete", "unresolved")
+        label, unit, first, last, part = closed
+        lag_check = False
+        wanted = _span_indices(freq, first, last)
+        if wanted is None:
+            raise StageFailure("conditions_incomplete", "unresolved")
+        wanted_start, wanted_end = wanted
+        requested = _index_to_period(wanted_end, freq)
+        what = _describe_window(first, last)
+        if wanted_end < coverage_start_idx:
+            raise StageFailure("metadata_refresh_required", "unresolved")
+        if wanted_start > anchor_idx and part:
+            raise StageFailure("metadata_refresh_required", "unresolved")
+        if wanted_start > anchor_idx:
+            # nothing of it is in the table yet: the same kind of period that holds the table's latest one
+            anchor_first, anchor_last = _unit_window(unit, *_last_month(bounds["end"], freq))
+            window = _span_indices(freq, anchor_first, anchor_last)
+            if window is None:
+                raise StageFailure("conditions_incomplete", "unresolved")
+            start_idx, end_idx = window[0], min(window[1], anchor_idx)
+            truncated = True
+            note = (
+                f"{label}({what})에 해당하는 자료가 표에 아직 없어 "
+                f"표의 최신 수록 시점({bounds['end']}) 기준으로 조회합니다."
+            )
+        else:
+            start_idx, end_idx = wanted_start, min(wanted_end, anchor_idx)
+            if wanted_end > anchor_idx:
+                truncated = True
+                note = (
+                    f"{label}({what}) 전체 기간 중 일부가 표에 아직 없어 "
+                    "조회 가능한 기간으로 자료를 조회합니다."
+                )
 
     if start_idx > anchor_idx:
         raise StageFailure("metadata_refresh_required", "unresolved")
     clamped = start_idx < coverage_start_idx
     if clamped:
         start_idx = coverage_start_idx
-    # "작년" names one closed, already-finished calendar year -- unlike
-    # "최근 N년"/"...이후"/"올해" (all open-ended "up through today"
-    # requests, for which the table's own latest period IS the right end),
-    # "작년"'s end must stop at that past year's own year-end, not run on
-    # into whatever later period the table happens to have reached since.
-    # Discovered 2026-10-02 while wiring the augmented golden cases: the
-    # pre-existing code used bounds["end"] unconditionally for every
-    # branch, which happened to never get exercised for "작년" until this
-    # round added real cases for it. Gated on the `is_last_year` flag set
-    # only by the "작년" branch above -- never by re-testing the raw query
-    # string here, so a query that merely contains "작년" as a substring
-    # but was actually routed through a different branch (e.g. a stated
-    # "최근 N년" count or an explicit "YYYY년 이후") keeps that branch's own
-    # open-ended-to-now end.
-    end_idx = (
-        min(period_number(_year_end(freq, anchor_year - 1), freq), anchor_idx)
-        if is_last_year
-        else anchor_idx
-    )
     resolved = {
         "frequency": freq,
         "start": _index_to_period(start_idx, freq),
         "end": _index_to_period(end_idx, freq),
     }
 
-    literal_end = _as_of_period(config.as_of, freq)
-    # "작년" doesn't care how far behind "today" the table's own freshness
-    # is -- it asked for a specific past, closed year, and that request is
-    # already fully (and unambiguously) satisfied unless the table's
-    # coverage doesn't even reach back that far (`clamped`). So unlike
-    # every open-ended-to-now branch above, a lag between as_of and the
-    # table's latest period is not, by itself, a reason to stop and ask.
-    needs_confirmation = clamped or (not is_last_year and literal_end != bounds["end"])
+    # a closed or stated-end request is already fully satisfied unless the table cannot reach it; a
+    # lag between as_of and the table's latest period is not, by itself, a reason to say anything
+    needs_confirmation = clamped or truncated or (lag_check and literal_end != bounds["end"])
     if needs_confirmation:
         # 2026-10-06 flow 변경(팀 결정): 안내만 하고 조회 단계로 계속 진행함.
         # 이용자에게 진행 여부를 묻지 않으므로 메시지는 질문형이 아닌 안내문임.
-        span = f"조회 기간: {resolved['start']} ~ {resolved['end']}"
-        if is_last_year:
-            message = (
-                f"작년({anchor_year - 1}년) 전체 기간 중 일부가 표에 아직 없어 "
-                f"조회 가능한 기간으로 자료를 조회합니다.\n{span}"
-            )
-        elif literal_end != bounds["end"]:
+        span_text = f"조회 기간: {resolved['start']} ~ {resolved['end']}"
+        if note is not None:
+            message = f"{note}\n{span_text}"
+        elif lag_check and literal_end != bounds["end"]:
             message = (
                 f"요청하신 기준(as_of={config.as_of})으로는 {literal_end}까지 필요하지만, "
                 f"표의 최신 수록 시점은 {bounds['end']}입니다. "
-                f"조회 가능한 기간으로 자료를 조회합니다.\n{span}"
+                f"조회 가능한 기간으로 자료를 조회합니다.\n{span_text}"
             )
         else:
             message = (
                 "요청하신 기간 중 일부가 표에 수록되어 있지 않아 "
-                f"조회 가능한 기간으로 자료를 조회합니다.\n{span}"
+                f"조회 가능한 기간으로 자료를 조회합니다.\n{span_text}"
             )
         return {
             "status": "needs_confirmation",
             "code": "period_requires_confirmation",
             "result": {
-                "requested_as_of_period": literal_end,
+                "requested_as_of_period": requested,
                 "resolved_period": resolved,
                 "message": message,
             },
@@ -547,34 +806,58 @@ def detect_baseline_extension(query: str, freq: str) -> int:
     return 0
 
 
+def _explicit_span(query: str, freq: str) -> tuple[int, int] | None:
+    """(first, last) period index of `freq` for the years (and parts of a year) the question states,
+    None when it states no year or names a part the frequency cannot show exactly.
+
+    A part of a year belongs to the year written before it: "2008년 1분기부터 2024년 4분기까지" -> 2008 Q1 ..
+    2024 Q4; "2023년 2월부터 2024년까지" -> 2023-02 .. 2024-12; "2024년 1분기 월별" -> 202401 .. 202403.
+    """
+    text = _period_text(query)
+    years = [(m.start(), int(m.group(1))) for m in re.finditer(r"(?<!\d)((?:19|20)\d{2})(?!\d)", text)]
+    if not years:
+        return None
+    parts: list[list[tuple[int, int]]] = [[] for _ in years]
+    for pos, first, last in _sub_tokens(text):
+        owner = max((i for i, (p, _y) in enumerate(years) if p < pos), default=0)
+        parts[owner].append((first, last))
+    first_year, last_year = years[0][1], years[-1][1]
+    if len(years) == 1:
+        first_month = parts[0][0][0] if parts[0] else 1
+        last_month = parts[0][-1][1] if parts[0] else 12
+    else:
+        first_month = parts[0][0][0] if parts[0] else 1
+        last_month = parts[-1][-1][1] if parts[-1] else 12
+    return _span_indices(freq, (first_year, first_month), (last_year, last_month))
+
+
 def resolve_explicit_period(query: str, table: Json, freq: str | None) -> Json | None:
     """The period a question with stated years asks for, computed in code like a relative one.
 
     "2008년 1분기부터 2024년 4분기까지" -> 200801~202404; "2024년 ... 월별" -> 202401~202412;
-    a comparison wording ("전년보다", "가장 크게 변했는지") starts earlier by the periods the
-    calculation needs. Returns None when the question has no stated year, still has relative
-    wording (that goes through resolve_relative_period) or the frequency is not in the table;
-    the model's own period and `validate_period` then decide as before. A period outside the
-    table's coverage raises the same error `validate_period` gives.
+    "2024년 1~3월" -> 202401~202403; a comparison wording ("전년보다", "가장 크게 변했는지") starts
+    earlier by the periods the calculation needs. Returns None when the question has no stated year,
+    still has relative wording (that goes through resolve_relative_period) or the frequency is not in
+    the table; the model's own period and `validate_period` then decide as before. A period outside
+    the table's coverage raises the same error `validate_period` gives, and a named part of a year the
+    frequency cannot show exactly ("2024년 상반기 연간") is refused rather than widened.
     """
     if freq is None or freq not in table["periods"] or has_relative_words(query, table):
         return None
-    years = stated_years(query)
-    if not years:
+    if not stated_years(query):
         return None
-    if freq == "Y":
-        start, end = years[0], years[-1]
-    else:
-        suffix = {"Q": "분기", "M": "월", "H": "반기"}[freq]
-        default_end = {"Q": "04", "M": "12", "H": "02"}[freq]
-        parts = re.findall(r"(?<!\d)(\d{1,2})\s*" + suffix, query)
-        start_sub = f"{int(parts[0]):02d}" if parts else "01"
-        end_sub = f"{int(parts[-1]):02d}" if parts else default_end
-        start, end = years[0] + start_sub, years[-1] + end_sub
+    span = _explicit_span(query, freq)
+    if span is None:
+        raise StageFailure("conditions_incomplete", "unresolved")
+    start_idx, end_idx = span
     extension = detect_baseline_extension(query, freq)
     if extension:
-        start = _index_to_period(period_number(start, freq) - extension, freq)
-    period = {"frequency": freq, "start": start, "end": end}
+        start_idx -= extension
+    period = {
+        "frequency": freq,
+        "start": _index_to_period(start_idx, freq),
+        "end": _index_to_period(end_idx, freq),
+    }
     validate_period(period, table, query=None)
     return period
 
@@ -606,16 +889,7 @@ def validate_period(
     if requested and freq != requested:
         raise StageFailure("explicit_frequency_mismatch")
     if freq in {"Q", "M", "H"} and not baseline_extension:
-        suffix = {"Q": "분기", "M": "월", "H": "반기"}[freq]
-        default_end = {"Q": "04", "M": "12", "H": "02"}[freq]
-        parts = re.findall(r"(?<!\d)(\d{1,2})\s*" + suffix, query)
-        if parts:
-            expected_start = f"{int(parts[0]):02d}"
-            expected_end = f"{int(parts[-1]):02d}"
-        else:
-            expected_start = "01"
-            expected_end = default_end
-        if start[4:] != expected_start or end[4:] != expected_end:
+        if _explicit_span(query, freq) != (a, b):
             raise StageFailure("explicit_period_mismatch")
 
 
