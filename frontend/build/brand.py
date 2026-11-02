@@ -32,7 +32,9 @@ def sprite():
 
 
 def logo_markup(view_box):
-    return (f'<svg class="brand-logo" viewBox="{view_box}" role="img" aria-label="ClaView">'
+    # <use>는 symbol을 바깥 svg의 (0,0)부터 채운다. 바깥 viewBox를 symbol과 같은 원점으로 두면 위·왼쪽이 잘리므로 0 0 폭 높이로 둔다.
+    _, _, width, height = view_box.split()
+    return (f'<svg class="brand-logo" viewBox="0 0 {width} {height}" role="img" aria-label="ClaView">'
             '<use href="#cv-logo"/></svg>')
 
 
