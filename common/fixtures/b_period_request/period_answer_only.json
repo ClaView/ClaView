@@ -1,0 +1,42 @@
+{
+ "query": "합성 예시 지표를 월별로 보여줘",
+ "tables": [
+  {
+   "org_id": "DEMO",
+   "table_id": "DEMO_PERIOD_ONLY",
+   "table_name": "합성 계약 예시표",
+   "focus": "합성 예시 지표",
+   "period_condition": {
+    "frequency": "M",
+    "frequency_source": "question",
+    "period": [
+     {
+      "start": "2024-01",
+      "end": "2024-12"
+     }
+    ],
+    "period_source": "user_answer",
+    "statistics": [
+     "s1"
+    ],
+    "period_phrase": "2024년",
+    "latest_unpublished": null,
+    "answers": [
+     {
+      "kind": "period",
+      "question_id": "synthetic:period:s1",
+      "question_version": 1,
+      "statistics": [
+       "s1"
+      ],
+      "option_id": null,
+      "value": "2024년",
+      "text": "2024년",
+      "source": "user_answer"
+     }
+    ]
+   }
+  }
+ ],
+ "as_of": "2025-01-31"
+}

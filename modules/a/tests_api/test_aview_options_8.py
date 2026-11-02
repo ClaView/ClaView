@@ -24,4 +24,4 @@ def test_a_basis_chosen_by_the_five_conditions_is_shown_in_its_own_words():
                         state="selected", verified=True,
                         auto_decided=[{"axis": "seasonal", "value": "원계열", "message": msg}])
     assert row.model_dump()["auto_decided"][0]["message"] == msg
-    assert A_VIEW_VERSION == "a-view/2026-11-02.11"  # the current version (a wrong or rolled-back one fails)
+    assert A_VIEW_VERSION == "a-view/2026-11-02.12"  # the current version (a wrong or rolled-back one fails)

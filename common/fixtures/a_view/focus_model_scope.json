@@ -1,5 +1,5 @@
 {
-  "contract_version": "a-view/2026-11-02.11",
+  "contract_version": "a-view/2026-11-02.12",
   "session": {
     "session_id": "synthetic-focus",
     "question_version": 1,
@@ -74,7 +74,9 @@
         "period_answers": [],
         "assignments": [],
         "calculations": {},
-        "notes": []
+        "notes": [],
+        "b_request": null,
+        "b_request_issue": null
       }
     ],
     "blocked": []

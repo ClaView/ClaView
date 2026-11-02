@@ -125,6 +125,9 @@ def test_selected_statistic_runs_every_stage_with_focus(screen):
     assert call["query"] == M2
     assert call["tables"] == [{"org_id": call["tables"][0]["org_id"], "table_id": "DT_161Y014",
                                "table_name": call["tables"][0]["table_name"], "focus": "M2 통화량"}]
+    prepared = state["a_view"]["handoff"]["ready"][0]["b_request"]
+    assert prepared["tables"][0]["period_condition"]["period_source"] == "quoted"
+    assert all("period_condition" not in table for table in call["tables"])
     assert {c["tableId"] for c in state["ui_cases"]} == {"DT_161Y014"}
 
 

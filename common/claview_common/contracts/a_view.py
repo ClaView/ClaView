@@ -14,7 +14,10 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-A_VIEW_VERSION = "a-view/2026-11-02.11"  # .2: A's assignments per request, notes, warning details kept
+from .b import BRequest
+
+A_VIEW_VERSION = "a-view/2026-11-02.12"  # .2: A's assignments per request, notes, warning details kept
+# .12: a validated B period-condition request is prepared separately from legacy tables. It does not enable B.
 # .11: the provenance of A's table-local focus, distinct from its unchanged statistic quote. Quote grounding
 # confirms source presence, not the semantic adequacy of the model's scope. B's table fields do not change.
 # .3: each final table's catalog range and latest unpublished months, the run's period policy (plan 56 order 4)
@@ -212,6 +215,9 @@ class HandoffRequest(_Model):
     assignments: list[Assignment] = Field(default_factory=list)
     calculations: dict[str, list[str]] = Field(default_factory=dict)
     notes: list[Reason] = Field(default_factory=list)  # what the B contract cannot carry, without blocking
+    # Prepared for a receiver that explicitly supports period conditions; legacy tables remain unchanged.
+    b_request: BRequest | None = None
+    b_request_issue: str | None = None
 
 
 class Blocked(_Model):
