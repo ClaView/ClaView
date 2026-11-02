@@ -1,0 +1,1783 @@
+{
+ "about": "Plan 56 6-2c: the confirmed polarity answers of the counterexample sentences (user 2026-10-31 20:25 UTC), copied from the confirmed file; polarity only, not every condition of a question. Sentences 70 (incomplete input) and 103 (single answer held) are left out.",
+ "source": "극성정답_확정.json",
+ "source_sha256": "5a171a4168f1b09a2999e3e48df565d158d7daee9bdfd657b1e7fdab228fe1cf",
+ "rows": [
+  {
+   "no": 1,
+   "text": "계절조정은 제외하지 말고 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 제외하지 말고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 2,
+   "text": "계절조정은 빼지 말고 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 빼지 말고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 3,
+   "text": "계절조정은 제외하지 않고 원계열과 함께 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 제외하지 않고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열과 함께"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 4,
+   "text": "명목은 빼지 않고 실질과 함께 보여줘",
+   "values": [
+    {
+     "axis": "price",
+     "value": "명목",
+     "polarity": "required",
+     "quote": "명목은 빼지 않고"
+    },
+    {
+     "axis": "price",
+     "value": "실질",
+     "polarity": "required",
+     "quote": "실질과 함께"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 5,
+   "text": "평잔은 제외하지는 말고 말잔과 함께 보여줘",
+   "values": [
+    {
+     "axis": "stock",
+     "value": "평잔",
+     "polarity": "required",
+     "quote": "평잔은 제외하지는 말고"
+    },
+    {
+     "axis": "stock",
+     "value": "말잔",
+     "polarity": "required",
+     "quote": "말잔과 함께"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 6,
+   "text": "계절조정도 빼지 말고 원계열과 함께 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도 빼지 말고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열과 함께"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 7,
+   "text": "광의통화를 보여줄 때 계절조정은 빼지 마",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 빼지 마"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 8,
+   "text": "계절조정을 제외할 필요는 없어",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "allowed",
+     "quote": "계절조정을 제외할 필요는 없어"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 9,
+   "text": "원계열과 계절조정 둘 다 제외 없이 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열과 계절조정 둘 다 제외 없이"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "원계열과 계절조정 둘 다 제외 없이"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 10,
+   "text": "원계열과 계절조정을 빠짐없이 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열과 계절조정을 빠짐없이"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "원계열과 계절조정을 빠짐없이"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 11,
+   "text": "계약통화도 안 빼고 원화기준과 함께 보여줘",
+   "values": [
+    {
+     "axis": "currency",
+     "value": "계약통화",
+     "polarity": "required",
+     "quote": "계약통화도 안 빼고"
+    },
+    {
+     "axis": "currency",
+     "value": "원화",
+     "polarity": "required",
+     "quote": "원화기준과 함께"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 12,
+   "text": "계절조정을 제외하고 원계열만 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정을 제외하고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열만"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 13,
+   "text": "명목을 빼고 실질만 보여줘",
+   "values": [
+    {
+     "axis": "price",
+     "value": "명목",
+     "polarity": "excluded",
+     "quote": "명목을 빼고"
+    },
+    {
+     "axis": "price",
+     "value": "실질",
+     "polarity": "required",
+     "quote": "실질만"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 14,
+   "text": "신규취급액을 제외한 잔액 기준 금리로 보여줘",
+   "values": [
+    {
+     "axis": "loan_basis",
+     "value": "신규취급액",
+     "polarity": "excluded",
+     "quote": "신규취급액을 제외한"
+    },
+    {
+     "axis": "loan_basis",
+     "value": "잔액기준",
+     "polarity": "required",
+     "quote": "잔액 기준 금리로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 15,
+   "text": "계절조정하지 않은 광의통화를 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정하지 않은"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 16,
+   "text": "계절조정하지 않고 원계열 그대로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정하지 않고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 그대로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 17,
+   "text": "실질 GDP를 계절조정하지 않은 값으로 보여줘",
+   "values": [
+    {
+     "axis": "price",
+     "value": "실질",
+     "polarity": "required",
+     "quote": "실질 GDP"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정하지 않은 값으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 18,
+   "text": "계절조정이 안 된 원계열 기준으로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정이 안 된"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 19,
+   "text": "명목이 아닌 실질 기준으로 보여줘",
+   "values": [
+    {
+     "axis": "price",
+     "value": "명목",
+     "polarity": "excluded",
+     "quote": "명목이 아닌"
+    },
+    {
+     "axis": "price",
+     "value": "실질",
+     "polarity": "required",
+     "quote": "실질 기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 20,
+   "text": "조세특례제한법 기준이 아닌 중소기업기본법 기준으로 보여줘",
+   "values": [
+    {
+     "axis": "size_law",
+     "value": "조세특례제한법",
+     "polarity": "excluded",
+     "quote": "조세특례제한법 기준이 아닌"
+    },
+    {
+     "axis": "size_law",
+     "value": "중소기업기본법",
+     "polarity": "required",
+     "quote": "중소기업기본법 기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 21,
+   "text": "말잔이 아니고 평잔으로 보여줘",
+   "values": [
+    {
+     "axis": "stock",
+     "value": "말잔",
+     "polarity": "excluded",
+     "quote": "말잔이 아니고"
+    },
+    {
+     "axis": "stock",
+     "value": "평잔",
+     "polarity": "required",
+     "quote": "평잔으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 22,
+   "text": "계절조정 계열은 아니고 원계열로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 계열은 아니고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 23,
+   "text": "광의통화를 보여주되 계절조정 값은 보고 싶지 않아",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 값은 보고 싶지 않아"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 24,
+   "text": "달러기준은 원하지 않아, 원화기준으로 보여줘",
+   "values": [
+    {
+     "axis": "currency",
+     "value": "달러",
+     "polarity": "excluded",
+     "quote": "달러기준은 원하지 않아"
+    },
+    {
+     "axis": "currency",
+     "value": "원화",
+     "polarity": "required",
+     "quote": "원화기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 25,
+   "text": "계절조정은 필요 없어, 원계열로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정은 필요 없어"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 26,
+   "text": "계절조정 없이 원계열로만 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 없이"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로만"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 27,
+   "text": "계절조정을 제외하고 싶지 않아",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정을 제외하고 싶지 않아"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 28,
+   "text": "전망은 제외하고 실적만 보여줘",
+   "values": [
+    {
+     "axis": "survey_view",
+     "value": "전망",
+     "polarity": "excluded",
+     "quote": "전망은 제외하고"
+    },
+    {
+     "axis": "survey_view",
+     "value": "실적",
+     "polarity": "required",
+     "quote": "실적만"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 29,
+   "text": "전월비는 빼고 전년동월비만 보여줘",
+   "values": [
+    {
+     "axis": "comparison",
+     "value": "전기비",
+     "polarity": "excluded",
+     "quote": "전월비는 빼고"
+    },
+    {
+     "axis": "comparison",
+     "value": "전년동기비",
+     "polarity": "required",
+     "quote": "전년동월비만"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 30,
+   "text": "원계열은 물론 계절조정도 제외하지 말고 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열은 물론"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도 제외하지 말고"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 31,
+   "text": "원계열을 상품별로 선그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 32,
+   "text": "원계열을 상품별로 표가 아니라 선그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 33,
+   "text": "원계열을 막대그래프 말고 선그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 34,
+   "text": "표 말고 그래프로 원계열 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 보여줘"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 35,
+   "text": "계절조정 계열을 표 대신 차트로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 계열을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 36,
+   "text": "원계열 수치를 표로 보여주지 말고 선그래프로 그려줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 수치를"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 37,
+   "text": "원계열로 보여주되 표로는 보여주지 않아도 돼",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로 보여주되"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 38,
+   "text": "계절조정 계열을 표로는 보고 싶지 않고 그래프로 보고 싶어",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 계열을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 39,
+   "text": "계절조정 값은 보고 싶지 않아, 원계열로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 값은 보고 싶지 않아"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 40,
+   "text": "광의통화 말잔을 상품별이 아니라 지역별로 보여줘",
+   "values": [
+    {
+     "axis": "stock",
+     "value": "말잔",
+     "polarity": "required",
+     "quote": "광의통화 말잔을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 41,
+   "text": "상품별이 아니라 지역별로 말잔을 보여줘",
+   "values": [
+    {
+     "axis": "stock",
+     "value": "말잔",
+     "polarity": "required",
+     "quote": "말잔을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 42,
+   "text": "실질 GDP를 연간이 아니라 분기별로 보여줘",
+   "values": [
+    {
+     "axis": "price",
+     "value": "실질",
+     "polarity": "required",
+     "quote": "실질 GDP를"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 43,
+   "text": "원화기준 수출액을 품목별이 아니라 용도별로 보여줘",
+   "values": [
+    {
+     "axis": "currency",
+     "value": "원화",
+     "polarity": "required",
+     "quote": "원화기준 수출액을"
+    },
+    {
+     "axis": "classification",
+     "value": "품목별",
+     "polarity": "excluded",
+     "quote": "품목별이 아니라"
+    },
+    {
+     "axis": "classification",
+     "value": "용도별",
+     "polarity": "required",
+     "quote": "용도별로"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 44,
+   "text": "신규취급액 기준 대출금리를 표 대신 선그래프로 보여줘",
+   "values": [
+    {
+     "axis": "loan_basis",
+     "value": "신규취급액",
+     "polarity": "required",
+     "quote": "신규취급액 기준 대출금리를"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 45,
+   "text": "표 대신 원계열 그래프를 상품별 말고 지역별로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 그래프를"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 46,
+   "text": "원계열뿐 아니라 계절조정도 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열뿐 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 47,
+   "text": "원계열만이 아니라 계절조정도 같이 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열만이 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도 같이"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 48,
+   "text": "명목만 아니라 실질도 보여줘",
+   "values": [
+    {
+     "axis": "price",
+     "value": "명목",
+     "polarity": "required",
+     "quote": "명목만 아니라"
+    },
+    {
+     "axis": "price",
+     "value": "실질",
+     "polarity": "required",
+     "quote": "실질도"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 49,
+   "text": "원계열 말고도 계절조정도 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 말고도"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 50,
+   "text": "원계열은 물론 계절조정도 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열은 물론"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 51,
+   "text": "말잔 대신 평잔으로 보여줘",
+   "values": [
+    {
+     "axis": "stock",
+     "value": "말잔",
+     "polarity": "excluded",
+     "quote": "말잔 대신"
+    },
+    {
+     "axis": "stock",
+     "value": "평잔",
+     "polarity": "required",
+     "quote": "평잔으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 52,
+   "text": "계절조정 말고 원계열로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 말고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 53,
+   "text": "계절조정 표가 아니라 원계열 표로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 표가 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 표로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 54,
+   "text": "계절조정표가 아니라 원계열표로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정표가 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열표로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 55,
+   "text": "계절조정 데이터가 아니라 원계열로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 데이터가 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 56,
+   "text": "원계열 그래프 말고 계절조정 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "excluded",
+     "quote": "원계열 그래프 말고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 그래프로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 57,
+   "text": "원계열 표가 아니라 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 표가 아니라"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 58,
+   "text": "원계열표가 아니라 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열표가 아니라"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 59,
+   "text": "달러기준 말고 원화기준으로, 표 대신 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "currency",
+     "value": "달러",
+     "polarity": "excluded",
+     "quote": "달러기준 말고"
+    },
+    {
+     "axis": "currency",
+     "value": "원화",
+     "polarity": "required",
+     "quote": "원화기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 60,
+   "text": "광의통화를 계절 조정 표가 아니라 원계열 표로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절 조정 표가 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 표로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 61,
+   "text": "광의통화를 계절조정 표가 아니라 원계열 표로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 표가 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 표로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 62,
+   "text": "광의통화를 계절조정 자료 말고 원계열 자료로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 자료 말고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 자료로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 63,
+   "text": "GDP를 실질 기준이 아닌 명목 기준으로 보여줘",
+   "values": [
+    {
+     "axis": "price",
+     "value": "실질",
+     "polarity": "excluded",
+     "quote": "실질 기준이 아닌"
+    },
+    {
+     "axis": "price",
+     "value": "명목",
+     "polarity": "required",
+     "quote": "명목 기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 64,
+   "text": "광의통화를 월말 잔액 자료가 아닌 평균 잔액 자료로 보여줘",
+   "values": [
+    {
+     "axis": "stock",
+     "value": "말잔",
+     "polarity": "excluded",
+     "quote": "월말 잔액 자료가 아닌"
+    },
+    {
+     "axis": "stock",
+     "value": "평잔",
+     "polarity": "required",
+     "quote": "평균 잔액 자료로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 65,
+   "text": "실업률을 계절조정된 계열이 아니라 원계열로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정된 계열이 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 66,
+   "text": "광의통화를 계절조정 데이터가 아니라 원계열 데이터를 막대 말고 선그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정 데이터가 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 데이터를"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 67,
+   "text": "소비자물가 상승률을 전년동기비 그래프가 아니라 전기비 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "comparison",
+     "value": "전년동기비",
+     "polarity": "excluded",
+     "quote": "전년동기비 그래프가 아니라"
+    },
+    {
+     "axis": "comparison",
+     "value": "전기비",
+     "polarity": "required",
+     "quote": "전기비 그래프로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 68,
+   "text": "실업률을 계절조정 표가 아니라 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 표가 아니라"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 69,
+   "text": "실업률을 계절조정표가 아니라 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정표가 아니라"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 71,
+   "text": "원계열을 상품별로 표가 아니라",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 72,
+   "text": "계절조정은 제외하지 말고",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 제외하지 말고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 73,
+   "text": "수출액을 원화나 달러화 말고 계약통화 기준으로 보여줘",
+   "values": [
+    {
+     "axis": "currency",
+     "value": "원화",
+     "polarity": "excluded",
+     "quote": "원화나 달러화 말고"
+    },
+    {
+     "axis": "currency",
+     "value": "달러",
+     "polarity": "excluded",
+     "quote": "원화나 달러화 말고"
+    },
+    {
+     "axis": "currency",
+     "value": "계약통화",
+     "polarity": "required",
+     "quote": "계약통화 기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 74,
+   "text": "광의통화 원계열뿐 아니라 계절조정도 같이 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열뿐 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도 같이"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 75,
+   "text": "원계열만이 아니라 계절조정 계열도 같이 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열만이 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 계열도 같이"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 76,
+   "text": "광의통화를 원계열 말고도 계절조정도 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 말고도"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 77,
+   "text": "계절조정만 아니면 되니까 원계열로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정만 아니면 되니까"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 78,
+   "text": "계절조정 계열의 고용률을 연령별로 합계는 빼고 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 계열의 고용률"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 79,
+   "text": "계절조정 계열을 지역별로 막대그래프 말고 선그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 계열을"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 80,
+   "text": "원계열로, 표가 아니라 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 81,
+   "text": "계절조정 값으로 보여줘. 원계열은 아니고.",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 값으로 보여줘"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "excluded",
+     "quote": "원계열은 아니고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 82,
+   "text": "실업률을 계절조정, 그건 빼고 원계열로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정, 그건 빼고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 83,
+   "text": "원계열로 보여줘. 아, 원계열 말고 계절조정으로",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "excluded",
+     "quote": "아, 원계열 말고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 84,
+   "text": "계절조정 표 말고 원계열 표로 보여주고, 계절조정은 그래프로도 같이 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열 표로"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 그래프로도 같이"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 85,
+   "text": "계절조정 계열을 지역별로 보는 건 아니고 전국 합계만 보고 싶어",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 계열을 지역별로 보는 건 아니고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 86,
+   "text": "GDP 성장률을 명목으로 말고 실질로 보여줘",
+   "values": [
+    {
+     "axis": "price",
+     "value": "명목",
+     "polarity": "excluded",
+     "quote": "명목으로 말고"
+    },
+    {
+     "axis": "price",
+     "value": "실질",
+     "polarity": "required",
+     "quote": "실질로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 87,
+   "text": "잔액 기준이 아니라 신규취급액 기준으로 대출금리를 보여줘",
+   "values": [
+    {
+     "axis": "loan_basis",
+     "value": "잔액기준",
+     "polarity": "excluded",
+     "quote": "잔액 기준이 아니라"
+    },
+    {
+     "axis": "loan_basis",
+     "value": "신규취급액",
+     "polarity": "required",
+     "quote": "신규취급액 기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 88,
+   "text": "광의통화를 말잔 기준이 아닌 평잔 기준으로 보여줘",
+   "values": [
+    {
+     "axis": "stock",
+     "value": "말잔",
+     "polarity": "excluded",
+     "quote": "말잔 기준이 아닌"
+    },
+    {
+     "axis": "stock",
+     "value": "평잔",
+     "polarity": "required",
+     "quote": "평잔 기준으로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 89,
+   "text": "실업률을 계절조정 표가 아니라 계절조정 그래프로 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 그래프로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 90,
+   "text": "계절조정은 없어도 괜찮아",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "allowed",
+     "quote": "계절조정은 없어도 괜찮아"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 91,
+   "text": "계절조정은 넣어도 되고 빼도 돼",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "allowed",
+     "quote": "계절조정은 넣어도 되고 빼도 돼"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 92,
+   "text": "계절조정은 제외하지 않아도 돼",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "allowed",
+     "quote": "계절조정은 제외하지 않아도 돼"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 93,
+   "text": "원계열뿐 아니라 계절조정도",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "required",
+     "quote": "원계열뿐 아니라"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정도"
+    }
+   ],
+   "all_required": true
+  },
+  {
+   "no": 94,
+   "text": "원화나 달러화로",
+   "values": [
+    {
+     "axis": "currency",
+     "value": "원화",
+     "polarity": "any_of",
+     "quote": "원화나 달러화로"
+    },
+    {
+     "axis": "currency",
+     "value": "달러",
+     "polarity": "any_of",
+     "quote": "원화나 달러화로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 95,
+   "text": "계절조정 없이는 안 돼",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 없이는 안 돼"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 96,
+   "text": "계절조정은 빼지 마",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 빼지 마"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 97,
+   "text": "계절조정은 빼지 말고",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 빼지 말고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 98,
+   "text": "계절조정은 빼지 않아도 된다",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "allowed",
+     "quote": "계절조정은 빼지 않아도 된다"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 99,
+   "text": "계절조정은 제외하지 마",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 제외하지 마"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 100,
+   "text": "계절조정은 제외하지 마세요",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 제외하지 마세요"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 101,
+   "text": "계절조정은 제외하지 마시고 보여주세요",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정은 제외하지 마시고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 102,
+   "text": "계절조정은 제외하지 않아도 괜찮아",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "allowed",
+     "quote": "계절조정은 제외하지 않아도 괜찮아"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 104,
+   "text": "계절조정을 제외하지 않아도 돼",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "allowed",
+     "quote": "계절조정을 제외하지 않아도 돼"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 105,
+   "text": "계절조정하지도 말고 그냥 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정하지도 말고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 106,
+   "text": "계절조정하지 말고 그냥 보여줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "excluded",
+     "quote": "계절조정하지 말고"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 107,
+   "text": "원계열 말고 계절조정 도표로",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "excluded",
+     "quote": "원계열 말고"
+    },
+    {
+     "axis": "seasonal",
+     "value": "계절조정",
+     "polarity": "required",
+     "quote": "계절조정 도표로"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 108,
+   "text": "원계열은 빼주세요",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "excluded",
+     "quote": "원계열은 빼주세요"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 109,
+   "text": "원계열은 빼 줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "excluded",
+     "quote": "원계열은 빼 줘"
+    }
+   ],
+   "all_required": false
+  },
+  {
+   "no": 110,
+   "text": "원계열은 빼줘",
+   "values": [
+    {
+     "axis": "seasonal",
+     "value": "원계열",
+     "polarity": "excluded",
+     "quote": "원계열은 빼줘"
+    }
+   ],
+   "all_required": false
+  }
+ ]
+}

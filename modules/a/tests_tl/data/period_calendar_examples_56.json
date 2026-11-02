@@ -1,0 +1,26 @@
+{
+ "about": "Policy ① example table (plan 56 order 4, bundle 3): what a quoted period reads as on the as_of calendar. Synthetic tables (M 2000-01~2026-08, Q 2000Q1~2026Q2, Y 2000~2025); as_of 2026-10-30. Shared as C1 discussion material; months are YYYY-MM, applied is the resolver's period in the table's frequency.",
+ "as_of": "2026-10-30",
+ "tables": {
+  "M": {"periods": {"M": {"start": "200001", "end": "202608"}}},
+  "Q": {"periods": {"Q": {"start": "200001", "end": "202602"}}},
+  "Y": {"periods": {"Y": {"start": "2000", "end": "2025"}}},
+  "Y_late_start": {"periods": {"Y": {"start": "2010", "end": "2025"}}}
+ },
+ "rows": [
+  {"quote": "올해", "table": "M", "applied": ["202601", "202610"], "missing": [["2026-09", "2026-10", "latest_unpublished"]]},
+  {"quote": "작년", "table": "M", "applied": ["202501", "202512"], "missing": []},
+  {"quote": "최근 1년", "table": "M", "applied": ["202601", "202610"], "missing": [["2026-09", "2026-10", "latest_unpublished"]]},
+  {"quote": "최근 3년", "table": "M", "applied": ["202401", "202610"], "missing": [["2026-09", "2026-10", "latest_unpublished"]]},
+  {"quote": "최근 12개월", "table": "M", "applied": ["202511", "202610"], "missing": [["2026-09", "2026-10", "latest_unpublished"]]},
+  {"quote": "최근 8개 분기", "table": "Q", "applied": ["202501", "202604"], "missing": [["2026-07", "2026-12", "latest_unpublished"]]},
+  {"quote": "2020년부터", "table": "M", "applied": ["202001", "202610"], "missing": [["2026-09", "2026-10", "latest_unpublished"]]},
+  {"quote": "최근 10년", "table": "Y", "applied": ["2017", "2026"], "missing": [["2026-01", "2026-12", "latest_unpublished"]]},
+  {"quote": "2026년", "table": "Y", "applied": ["2026", "2026"], "missing": [["2026-01", "2026-12", "latest_unpublished"]]},
+  {"quote": "2020년부터 2023년까지", "table": "M", "applied": ["202001", "202312"], "missing": []},
+  {"quote": "2000년부터", "table": "Y_late_start", "applied": ["2010", "2025"], "missing": [["2000-01", "2009-12", "past_shortfall"], ["2026-01", "2026-12", "end_uncovered"]]}
+ ],
+ "not_fit": [
+  {"quote": "최근 12개월", "table": "Q", "status": "table_unsuitable", "detail": "recent_span_not_fit", "why": "12 months back from 2026-10 start in 2025-11, inside 2025Q4: a Q table would widen the start to 2025-10, never rounded"}
+ ]
+}

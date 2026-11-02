@@ -158,20 +158,25 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None) ->
     first_max = manifest["max_calls"] - research["max_rejudge_calls"]
     gate = L.CallGate(manifest)  # every call is checked right before it is sent (user 2026-10-29 09:04 UTC)
     if mode == "live":
-        transport = L.KeyGuard(transport, gate)  # a 401/403 stops later sends (user 2026-10-29 10:40 UTC)
-    judge = gate.judge(m["name"], LiveJudge(transport, first_max, archive, ref) if mode == "live"
-                       else FakeJudge(archive, ref))
+        # a 401/403 halts the key in the credential ledger and stops later sends (user 2026-10-29 10:40 UTC)
+        transport = L.KeyGuard(L.guarded(transport, manifest["run_id"])[0], gate)
+    first_judge = (LiveJudge(transport, first_max, archive, ref, credential_ref=L.CREDENTIAL) if mode == "live"
+                   else FakeJudge(archive, ref))
+    judge = gate.judge(m["name"], first_judge)
+    second_judge = None
     settings = K.Settings(model=m["model"], effort=m["effort"], max_output_tokens=m["max_output_tokens"])
     rejudge = re_settings = budget = None
     if research["enabled"]:
         r = research["model"]
-        rejudge = gate.judge(r["name"], LiveJudge(transport, research["max_rejudge_calls"], archive, ref)
-                             if mode == "live" else FakeJudge(archive, ref))
+        second_judge = (LiveJudge(transport, research["max_rejudge_calls"], archive, ref, slot="a_self_rejudge",
+                                  credential_ref=L.CREDENTIAL) if mode == "live"
+                        else FakeJudge(archive, ref, slot="a_self_rejudge"))
+        rejudge = gate.judge(r["name"], second_judge)
         re_settings = K.Settings(model=r["model"], effort=r["effort"], max_output_tokens=r["max_output_tokens"])
         budget = L.RejudgeBudget(research, gate.total, lambda: gate.calls(r["name"]), manifest["max_calls"])
     total = gate.total
 
-    records, started, stopped = {}, now(), None
+    records, started, stopped, ledgers = {}, now(), None, {}
     from tl_eval import score as S
 
     try:
@@ -188,11 +193,13 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None) ->
             c = cases[e["case_id"]]
             listed = e["case_id"] in research["cases"]
             gate.for_case(e["case_id"])
+            ledgers[key] = ledger = L.entry_ledger(c["question"])
+            L.bind([first_judge, second_judge], ledger)
             # the re-judge goes through the gate for every case: the gate, not a missing reference, refuses it for an
             # unlisted case
             state = graph_run(c["question"], layer, judge, settings, c["as_of"], research=listed,
                               research_budget=budget.for_case(e["case_id"]) if listed else None,
-                              research_judge=rejudge, research_settings=re_settings)
+                              research_judge=rejudge, research_settings=re_settings, ledger=ledger)
             used, used_re = gate.calls(m["name"]) - before, (gate.calls(re_name) if re_name else 0) - before_re
             if used > 1 or used_re > (1 if listed else 0) or total() > manifest["max_calls"]:
                 raise RunStopped(f"{key}: {used} first and {used_re} re-judge calls for one question")
@@ -213,7 +220,8 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None) ->
                                       if rejudge else {})},
                "rejudge_calls": gate.calls(research["model"]["name"]) if rejudge else 0,
                "refused_before_sending": list(gate.refused), "key_source": key_source,
-               "research_ends": {k: r["research"]["end"] for k, r in records.items() if r.get("research")}}
+               "research_ends": {k: r["research"]["end"] for k, r in records.items() if r.get("research")},
+               "ledgers": {k: v.summary()["by_slot"] for k, v in ledgers.items()}}
         (out_dir / "run.json").write_text(json.dumps(row, ensure_ascii=False, indent=1), encoding="utf-8")
     summary = {"version": EXPLORE_VERSION, "note": "observations per question; no accuracy over the list",
                "questions": {k: observe(rec, cases[k.split("|")[2]], layer) for k, rec in records.items()},

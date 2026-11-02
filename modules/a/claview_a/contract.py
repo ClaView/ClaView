@@ -4,8 +4,10 @@ Input (``build_payload``): the raw question, the cards (``cards.CARD_LEGEND`` on
 with their labels. Nothing of the current path's analysis (segments, conditions, senses, scopes, period hints) goes in.
 A payload over ``PAYLOAD_LIMIT`` characters is refused (``input_too_large``), never cut.
 
-Output (``output_schema``, strict JSON schema): statistics (what the question asks to see, quoted), splitters, periods,
-frequencies and calculations (quoted, never resolved here), choices (one table per statistic, by card reference
+Output (``output_schema``, strict JSON schema): statistics (what the question asks to see, quoted), splitters, periods
+and frequencies (quoted; from contract .8 with their meaning structured by the model: every statistic has a period row
+and a frequency row, ``not_stated`` when the user said none, and the code computes dates from the values), calculations
+(quoted, never resolved here), choices (one table per statistic, by card reference
 "gN.tN", with evidence quoted from that table's card), asks (an ask axis, one table per value), missing (statistics
 with no card table, with search words), alternatives (record only).
 
@@ -29,13 +31,58 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from .cards import ASK_AXES, CARD_LEGEND, refs, render_cards
+from .conditions.words import BASIS_AXES
 from .transport.canonical import canonical
 
-from .cards import ASK_AXES, CARD_LEGEND, refs, render_cards
-
-CONTRACT_VERSION = "tl-contract-2026-10-28.3"  # .3: evidence per ask option, required and non-empty
+# .3: evidence per ask option, required and non-empty; .4: splitter value and polarity, the period meaning (and the
+# statistics a same-range period refers to), the aggregation rows (plan 56 order 6-3, users 2026-10-31 15:23, 17:53,
+# 17:56 and 18:28 UTC); .5: the average basis of a period average and its quote on the aggregation rows (plan 56
+# order 6-3c, user 2026-10-31 20:10 UTC); .6: the changes a re-judgment makes to a target's basis rows, each with its
+# quote and reason, and the re-judgment's input of fixed context and targets (plan 56 order 9, bundle 10);
+# .7: a table-specific scope per statistic with original-question source excerpts, separate from its short quote;
+# .8: the period and frequency rows carry their meaning structured by the model (form, calendar values or a count back
+# from as_of, read failure; a frequency value or not_stated), one row of each per statistic at least (BOK20 live check
+# 11-02, user 02:37 UTC: the model structures, the code computes and checks)
+# .9: calendar offsets distinct from recent windows, incomplete user bounds and unsupported meanings distinct from
+# internal interpretation errors. The row shape stays the same; older schemas keep their own enum sets.
+CONTRACT_VERSION = "tl-contract-2026-10-28.9"
 # answers written to an older contract, read only by the replay path that names it (user 2026-10-28 06:47 UTC)
-LEGACY_CONTRACTS = ("tl-contract-2026-10-28.2",)  # no evidence field on ask options
+LEGACY_CONTRACTS = ("tl-contract-2026-10-28.2",  # no evidence field on ask options
+                    "tl-contract-2026-10-28.3")  # no polarity, period meaning or aggregation fields
+# earlier contracts with the polarity, period meaning and aggregation fields, read as written (no average basis)
+EARLIER_CONTRACTS = ("tl-contract-2026-10-28.4",  # no average basis
+                     "tl-contract-2026-10-28.5",  # no changes of a re-judgment
+                     "tl-contract-2026-10-28.6",  # no grounded table-specific focus
+                     "tl-contract-2026-10-28.7",  # periods and frequencies quoted only (read by the quote reader)
+                     "tl-contract-2026-10-28.8")  # structured periods without calendar offsets or partial bounds
+CHANGES_CONTRACTS = ("tl-contract-2026-10-28.6", "tl-contract-2026-10-28.7", "tl-contract-2026-10-28.8",
+                     "tl-contract-2026-10-28.9")
+FOCUS_CONTRACTS = ("tl-contract-2026-10-28.7", "tl-contract-2026-10-28.8", "tl-contract-2026-10-28.9")
+# the contracts whose period and frequency rows carry the model's structured meaning (``periods.semantic``)
+SEMANTIC_PERIOD_CONTRACTS = ("tl-contract-2026-10-28.8", "tl-contract-2026-10-28.9")
+# the contracts whose ask options carry evidence (a list, never one version compared: plan 56 order 6-3)
+OPTION_EVIDENCE_CONTRACTS = ("tl-contract-2026-10-28.3", "tl-contract-2026-10-28.4", "tl-contract-2026-10-28.5",
+                             "tl-contract-2026-10-28.6", "tl-contract-2026-10-28.7", "tl-contract-2026-10-28.8",
+                             "tl-contract-2026-10-28.9")
+# the instructions' own version (the prompt text is also hashed in the run info)
+# .2: the average basis and quotes that state it (plan 56 6-3c); .3: the re-judgment of the targets only and its
+# changes, an ask only when the meaning differs and two grounded alternatives remain, options of other cards (plan 56
+# orders 9 and 12, ⑥-다); .6: periods and frequencies structured by meaning, one row of each per statistic (contract .8)
+PROMPT_VERSION = "tl-prompt-2026-11-02.8"
+POLARITIES = ("required", "any_of", "excluded", "allowed", "undetermined", "unreadable", "not_basis")
+PERIOD_MEANINGS = ("range", "latest_available", "same_as", "user_undecided")
+# contract .8: an excluded period (a first-stage limit, as before) and a period the user did not state
+SEMANTIC_PERIOD_MEANINGS = (*PERIOD_MEANINGS, "excluded", "not_stated")
+PERIOD_FORMS = ("absolute", "relative", "none")
+PERIOD_UNITS = ("Y", "H", "Q", "M", "none")
+READ_STATES = ("ok", "failed")
+FREQUENCY_VALUES = ("Y", "H", "Q", "M", "not_stated", "unreadable")
+FREQUENCY_ANCHORS = ("end", "none")
+FREQUENCIES = ("Y", "H", "Q", "M")
+METHODS = ("sum", "period_end", "period_average", "weighted", "unknown")
+SOURCE_BASES = ("end_balance", "average_balance", "flow", "ratio", "unknown")
+AVERAGE_BASES = ("calendar_day", "simple_of_periods", "business_day", "observation_day", "unknown")
 SCHEMA_NAME = "tl_table_judgement"
 PAYLOAD_LIMIT = 24_000  # characters of the canonical payload (the current path's input limit)
 PROMPT_PATH = Path(__file__).resolve().parent / "data" / "prompt_tl.md"
@@ -60,13 +107,22 @@ def prompt_text() -> str:
 # ---------------------------------------------------------------- input
 
 
-def build_payload(question: str, cards: list[dict], unresolved: list[dict] | None = None) -> dict:
+def build_payload(question: str, cards: list[dict], unresolved: list[dict] | None = None,
+                  fixed: dict | None = None, targets: list[dict] | None = None) -> dict:
     """The judge's input. ``unresolved`` (a re-judgment after a re-search only, user 2026-10-29 08:18 UTC): the
-    statistics the first judgment left missing with the condition quotes it attached to them; the first payload
-    never has the key."""
-    payload = {"question": question, "cards": CARD_LEGEND + "\n" + render_cards(cards), "ask_axes": dict(ASK_AXES)}
+    statistics the first judgment left missing with the condition quotes it attached to them. ``fixed`` and
+    ``targets`` (the one self-recovery, contract .6, plan 56 order 9): the context that stays (the question and the
+    statistics already decided, never to be changed) and the statistics to judge again, each with its quotes, why it
+    failed and the facts found. The first payload has none of these keys."""
+    payload = {"question": question, "cards": CARD_LEGEND + "\n" + render_cards(cards), "ask_axes": dict(ASK_AXES),
+               # contract .4: a splitter's value is one of its axis's values (plan 56 order 6-3)
+               "basis_values": {axis: list(BASIS_AXES.get(axis, {})) for axis in ASK_AXES}}
     if unresolved is not None:
         payload["unresolved"] = unresolved
+    if fixed is not None:
+        payload["fixed"] = fixed
+    if targets is not None:
+        payload["targets"] = targets
     size = len(canonical(payload))
     if size > PAYLOAD_LIMIT:
         raise ContractError("input_too_large", f"{size} > {PAYLOAD_LIMIT}")
@@ -84,23 +140,56 @@ def _arr(items: dict) -> dict:
     return {"type": "array", "items": items}
 
 
-def output_schema() -> dict:
+def _enum(values) -> dict:
+    return {"type": "string", "enum": list(values)}
+
+
+def output_schema(contract: str = CONTRACT_VERSION) -> dict:
+    """The output schema of ``contract``: the current one, or an older one an answer was written to."""
     s = {"type": "string"}
     ids = _arr(s)
     quoted = _arr(_obj({"quote": s, "for": ids}))
-    evidence = _arr(_obj({"kind": {"type": "string", "enum": list(EVIDENCE_KINDS)}, "text": s}))
-    return _obj({
+    evidence = _arr(_obj({"kind": _enum(EVIDENCE_KINDS), "text": s}))
+    axis = _enum([*ASK_AXES, "other"])
+    old = contract in LEGACY_CONTRACTS
+    fields = {
         "statistics": _arr(_obj({"id": s, "quote": s, "name": s})),
-        "splitters": _arr(_obj({"quote": s, "axis": {"type": "string", "enum": [*ASK_AXES, "other"]}, "for": ids})),
-        "periods": quoted,
+        "splitters": _arr(_obj({"quote": s, "axis": axis, "for": ids} if old else
+                               {"quote": s, "axis": axis, "value": s, "polarity": _enum(POLARITIES), "for": ids})),
+        "periods": quoted if old else _arr(_obj({"quote": s, "for": ids, "meaning": _enum(PERIOD_MEANINGS),
+                                                 "refers_to": ids})),
         "frequencies": quoted,
         "calculations": quoted,
         "choices": _arr(_obj({"for": ids, "table": s, "evidence": evidence})),
-        "asks": _arr(_obj({"for": s, "axis": {"type": "string", "enum": list(ASK_AXES)},
+        "asks": _arr(_obj({"for": s, "axis": _enum(ASK_AXES),
                            "options": _arr(_obj({"value": s, "table": s, "evidence": evidence}))})),
         "missing": _arr(_obj({"for": ids, "search_words": _arr(s)})),
         "alternatives": _arr(_obj({"for": ids, "table": s, "why": s})),
-    })
+    }
+    if not old:
+        row = {"for": ids, "requested_frequency": _enum(FREQUENCIES), "source_frequency": _enum(FREQUENCIES),
+               "method": _enum(METHODS), "source_basis": _enum(SOURCE_BASES), "evidence": evidence,
+               "weights": _arr(s)}
+        if contract != "tl-contract-2026-10-28.4":
+            row |= {"average_basis": _enum(AVERAGE_BASES), "average_evidence": evidence}
+        fields["aggregations"] = _arr(_obj(row))
+    if contract in CHANGES_CONTRACTS:  # contract .6: a re-judgment's changes of basis rows
+        fields["changes"] = _arr(_obj({"for": ids, "axis": axis, "value": s, "from": _enum(POLARITIES),
+                                       "to": _enum(POLARITIES), "quote": s, "reason": s}))
+    if contract in FOCUS_CONTRACTS:
+        fields["focuses"] = _arr(_obj({"for": ids, "text": s, "quotes": _arr(s)}))
+    if contract in SEMANTIC_PERIOD_CONTRACTS:  # contract .8: the meaning of each period and frequency, structured
+        meanings = SEMANTIC_PERIOD_MEANINGS
+        forms = PERIOD_FORMS
+        if contract == "tl-contract-2026-10-28.9":
+            meanings = (*meanings, "unsupported")
+            forms = (*forms, "calendar_offset")
+        fields["periods"] = _arr(_obj({"quote": s, "for": ids, "meaning": _enum(meanings),
+                                       "refers_to": ids, "form": _enum(forms), "start": s, "end": s,
+                                       "count": s, "unit": _enum(PERIOD_UNITS), "read": _enum(READ_STATES)}))
+        fields["frequencies"] = _arr(_obj({"quote": s, "for": ids, "value": _enum(FREQUENCY_VALUES),
+                                           "anchor": _enum(FREQUENCY_ANCHORS)}))
+    return _obj(fields)
 
 
 @dataclass(frozen=True)
@@ -166,8 +255,9 @@ def _blank(value, path: str = "$") -> str | None:
 
 def _structure(out: dict, strict_options: bool = True) -> None:
     """Structure errors that need no judgement (module docstring); raises ``ContractError``."""
-    for key in ("splitters", "periods", "frequencies", "calculations", "choices", "missing", "alternatives"):
-        for i, row in enumerate(out[key]):
+    for key in ("splitters", "periods", "frequencies", "calculations", "choices", "missing", "alternatives",
+                "aggregations", "focuses"):
+        for i, row in enumerate(out.get(key) or []):
             if not row["for"]:
                 raise ContractError("empty_for", f"{key}[{i}]")
             if len(set(row["for"])) != len(row["for"]):
@@ -182,6 +272,20 @@ def _structure(out: dict, strict_options: bool = True) -> None:
     for i, m in enumerate(out["missing"]):
         if not m["search_words"]:
             raise ContractError("empty_search_words", f"missing[{i}]")
+    if "focuses" in out:
+        focused = set()
+        for i, row in enumerate(out["focuses"]):
+            if len(row["for"]) != 1:
+                raise ContractError("focus_statistic_count", f"focuses[{i}]")
+            sid = row["for"][0]
+            if sid in focused:
+                raise ContractError("focus_repeated", sid)
+            focused.add(sid)
+            if not row["quotes"]:
+                raise ContractError("empty_focus_quotes", sid)
+        missing_focus = sorted({s["id"] for s in out["statistics"]} - focused)
+        if missing_focus:
+            raise ContractError("focus_missing", ", ".join(missing_focus))
     seen_axes: set[tuple[str, str]] = set()
     for i, a in enumerate(out["asks"]):
         if len(a["options"]) < 2:
@@ -211,7 +315,8 @@ def _structure(out: dict, strict_options: bool = True) -> None:
             raise ContractError("statistic_multi_kind", f"{st['id']}: {sorted(got)}")
 
 
-def parse_output(text: str, cards: list[dict], answer_contract: str = CONTRACT_VERSION) -> dict:
+def parse_output(text: str, cards: list[dict], answer_contract: str = CONTRACT_VERSION,
+                 fixed_ids: tuple[str, ...] | list[str] = ()) -> dict:
     """{output, tables, problems}: the parsed output, every table reference resolved to a real table ID (None when
     unresolved), and the non-fatal problems (unresolved references). A broken shape or structure raises
     ``ContractError`` with its code: ``not_json``, ``schema``, ``empty_string``, ``statistic_id``, ``statistic_ref``,
@@ -224,10 +329,10 @@ def parse_output(text: str, cards: list[dict], answer_contract: str = CONTRACT_V
         out = json.loads(text)
     except (TypeError, ValueError):
         raise ContractError("not_json") from None
-    if answer_contract not in (CONTRACT_VERSION, *LEGACY_CONTRACTS):
+    if answer_contract not in (CONTRACT_VERSION, *EARLIER_CONTRACTS, *LEGACY_CONTRACTS):
         raise ValueError(f"unknown answer contract {answer_contract}")
     legacy = []
-    if answer_contract in LEGACY_CONTRACTS and isinstance(out, dict) and isinstance(out.get("asks"), list):
+    if answer_contract not in OPTION_EVIDENCE_CONTRACTS and isinstance(out, dict) and isinstance(out.get("asks"), list):
         # contract .2 had no evidence field on ask options: the field is absent by the contract of the time, not
         # broken by the model. Read as an empty list and recorded as an absence, never as a violation of .3
         for i, a in enumerate(out["asks"]):
@@ -235,7 +340,7 @@ def parse_output(text: str, cards: list[dict], answer_contract: str = CONTRACT_V
                 if isinstance(o, dict) and "evidence" not in o:
                     o["evidence"] = []
                     legacy.append(f"asks[{i}].options[{j}]")
-    if (err := _conforms(out, output_schema())) is not None:
+    if (err := _conforms(out, output_schema(answer_contract))) is not None:
         raise ContractError("schema", err)
     if (blank := _blank(out)) is not None:
         raise ContractError("empty_string", blank)
@@ -243,12 +348,16 @@ def parse_output(text: str, cards: list[dict], answer_contract: str = CONTRACT_V
     if not stat_ids or any(not _STAT_ID.fullmatch(i) for i in stat_ids) or len(set(stat_ids)) != len(stat_ids):
         raise ContractError("statistic_id", ", ".join(stat_ids) or "none")
     known = set(stat_ids)
-    fors = [f for key in ("splitters", "periods", "frequencies", "calculations", "choices", "missing", "alternatives")
-            for row in out[key] for f in row["for"]] + [a["for"] for a in out["asks"]]
-    unknown = sorted(set(fors) - known)
+    fors = [f for key in ("splitters", "periods", "frequencies", "calculations", "choices", "missing", "alternatives",
+                          "aggregations", "changes", "focuses") for row in out.get(key) or [] for f in row["for"]] + \
+        [a["for"] for a in out["asks"]]
+    # a period's refers_to may also name a statistic the re-judgment was given as fixed (``fixed_ids``): it is read,
+    # never judged again; every row's ``for`` still names the answer's own statistics only (Q077, owner 11-01 12:26)
+    refers = [x for p in out["periods"] for x in p.get("refers_to") or []]
+    unknown = sorted((set(fors) - known) | (set(refers) - known - set(fixed_ids)))
     if unknown:
         raise ContractError("statistic_ref", ", ".join(unknown))
-    _structure(out, strict_options=answer_contract == CONTRACT_VERSION)
+    _structure(out, strict_options=answer_contract in OPTION_EVIDENCE_CONTRACTS)
     by_ref = refs(cards)
     ids = set(by_ref.values())
     tables: dict[str, str | None] = {}

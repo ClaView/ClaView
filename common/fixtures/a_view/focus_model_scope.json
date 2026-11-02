@@ -1,0 +1,85 @@
+{
+  "contract_version": "a-view/2026-11-02.11",
+  "session": {
+    "session_id": "synthetic-focus",
+    "question_version": 1,
+    "question": "2024년 예금은행 대출금리를 월별로 보여줘",
+    "as_of": "2026-10-29",
+    "run": {
+      "versions": {},
+      "model": {
+        "name": "synthetic"
+      },
+      "research_model": null,
+      "profile": "fixture",
+      "period_policy": null
+    }
+  },
+  "status": "ready",
+  "a_route": "handoff",
+  "statistics": [
+    {
+      "request_id": "synthetic-focus:s1",
+      "statistic": "s1",
+      "quote": "예금은행 대출금리",
+      "name": "예금은행 대출금리",
+      "outcome": "selected",
+      "state": "selected",
+      "verified": true,
+      "representative": null,
+      "tables": [],
+      "basis": [],
+      "focus": "예금은행 대출금리",
+      "focus_provenance": {
+        "text": "예금은행 대출금리",
+        "quotes": [
+          "예금은행 대출금리"
+        ],
+        "source": "model_scope",
+        "status": "grounded"
+      },
+      "conditions": {
+        "periods": [],
+        "frequencies": [],
+        "calculations": [],
+        "splitters": []
+      },
+      "reasons": [],
+      "warnings": [],
+      "search_words": [],
+      "answers": [],
+      "aggregation": null,
+      "auto_decided": [],
+      "a_stage": null,
+      "warning_rows": [],
+      "end_point_status": []
+    }
+  ],
+  "questions": [],
+  "handoff": {
+    "ready": [
+      {
+        "request_id": "synthetic-focus:s1",
+        "statistics": [
+          "s1"
+        ],
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "DT_121Y006",
+            "table_name": null,
+            "focus": "예금은행 대출금리"
+          }
+        ],
+        "period_answers": [],
+        "assignments": [],
+        "calculations": {},
+        "notes": []
+      }
+    ],
+    "blocked": []
+  },
+  "failure": null,
+  "research": null,
+  "warnings": []
+}

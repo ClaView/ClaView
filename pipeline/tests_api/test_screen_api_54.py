@@ -14,11 +14,13 @@ from claview_b.synthetic import SyntheticFetchClient, SyntheticSelectionModel
 from claview_pipeline import api
 from claview_pipeline.screen import ScreenPipeline
 
-TWO = "M2 통화량과 예금은행 대출금리 2024년"
+# plan 56 order 5 (policy ④, user 2026-10-31 17:53 item 1): the HTTP flow is checked here, not the frequency: the
+# question and the made-up answer quote 연간 with the period (before, the longest frequency was assumed)
+TWO = "M2 통화량과 예금은행 대출금리 2024년 연간"
 SCRIPT = {TWO: {
     "statistics": [{"id": "s1", "quote": "M2 통화량", "name": "M2"},
                    {"id": "s2", "quote": "예금은행 대출금리", "name": "r"}],
-    "periods": [{"quote": "2024년", "for": ["s1", "s2"]}],
+    "periods": [{"quote": "2024년", "for": ["s1", "s2"]}], "frequencies": [{"quote": "연간", "for": ["s1", "s2"]}],
     "asks": [{"for": "s1", "axis": "stock", "options": [{"value": "평잔", "table": "DT_161Y013"},
                                                         {"value": "말잔", "table": "DT_161Y014"}]},
              {"for": "s2", "axis": "loan_basis", "options": [{"value": "신규취급액", "table": "DT_121Y006"},

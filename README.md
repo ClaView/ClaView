@@ -1,17 +1,18 @@
 # ClaView (A 표 선택 → B 계열·기간 선택·조회 → C 표현)
 
 자연어 질문을 받아 KOSIS 한국은행 소관 통계표 349개 중 필요한 표를 고르고(A), 항목·분류·기간·주기를 정해 KOSIS Open API로 값을 가져와(B), 표·그래프로 보여 주는(C) 에이전트 PoC다.
-A·B·C 담당자가 **한 레포에서 각자의 모듈 경로만** 고친다. 각 모듈은 service 함수(`claview_<x>_api/service.py`)를 경계로 갖고, 메인 파이프라인은 이 함수들을 **코드로 직접** 불러 전체를 돌린다. 같은 함수를 모듈별 HTTP API로도 열어 두어, 담당자는 자기 모듈만 띄워 시험·평가한다. 실행 환경은 Docker로 통일한다.
+A·B·C 담당자가 **한 레포에서 각자의 모듈 경로만** 고친다. 메인 파이프라인은 각 모듈의 Python service를 **코드로 직접** 불러 전체를 돌린다. 모듈별 HTTP API는 독립 시험·평가용이다. A의 기본 HTTP는 새 A의 `screen.py`·AView 경로이며, 예전 A HTTP는 `/a/legacy/*`로 구분한다. 실행 환경은 Docker로 통일한다.
 
 ```text
 서비스:  브라우저 → frontend(nginx :10300) ─/api/*→ pipeline(:10301)
                                                     └ 같은 프로세스: 새 A 화면 service(AView) → B service(요청마다) → 조회 → C service
 
 모듈 시험·평가용(같은 service 코드를 HTTP로):
-         module-a(:10311) /a/select·/a/answer   module-b(:10312) /b/resolve·/b/fetch·/b/run   module-c(:10313) /c/present
+         module-a(:10311) /a/select·/a/answer·/a/records/{session_id}
+         module-b(:10312) /b/resolve·/b/fetch·/b/run   module-c(:10313) /c/present
 ```
 
-pipeline은 module-a/b/c 컨테이너를 부르지 않는다. 그래서 모듈 API로 잰 결과와 서비스 동작이 같은 코드에서 나온다.
+pipeline은 module-a/b/c 컨테이너를 부르지 않는다. A HTTP 전환은 이 호출 방식을 바꾸지 않으며, 모듈 A만의 결과를 전체 화면·B·C 연결 완료로 해석하지 않는다.
 
 - **처음이면: [팀 작업 가이드](docs/guides/팀_작업_가이드.md)** (설치, 매일 작업 흐름, 담당별 시험, 첫 과제)
 - 결정 사항: [결정 기록](docs/design/결정_기록.md)
@@ -22,8 +23,8 @@ pipeline은 module-a/b/c 컨테이너를 부르지 않는다. 그래서 모듈 A
 | 경로 | 내용 | 담당 |
 |---|---|---|
 | `modules/a/claview_a/` | **새 A(표 단위 경로). 화면 경로에 연결(합성 판단기로 확인, 실호출 꺼짐).** 공개 `run`(재검색 인자 전달), 기준 축 답변 적용 `answers`, CLI `python -m claview_a`. 표준 라이브러리·langgraph만 쓰는 패키지 규칙을 지킨다. [기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) · [55문항 측정판](docs/modules/a/A_측정판_55문항_20261029.md) · [계획 54](docs/plans/54_새A_화면연결.md) | A |
-| `modules/a/claview_a_legacy/` | 기존 A(10/21판). 모듈 A API·옛 staged 실행기·`claview` 명령·골든 22 평가가 쓴다. 화면 경로는 쓰지 않는다(자동 대체 없음) | A |
-| `modules/a/claview_a_api/` | 새 A 화면 service(`screen.py`: 실행 설정·세션·답변), 공개 결과 어댑터(`view.py` → `claview_common.contracts.a_view.AView`), 합성 판단기. 기존 A의 service(`service.py`)와 HTTP 계층(`api.py`: `POST /a/select`, `/a/answer`)은 아직 기존 A를 부른다 | A |
+| `modules/a/claview_a_legacy/` | 기존 A(10/21판). `/a/legacy/select`·`/a/legacy/answer`, 옛 staged 실행기·`claview` 명령·골든 22 평가가 쓴다. 새 경로의 자동 대체로 쓰지 않는다 | A |
+| `modules/a/claview_a_api/` | 새 A 화면 service(`screen.py`), AView 어댑터(`view.py`), 세션을 저장하는 HTTP 경계(`http.py`, `api.py`). 기본 `/a/select`·`/a/answer`는 새 A이며 계약 판을 반드시 보낸다. 예전 `service.py`는 legacy 경로에 남는다 | A |
 | `modules/a/{tests,tests_tl,tests_legacy,tests_api,scripts}/` | 새 A 시험(옮긴 부품 / 표 단위 경로), 기존 A 시험, API 시험, 연구·평가 도구(새 A 평가기 `scripts/tl_eval`) | A |
 | `modules/b/claview_b/`, `claview_b_api/` | B 본체(그래프·조회·합성 모델), service와 HTTP 계층(`/b/resolve`, `/b/fetch`, `/b/run`) | B |
 | `modules/c/claview_c/`, `claview_c_api/` | C 표현 로직(렌더러·분석·차트 정책), service와 HTTP 계층(`/c/present`) | C |
@@ -47,6 +48,8 @@ docker compose down                        # 중지
 - `/info`에 git SHA를 표시하려면 실행 전에 PowerShell `$env:GIT_SHA = git rev-parse --short HEAD`, bash `export GIT_SHA=$(git rev-parse --short HEAD)`(`make up`은 자동).
 
 - 화면: http://localhost:10300/ · 파이프라인 API 문서: http://localhost:10301/docs · 모듈 API 문서: http://localhost:10311/docs (A), `10312`(B), `10313`(C)
+- 새 A HTTP 요청에는 `contract_version: "a-http/2026-11-02.1"`이 필요하다. 응답은 `view`(AView)와 실행 모드를 담으며, 확인 답은 서버에 저장한 세션에 적용한다. [요청·답변·기록 조회와 이전 방법](docs/contracts/A_HTTP_전환_20261102.md)
+- 모듈 A HTTP는 기본 합성 모드다. `live`에서도 기존 승인 게이트·호출 한도를 통과해야 전송하며, B·KOSIS는 호출하지 않는다. `CLAVIEW_A_RUN_ROOT`로 서버 기록 위치를 지정할 수 있고 기본은 저장소의 `runs/a_http`이다. 배포 시 기록을 유지할 저장 경로를 준비한다. HTTP에서 실행 모드·기록 경로·checkpoint를 주입하지 않는다.
 - 개발(소스 마운트 + 자동 재시작): `docker compose -f docker-compose.yaml -f docker-compose.local.yaml up --build`
 - 골든 통합 평가: `docker compose -f docker-compose.yaml -f docker-compose.eval.yaml run --rm eval-pipeline`
 - `CLAVIEW_MODE=synthetic`: B는 합성 모델(첫 항목·첫 분류값), 조회는 합성 값 "1". **배선 확인용이며 정확도가 아니다.** `live`는 B의 선택 모델(`gpt-6.1-terra`, OpenAI)과 KOSIS를 실제로 부른다. 호출 수·비용 승인 뒤에만 켠다(AGENTS.md). 새 A 화면 경로는 live에서 A의 모델 호출이 꺼져 있어 1단계에서 `a_live_disabled`로 멈춘다(호출 한도 검사 연결 전). B만 live로 확인하려면 B 모듈 API(`/b/resolve`)에 표를 직접 넘긴다.
@@ -98,9 +101,11 @@ $env:PYTHONPATH = "common;modules/a;modules/b;modules/c;pipeline"
 | 모듈 service 직접 호출 (2026-10-26) | module-a/b/c 컨테이너를 멈춘 상태에서도 화면 경로 흐름·확인 질문 재개가 그대로 동작. 골든 22문항의 상태·단계·카드·단계 문구가 변경 전 경로와 22/22 같음 |
 | 골든 통합 평가(`eval-pipeline`) | 표 일치 17/22, B 성공 17/22, completed 17/22 (기존 기준선과 같음) |
 
+- 위 표의 `/a/select`와 `proceed` 결과는 10월 26일 당시의 기존 A HTTP 측정이다. 지금은 그 계약이 `/a/legacy/select`에 있으며 새 기본 HTTP의 결과와 합산하지 않는다.
 - 모듈 A의 첫 요청은 카탈로그 적재 때문에 약 8초 걸린다(이후 요청은 빠름).
 - 새 A(2026-10-28) 시험 결과는 [A 기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) 3·5절에 있다.
 - 새 A 55문항 측정판(2026-10-29: 기간·주기 검사, 제한 재검색) 결과와 남은 한계는 [A 측정판 문서](docs/modules/a/A_측정판_55문항_20261029.md)에 있다.
+- A 기간·주기 의미 구조화, 되묻기·부분 복구·focus 보존의 공유 범위는 [A 1차 기본 기능 공유](docs/modules/a/A_1차_공유_범위_20261102.md)에 있다. 새 A Python service와 A 단독 HTTP를 포함하며 전체 화면·B 연결 완료를 뜻하지 않는다.
 
 ## 4. 바뀐 점 (이전 zip 통합본 대비)
 
@@ -113,7 +118,7 @@ $env:PYTHONPATH = "common;modules/a;modules/b;modules/c;pipeline"
 ## 5. 아직 하지 않은 것
 
 - `claview` 명령과 골든 통합 평가(`claview evaluate`, `eval-pipeline`)는 아직 예전 경로(`claview_pipeline.session`·`b_port`: A 안의 B 포트)를 쓴다. 서비스 경로(`staged`)와 결과는 같지만 코드가 둘이다.
-- A의 `agent/b_connection`(A가 B를 부르는 구조) 제거는 A 담당 작업이다. 지금 A API는 이 단계를 기록용 포트로 재생해 B 요청을 꺼낸다(A 코드 무변경).
+- 기존 A의 `agent/b_connection`은 legacy API와 옛 평가 경로에 남아 있다. 새 A HTTP는 AView의 송신 예정 값을 반환하며 B를 실행하지 않는다.
 - 모듈별 평가 러너(`make eval-a/b/c`, 기준선 비교 리포트)와 GitHub Actions의 Docker 스모크는 설계안 6단계다.
 - LLM 호출·카탈로그 읽기·기간 계산·경로/키 읽기가 모듈마다 중복되어 있다. 공통 모듈로 옮기는 설계와 순서: [공통 모듈 이전 설계](docs/design/공통모듈_이전_설계.md)(A 패키지 규칙 완화 결정 필요).
 - 실제 KOSIS·OpenAI로 화면 전체 흐름(A→B→조회→C)을 확인하지 않았다. B 선택 단계만 live로 확인했다(2026-11-02, 골든 CV-BC-02 두 표 일치, [기록](docs/modules/b/research/B_모델_교체_GPT_고정_및_후속개선_기록_20261102.md)).

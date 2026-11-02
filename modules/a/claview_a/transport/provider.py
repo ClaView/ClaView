@@ -19,7 +19,13 @@ from .canonical import canonical
 
 
 class ProviderError(Exception):
-    pass
+    """A transport or response failure; ``str(e)`` is its code. ``phase`` (plan 56 order 3) says where it happened:
+    ``before_send`` (no request left the process), ``send`` (the request may have reached the provider) or
+    ``response`` (the provider answered). It changes nothing about how a request is sent."""
+
+    def __init__(self, code: str = "", phase: str | None = None):
+        super().__init__(code)
+        self.phase = phase
 
 
 class OpenAITransport:
@@ -29,7 +35,7 @@ class OpenAITransport:
     def _key() -> str:
         value = os.environ.get("OPENAI_API_KEY", "").strip()
         if not value or any(c.isspace() or ord(c) < 32 or ord(c) > 126 for c in value):
-            raise ProviderError("key_unavailable")
+            raise ProviderError("key_unavailable", "before_send")
         return value
 
     def preflight(self) -> None:
@@ -46,15 +52,15 @@ class OpenAITransport:
                                headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
             response = connection.getresponse()
             if response.status != 200:
-                raise ProviderError("http_" + str(response.status))
+                raise ProviderError("http_" + str(response.status), "response")
             body = response.read().decode("utf-8")
             if key in body:
-                raise ProviderError("unsafe_response")
+                raise ProviderError("unsafe_response", "response")
             return body
         except ProviderError:
             raise
         except Exception:
-            raise ProviderError("transport") from None
+            raise ProviderError("transport", "send") from None
         finally:
             if connection is not None:
                 connection.close()
@@ -65,14 +71,14 @@ def extract(raw: str) -> tuple[str, dict | None]:
         response = json.loads(raw)
         usage = response.get("usage")
         if response.get("status") != "completed":
-            raise ProviderError("incomplete")
+            raise ProviderError("incomplete", "response")
         parts = [c for o in response.get("output", []) if o.get("type") == "message"
                  for c in o.get("content", [])]
         if any(c.get("type") == "refusal" for c in parts):
-            raise ProviderError("refusal")
+            raise ProviderError("refusal", "response")
         texts = [c["text"] for c in parts if c.get("type") == "output_text"]
         if len(texts) != 1 or not isinstance(texts[0], str) or not texts[0].strip():
-            raise ProviderError("empty_output")
+            raise ProviderError("empty_output", "response")
         return texts[0], usage
     except (ValueError, KeyError, TypeError, AttributeError):
-        raise ProviderError("response_format") from None
+        raise ProviderError("response_format", "response") from None

@@ -17,6 +17,15 @@ SECOND = {"name": "sol", "model": "gpt-6.1-sol", "effort": "low", "max_output_to
 Q = "2024년에 국내에서 생산해 국내에 팔거나 수출한 것들의 전체 물가 흐름을 월별로 보여줘"
 
 
+@pytest.fixture(autouse=True)
+def _old_fixed_answers(monkeypatch):
+    """The transports' fixed answers here are of contract .3 (plan 56 order 6-3b): the live judges of the runners,
+    which name the current contract, are told so for these tests."""
+    from claview_a import judges
+
+    monkeypatch.setattr(judges.LiveJudge, "answer_contract", "tl-contract-2026-10-28.3")
+
+
 def answer(text: str) -> str:
     return json.dumps({"status": "completed", "usage": {"input_tokens": 100, "output_tokens": 20},
                        "output": [{"type": "message", "content": [{"type": "output_text", "text": text}]}]})

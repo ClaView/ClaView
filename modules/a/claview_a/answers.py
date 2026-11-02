@@ -15,6 +15,13 @@ the first answer is kept as ``record_before_answers``. Each applied answer raise
 answer to an older version, to a question that is no longer pending or with an option that was not offered is refused
 (``AnswerError``) before anything changes.
 
+Condition questions (plan 56 order 5, policy ②④): a statistic the check left as ``ask_condition`` has a period or
+frequency question (``condition_asks``), one per kind for the statistics it names. The answer is an offered option or,
+for a period question that takes text, the typed period, read by the period reader before anything changes (a text
+it cannot read is refused, ``answer_unreadable``). The answer is kept as a quote of those statistics
+(``condition_answers``) and the period checks run again on their decided tables (``check.decide_periods`` with the
+same reading as the check); the other condition stays as decided. No model is called.
+
 Nothing here names a table, case or question.
 """
 
@@ -27,21 +34,23 @@ from .search.tables import selection_catalog
 from . import check as CH
 from . import periods as PR
 from .cards import ASK_AXES
+from .periods.contract import check_conditions
 
-ANSWERS_VERSION = "tl-answers-2026-10-30.1"
+ANSWERS_VERSION = "tl-answers-2026-11-02.4"  # .4: semantic model rows stay off the legacy quote-reader path
 ANSWER_SOURCE = "user_answer"
 ERRORS = ("no_reply", "reply_shape", "stale_question", "duplicate_reply", "question_not_pending",
-          "option_not_offered", "no_record")
+          "option_not_offered", "no_record", "answer_unreadable")
+CONDITION_KINDS = ("period", "frequency")
 
 
 class AnswerError(ValueError):
     """A reply that cannot be applied; ``code`` is one of ``ERRORS``. The state is left unchanged."""
 
-    def __init__(self, code: str):
+    def __init__(self, code: str, cause: str | None = None):
         if code not in ERRORS:
             raise ValueError(f"unknown answer error {code!r}")
         super().__init__(code)
-        self.code = code
+        self.code, self.cause = code, cause  # cause: why a typed answer is not read (plan 56 order 10)
 
 
 def question_version(state: dict) -> int:
@@ -53,20 +62,53 @@ def question_id(statistic: str, axis: str) -> str:
     return f"q:{statistic}:{axis}"
 
 
+def condition_question_id(statistics: list[str], kind: str) -> str:
+    return f"q:{'+'.join(statistics)}:{kind}"
+
+
 def questions(state: dict) -> list[dict]:
-    """The pending basis-axis questions: one per ask axis of every statistic whose outcome is ``ask``, in record
-    order, with the options as the check left them (value and option table)."""
+    """The pending questions: one per ask axis of every statistic whose outcome is ``ask``, in record order, with the
+    options as the check left them (value and option table); then one per condition question of the statistics whose
+    outcome is ``ask_condition`` (kind ``period`` or ``frequency``, once for the statistics it names)."""
     out = []
+    seen: set[str] = set()
     for d in (state.get("record") or {}).get("decisions") or []:
+        if d["outcome"] == CH.CONDITION_OUTCOME:
+            for a in d.get("condition_asks") or []:
+                qid = condition_question_id(a["statistics"], a["kind"])
+                if qid in seen:
+                    continue
+                seen.add(qid)
+                out.append({"question_id": qid, "kind": a["kind"], "statistics": list(a["statistics"]),
+                            "statistic": a["statistics"][0], "cause": a["cause"], "input": a["input"],
+                            **({"partial_periods": copy.deepcopy(a["partial_periods"])}
+                               if a.get("partial_periods") else {}),
+                            "options": [{"option_id": f"{qid}:{o['option_id']}", "value": o["value"],
+                                         "label": o["label"], "quote": o["quote"], "range": o.get("range"),
+                                         "table_id": None} for o in a["options"]]})
+            out += _basis_questions(d, "condition")  # the basis asks that do not wait for the answer (⑥)
+            continue
         if d["outcome"] != "ask":
             continue
-        sid = d["statistic"]
-        for a in d["asks"]:
-            qid = question_id(sid, a["axis"])
-            out.append({"question_id": qid, "kind": "basis_axis", "statistic": sid, "axis": a["axis"],
-                        "axis_label": ASK_AXES.get(a["axis"], a["axis"]), "source": a["source"],
-                        "options": [{"option_id": f"{qid}:o{i}", "value": o["value"], "table_id": o["table_id"]}
-                                    for i, o in enumerate(a["options"], start=1)]})
+        out += _basis_questions(d)
+    return out
+
+
+def _basis_questions(d: dict, screen: str = "ask") -> list[dict]:
+    """One question per basis ask of ``d`` (plan 56 order 8, ⑥): the options as the check left them, an unsupported
+    one never shown, an unconfirmed one shown as needing a check and not selectable (``selectable``). With a condition
+    question pending (``screen`` condition), only the asks that do not wait for it (``after`` empty)."""
+    sid, out = d["statistic"], []
+    for a in d["asks"]:
+        if screen == "condition" and a.get("after", ["period"]):
+            continue
+        qid = question_id(sid, a["axis"])
+        out.append({"question_id": qid, "kind": "basis_axis", "statistic": sid, "axis": a["axis"],
+                    "axis_label": ASK_AXES.get(a["axis"], a["axis"]), "source": a["source"],
+                    "options": [{"option_id": f"{qid}:o{i}", "value": o["value"], "table_id": o["table_id"],
+                                 "status": o.get("status", "supported"), "selectable": o.get("selectable", True)}
+                                for i, o in enumerate(a["options"], start=1)
+                                if o.get("status", "supported") != "unsupported"]})
     return out
 
 
@@ -80,7 +122,8 @@ def _validate(state: dict, replies) -> list[tuple[dict, dict]]:
     seen: set[str] = set()
     out = []
     for r in replies:
-        if not isinstance(r, dict) or set(r) != {"question_id", "question_version", "option_id"}:
+        if not isinstance(r, dict) or set(r) not in ({"question_id", "question_version", "option_id"},
+                                                     {"question_id", "question_version", "text"}):
             raise AnswerError("reply_shape")
         if type(r["question_version"]) is not int or r["question_version"] != current:
             raise AnswerError("stale_question")
@@ -90,9 +133,26 @@ def _validate(state: dict, replies) -> list[tuple[dict, dict]]:
         q = pending.get(r["question_id"])
         if q is None:
             raise AnswerError("question_not_pending")
+        if "text" in r:  # a typed period: only where the question takes text, and only what the reader reads
+            if q.get("input") != "choice_or_text" or not isinstance(r["text"], str):
+                raise AnswerError("reply_shape")
+            got = PR.read_quotes([r["text"]], [])
+            if got["problems"] or not any(c["kind"] == "period" for c in got["conditions"]):
+                raise AnswerError("answer_unreadable",
+                                  (got["problems"][0].get("code") if got["problems"] else None) or "no_period_read")
+            if check_conditions(got["conditions"]):
+                raise AnswerError("answer_unreadable", "malformed_condition")
+            if why := CH.partial_period_problem(q.get("partial_periods") or [], got["conditions"], state["as_of"]):
+                raise AnswerError("answer_unreadable", why)
+            out.append((q, {"option_id": None, "value": r["text"], "quote": r["text"], "text": r["text"]}))
+            continue
         option = next((o for o in q["options"] if o["option_id"] == r["option_id"]), None)
-        if option is None:
+        if option is None or option.get("selectable") is False:  # an unconfirmed option is never chosen (⑥)
             raise AnswerError("option_not_offered")
+        if q.get("partial_periods"):
+            got = PR.read_quotes([option["quote"]], [])
+            if why := CH.partial_period_problem(q["partial_periods"], got["conditions"], state["as_of"]):
+                raise AnswerError("answer_unreadable", why)
         out.append((q, option))
     return out
 
@@ -109,7 +169,27 @@ def apply(state: dict, replies: list[dict], layer) -> dict:
     log = new.setdefault("answer_log", {"version": ANSWERS_VERSION, "question_version": 0, "rows": []})
     by_sid = {d["statistic"]: d for d in record["decisions"]}
     touched: list[str] = []
+    conditioned: list[str] = []
     for q, option in checked:
+        if q["kind"] in CONDITION_KINDS:
+            row = {"question_id": q["question_id"], "question_version": current, "statistics": list(q["statistics"]),
+                   "kind": q["kind"], "option_id": option["option_id"], "value": option["value"],
+                   "quote": option["quote"], "text": option.get("text"), "range": option.get("range"),
+                   "source": ANSWER_SOURCE}
+            for sid in q["statistics"]:
+                d = by_sid[sid]
+                d["condition_asks"] = [a for a in d.get("condition_asks") or [] if a["kind"] != q["kind"]]
+                # what the answer replaces for this statistic: only that condition (plan 56 order 10, bundle 9)
+                before = [a["quote"] for a in d.get("condition_answers") or [] if a["kind"] == q["kind"]] or \
+                    [x["quote"] for x in record["model_output"][{"period": "periods", "frequency": "frequencies"}
+                                                                [q["kind"]]] if sid in x["for"]]
+                row.setdefault("replaces", []).append({"statistic": sid, "condition": q["kind"],
+                                                       "from": before or None, "to": option["quote"]})
+                d["condition_answers"] = [a for a in d.get("condition_answers") or [] if a["kind"] != q["kind"]]
+                d["condition_answers"].append(row)
+                conditioned.append(sid)
+            log["rows"].append(row)
+            continue
         d = by_sid[q["statistic"]]
         ask = next(a for a in d["asks"] if a["axis"] == q["axis"])
         d["asks"].remove(ask)
@@ -121,11 +201,23 @@ def apply(state: dict, replies: list[dict], layer) -> dict:
         d["basis"][q["axis"]] = {"value": [option["value"]], "source": ANSWER_SOURCE, "question_id": q["question_id"]}
         log["rows"].append(row)
         touched.append(q["statistic"])
-    if any(not by_sid[sid]["asks"] for sid in touched):
+    done = [sid for sid in dict.fromkeys(conditioned) if not by_sid[sid]["condition_asks"]]
+    if any(not by_sid[sid]["asks"] for sid in touched) or done:
         lk = CH.Cards(new["cards"], selection_catalog(layer).views)
-        for sid in dict.fromkeys(touched):
-            if not by_sid[sid]["asks"]:
-                _decide(new, by_sid[sid], lk)
+        for sid in dict.fromkeys(touched + done):
+            d = by_sid[sid]
+            if d.get("condition_asks"):  # a period or frequency answer still to come: the basis answer waits
+                continue
+            if d["asks"]:
+                if sid in done:  # the period answered first: the option statuses on it (⑥)
+                    _resettle(new, d, lk)
+                continue
+            if d.get("answered_asks") and d.get("model_kind") != "ask_answered":
+                _decide(new, d, lk)
+            elif sid in done:
+                _decide_conditions(new, d, lk)
+    for d in record["decisions"]:  # the stage, warnings and period hints again after the answers (plan 56 order 11)
+        CH.annotate(d, record["model_output"])
     record["route"] = CH.route(record)
     new["action"] = record["route"]["action"]
     log["question_version"] = current + 1
@@ -140,6 +232,10 @@ def _finish(d: dict) -> None:
     """The outcome by the check's own rule (``check.check``, last loop)."""
     if d["reasons"]:
         d["outcome"] = "failed"
+    elif d.get("condition_asks"):  # the period or frequency only the user can give (plan 56 order 5)
+        d["outcome"] = CH.CONDITION_OUTCOME
+    elif (d.get("frequency") or {}).get("aggregation"):  # kept, to be aggregated (plan 56 order 6-3)
+        d["outcome"] = CH.AGGREGATION_OUTCOME
     elif d["final_tables"]:
         d["outcome"] = "selected" if d["citation"]["status"] == "verified" else "selected_unverified"
     else:
@@ -147,11 +243,53 @@ def _finish(d: dict) -> None:
         d["reasons"].append({"code": "undecided", "detail": None})
 
 
+def _context(state: dict) -> dict:
+    contract = (state["record"].get("parse") or {}).get("answer_contract")
+    return {"question": state["record"]["question"], "out": state["record"]["model_output"],
+            "polar": contract in CH.POLARITY_CONTRACTS, "semantic": contract in CH.SEMANTIC_PERIOD_CONTRACTS}
+
+
+def _resettle(state: dict, d: dict, lk: CH.Cards) -> None:
+    """The period (or frequency) answered before the basis asks (plan 56 order 8, ⑥): each option's status again on
+    the answer (``check.settle_asks``); the basis asks follow, or the one option the five conditions choose takes the
+    period checks, or the statistic stops as the check would."""
+    ctx = _context(state)
+    reading = CH.condition_reading(d, ctx["question"], ctx["out"], ctx["polar"], semantic=ctx["semantic"],
+                                   as_of=state["as_of"])
+    d["ask_feasibility"] = CH._ask_feasibility(d, d["quote"], reading, lk, state["as_of"])
+    got = CH.settle_asks(d, d["quote"], reading, lk, state["as_of"])
+    if got:
+        _fail(d, *got)
+        return _finish(d)
+    if d["asks"]:
+        for a in d["asks"]:
+            a["after"] = []
+            a["combinations"] = CH.ask_combinations(d)
+        d["outcome"] = "ask"
+        return None
+    got = CH.verify_table(d["quote"], d["representative"], d["item_evidence"], lk, d["retention"])
+    d["verification"].append(CH._trace("answer:auto_decided", got))
+    if not got["ok"]:
+        _fail(d, got["code"], {"for": "answer:auto_decided", "table": d["representative"]})
+        return _finish(d)
+    d["final_tables"] = []
+    CH.decide_periods(d, d["quote"], d["representative"], reading, lk, state["as_of"], "answer", ctx)
+    return _finish(d)
+
+
+def _decide_conditions(state: dict, d: dict, lk: CH.Cards) -> None:
+    """Every condition question of ``d`` answered: the period checks again on its decided table, with the answers read
+    as quotes (``check.decide_periods``); the table and basis stay as decided."""
+    reading = _answer_reading(state, d)
+    d["final_tables"] = []
+    CH.decide_periods(d, d["quote"], d["representative"], reading, lk, state["as_of"], "answer", _context(state))
+    _finish(d)
+
+
 def _decide(state: dict, d: dict, lk: CH.Cards) -> None:
     """Every axis of ``d`` answered: the option table holding every answered value, then the checks of a decided
     table (check steps 4 and 5) on it."""
-    out = state["record"]["model_output"]
-    sid, quote, as_of = d["statistic"], d["quote"], state["as_of"]
+    quote, as_of = d["quote"], state["as_of"]
     answered = {a["axis"]: a["answer"]["value"] for a in d["answered_asks"]}
     options = list(dict.fromkeys(o["table_id"] for a in d["answered_asks"] for o in a["options"]))
     targets = [t for t in options if (d["option_evidence"].get(t) or {}).get("valid")
@@ -181,45 +319,17 @@ def _decide(state: dict, d: dict, lk: CH.Cards) -> None:
         _fail(d, got["code"], {"for": "answer:option_table", "table": t,
                                **({"detail": got["detail"]} if "detail" in got else {})})
         return _finish(d)
-    # 4. periods and final tables, as for a decided table
-    reading = PR.read_quotes([r["quote"] for r in out["periods"] if sid in r["for"]],
-                             [r["quote"] for r in out["frequencies"] if sid in r["for"]])
-    rows = {r["table_id"]: r for r in lk.card_of[t]["tables"]}
-    d["period"] = {"readings": reading["readings"]}
-    if reading["problems"]:
-        for p in reading["problems"]:
-            _fail(d, p["code"], p)
-        return _finish(d)
-    candidates = CH._candidates(rows, t)
-    d["checks_done"].append("periods")
-    got = CH._select_periods(quote, t, candidates, d["item_evidence"], reading, lk, as_of, "answer", d["retention"])
-    d["verification"] += got.pop("trace")
-    quoted = any(c["kind"] == "period" for c in reading["conditions"])
-    d["period"].update({"candidates": candidates, "excluded": [x for x in rows if x not in candidates],
-                        "default_applied": not quoted,
-                        "default_reason": None if quoted else
-                        ("only base-year marks were quoted" if any(r["kind"] == "period" for r in reading["readings"])
-                         else "no period quoted"), **got})
-    if got["status"] != "selected":
-        _fail(d, got["reason"], got.get("detail"))
-        return _finish(d)
-    # 5. recheck every final table
-    d["checks_done"].append("final_recheck")
-    problems = []
-    for r in got["tables"]:
-        x = r["table_id"]
-        again = CH.verify_table(quote, x, d["item_evidence"], lk, d["retention"])
-        d["verification"].append({**CH._trace("final_table", again), "period": r["period"], "frequency": r["frequency"]})
-        if not again["ok"]:
-            problems.append(f"{x}: {again['code']}")
-        if CH._basis(lk.row[x]) != CH._basis(lk.row[t]):
-            problems.append(f"{x}: basis differs")
-        if x not in got["usable"]:
-            problems.append(f"{x}: content not verified")
-    if problems:
-        _fail(d, "final_recheck_failed", problems)
-        return _finish(d)
-    d["final_tables"] = got["tables"]
-    if [r["table_id"] for r in got["tables"]] != [t]:
-        d["corrections"].append({"code": "final_tables_by_period", "from": t, "to": [r["table_id"] for r in got["tables"]]})
+    # 4 and 5. periods, final tables and their recheck: the check's own function (``check.decide_periods``)
+    reading = _answer_reading(state, d)
+    CH.decide_periods(d, quote, t, reading, lk, as_of, "answer", _context(state))
     _finish(d)
+
+
+def _answer_reading(state: dict, d: dict) -> dict:
+    """Select a reader by the recorded contract, never reinterpret structured model quotes."""
+    ctx = _context(state)
+    if ctx["semantic"]:
+        return CH.condition_reading(d, ctx["question"], ctx["out"], ctx["polar"], semantic=True, as_of=state["as_of"])
+    sid, out = d["statistic"], ctx["out"]
+    return PR.read_quotes([r["quote"] for r in out["periods"] if sid in r["for"]],
+                          [r["quote"] for r in out["frequencies"] if sid in r["for"]])

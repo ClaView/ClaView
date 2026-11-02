@@ -14,9 +14,15 @@ from claview_a_api import view as V
 from claview_a_api.synthetic_judges import ScriptJudge, by_question
 from claview_common.contracts.a_view import AView
 
+# plan 56 order 5 (policy ④, user 2026-10-31 17:53 item 1): these tests check the screen's wiring, not frequencies.
+# Each made-up question and answer quotes the frequency the resolver's default used to give (연간) next to its period
+# (``with_frequency``); before, no frequency was quoted and the longest one was assumed. The assertions are unchanged.
 AS_OF = "2026-10-22"
-M2 = "M2 통화량 2023년 보여줘"
-TWO = "M2 통화량과 예금은행 대출금리 2024년"
+M2 = "M2 통화량 2023년 연간으로 보여줘"
+TWO = "M2 통화량과 예금은행 대출금리 2024년 연간"
+# two periods in the question: the same table with different conditions (before, s2 had none quoted and the default
+# window made it differ; a period missing for one statistic only is no longer filled)
+TWO_PERIODS = "M2 통화량 2024년과 예금은행 대출금리 2023년 연간"
 STOCK = {"for": "s1", "axis": "stock", "options": [{"value": "평잔", "table": "DT_161Y013"},
                                                     {"value": "말잔", "table": "DT_161Y014"}]}
 STATS2 = [{"id": "s1", "quote": "M2 통화량", "name": "M2"}, {"id": "s2", "quote": "예금은행 대출금리", "name": "rate"}]
@@ -37,10 +43,24 @@ SCRIPTS = {
     "same_table_same": {TWO: {"statistics": STATS2, "periods": [{"quote": "2024년", "for": ["s1", "s2"]}],
                               "choices": [{"for": ["s1"], "table": "DT_161Y014"},
                                           {"for": ["s2"], "table": "DT_161Y014"}]}},
-    "same_table_differ": {TWO: {"statistics": STATS2, "periods": [{"quote": "2024년", "for": ["s1"]}],
+    "same_table_differ": {TWO_PERIODS: {"statistics": STATS2, "periods": [{"quote": "2024년", "for": ["s1"]},
+                                                                      {"quote": "2023년", "for": ["s2"]}],
                                 "choices": [{"for": ["s1"], "table": "DT_161Y014"},
                                             {"for": ["s2"], "table": "DT_161Y014"}]}},
 }
+
+
+def with_frequency(scripts: dict, word: str = "연간") -> dict:
+    """Every made-up answer with a period also quotes ``word`` for the statistics of its periods."""
+    for answers in scripts.values():
+        for out in answers.values():
+            if out.get("periods"):
+                ids = sorted({s for r in out["periods"] for s in r["for"]})
+                out.setdefault("frequencies", [{"quote": word, "for": ids}])
+    return scripts
+
+
+with_frequency(SCRIPTS)
 
 
 def judges(name):
@@ -129,11 +149,11 @@ def test_same_table_requests_merge_only_with_the_same_conditions():
     v = select("same_table_same", TWO)["view"]
     (r,) = v["handoff"]["ready"]
     assert r["statistics"] == ["s1", "s2"] and r["tables"][0]["focus"] == "M2 통화량 / 예금은행 대출금리"
-    v = select("same_table_differ", TWO)["view"]
+    v = select("same_table_differ", TWO_PERIODS)["view"]
     assert v["handoff"]["ready"] == []
     (b,) = v["handoff"]["blocked"]
     assert (b["statistics"], b["code"]) == (["s1", "s2"], "same_table_conditions_differ")
-    # the detail is A's own assignment per statistic: 2024 quoted for s1, A's period for s2 (none quoted)
+    # the detail is A's own assignment per statistic: 2024 quoted for s1, 2023 for s2
     assert [d["tables"][0]["table_id"] for d in b["detail"]] == ["DT_161Y014", "DT_161Y014"]
     assert b["detail"][0]["tables"][0]["period"] == [{"start": "2024-01", "end": "2024-12"}]
     assert b["detail"][0]["tables"][0]["period"] != b["detail"][1]["tables"][0]["period"]

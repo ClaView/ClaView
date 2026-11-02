@@ -133,13 +133,15 @@ M2 = "M2 상품별 구성내역"
 
 
 def m2(layer, seasonal_word, chosen):
-    q = f"2024년 1~3월 M2 총액을 평잔·{seasonal_word} 기준으로 보여줘"
+    # plan 56 order 5 (policy ④, user 2026-10-31 17:53 item 1): the stated-basis check, not the frequency, is tested
+    # here, so the question and the made-up answer quote the frequency the period unit used to give (월별)
+    q = f"2024년 1~3월 M2 총액을 평잔·{seasonal_word} 기준으로 월별로 보여줘"
 
     def build(cards):
         r, _, card = ref(cards, M2, layer, stock="평잔", seasonal=chosen)
         out = output([("s1", "M2 총액")], [{"quote": "평잔", "axis": "stock", "for": ["s1"]},
                                          {"quote": seasonal_word, "axis": "seasonal", "for": ["s1"]}],
-                     [("s1", r, card["name"])], period="2024년 1~3월", frequency=None)
+                     [("s1", r, card["name"])], period="2024년 1~3월", frequency="월별")
         out["choices"][0]["evidence"] = [{"kind": "item", "text": f"M2(평잔 {chosen})"}]
         return out
     return go(q, layer, build)

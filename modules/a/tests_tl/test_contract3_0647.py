@@ -58,6 +58,8 @@ def loan_ask(cards, evidence=None, values=("신규취급액", "잔액")):
     return o
 
 
+# the fixed inputs here are of contract .3 (plan 56 order 6-3b: contract .4 is the current one)
+OLD = "tl-contract-2026-10-28.3"
 GOOD = [[{"kind": "bracket", "text": "신규취급액 기준"}, {"kind": "item", "text": "가계대출"}],
         [{"kind": "bracket", "text": "잔액 기준"}, {"kind": "item", "text": "가계대출 2)"}]]
 
@@ -68,13 +70,13 @@ GOOD = [[{"kind": "bracket", "text": "신규취급액 기준"}, {"kind": "item",
 def test_option_evidence_is_required_in_the_current_contract(layer):
     cards = cards_of(LOAN_OPEN, layer)
     with pytest.raises(K.ContractError) as e:  # the key missing: the schema refuses
-        K.parse_output(json.dumps(loan_ask(cards), ensure_ascii=False), cards)
+        K.parse_output(json.dumps(loan_ask(cards), ensure_ascii=False), cards, OLD)
     assert e.value.code == "schema"
     with pytest.raises(K.ContractError) as e:  # an empty list: a violation of contract .3
-        K.parse_output(json.dumps(loan_ask(cards, [[], GOOD[1]]), ensure_ascii=False), cards)
+        K.parse_output(json.dumps(loan_ask(cards, [[], GOOD[1]]), ensure_ascii=False), cards, OLD)
     assert e.value.code == "empty_option_evidence"
-    got = K.parse_output(json.dumps(loan_ask(cards, GOOD), ensure_ascii=False), cards)
-    assert got["problems"] == [] and got["answer_contract"] == K.CONTRACT_VERSION
+    got = K.parse_output(json.dumps(loan_ask(cards, GOOD), ensure_ascii=False), cards, OLD)
+    assert got["problems"] == [] and got["answer_contract"] == OLD  # read with the contract it names
 
 
 def test_a_contract_2_answer_is_read_with_its_absence_recorded_not_as_a_violation(layer, views):
@@ -96,7 +98,7 @@ def test_a_contract_2_answer_is_read_with_its_absence_recorded_not_as_a_violatio
 
 def test_an_ask_with_evidence_on_each_option_table_passes(layer, views):
     cards = cards_of(LOAN_OPEN, layer)
-    got = K.parse_output(json.dumps(loan_ask(cards, GOOD), ensure_ascii=False), cards)
+    got = K.parse_output(json.dumps(loan_ask(cards, GOOD), ensure_ascii=False), cards, OLD)
     d = CH.check(LOAN_OPEN, cards, got, views, AS_OF)["decisions"][0]
     assert d["outcome"] == "ask" and d["citation"]["status"] == "verified"
     assert d["option_evidence"][RATE_BAL]["items"] == ["가계대출 2)"]
@@ -106,7 +108,7 @@ def test_the_representatives_evidence_copied_to_another_option_is_an_error(layer
     """Evidence copied from the new-loan table to the balance option is not on the balance table's card."""
     cards = cards_of(LOAN_OPEN, layer)
     copied = [GOOD[0], [{"kind": "bracket", "text": "신규취급액 기준"}]]
-    got = K.parse_output(json.dumps(loan_ask(cards, copied), ensure_ascii=False), cards)
+    got = K.parse_output(json.dumps(loan_ask(cards, copied), ensure_ascii=False), cards, OLD)
     d = CH.check(LOAN_OPEN, cards, got, views, AS_OF)["decisions"][0]
     assert d["outcome"] == "failed" and d["reasons"][0]["code"] == "target_table_unconfirmed"
     assert [p["code"] for p in d["citation"]["problems"]] == ["evidence_of_other_table"]
@@ -143,10 +145,10 @@ def std_ask():
                       "groups": [[RATE_NEW]]}}
 
 
-def measured(layer, views, out, contract=K.CONTRACT_VERSION):
+def measured(layer, views, out, contract=OLD):
     cards = cards_of(LOAN_OPEN, layer)
     text = json.dumps(out(cards), ensure_ascii=False)
-    if contract == K.CONTRACT_VERSION:
+    if contract == OLD:
         state = run(LOAN_OPEN, layer, lambda p, r: text, K.Settings("fake"), AS_OF)
         rec = S.adapt(state)
     else:

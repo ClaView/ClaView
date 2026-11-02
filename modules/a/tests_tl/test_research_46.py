@@ -106,7 +106,9 @@ def test_recovery_the_added_card_is_judged_again_under_the_same_checks(layer):
     assert chosen in r["tables_added"] and d["model_kind"] == "choice"
     assert {"basis", "periods", "final_recheck"} <= set(d["checks_done"])
     assert d["outcome"] in ("selected", "selected_unverified") and d["final_tables"]
-    assert judge.payloads[1] == K.build_payload(CV22, state["cards"], state["unresolved"])
+    # plan 56 order 9-2 (contract .6 input): the re-judgment's fixed context and targets ride with the unresolved rows
+    assert judge.payloads[1] == K.build_payload(CV22, state["cards"], state["unresolved"],
+                                                fixed=state["rejudge_fixed"], targets=state["rejudge_input"])
 
 
 def test_recovery_external_debt_card_is_added_after_the_question_cards(layer):
@@ -148,14 +150,26 @@ def test_a_decided_statistic_is_never_redone(layer):
     out["statistics"] = [{"id": "s1", "quote": "M2 총액", "name": "M2 총액"},
                          {"id": "s2", "quote": "원/달러 환율", "name": "원/달러 환율"}]
     out["missing"] = [{"for": ["s2"], "search_words": ["원/달러 환율"]}]
+    # input only (the 17:53 rule): the period and frequency quoted, so s1 is decided (else it is a correction target)
+    out["periods"] = [{"quote": "2024년 1~3월", "for": ["s1", "s2"]}]
+    out["frequencies"] = [{"quote": "월별", "for": ["s1", "s2"]}]
     cards = build_cards(q, build_pool(q, layer), layer)
     m2 = next(c for c in cards if c["name"] == "M2 상품별 구성내역")
     out["choices"] = [{"for": ["s1"], "table": f"{m2['card_id']}.{table_numbers(m2)[m2['tables'][0]['table_id']]}",
                        "evidence": [{"kind": "title", "text": m2["name"]}]}]
-    judge = Script(out)
+    # plan 56 order 9 (bundle 10, ⑧-가, registered policy change): some statistics missing is enough for the one
+    # re-search; the decided s1 is never redone (its first decision is kept, ``merge_rounds``). Before: no second
+    # call, end other_statistics_decided. The second answer here leaves s2 missing again.
+    first = {d["statistic"]: d for d in run(q, layer, Script(out), Settings("fake"), AS_OF)["record"]["decisions"]}
+    judge = Script(out, out)
     state = go(q, judge, layer)
-    assert judge.calls == 1 and state["research"]["end"] == "other_statistics_decided"
-    assert state["research"]["status"] == "not_run" and "first_round" not in state
+    if state["research"]["status"] == "not_run":  # no new table for s2's words: nothing is re-judged
+        assert judge.calls == 1 and state["research"]["end"] in ("no_new_candidates", "original_candidates_changed")
+    else:
+        assert judge.calls == 2 and state["research"]["end"] in ("still_missing", "rejudged")
+    s1 = next(d for d in state["record"]["decisions"] if d["statistic"] == "s1")
+    assert s1 == first["s1"]  # the decided statistic keeps its first decision
+    assert [t["statistic"] for t in state["record"]["rejudge"]["targets"]] == ["s2"]
 
 
 def test_nothing_missing_or_no_search_word_ends_without_a_call(layer):
@@ -252,7 +266,8 @@ def test_the_re_judgment_goes_to_its_own_judge_with_the_unresolved_statistics(la
                                                  "search_words": ["총산출물가지수"], "splitters": [],
                                                  "periods": ["2024년"], "frequencies": ["월별"],
                                                  "calculations": []}]
-    assert second.payloads[0] == K.build_payload(CV22, state["cards"], state["unresolved"])
+    assert second.payloads[0] == K.build_payload(CV22, state["cards"], state["unresolved"],
+                                                 fixed=state["rejudge_fixed"], targets=state["rejudge_input"])
     assert second.requests[0]["text"] == first.requests[0]["text"]  # the same output contract
     assert state["run_info"]["model"]["model"] == "first-model"
     assert state["run_info"]["research_model"]["model"] == "second-model"

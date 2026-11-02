@@ -12,7 +12,11 @@ import json
 import re
 from collections.abc import Callable
 
+from claview_a.contract import output_schema
 from claview_a.graph import JudgeError
+
+# the contract of the scripts written before contract .4 (plan 56 order 6-3)
+LEGACY_SCRIPT_CONTRACT = "tl-contract-2026-10-28.3"
 
 KEYS = (
     "statistics",
@@ -40,10 +44,11 @@ def card_index(cards_text: str) -> dict[str, tuple[str, str]]:
     return out
 
 
-def complete(out: dict, payload: dict) -> dict:
-    """The script's output with every contract key and title evidence where none was written."""
+def complete(out: dict, payload: dict, contract: str = LEGACY_SCRIPT_CONTRACT) -> dict:
+    """The script's output with every key of ``contract`` and title evidence where none was written."""
     index = card_index(payload["cards"])
-    full = {k: json.loads(json.dumps(out.get(k, []), ensure_ascii=False)) for k in KEYS}
+    keys = output_schema(contract)["properties"]
+    full = {k: json.loads(json.dumps(out.get(k, []), ensure_ascii=False)) for k in keys}
 
     def evidence(table: str) -> list[dict]:
         return [{"kind": "title", "text": index[table][1]}] if table in index else [{"kind": "title", "text": table}]
@@ -62,8 +67,11 @@ class ScriptJudge:
     """``script(payload) -> output | None``: the output for this payload (table IDs, no evidence needed), or None
     when the script has none (then ``LookupError``, never a guess)."""
 
-    def __init__(self, script: Callable[[dict], dict | None]):
+    def __init__(self, script: Callable[[dict], dict | None], answer_contract: str = LEGACY_SCRIPT_CONTRACT):
+        # the contract its scripted answers are written to: the old shape (no polarity, period meaning or
+        # aggregation fields) unless a script of the current contract says so (plan 56 order 6-3)
         self.script, self.calls, self.models = script, 0, []
+        self.answer_contract = answer_contract
 
     def __call__(self, payload: dict, request: dict) -> str:
         self.calls += 1
@@ -73,7 +81,7 @@ class ScriptJudge:
             raise LookupError("no scripted answer for this question")
         if "judge_error" in out:
             raise JudgeError(out["judge_error"])
-        return json.dumps(complete(out, payload), ensure_ascii=False)
+        return json.dumps(complete(out, payload, self.answer_contract), ensure_ascii=False)
 
 
 def by_question(answers: dict[str, dict], fallback: Callable[[dict], dict | None] | None = None):

@@ -247,6 +247,7 @@ class CallGate:
         def call(payload: dict, request: dict) -> str:
             self._admit(model)
             return inner(payload, request)
+        call.answer_contract = getattr(inner, "answer_contract", None)  # the inner judge's contract goes through
         return call
 
     def _admit(self, model: str) -> None:
@@ -268,6 +269,33 @@ class CallGate:
 
 
 KEY_REFUSALS = ("http_401", "http_403")
+CREDENTIAL = "OPENAI_API_KEY"  # the credential's name in a ledger, never the key
+
+
+def guarded(transport, run_id: str):
+    """(transport, credential ledger) of a live run (plan 56 order 3): a 401/403 halts the key in the run's credential
+    ledger, so every later send with it is refused before it reaches ``transport`` (``credential_halted``)."""
+    from claview_a.budget import Ledger, key_of
+    from claview_a.judges import GuardedTransport
+
+    ledger = Ledger.memory(key_of("run:" + run_id))
+    return GuardedTransport(transport, ledger, CREDENTIAL), ledger
+
+
+def entry_ledger(question: str):
+    """The call ledger of one scheduled question (plan 56 order 3): its C9 slots, in memory. A run asks a question
+    again on purpose (rounds, models), so each scheduled entry has its own; the original question's durable ledger
+    is bundle 9's."""
+    from claview_a.budget import Ledger, key_of
+
+    return Ledger.memory(key_of(question))
+
+
+def bind(judges, ledger) -> None:
+    """Point the live and fake judges behind a gate at the scheduled question's ledger."""
+    for j in judges:
+        if j is not None and hasattr(j, "ledger"):
+            j.ledger = ledger
 
 
 class KeyGuard:
@@ -315,6 +343,7 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None, re
             key_from_env_file()  # the team's .env, the one key source (user 2026-10-29 09:51 UTC)
             transport = OpenAITransport()
         transport.preflight()  # key present (not read out): fails before any call is sent
+        transport, _credentials = guarded(transport, manifest["run_id"])
     elif mode == "replay":
         rows = [json.loads(x) for x in (Path(replay_from) / "calls.jsonl").read_text(encoding="utf-8").splitlines()]
     elif mode != "fake":
@@ -335,9 +364,10 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None, re
     out_dir.mkdir(parents=True)
     (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
     archive, ref = Archive(out_dir / "calls.jsonl"), {}
-    judge = {"live": lambda: LiveJudge(transport, manifest["max_calls"], archive, ref),
+    judge = {"live": lambda: LiveJudge(transport, manifest["max_calls"], archive, ref, credential_ref=CREDENTIAL),
              "fake": lambda: FakeJudge(archive, ref),
              "replay": lambda: ReplayJudge(rows, archive, ref)}[mode]()
+    ledgers = {}
     settings = K.Settings(**manifest["model"])
     records, started, stopped = {}, now(), None
     try:
@@ -347,7 +377,9 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None, re
             if changed:
                 raise RunStopped(f"fixed conditions changed before {cid}: {changed}")
             before = judge.calls
-            state = graph_run(by[cid]["question"], layer, judge, settings, manifest["as_of"])
+            ledgers[cid] = ledger = entry_ledger(by[cid]["question"])
+            bind([judge], ledger)
+            state = graph_run(by[cid]["question"], layer, judge, settings, manifest["as_of"], ledger=ledger)
             if judge.calls - before > 1:
                 raise RunStopped(f"{cid}: {judge.calls - before} calls for one question")
             rec = S.adapt(state)
@@ -372,7 +404,8 @@ def run(manifest: dict, mode: str, out_dir: Path, layer=None, transport=None, re
                                                   for u in usage),
                               "output": sum(u.get("output_tokens", 0) for u in usage),
                               "reasoning": sum((u.get("output_tokens_details") or {}).get("reasoning_tokens", 0)
-                                               for u in usage)}}
+                                               for u in usage)},
+                   "ledgers": {k: v.summary()["by_slot"] for k, v in ledgers.items()}}
         (out_dir / "run.json").write_text(json.dumps(summary, ensure_ascii=False, indent=1), encoding="utf-8")
     views = selection_catalog(layer).views
     report = R.evaluate(records, standard, {t: v.title for t, v in views.items()}, R.coverage_of(views), std_sha)

@@ -110,6 +110,7 @@ jobs:
           curl -fsS http://localhost:10300/health
           curl -fsS http://localhost:10301/health
           curl -fsS http://localhost:10311/health && curl -fsS http://localhost:10312/health && curl -fsS http://localhost:10313/health
-          curl -fsS -X POST http://localhost:10311/a/select -H 'Content-Type: application/json' -d @common/fixtures/a_request/CV-AB-12.json > /dev/null
+          curl -fsS -X POST http://localhost:10311/a/select -H 'Content-Type: application/json' -d @common/fixtures/a_http_request/focus_model_scope.json > /dev/null
+          curl -fsS -X POST http://localhost:10311/a/legacy/select -H 'Content-Type: application/json' -d @common/fixtures/a_request/CV-AB-12.json > /dev/null
       - if: always()
         run: docker compose down

@@ -169,10 +169,17 @@ class ScreenPipeline(Pipeline):
     def __init__(self, *args, judges_factory=None, period_questions=None, b_factory=None, **kwargs):
         super().__init__(*args, **kwargs)
         # judges_factory() -> claview_a_api.screen.Judges; the default refuses live calls (a_live_disabled)
-        self.judges_factory = judges_factory or (lambda: a_screen.judges_for(self.mode))
+        self.judges_factory = judges_factory or self._default_judges
         self.period_questions = period_questions  # tests and the screen demo only (synthetic period questions)
         if b_factory is not None:
             self.b_factory = b_factory
+
+    def _default_judges(self):
+        # A's approved transport is available through its API, but this main screen path does not yet connect
+        # persistent records and downstream call caps. Keep its previous live-disabled behavior until that PR.
+        if self.mode == "live":
+            raise a_screen.LiveDisabled()
+        return a_screen.judges_for(self.mode)
 
     # ---- resume -----------------------------------------------------------------------
     def validate_resume(self, paused, confirmation):

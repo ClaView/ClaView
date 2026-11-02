@@ -26,22 +26,26 @@ from __future__ import annotations
 import copy
 
 from claview_a.cards import ASK_AXES
+from claview_a.focus import FOCUS_JOIN, MAX_FOCUS_CHARS
+from claview_a.quotes import quote_in_question
 from claview_a.search.tables import selection_catalog
 from claview_common.contracts.a_view import AView
 
-# B accepts a focus of at most this many characters (claview_b.stages.MAX_FOCUS_CHARS; B checks it again).
-MAX_FOCUS_CHARS = 100
-FOCUS_JOIN = " / "
+# The check and handoff share B's existing focus limit; B checks it again.
 STATE_OF = {
     "selected": "selected",
     "selected_unverified": "unverified",
     "ask": "asking",
     "ask_unverified": "unverified",
+    "ask_condition": "asking",
+    "aggregation_needed": "unverified",
     "not_in_pool": "missing",
     "failed": "failed",
 }
 BLOCKED_CODE = {
     "ask": "awaiting_answer",
+    "ask_condition": "awaiting_answer",
+    "aggregation_needed": "aggregation_needed",
     "ask_unverified": "a_evidence_unverified",
     "selected_unverified": "a_evidence_unverified",
     "not_in_pool": "not_in_pool",
@@ -60,6 +64,15 @@ def _table(views: dict, table_id: str, **extra) -> dict:
     }
 
 
+def _catalog_range(views: dict, table_id: str, frequency: str | None) -> dict | None:
+    """The table's range in ``frequency`` as the A catalog records it (the source of A's coverage)."""
+    view = views.get(table_id)
+    for f, start, end in (view.periods if view else ()) or ():
+        if f == frequency:
+            return {"frequency": f, "start": start, "end": end, "source": "a_catalog"}
+    return None
+
+
 def _conditions(out: dict | None, sid: str) -> dict:
     if not out:
         return {}
@@ -68,16 +81,36 @@ def _conditions(out: dict | None, sid: str) -> dict:
     return got
 
 
-def _basis(d: dict) -> list[dict]:
+def _polarity(out: dict | None, sid: str, axis: str) -> tuple[str | None, dict]:
+    """(mode, value -> quotes) of the model's polarity rows of ``sid`` on ``axis`` (none for an older answer)."""
+    rows = [r for r in (out or {}).get("splitters") or []
+            if sid in r["for"] and r["axis"] == axis and r.get("polarity")]
+    required = [r for r in rows if r["polarity"] == "required"]
+    any_of = [r for r in rows if r["polarity"] == "any_of"]
+    quotes: dict[str, list[str]] = {}
+    for r in required or any_of:
+        quotes.setdefault(r["value"], [])
+        if r["quote"] not in quotes[r["value"]]:
+            quotes[r["value"]].append(r["quote"])
+    return ("all" if required else "any" if any_of else None), quotes
+
+
+def _basis(d: dict, out: dict | None = None) -> list[dict]:
     rows = []
     for axis, b in (d.get("basis") or {}).items():
         value = b.get("value")
+        polar = out and b.get("source") == "splitter"
+        mode, quotes = _polarity(out, d.get("statistic"), axis) if polar else (None, {})
         rows.append(
             {
                 "axis": axis,
                 "label": ASK_AXES.get(axis, axis),
                 "value": list(value) if isinstance(value, list | tuple) else [str(value)],
                 "source": b.get("source") or "unknown",
+                "excluded": list(b.get("excluded") or []),
+                "note": b.get("note"),
+                "mode": mode,
+                "value_quotes": quotes,
             }
         )
     return rows
@@ -116,11 +149,54 @@ def _answers(d: dict) -> list[dict]:
             "source": a["source"],
         }
         for a in d.get("answers") or []
+    ] + [
+        {
+            "question_id": a["question_id"],
+            "question_version": a["question_version"],
+            "statistics": list(a["statistics"]),
+            "kind": a["kind"],
+            "option_id": a["option_id"],
+            "value": a["value"],
+            "text": a.get("text"),
+            "table_id": None,
+            "source": a["source"],
+        }
+        for a in d.get("condition_answers") or []
     ]
 
 
 def _question_text(quote: str, label: str) -> str:
     return f"‘{quote}’의 {label} 기준을 골라 주세요. 질문에 기준이 없고 표마다 달라 임의로 정하지 않았습니다."
+
+
+CONDITION_TEXT = {
+    "period": "‘{quote}’의 기간을 골라 주세요. 질문에 기간이 없어 임의로 정하지 않았습니다.",
+    "frequency": "‘{quote}’의 주기를 골라 주세요. 표가 여러 주기를 주고 질문에 주기가 없어 임의로 정하지 않았습니다.",
+}
+
+
+def _condition_question(q: dict, quotes: list[str], version: int) -> dict:
+    """An AView question of A's own period or frequency question (plan 56 order 5)."""
+    text = CONDITION_TEXT[q["kind"]].format(quote="’, ‘".join(quotes))
+    if q.get("partial_periods"):
+        bounds = " · ".join(("시작 " if k == "start" else "끝 ") + p[k]
+                            for p in q["partial_periods"] for k in ("start", "end") if p.get(k))
+        text = f"‘{'’, ‘'.join(quotes)}’의 {bounds} 조건은 유지합니다. 빠진 경계를 정해 전체 기간을 입력해 주세요."
+    return {
+        "question_id": q["question_id"],
+        "question_version": version,
+        "kind": q["kind"],
+        "statistics": list(q["statistics"]),
+        "cause": q["cause"],
+        "axis": None,
+        "axis_label": None,
+        "text": text,
+        "input": q["input"],
+        "options": [
+            {"option_id": o["option_id"], "label": o["label"], "value": o["value"], "range": copy.deepcopy(o["range"])}
+            for o in q["options"]
+        ],
+    }
 
 
 def build(checkpoint: dict, layer) -> dict:
@@ -134,10 +210,14 @@ def build(checkpoint: dict, layer) -> dict:
     record = state.get("record") or {}
     out = record.get("model_output")
     stats_by_id = {s["id"]: s for s in (out or {}).get("statistics") or []}
-    a_version = AN.question_version(state)
+    a_version = checkpoint["session"]["question_version"]  # one question version for every question (bundle 9)
 
     questions = []
     for q in AN.questions(state):
+        if q["kind"] in AN.CONDITION_KINDS:
+            quotes = [stats_by_id.get(s, {}).get("quote", "") for s in q["statistics"]]
+            questions.append(_condition_question(q, quotes, a_version))
+            continue
         quote = stats_by_id.get(q["statistic"], {}).get("quote", "")
         questions.append(
             {
@@ -156,12 +236,14 @@ def build(checkpoint: dict, layer) -> dict:
                         "value": o["value"],
                         "table_id": o["table_id"],
                         "table_name": _table(views, o["table_id"])["table_name"],
+                        "status": o.get("status"),
+                        "selectable": o.get("selectable", True),
                     }
                     for o in q["options"]
                 ],
             }
         )
-    questions += [copy.deepcopy(q) for q in period.get("questions") or []]
+    questions += [{**copy.deepcopy(q), "question_version": a_version} for q in period.get("questions") or []]
     asked = {sid for q in questions for sid in q["statistics"]}
     period_answers = {}
     for a in period.get("answers") or []:
@@ -180,23 +262,53 @@ def build(checkpoint: dict, layer) -> dict:
                 "name": d["name"],
                 "outcome": outcome,
                 "state": STATE_OF[outcome],
-                "verified": outcome in ("selected", "ask"),
+                "verified": outcome in ("selected", "ask", "ask_condition"),
                 "representative": d.get("representative"),
                 "tables": [
-                    _table(views, r["table_id"], period=copy.deepcopy(r.get("period")), frequency=r.get("frequency"))
+                    _table(
+                        views,
+                        r["table_id"],
+                        period=copy.deepcopy(r.get("period")),
+                        frequency=r.get("frequency"),
+                        catalog_range=_catalog_range(views, r["table_id"], r.get("frequency")),
+                        latest_unpublished=copy.deepcopy(r.get("latest_unpublished")),
+                        period_hint=copy.deepcopy(r.get("period_hint")),
+                        period_phrase=copy.deepcopy(r.get("period_phrase")),
+                        period_source=(r.get("period_phrase") or {}).get("source"),
+                        frequency_source=(d.get("frequency") or {}).get("source"),
+                        default_reason=(d.get("period") or {}).get("default_reason"),
+                    )
                     for r in d.get("final_tables") or []
                 ],
-                "basis": _basis(d),
-                "focus": d["quote"],
+                "basis": _basis(d, out),
+                "focus": (d.get("focus") or {}).get("text", d["quote"]),
+                "focus_provenance": copy.deepcopy(d.get("focus") or {
+                    "text": d["quote"], "quotes": [d["quote"]], "source": "legacy_quote",
+                    "status": ("verified_quote_only"
+                               if quote_in_question(d["quote"], session["question"]) else "invalid"),
+                }),
                 "conditions": _conditions(out, sid),
                 "reasons": _reasons(d.get("reasons")),
                 "warnings": _warnings(d.get("warnings")),
                 "search_words": list(d.get("search_words") or []),
                 "answers": _answers(d) + period_answers.get(sid, []),
+                "aggregation": copy.deepcopy((d.get("frequency") or {}).get("aggregation")),
+                "auto_decided": [{"axis": c["axis"], "value": c["value"], "message": c["message"]}
+                                 for c in d.get("corrections") or [] if c["code"] == "auto_decided"],
+                "a_stage": d.get("a_stage"),
+                "warning_rows": copy.deepcopy(d.get("warning_rows") or []),
+                "end_point_status": copy.deepcopy(d.get("end_point_status") or []),
             }
         )
 
-    ready, blocked = _handoff(session, statistics, asked, period_answers)
+    # A's own period and frequency answers (plan 56 order 5) go with the request too: B's table list has no field for
+    # them, so a request carrying them waits for a B that takes them (plan 56 0.5, period_answer_contract_pending)
+    handoff_answers = {sid: list(rows) for sid, rows in period_answers.items()}
+    for s in statistics:
+        handoff_answers.setdefault(s["statistic"], []).extend(
+            copy.deepcopy(a) for a in s["answers"] if a["kind"] in AN.CONDITION_KINDS and a not in
+            handoff_answers.get(s["statistic"], []))
+    ready, blocked = _handoff(session, statistics, asked, handoff_answers)
     failure = None
     if record.get("error"):
         failure = {"stage": record["error"].get("stage") or "a", "code": record["error"].get("code") or "unknown"}
@@ -223,6 +335,7 @@ def build(checkpoint: dict, layer) -> dict:
                 "model": copy.deepcopy(info.get("model") or {}),
                 "research_model": copy.deepcopy(info.get("research_model")),
                 "profile": session["profile"],
+                "period_policy": copy.deepcopy(info.get("period_policy")),
             },
         },
         "status": status,
@@ -345,6 +458,7 @@ def _handoff(session: dict, statistics: list[dict], asked: set, period_answers: 
                         "frequency": t.get("frequency"),
                         "period": copy.deepcopy(t.get("period")),
                         "statistics": sids,
+                        **{k: copy.deepcopy(t[k]) for k in ("catalog_range", "latest_unpublished") if t.get(k)},
                     }
                     for t in first
                 ],
@@ -353,3 +467,55 @@ def _handoff(session: dict, statistics: list[dict], asked: set, period_answers: 
             }
         )
     return ready, blocked
+
+
+# ---------------------------------------------------------------- the C2 conditions of a request (plan draft 57 step 1)
+
+CONDITION_SOURCES = ("quoted", "user_answer")  # a period source the C2 delivery allows (no default)
+PHRASE_MAX = 60  # the C2 delivery's period_phrase limit
+
+
+def handoff_conditions(view: dict, request: dict) -> dict:
+    """The C2 conditions (delivery rev 11, 3.1) of one ready request, assembled from the same AView statistics the
+    screen shows: per table the statistics, frequency, requested months, period and frequency sources, the period
+    phrase and the unpublished months, and A's period hint apart. Nothing is read again from the question and
+    nothing is decided here. {conditions, period_hints, withheld}: ``withheld`` names why no condition is made for
+    the request (a period source the delivery does not allow, the members' values or sources not one), and then
+    ``conditions`` is empty: the request keeps today's path. Owner 11-01 13:39 / 14:08: A assembles, the pipeline only
+    converts, checks and sends."""
+    stats = {s["statistic"]: s for s in view.get("statistics") or []}
+    members = [stats.get(sid) for sid in request["statistics"]]
+    if any(m is None or m.get("outcome") != "selected" for m in members):
+        return {"conditions": [], "period_hints": [], "withheld": "statistic_not_selected"}
+    conditions, hints = [], []
+    for t in request["tables"]:
+        rows = [next((x for x in m["tables"] if x["table_id"] == t["table_id"]), None) for m in members]
+        if any(r is None for r in rows):
+            return {"conditions": [], "period_hints": [], "withheld": "member_table_missing"}
+        values = {(r.get("frequency"), _span_key(r.get("period")), r.get("period_source"), r.get("frequency_source"))
+                  for r in rows}
+        if len(values) != 1:
+            return {"conditions": [], "period_hints": [], "withheld": "member_values_differ"}
+        first = rows[0]
+        if first.get("period_source") not in CONDITION_SOURCES:
+            return {"conditions": [], "period_hints": [], "withheld": "period_source_not_allowed"}
+        if not first.get("frequency") or len(first.get("period") or []) != 1:
+            return {"conditions": [], "period_hints": [], "withheld": "period_not_one_span"}
+        texts = list(dict.fromkeys((r.get("period_phrase") or {}).get("text") for r in rows if
+                                   (r.get("period_phrase") or {}).get("text")))
+        phrase = FOCUS_JOIN.join(texts) or None
+        row = {"table_id": t["table_id"], "statistics": list(request["statistics"]), "frequency": first["frequency"],
+               "period": copy.deepcopy(first["period"]), "period_source": first["period_source"],
+               "frequency_source": first.get("frequency_source")}
+        if phrase and len(phrase) <= PHRASE_MAX:
+            row["period_phrase"] = phrase
+        if first.get("latest_unpublished"):
+            row["latest_unpublished"] = copy.deepcopy(first["latest_unpublished"])
+        conditions.append(row)
+        if first.get("period_hint"):
+            hints.append({"table_id": t["table_id"], **copy.deepcopy(first["period_hint"])})
+    return {"conditions": conditions, "period_hints": hints, "withheld": None}
+
+
+def _span_key(spans) -> tuple:
+    return tuple((s.get("start"), s.get("end")) for s in spans or [])

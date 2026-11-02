@@ -70,3 +70,15 @@ def test_json_schemas_export():
         contracts.ViewModel,
     ):
         assert model.model_json_schema()["title"] == model.__name__
+
+
+@pytest.mark.parametrize(("name", "body"), load("a_view"))
+def test_a_view_focus_provenance_stays_outside_b_table_fields(name, body):
+    from claview_common.contracts.a_view import AView
+
+    view = AView.model_validate(body)
+    provenance = view.statistics[0].focus_provenance
+    assert provenance["source"] in {"model_scope", "legacy_quote"}, name
+    table = view.handoff.ready[0].tables[0].model_dump()
+    assert table["focus"] == view.statistics[0].focus
+    assert set(table) == {"org_id", "table_id", "table_name", "focus"}

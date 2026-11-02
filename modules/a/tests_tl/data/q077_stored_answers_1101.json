@@ -1,0 +1,18 @@
+{
+ "about": "Stored answers of one live question (approval a19-20261101-65e0bf0, 2026-11-01): the first judgment and the one re-judgment, as the provider returned their text. Model outputs only (no request, key or usage). Used as a regression fixture; never a model result.",
+ "question": "기대인플레이션율과 경제심리지수를 같은 기간으로 비교해줘.",
+ "as_of": "2026-10-29",
+ "contract": "tl-contract-2026-10-28.6",
+ "answers": [
+  {
+   "model": "gpt-6.1-terra",
+   "request_sha256": "c57c13128a8d2105dbc90ecf66142355da08a211bdc82b7cbecc7851093508af",
+   "text": "{\"aggregations\":[],\"alternatives\":[],\"asks\":[],\"calculations\":[],\"changes\":[],\"choices\":[{\"evidence\":[{\"kind\":\"title\",\"text\":\"기대인플레이션율\"}],\"for\":[\"s1\"],\"table\":\"g1.t1\"},{\"evidence\":[{\"kind\":\"title\",\"text\":\"경제심리지수\"}],\"for\":[\"s2\"],\"table\":\"g2.t1\"}],\"frequencies\":[],\"missing\":[],\"periods\":[{\"for\":[\"s2\"],\"meaning\":\"same_as\",\"quote\":\"같은 기간으로\",\"refers_to\":[\"s1\"]}],\"splitters\":[],\"statistics\":[{\"id\":\"s1\",\"name\":\"기대인플레이션율\",\"quote\":\"기대인플레이션율\"},{\"id\":\"s2\",\"name\":\"경제심리지수\",\"quote\":\"경제심리지수\"}]}"
+  },
+  {
+   "model": "gpt-6.1-sol",
+   "request_sha256": "cb5aaeaf1cae1559c5f187464508fce2af8d92e93e0265d972f93c47ff04ba82",
+   "text": "{\"aggregations\":[],\"alternatives\":[],\"asks\":[],\"calculations\":[],\"changes\":[],\"choices\":[{\"evidence\":[{\"kind\":\"title\",\"text\":\"기대인플레이션율\"}],\"for\":[\"s1\"],\"table\":\"g1.t1\"}],\"frequencies\":[],\"missing\":[],\"periods\":[{\"for\":[\"s1\"],\"meaning\":\"same_as\",\"quote\":\"같은 기간\",\"refers_to\":[\"s2\"]}],\"splitters\":[],\"statistics\":[{\"id\":\"s1\",\"name\":\"기대인플레이션율\",\"quote\":\"기대인플레이션율\"}]}"
+  }
+ ]
+}

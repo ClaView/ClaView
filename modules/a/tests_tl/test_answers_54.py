@@ -19,9 +19,12 @@ from claview_a.contract import Settings
 from conftest import fill_option_evidence
 
 AS_OF = "2026-10-22"
-M2 = "M2 통화량 2023년 보여줘"
-GDP = "GDP 2023년 보여줘"
-TWO = "M2 통화량과 예금은행 대출금리 2024년"
+# plan 56 order 5 (policy ④, user 2026-10-31 17:53 item 1): these questions check basis answers, not frequencies, so
+# the question and the made-up answer quote a frequency every option table gives (연간: the resolver's old default for
+# M2; 분기별 for GDP); before, with no frequency quoted, the longest one was assumed. The assertions are unchanged.
+M2 = "M2 통화량 2023년 연간으로 보여줘"
+GDP = "GDP 2023년 분기별로 보여줘"  # 분기별: every option table of its asks gives it (계절조정 is quarterly only)
+TWO = "M2 통화량과 예금은행 대출금리 2024년 연간"
 
 
 def ask(sid, axis, *options):
@@ -30,15 +33,17 @@ def ask(sid, axis, *options):
 
 OUTPUTS = {
     M2: {"statistics": [{"id": "s1", "quote": "M2 통화량", "name": "M2"}],
-         "periods": [{"quote": "2023년", "for": ["s1"]}],
+         "periods": [{"quote": "2023년", "for": ["s1"]}], "frequencies": [{"quote": "연간", "for": ["s1"]}],
          "asks": [ask("s1", "stock", ("평잔", "DT_161Y013"), ("말잔", "DT_161Y014"))]},
     GDP: {"statistics": [{"id": "s1", "quote": "GDP", "name": "GDP"}],
           "periods": [{"quote": "2023년", "for": ["s1"]}],
+          "frequencies": [{"quote": "분기별", "for": ["s1"]}],
           "asks": [ask("s1", "seasonal", ("계절조정", "DT_200Y104"), ("원계열", "DT_200Y106")),
                    ask("s1", "price", ("명목", "DT_200Y105"), ("실질", "DT_200Y106"))]},
     TWO: {"statistics": [{"id": "s1", "quote": "M2 통화량", "name": "M2"},
                          {"id": "s2", "quote": "예금은행 대출금리", "name": "rate"}],
           "periods": [{"quote": "2024년", "for": ["s1", "s2"]}],
+          "frequencies": [{"quote": "연간", "for": ["s1", "s2"]}],
           "asks": [ask("s1", "stock", ("평잔", "DT_161Y013"), ("말잔", "DT_161Y014")),
                    ask("s2", "loan_basis", ("신규취급액", "DT_121Y006"), ("잔액기준", "DT_121Y015"))]},
 }

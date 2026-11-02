@@ -12,9 +12,12 @@ from claview_a_api import service as a_legacy_service
 from claview_a_api.synthetic_judges import ScriptJudge, by_question
 from claview_pipeline.synthetic import SyntheticFetchClient, SyntheticSelectionModel
 
+# plan 56 order 5 (policy ④, user 2026-10-31 17:53 item 1): these tests check the screen's wiring, not frequencies.
+# Each made-up question and answer quotes the frequency the resolver's default used to give (연간) next to its period
+# (``with_frequency``); before, no frequency was quoted and the longest one was assumed. The assertions are unchanged.
 AS_OF = "2026-10-22"
-M2 = "M2 통화량 2023년 보여줘"
-TWO = "M2 통화량과 예금은행 대출금리 2024년"
+M2 = "M2 통화량 2023년 연간으로 보여줘"
+TWO = "M2 통화량과 예금은행 대출금리 2024년 연간"
 S1 = [{"id": "s1", "quote": "M2 통화량", "name": "M2"}]
 S2 = S1 + [{"id": "s2", "quote": "예금은행 대출금리", "name": "rate"}]
 STOCK = {"for": "s1", "axis": "stock", "options": [{"value": "평잔", "table": "DT_161Y013"},
@@ -30,6 +33,19 @@ SCRIPTS = {
                       "missing": [{"for": ["s2"], "search_words": ["대출금리"]}]}},
     "error": {M2: {"judge_error": "timeout"}},
 }
+
+
+def with_frequency(scripts: dict, word: str = "연간") -> dict:
+    """Every made-up answer with a period also quotes ``word`` for the statistics of its periods."""
+    for answers in scripts.values():
+        for out in answers.values():
+            if out.get("periods"):
+                ids = sorted({s for r in out["periods"] for s in r["for"]})
+                out.setdefault("frequencies", [{"quote": word, "for": ids}])
+    return scripts
+
+
+with_frequency(SCRIPTS)
 
 
 def stage_status(state):
@@ -122,6 +138,22 @@ def test_default_judges_are_synthetic_and_live_is_refused(screen, monkeypatch):
     live.mode = "live"
     state = live.run(M2, as_of=AS_OF)
     assert state["error_code"] == "a_live_disabled" and stage_status(state)["question"] == "failed"
+    assert state["calls"]["HCX"] == state["calls"]["KOSIS"] == 0
+
+
+def test_an_a_approval_does_not_enable_the_unconnected_main_screen(screen, monkeypatch):
+    def refuse(*args, **kwargs):
+        raise AssertionError("the main screen must not open an A live gate yet")
+
+    monkeypatch.setenv("CLAVIEW_A_LIVE_APPROVAL", "not-opened.json")
+    monkeypatch.setattr(a_screen, "live_judges", refuse)
+    from claview_pipeline.screen import ScreenPipeline
+
+    p = screen()
+    live = ScreenPipeline(model=None, client=None, runs_dir=None, session=p)
+    live.mode = "live"
+    state = live.run(M2, as_of=AS_OF)
+    assert state["error_code"] == "a_live_disabled"
     assert state["calls"]["HCX"] == state["calls"]["KOSIS"] == 0
 
 
@@ -240,11 +272,11 @@ def test_period_text_is_not_sent_to_the_real_b_contract(screen):
 
 # ---------------------------------------------------------------- review fixes (plan 54b): A's conditions kept to B
 
-DIFF = "M2 통화량 2023년과 예금은행 대출금리 2024년"
-EDITIONS = "2001년부터 2010년까지 M2 말잔(원계열)을 보여줘"
-CALC = "2023년 M2 통화량 비중과 M2 통화량 수준을 보여줘"
-BASE = "2023년 M2 통화량의 전년 대비 증감률을 보여줘"
-WARN = "2024년 수출 공산품 가격을 원화 기준으로 보여줘"
+DIFF = "M2 통화량 2023년과 예금은행 대출금리 2024년 연간"
+EDITIONS = "2001년부터 2010년까지 M2 말잔(원계열)을 연간으로 보여줘"
+CALC = "2023년 연간 M2 통화량 비중과 M2 통화량 수준을 보여줘"
+BASE = "2023년 연간 M2 통화량의 전년 대비 증감률을 보여줘"
+WARN = "2024년 연간 수출 공산품 가격을 원화 기준으로 보여줘"
 SCRIPTS.update({
     "periods_differ": {DIFF: {"statistics": S2, "periods": [{"quote": "2023년", "for": ["s1"]},
                                                             {"quote": "2024년", "for": ["s2"]}],
@@ -278,6 +310,7 @@ SCRIPTS.update({
                                  "options": [{"value": "기본분류", "table": "DT_402Y014"},
                                              {"value": "품목별", "table": "DT_402Y016"}]}]}},
 })
+with_frequency(SCRIPTS)
 
 
 def test_different_periods_on_different_tables_are_not_sent(screen):

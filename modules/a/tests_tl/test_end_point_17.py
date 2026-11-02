@@ -100,8 +100,15 @@ def test_an_end_word_for_some_statistics_is_not_spread_to_the_others(layer):
 
 
 def test_a_question_without_a_frequency_records_none_and_does_not_stop(layer):
-    _, d, _ = go(m2_question("2020~2024년"), layer, periods=["2020~2024년"])
-    assert d["s1"]["frequency_quotes"] == [] and d["s1"]["outcome"] == "selected"
+    # plan 56 order 5 (policy ④, user 2026-10-31 17:53 item 2). The test checks what a question with a period and no
+    # frequency gives. Before: frequency_quotes [] and selected (the resolver assumed the longest frequency). Now the
+    # period is kept and, with several valid frequencies, only the frequency is asked: no default frequency, no period
+    # question, nothing handed on.
+    state, d, _ = go(m2_question("2020~2024년"), layer, periods=["2020~2024년"])
+    s = d["s1"]
+    assert s["frequency_quotes"] == [] and s["outcome"] == "ask_condition" and state["action"] == "ask"
+    assert [a["kind"] for a in s["condition_asks"]] == ["frequency"] and len(s["frequency"]["valid"]) > 1
+    assert s["final_tables"] == [] and "cause" not in s["period"]
 
 
 def test_an_end_word_not_in_the_question_still_fails_the_quote_check(layer):

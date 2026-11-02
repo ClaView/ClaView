@@ -29,12 +29,12 @@ from typing import Any
 
 # .2: `attrs.invalid` is malformed, `extract_status` no longer decides support, one assigned
 # segment per table
-CONTRACT_VERSION = "period-contract/2026-10-21.2"
+CONTRACT_VERSION = "period-contract/2026-10-31.3"  # .3: as_of_calendar anchor (plan 56 order 4)
 
 STATUSES = ("ok", "unresolved", "table_unsuitable", "no_data_in_range", "invalid_input")
 SOURCES = ("question", "catalog", "default", "user")
 HINT_STATES = ("absent", "empty", "given")
-ANCHOR_SOURCES = ("bundle_common", "table_latest")
+ANCHOR_SOURCES = ("bundle_common", "table_latest", "as_of_calendar")
 FREQUENCIES = ("Y", "H", "Q", "M")
 PERIOD_FORMS = ("range", "since", "recent", "point", "alias")
 PERIOD_DIAGNOSES = ("ok", "unsupported", "malformed")
@@ -195,8 +195,8 @@ def check_context(context: Any) -> list[str]:
     if source not in ANCHOR_SOURCES:
         out.append("context.anchor_source: unknown")
     anchor = context.get("anchor")
-    if source == "bundle_common" and not is_month(anchor):
-        out.append("context.anchor: a bundle_common anchor must be YYYY-MM")
+    if source in ("bundle_common", "as_of_calendar") and not is_month(anchor):
+        out.append(f"context.anchor: a {source} anchor must be YYYY-MM")
     if source == "table_latest" and anchor is not None:
         out.append("context.anchor: must be None for table_latest")
     if "simultaneous" in context and not isinstance(context["simultaneous"], bool):
