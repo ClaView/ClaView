@@ -207,14 +207,16 @@ def build(store: MetadataStore) -> list[dict]:
         }
     )
 
-    # --- H: 작년 -- status: implemented (2026-10-02: as_of 연도 기준
-    # 해석은 더 이상 유효한 대안이 아님 -- 팀이 "올해"/"작년" 모두 표의
-    # anchor_year 기준으로 일괄 결정함(분기 "최근 N년"에 쓴 것과 같은
-    # 원칙). as_of_year_based는 참고용으로만 period_candidates에 남겨둠. ---
+    # --- H: 작년 -- status: implemented (2026-11-02 팀 결정으로 변경: "작년"은 as_of 달력의
+    # 닫힌 한 해임. 2026-10-02에는 표의 anchor_year(최신 수록 연도) 기준으로 일괄 결정했으나,
+    # 표 최신 연도가 2025인 연간 표에서 작년(2025)을 2024로 읽는 오류라서 되돌림.
+    # 이 해 전체가 표에 있으면 그대로, 일부만 있으면 자르고 안내하며, 전혀 없으면 표의
+    # 최신 연도로 대체하고 안내함. anchor_year_based는 이전 기준의 참고용으로만 남겨둠.
+    # "올해"는 계속 표의 anchor_year 기준임. ---
     query = "작년 예금규모별 계좌수를 반기별로 보여줘"
     as_of_based = year_anchored(table, "H", AS_OF_YEAR - 1)
     anchor_based = year_anchored(table, "H", anchor_year - 1)
-    check_against_code(query, table, anchor_based, expect_error=False)
+    check_against_code(query, table, as_of_based, expect_error=False)
     cases.append(
         {
             "case_id": "CV-AUG-04",
@@ -234,7 +236,7 @@ def build(store: MetadataStore) -> list[dict]:
                             table,
                             "13103134743999",
                             dims,
-                            anchor_based,
+                            as_of_based,
                             "CV-AUG-04-S1",
                             "예금규모별 계좌수 및 금액 / 저축성예금 / 계좌수(천좌) / 합계",
                         )
@@ -329,7 +331,7 @@ def build(store: MetadataStore) -> list[dict]:
     query = "작년 제도부문별 소득계정을 분기별로 보여줘"
     as_of_based_q = year_anchored(table_qa, "Q", AS_OF_YEAR - 1)
     anchor_based_q = year_anchored(table_qa, "Q", anchor_year_qa - 1)
-    check_against_code(query, table_qa, anchor_based_q, expect_error=False)
+    check_against_code(query, table_qa, as_of_based_q, expect_error=False)
     cases.append(
         {
             "case_id": "CV-AUG-07",
@@ -349,7 +351,7 @@ def build(store: MetadataStore) -> list[dict]:
                             table_qa,
                             "13103844575999",
                             dims_qa,
-                            anchor_based_q,
+                            as_of_based_q,
                             "CV-AUG-07-S1",
                             "제도부문별 소득계정(명목, 분기) / 가계 및 비영리단체(원천) / 피용자보수",  # noqa: E501
                         )
@@ -429,7 +431,7 @@ def build(store: MetadataStore) -> list[dict]:
     query = "작년 지역별 결제통화 수출을 월별로 보여줘"
     as_of_based_m = year_anchored(table_ma, "M", AS_OF_YEAR - 1)
     anchor_based_m = year_anchored(table_ma, "M", anchor_year_ma - 1)
-    check_against_code(query, table_ma, anchor_based_m, expect_error=False)
+    check_against_code(query, table_ma, as_of_based_m, expect_error=False)
     cases.append(
         {
             "case_id": "CV-AUG-10",
@@ -449,7 +451,7 @@ def build(store: MetadataStore) -> list[dict]:
                             table_ma,
                             "13103134484999",
                             dims_ma,
-                            anchor_based_m,
+                            as_of_based_m,
                             "CV-AUG-10-S1",
                             "지역별 결제통화(수출) / 달러 (아세안) / 금액",
                         )
@@ -498,7 +500,7 @@ def build(store: MetadataStore) -> list[dict]:
     query = "작년 지역별 수출 규모를 연도별로 보여줘"
     as_of_based_y = year_anchored(table_y, "Y", AS_OF_YEAR - 1)
     anchor_based_y = year_anchored(table_y, "Y", anchor_year_y - 1)
-    check_against_code(query, table_y, anchor_based_y, expect_error=False)
+    check_against_code(query, table_y, as_of_based_y, expect_error=False)
     cases.append(
         {
             "case_id": "CV-AUG-12",
@@ -518,7 +520,7 @@ def build(store: MetadataStore) -> list[dict]:
                             table_y,
                             "13103134752999",
                             dims_y,
-                            anchor_based_y,
+                            as_of_based_y,
                             "CV-AUG-12-S1",
                             "지역별 경상수지 / 수출 / 미국",
                         )
