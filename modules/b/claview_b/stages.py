@@ -4,9 +4,33 @@ from __future__ import annotations
 
 import json
 import re
+from typing import Any
 
 from .contracts import Config, Json, StageFailure, outcome
 from .metadata import WIDTHS, period_number, selected_unit
+from .period_condition import (
+    FREQUENCY_ORDER,
+    Span,
+    FREQUENCY_UNSUPPORTED,
+    MONTHS_PER_PERIOD,
+    NOT_REPRESENTABLE,
+    OUT_OF_COVERAGE,
+    condition_span,
+    coverage_span,
+    intersect,
+    parse_condition,
+    period_text,
+    range_json,
+    reference_differs,
+    representable_frequencies,
+    resolution_row,
+    span_from_json,
+    subtract,
+)
+from .period_condition import end_slot as _end_slot
+from .period_condition import slot as _slot
+from .period_condition import span_of_months as _span_indices
+from .period_condition import start_slot as _start_slot
 from .models import check_output, object_schema
 from .search import grams, normalized
 from .services import Services as Services
@@ -279,7 +303,6 @@ def model_table(table: Json, full_table: Json | None = None) -> Json:
 COUNT_PATTERN = re.compile(r"(최근|지난)\s*(\d+)\s*(?:(?:개\s*)?(년도|년|반기|분기)|(개월|달))")
 COUNT_UNIT_MONTHS = {"년도": 12, "년": 12, "반기": 6, "분기": 3, "개월": 1, "달": 1}
 UNIT_FREQUENCY = {"년도": "Y", "년": "Y", "반기": "H", "분기": "Q", "개월": "M", "달": "M"}
-MONTHS_PER_PERIOD = {"Y": 12, "H": 6, "Q": 3, "M": 1}
 
 # 상반기·하반기·"상·하반기": half of a year, not the word "반기" (which asks for half-year periods).
 HALF_OF_YEAR = re.compile(r"(?:상\s*[·ㆍ/,.]\s*하|상|하)\s*반기")
@@ -308,9 +331,8 @@ SUB_LIMIT = {"월": 12, "분기": 4, "반기": 2}
 SUB_MONTHS = {"월": 1, "분기": 3, "반기": 6}
 COMPARISON_AFTER = re.compile(r"\s*(?:대비|보다|에\s*비해|와\s*비교|과\s*비교|동기)")
 
-# Frequencies from the longest period to the shortest: the default when a question never says
-# which one it wants and the table offers several (the others are returned as alternatives).
-FREQUENCY_ORDER = ("Y", "H", "Q", "M")
+# FREQUENCY_ORDER (period_condition): from the longest period to the shortest, the default when a question
+# never says which one it wants and the table offers several (the others are returned as alternatives).
 # kept for importers of the old name
 MONTH_CUE = r"(어느|몇|한|매|최근|지난)\s*\d*\s*달(?!러)"
 
@@ -397,34 +419,26 @@ def _month_tokens(num: str | None, unit: str | None) -> tuple[int, int] | None:
     return (n - 1) * step + 1, n * step
 
 
-def _slot(freq: str, year: int, month: int) -> int:
-    """Index of the period of `freq` that holds this calendar month."""
-    if freq == "Y":
-        return year
-    width = WIDTHS[freq]
-    return year * width + (month - 1) // (12 // width)
-
-
-def _start_slot(freq: str, year: int, month: int) -> int | None:
-    """Index of the period of `freq` that starts in this month; None when none does."""
-    return None if (month - 1) % MONTHS_PER_PERIOD[freq] else _slot(freq, year, month)
-
-
-def _end_slot(freq: str, year: int, month: int) -> int | None:
-    """Index of the period of `freq` that ends in this month; None when none does."""
-    return None if month % MONTHS_PER_PERIOD[freq] else _slot(freq, year, month)
-
-
-def _span_indices(freq: str, start: tuple[int, int], end: tuple[int, int]) -> tuple[int, int] | None:
-    """Period indices of `freq` covering exactly (year, month) .. (year, month); None when the span does
-    not start and end on period boundaries (a quarter cannot show "2월", a year cannot show a half)."""
-    first, last = _start_slot(freq, *start), _end_slot(freq, *end)
-    return None if first is None or last is None else (first, last)
-
-
 def _fits(freq: str, tokens: list[tuple[int, int, int]]) -> bool:
     step = MONTHS_PER_PERIOD[freq]
     return all((first - 1) % step == 0 and last % step == 0 for _pos, first, last in tokens)
+
+
+def stated_frequency(query: str, table: Json) -> str | None:
+    """The frequency the question itself names ("연간", "분기별", "월별", "어느 달", "최근 8분기"), else None.
+
+    The table may not have it (the caller decides what that means)."""
+    stated, half_of_year = _frequency_cue(query)
+    if stated is None and half_of_year and "H" in table["periods"]:
+        stated = "H"
+    if stated is None:
+        count = COUNT_PATTERN.search(query)
+        if count:
+            unit_freq = UNIT_FREQUENCY[count.group(3) or count.group(4)]
+            # "최근 8분기" names quarters; "최근 3년" names a range only (the default stays as before)
+            if unit_freq != "Y" and unit_freq in table["periods"]:
+                stated = unit_freq
+    return stated
 
 
 def decide_frequency(query: str, table: Json) -> tuple[str | None, list[str]]:
@@ -436,16 +450,7 @@ def decide_frequency(query: str, table: Json) -> tuple[str | None, list[str]]:
     prepares them so the user can switch without another model call). A named part of a year
     ("상반기", "1~3월") narrows the default to the frequencies that can show exactly that part.
     """
-    stated, half_of_year = _frequency_cue(query)
-    if stated is None and half_of_year and "H" in table["periods"]:
-        stated = "H"
-    if stated is None:
-        count = COUNT_PATTERN.search(query)
-        if count:
-            unit_freq = UNIT_FREQUENCY[count.group(3) or count.group(4)]
-            # "최근 8분기" names quarters; "최근 3년" names a range only (the default stays as before)
-            if unit_freq != "Y" and unit_freq in table["periods"]:
-                stated = unit_freq
+    stated = stated_frequency(query, table)
     if stated:
         return stated, []
     available = [f for f in FREQUENCY_ORDER if f in table["periods"]]
@@ -615,6 +620,13 @@ def _closed_period(query: str, as_of: str) -> tuple[str, str, tuple[int, int], t
 def resolve_relative_period(
     query: str, table: Json, config: Config, freq: str | None = None
 ) -> Json:
+    """The legacy result shape of `resolve_relative_detail` (see there for what is decided)."""
+    return resolve_relative_detail(query, table, config, freq)["legacy"]
+
+
+def resolve_relative_detail(
+    query: str, table: Json, config: Config, freq: str | None = None
+) -> Json:
     """Deterministically resolves "최근 N / ...부터 / 올해 / 작년 / 지난달" wording against the
     table's own metadata coverage -- in code, never left to the model.
 
@@ -644,6 +656,12 @@ def resolve_relative_period(
 
     Raises StageFailure("conditions_incomplete", "unresolved") for wording this function does not
     confidently parse (bare "지금/현재/최신/최근", or "지난" with no attached count or period).
+
+    Besides the legacy result (`legacy`), the detail says what the period_resolutions row needs, as
+    (first, last) period indexes of `freq`: `requested` (what the wording asks for, before the table's
+    coverage cuts it), `fetched` (what is read, a leading calculation range included), `extra` (that
+    calculation range or None), `missing` (requested but not fetched), `substituted` (nothing of the
+    request is fetched) and `kind`, the notice the row shows (None when there is nothing to say).
     """
     if freq is None:
         freq, _alternatives = decide_frequency(query, table)
@@ -660,6 +678,8 @@ def resolve_relative_period(
     truncated = False
     lag_check = True  # open-ended "up to today": a table older than as_of is worth a notice
     requested = literal_end
+    request_span: Span | None = None  # the wording's own range (see the docstring), set per branch
+    extension = 0
     count_match = COUNT_PATTERN.search(query)
     open_start = _stated_open_start(query)
     if count_match:
@@ -697,6 +717,7 @@ def resolve_relative_period(
             else:
                 end_idx = wanted_end
         start_idx = end_idx - (count - 1)
+        request_span = (start_idx, end_idx)
     elif open_start:
         year, span, kind = open_start
         first_month = span[0] if span else 1
@@ -706,14 +727,23 @@ def resolve_relative_period(
         if kind == "부터":
             # "2020년부터 ... 전년 대비": the comparison needs the periods before the stated start too
             # ("이후" never did, and "전년동기비" in an indicator name must not start it earlier)
-            start_idx -= detect_baseline_extension(query, freq)
+            extension = detect_baseline_extension(query, freq)
+            request_span = (start_idx, anchor_idx)
+            start_idx -= extension
         end_idx = anchor_idx
+        request_span = request_span or (start_idx, end_idx)
     elif re.search(THIS_YEAR, text):
         # anchor_year(표의 실제 최신 수록 연도) 기준 -- config.as_of 기준으로 계산하면 당장 다가온 해의
         # 데이터가 아직 없는 표(연간 표는 전부가 그렇다)에서 매번 막혀버렸던 문제를 완만한 처리로
         # 바꾼 것(팀 결정, 2026-10-02).
         start_idx = period_number(_year_start(freq, anchor_year), freq)
         end_idx = anchor_idx
+        # asked: this year of the as-of calendar up to its as-of period; read: the table's latest year
+        request_span = (
+            (start_idx, end_idx)
+            if anchor_year > int(config.as_of[:4])
+            else (period_number(_year_start(freq, int(config.as_of[:4])), freq), period_number(literal_end, freq))
+        )
     else:
         closed = _closed_period(query, config.as_of)
         if closed is None:
@@ -724,6 +754,7 @@ def resolve_relative_period(
         if wanted is None:
             raise StageFailure("conditions_incomplete", "unresolved")
         wanted_start, wanted_end = wanted
+        request_span = wanted
         requested = _index_to_period(wanted_end, freq)
         what = _describe_window(first, last)
         if wanted_end < coverage_start_idx:
@@ -756,6 +787,22 @@ def resolve_relative_period(
     clamped = start_idx < coverage_start_idx
     if clamped:
         start_idx = coverage_start_idx
+    assert request_span is not None
+    fetched_span = (start_idx, end_idx)
+    shared = intersect(request_span, fetched_span)
+    missing = subtract(request_span, shared)
+    substituted = shared is None
+    extra = (start_idx, request_span[0] - 1) if extension and start_idx < request_span[0] else None
+    if substituted:
+        kind = "requested_period_substituted"
+    elif missing:
+        kind = "requested_period_partly_unavailable"
+    elif truncated:
+        kind = "stated_end_beyond_table"
+    elif lag_check and literal_end != bounds["end"]:
+        kind = "table_lag"
+    else:
+        kind = None
     resolved = {
         "frequency": freq,
         "start": _index_to_period(start_idx, freq),
@@ -782,7 +829,7 @@ def resolve_relative_period(
                 "요청하신 기간 중 일부가 표에 수록되어 있지 않아 "
                 f"조회 가능한 기간으로 자료를 조회합니다.\n{span_text}"
             )
-        return {
+        legacy = {
             "status": "needs_confirmation",
             "code": "period_requires_confirmation",
             "result": {
@@ -791,7 +838,20 @@ def resolve_relative_period(
                 "message": message,
             },
         }
-    return {"status": "resolved", "period": resolved}
+    else:
+        message = None
+        legacy = {"status": "resolved", "period": resolved}
+    return {
+        "legacy": legacy,
+        "requested": request_span,
+        "fetched": fetched_span,
+        "extra": extra,
+        "missing": missing,
+        "substituted": substituted,
+        "kind": kind,
+        "message": message,
+        "period": resolved,
+    }
 
 
 def detect_baseline_extension(query: str, freq: str) -> int:
@@ -804,6 +864,11 @@ def detect_baseline_extension(query: str, freq: str) -> int:
     if re.search(PERIOD_OVER_PERIOD, query):
         return 1
     return 0
+
+
+def baseline_purpose(query: str) -> str:
+    """Why a calculation range is read before the shown one (the `purpose` of period_resolutions)."""
+    return "yoy_baseline" if re.search(YEAR_OVER_YEAR, query) else "previous_period_baseline"
 
 
 def _explicit_span(query: str, freq: str) -> tuple[int, int] | None:
@@ -832,6 +897,11 @@ def _explicit_span(query: str, freq: str) -> tuple[int, int] | None:
 
 
 def resolve_explicit_period(query: str, table: Json, freq: str | None) -> Json | None:
+    detail = explicit_period_detail(query, table, freq)
+    return None if detail is None else detail["period"]
+
+
+def explicit_period_detail(query: str, table: Json, freq: str | None) -> Json | None:
     """The period a question with stated years asks for, computed in code like a relative one.
 
     "2008년 1분기부터 2024년 4분기까지" -> 200801~202404; "2024년 ... 월별" -> 202401~202412;
@@ -859,7 +929,208 @@ def resolve_explicit_period(query: str, table: Json, freq: str | None) -> Json |
         "end": _index_to_period(end_idx, freq),
     }
     validate_period(period, table, query=None)
-    return period
+    return {
+        "period": period,
+        "requested": span,
+        "fetched": (start_idx, end_idx),
+        "extra": (start_idx, span[0] - 1) if extension else None,
+        "missing": [],
+        "substituted": False,
+        "kind": None,
+        "message": None,
+    }
+
+
+def _stop(code: str) -> StageFailure:
+    """A user-confirmed condition B cannot honor exactly: B stops and says why (A decides how to ask again)."""
+    return StageFailure(code, "unresolved", "period_condition")
+
+
+def _as_period(freq: str, span: Span) -> Json:
+    return {"frequency": freq, "start": _index_to_period(span[0], freq), "end": _index_to_period(span[1], freq)}
+
+
+def _confirmed_detail(query: str, table: Json, condition: Any, freq: str) -> Json:
+    """The period the user confirmed, as `freq`'s periods: never widened, never replaced.
+
+    Only the part the table holds is read (the rest is `missing`); nothing in common stops with
+    period_condition_out_of_coverage. A comparison wording ("전년 대비") still needs the periods before the
+    start, which the confirmed range cannot contain: they are read as a calculation range.
+    """
+    span = condition_span(freq, condition)
+    if span is None:
+        raise _stop(NOT_REPRESENTABLE)
+    bounds = coverage_span(table, freq)
+    shared = intersect(span, bounds) if bounds else None
+    if shared is None:
+        raise _stop(OUT_OF_COVERAGE)
+    first, extra = shared[0], None
+    extension = detect_baseline_extension(query, freq)
+    if extension and bounds and shared[0] == span[0] and bounds[0] < span[0]:
+        first = max(bounds[0], span[0] - extension)
+        extra = (first, span[0] - 1)
+    missing = subtract(span, shared)
+    return {
+        "requested": span,
+        "fetched": (first, shared[1]),
+        "extra": extra,
+        "missing": missing,
+        "substituted": False,
+        "kind": "confirmed_period_partly_unavailable" if missing else None,
+        "message": None,
+    }
+
+
+def _computed_detail(query: str, table: Json, config: Config, freq: str) -> Json | None:
+    """B's own reading of the question's period wording; None when it names no period at all."""
+    if has_relative_words(query, table):
+        return resolve_relative_detail(query, table, config, freq)
+    return explicit_period_detail(query, table, freq)
+
+
+def _quoted_detail(table: Json, condition: Any, freq: str, failure: StageFailure) -> Json:
+    """A's quoted period as the fallback when B cannot read the wording; it must fit exactly and lie in the table."""
+    span = condition_span(freq, condition)
+    bounds = coverage_span(table, freq)
+    if span is None or bounds is None or intersect(span, bounds) != span:
+        raise failure
+    return {
+        "requested": span,
+        "fetched": span,
+        "extra": None,
+        "missing": [],
+        "substituted": False,
+        "kind": "a_quoted_period_used",
+        "message": None,
+    }
+
+
+def _period_message(detail: Json, freq: str) -> str:
+    fetched = _as_period(freq, detail["fetched"])
+    span_text = f"조회 기간: {fetched['start']} ~ {fetched['end']}"
+    kind = detail["kind"]
+    if kind == "confirmed_period_partly_unavailable":
+        gone = ", ".join(f"{period_text(a, freq)}~{period_text(b, freq)}" for a, b in detail["missing"])
+        return f"선택하신 기간 중 일부({gone})가 표에 아직 수록되어 있지 않아 조회 가능한 기간으로 자료를 조회합니다.\n{span_text}"
+    if kind == "a_quoted_period_used":
+        return f"질문의 기간 표현을 확정하지 못해 질문에서 읽은 기간으로 조회합니다.\n{span_text}"
+    return detail.get("message") or span_text
+
+
+def plan_table_period(query: str, table: Json, config: Config, raw_condition: Any = None) -> Json:
+    """The period and frequency to read one table with, and the row `period_resolutions` reports.
+
+    Field by field, a user's answer decides (docs: B 회신 v2, 4절), B computes the rest from the question:
+
+    * period and frequency both answered: A's values, the question is not read again; only the part the
+      table holds is read.
+    * period answered: A's period; the frequency is the question's own if it names one, else the longest
+      frequency the table has that shows exactly that period (the others are alternatives). A frequency
+      that cannot show it exactly stops, it is never widened to the nearest boundary.
+    * frequency answered: A's frequency (a table without it stops); B computes the period.
+    * neither answered: B computes both, A's values are only recorded. When B cannot read the wording and
+      A quoted a period, that period is used (and said so) if it fits exactly and lies in the table.
+
+    Without a condition this is B's existing behavior; the row is simply not reported then.
+
+    Returns period (what to select with), show (the model may be told it), legacy (the existing
+    period_notices entry, or None), alternatives, and the row ingredients (see period_condition.resolution_row).
+    """
+    condition = None if raw_condition is None else parse_condition(raw_condition)
+    frequency_answered = condition is not None and condition.frequency_source == "user_answer"
+    period_answered = condition is not None and condition.period_source == "user_answer"
+    alternatives: list[str] = []
+    applied = {"period": "b_computed", "frequency": "b_computed"}
+    if frequency_answered:
+        freq = condition.frequency
+        applied["frequency"] = "a_user_answer"
+        if freq not in table["periods"]:
+            raise _stop(FREQUENCY_UNSUPPORTED)
+    elif period_answered:
+        fits = representable_frequencies(table, condition)
+        stated = stated_frequency(query, table)
+        if stated is not None and stated not in fits or not fits:
+            raise _stop(NOT_REPRESENTABLE)
+        freq = stated or fits[0]
+        alternatives = [] if stated else fits[1:]
+    else:
+        freq, alternatives = decide_frequency(query, table)
+    if freq is None:
+        if condition is None and not has_relative_words(query, table):
+            return {"frequency": None, "period": None, "show": False, "legacy": None, "alternatives": [],
+                    "requested": None, "applied": applied}
+        raise StageFailure("conditions_incomplete", "unresolved")
+
+    def detail_for(candidate: str) -> Json | None:
+        nonlocal applied
+        if period_answered:
+            applied = {**applied, "period": "a_user_answer"}
+            return _confirmed_detail(query, table, condition, candidate)
+        try:
+            found = _computed_detail(query, table, config, candidate)
+            if found is not None:
+                return found
+            if condition is None:
+                return None  # no period wording and no condition: the model's own period is validated later
+            failure = StageFailure("conditions_incomplete", "unresolved")
+        except StageFailure as exc:
+            if exc.code != "conditions_incomplete":
+                raise
+            failure = exc
+        if condition is None or condition.period_source != "quoted":
+            raise failure
+        applied = {**applied, "period": "a_quoted_fallback"}
+        return _quoted_detail(table, condition, candidate, failure)
+
+    detail = detail_for(freq)
+    applied_now = dict(applied)  # an alternative's `detail_for` must not change the chosen row's sources
+    if detail is None:
+        return {"frequency": freq, "period": None, "show": False, "legacy": None, "alternatives": [],
+                "requested": None, "applied": applied_now}
+    notices: list[Json] = []
+    if detail["kind"]:
+        notices.append({"code": detail["kind"], "visible": True, "message": _period_message(detail, freq)})
+    differs = reference_differs(condition, freq, detail["requested"])
+    if applied["period"] == "b_computed" and differs and differs["differs"]["period"]:
+        notices.append({"code": "reference_period_differs", "visible": False, "message": None})
+    if detail["extra"]:
+        notices.append({"code": "calculation_range_extended", "visible": False, "message": None})
+    period = _as_period(freq, detail["fetched"])
+    alternative_rows = []
+    for other in alternatives:
+        try:
+            other_detail = detail_for(other)
+        except StageFailure:
+            continue  # that frequency cannot show this period: not offered
+        if other_detail is None:
+            continue
+        alternative_rows.append({"frequency": other, "period": _as_period(other, other_detail["fetched"])})
+    legacy = detail.get("legacy")
+    if legacy is None and detail["kind"] in {"confirmed_period_partly_unavailable", "a_quoted_period_used"}:
+        legacy = {
+            "status": "needs_confirmation",
+            "code": "period_requires_confirmation",
+            "result": {
+                "requested_as_of_period": period_text(detail["requested"][1], freq),
+                "resolved_period": period,
+                "message": notices[0]["message"],
+            },
+        }
+    return {
+        "frequency": freq,
+        "period": period,
+        "show": bool(detail.get("legacy")) and applied_now["period"] == "b_computed",
+        "legacy": legacy if legacy and legacy["status"] == "needs_confirmation" else None,
+        "alternatives": alternative_rows,
+        "requested": detail["requested"],
+        "fetched": detail["fetched"],
+        "missing": detail["missing"],
+        "extra": [detail["extra"]] if detail["extra"] else [],
+        "extra_purpose": baseline_purpose(query),
+        "applied": applied_now,
+        "substituted": detail["substituted"],
+        "notices": notices,
+    }
 
 
 def validate_period(
@@ -2162,12 +2433,19 @@ class BSteps:
                     not isinstance(focus, str) or not focus.strip() or len(focus) > MAX_FOCUS_CHARS
                 ):
                     raise StageFailure("invalid_a_result")
+            # A's structured period condition (optional per table): checked once here, by the contract's codes
+            conditions = {
+                k: parse_condition(t["period_condition"]).model_dump()
+                for k, t in zip(keys, tables)
+                if t.get("period_condition") is not None
+            }
             metadata = {k: s.store.get(t["org_id"], t["table_id"]) for k, t in zip(keys, tables)}
             return {
                 "table_keys": keys,
                 "table_index": 0,
                 "table_metadata": metadata,
                 "selections_by_table": {},
+                "period_conditions": conditions,
             }
         except (KeyError, TypeError):
             return {"stage_outcome": outcome("B", failure=StageFailure("invalid_a_result"))}
@@ -2188,45 +2466,22 @@ class BSteps:
             notices = state.get("period_notices", {})
             alternatives = state.get("frequency_alternatives", {})
             table_meta = state["table_metadata"][key]
-            freq, other_freqs = decide_frequency(query, table_meta)
-            if has_relative_words(query, table_meta):
-                resolution = resolve_relative_period(query, table_meta, s.config, freq)
-                if resolution["status"] == "needs_confirmation":
-                    # 2026-10-06 flow 변경: 조회 가능 기간을 안내(period_notices)로 저장하고
-                    # 같은 기간으로 다음 단계(선택·검증·조회)를 계속 진행함. 되묻지 않음.
-                    resolved_period = resolution["result"]["resolved_period"]
-                    notices = {
-                        **notices,
-                        key: {
-                            "table": key,
-                            "status": "needs_confirmation",
-                            "code": resolution["code"],
-                            **resolution["result"],
-                        },
-                    }
-                else:
-                    resolved_period = resolution["period"]
-                shown_period = resolved_period
-            else:
-                # Stated years are turned into the period here too (not left to the model).
-                resolved_period = resolve_explicit_period(query, table_meta, freq)
-            if resolved_period is not None and other_freqs:
-                found = []
-                for other in other_freqs:
-                    try:
-                        if has_relative_words(query, table_meta):
-                            other_res = resolve_relative_period(query, table_meta, s.config, other)
-                            period = (
-                                other_res.get("period") or other_res["result"]["resolved_period"]
-                            )
-                        else:
-                            period = resolve_explicit_period(query, table_meta, other)
-                    except StageFailure:
-                        continue  # that frequency cannot show this period: not offered
-                    if period is not None:
-                        found.append({"frequency": other, "period": period})
-                if found:
-                    alternatives = {**alternatives, key: found}
+            plan = plan_table_period(query, table_meta, s.config, state.get("period_conditions", {}).get(key))
+            resolved_period = plan["period"]
+            # the model is told only a period computed from relative wording; stated years, an answered
+            # period and A's quoted period are applied in code and never shown (see the note above)
+            shown_period = resolved_period if plan["show"] else None
+            if plan["legacy"]:
+                # 2026-10-06 flow 변경: 조회 가능 기간을 안내(period_notices)로 저장하고
+                # 같은 기간으로 다음 단계(선택·검증·조회)를 계속 진행함. 되묻지 않음.
+                legacy = plan["legacy"]
+                notices = {
+                    **notices,
+                    key: {"table": key, "status": legacy["status"], "code": legacy["code"], **legacy["result"]},
+                }
+            if plan["alternatives"]:
+                alternatives = {**alternatives, key: plan["alternatives"]}
+            plans = {**state.get("period_plans", {}), key: plan}
             table = build_b_context(query, state["table_metadata"][key], s.config)
             # The pruning above still reads the stored table (with `path`); only what is sent
             # to the model is slimmed. The schema keeps every code of the (pruned) table.
@@ -2240,7 +2495,9 @@ class BSteps:
                 "query": query,
                 # the list the model sees stays {org_id, table_id, table_name}; the table's own
                 # focus is sent separately below
-                "selected_tables": [{k: v for k, v in t.items() if k != "focus"} for t in tables],
+                "selected_tables": [
+                    {k: v for k, v in t.items() if k not in ("focus", "period_condition")} for t in tables
+                ],
                 "table_metadata": shown,
                 "as_of": s.config.as_of,
                 "period_policy": s.config.period_policy,
@@ -2263,6 +2520,7 @@ class BSteps:
                 "resolved_period": resolved_period,
                 "period_notices": notices,
                 "frequency_alternatives": alternatives,
+                "period_plans": plans,
             }
         except StageFailure as exc:
             return {"stage_outcome": outcome("B", failure=exc)}
@@ -2421,6 +2679,17 @@ class BSteps:
             changes_all = [n for k in state["table_keys"] for n in expand_notices.get(k, [])]
             if changes_all:
                 result["expand_notices"] = changes_all
+            if state.get("period_conditions"):
+                # one row per table whose period B could state: what was asked, read, missing, and from whom
+                result["period_resolutions"] = [
+                    resolution_row(
+                        state["table_metadata"][k]["table_id"],
+                        parse_condition(state["period_conditions"][k]) if k in state["period_conditions"] else None,
+                        state["period_plans"][k],
+                    )
+                    for k in state["table_keys"]
+                    if state.get("period_plans", {}).get(k, {}).get("requested")
+                ]
             return {
                 "selections_by_table": by_table,
                 "table_index": state["table_index"] + 1,

@@ -25,6 +25,8 @@ class BState(TypedDict, total=False):
     selection_context: Json
     resolved_period: Json
     period_notices: Json
+    period_conditions: Json
+    period_plans: Json
     model_schema: Json
     expand_enabled: bool
     model_output: Json
