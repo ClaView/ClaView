@@ -58,7 +58,7 @@ def build():
             "화면을 닫아 실행 결과를 받지 못한 기록입니다. 서버 작업 완료 여부는 확인되지 않았습니다.")
     replace("cv.msgs.forEach(function (m) { if (m.kind === 'run')", "cv.msgs.forEach(function (m) { m.loadedFromHistory=true; if (m.kind === 'run')")
     replace("저장된 샘플을 보여줍니다. 실제 A·B 실행 및 새 KOSIS 조회는 연결되어 있지 않습니다.",
-            '통계표와 조회 조건을 확인한 뒤 그래프를 볼 수 있습니다. <a href="/sample" target="_blank" rel="noopener">저장 자료 보기</a>')
+            '통계표와 조회 조건을 확인한 뒤 그래프를 볼 수 있습니다.')
     replace('시안 A · 인라인 카드형', '한국은행 통계 · KOSIS')
     replace("한국은행 통계를 자연어로 물어보면 표와 기간을 찾아 차트로 보여드립니다.",
             "궁금한 통계와 기간을 적어 주세요. 예시를 골라 시작해도 좋아요.")

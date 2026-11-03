@@ -229,6 +229,12 @@
     });
     form.append(button,hint); box.append(form); refresh(); return box;
   }
+  function callCountsForDisplay(counts){
+    if(!counts||typeof counts!=='object'||Array.isArray(counts))return '이전 기록에는 별도 집계 없음';
+    return Object.fromEntries(Object.entries(counts).map(function(entry){
+      return [entry[0]==='HCX'?'B 모델':entry[0],entry[1]];
+    }));
+  }
   function fillAi(body,m,cv){
     body.innerHTML='';
     var origin=recordOriginText(m);
@@ -288,7 +294,7 @@
       answer.append(el('p',{text:CV.ux.text(m.answer)}));body.append(answer);
     }
     if(m.callCounts||m.jobId||CV.ux.text(m.answer)!==(m.answer||''))body.append(el('details',{class:'technical-detail'},el('summary',{text:'실행 기록 자세히 보기'}),
-      el('pre',{text:JSON.stringify({실행번호:m.runId||m.jobId,호출횟수:m.callCounts||'이전 기록에는 별도 집계 없음',원래안내:m.answer},null,2)})));
+      el('pre',{text:JSON.stringify({실행번호:m.runId||m.jobId,호출횟수:callCountsForDisplay(m.callCounts),원래안내:m.answer},null,2)})));
     if(m.finishedAt)body.append(el('p',{class:'stage-note',text:'실행: '+new Date(m.finishedAt).toLocaleString('ko-KR')+' · 이력을 열어도 API를 다시 호출하지 않습니다.'}));
   }
   async function readJson(url,options){
@@ -321,7 +327,7 @@
   function recoveryEl(m,cv){
     var expired=m.recoveryState==='expired',box=el('aside',{class:'recovery-box',role:'status'});
     box.append(el('strong',{text:expired?'이전 실행 상태를 더 이상 확인할 수 없습니다.':'이전 실행의 진행 상태를 확인할 수 있습니다.'}),
-      el('p',{text:expired?'서버가 다시 시작됐거나 보관된 작업이 없어졌습니다. 새 조회를 자동으로 시작하지 않았습니다. 연결 표시 옆의 서버 기록에서 저장된 실행을 찾아 불러오세요.':
+      el('p',{text:expired?'서버가 다시 시작됐거나 보관된 작업이 없어졌습니다. 새 조회를 자동으로 시작하지 않았습니다. 연결 표시 옆의 ‘서버 복원’에서 저장된 실행을 찾아 불러오세요.':
         '화면 연결이 끊겨도 서버 작업은 계속될 수 있습니다. 아래 버튼은 기존 작업만 확인하며 질문을 다시 제출하거나 API를 중복 호출하지 않습니다.'}));
     if(m.recoveryNote)box.append(el('p',{text:m.recoveryNote}));
     var check=el('button',{type:'button',class:'example-action',text:'진행 상태 다시 확인',disabled:expired||!!S.running,onclick:function(){recoverMessage(m,cv);}});
@@ -455,7 +461,7 @@
   }
   function mountConnection(){
     var root=el('div',{class:'connection-bar','data-state':'checking'}),status=el('span',{role:'status','aria-live':'polite',text:'서버 연결 확인 중'}),button=el('button',{type:'button',class:'example-action',text:'연결 확인',onclick:function(){checkConnection(true);}});
-    var recordsButton=el('button',{type:'button',class:'example-action',text:'서버 기록',onclick:showServerRecords});
+    var recordsButton=el('button',{type:'button',class:'example-action',text:'서버 복원',title:'저장된 실행 결과를 불러옵니다.',onclick:showServerRecords});
     var records=el('aside',{class:'recovery-box server-records','aria-label':'서버 실행 기록'});records.hidden=true;
     root.append(el('span',{class:'connection-dot','aria-hidden':'true'}),status,button,recordsButton);D.scroller.before(root,records);connectionUi={root:root,status:status,button:button,records:records,recordsButton:recordsButton};
     checkConnection(true);setInterval(function(){if(!document.hidden)checkConnection(false);},30000);
@@ -500,7 +506,7 @@
     mountExampleLibrary();
     if(CV.SAVED_VIEW){
       var savedHint=el('aside',{class:'file-server-hint',role:'note'});
-      savedHint.append(el('strong',{text:'저장 자료 보기 · 이 화면에서는 새 조회를 실행하지 않습니다.'}),el('a',{href:'/',text:'새 질문 실행 화면으로 이동'}));
+      savedHint.append(el('strong',{text:'저장된 결과 · 이 화면에서는 새 조회를 실행하지 않습니다.'}),el('a',{href:'/',text:'새 질문 실행 화면으로 이동'}));
       D.composer.before(savedHint);D.input.disabled=true;D.sendBtn.disabled=true;
       D.exampleHint.textContent='저장된 결과를 보는 화면입니다. 새 질문은 위의 실제 실행 화면에서 입력해 주세요.';
       D.input.placeholder='새 질문은 실제 실행 화면에서 입력해 주세요.';
