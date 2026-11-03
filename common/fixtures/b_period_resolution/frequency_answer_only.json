@@ -1,0 +1,55 @@
+{
+ "table_id": "DEMO_FREQUENCY_ONLY",
+ "statistics": [
+  "s1"
+ ],
+ "frequency": "Q",
+ "frequency_alternatives": [],
+ "requested": [
+  {
+   "frequency": "Q",
+   "start": "202401",
+   "end": "202404"
+  }
+ ],
+ "fetched": [
+  {
+   "frequency": "Q",
+   "start": "202401",
+   "end": "202403"
+  }
+ ],
+ "missing": [
+  {
+   "frequency": "Q",
+   "start": "202404",
+   "end": "202404"
+  }
+ ],
+ "calculation_extra": [],
+ "applied_sources": {
+  "period": "b_computed",
+  "frequency": "a_user_answer"
+ },
+ "substituted": false,
+ "reference": {
+  "period": [
+   {
+    "start": "2024-01",
+    "end": "2024-12"
+   }
+  ],
+  "frequency": "Q",
+  "differs": {
+   "period": false,
+   "frequency": false
+  }
+ },
+ "notices": [
+  {
+   "code": "requested_period_partly_unavailable",
+   "visible": true,
+   "message": "합성 예시: 요청 기간을 보존하고 미수록 기간은 조회하지 않았습니다."
+  }
+ ]
+}

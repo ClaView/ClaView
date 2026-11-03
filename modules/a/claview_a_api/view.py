@@ -25,11 +25,14 @@ from __future__ import annotations
 
 import copy
 
+from pydantic import ValidationError
+
 from claview_a.cards import ASK_AXES
 from claview_a.focus import FOCUS_JOIN, MAX_FOCUS_CHARS
 from claview_a.quotes import quote_in_question
 from claview_a.search.tables import selection_catalog
 from claview_common.contracts.a_view import AView
+from claview_common.contracts.b import BRequest
 
 # The check and handoff share B's existing focus limit; B checks it again.
 STATE_OF = {
@@ -350,6 +353,10 @@ def build(checkpoint: dict, layer) -> dict:
             for p in (record.get("parse") or {}).get("problems") or []
         ],
     }
+    for request in ready:
+        prepared = prepare_b_request(view, request)
+        request["b_request"] = prepared["request"]
+        request["b_request_issue"] = prepared["withheld"]
     return AView(**view).model_dump()
 
 
@@ -519,3 +526,37 @@ def handoff_conditions(view: dict, request: dict) -> dict:
 
 def _span_key(spans) -> tuple:
     return tuple((s.get("start"), s.get("end")) for s in spans or [])
+
+
+def prepare_b_request(view: dict, request: dict) -> dict:
+    """Prepare the versioned B input without changing A's decisions or enabling transport.
+
+    Legacy handoff tables and all existing gates remain intact. Answers keep their original scope;
+    the shared contract checks coverage by kind and deduplicates shared answers. No text is re-read.
+    A preparation error is reported beside the ready request, not converted into a table-selection failure.
+    """
+    targets = set(request["statistics"])
+    if any(targets.intersection(q["statistics"]) for q in view.get("questions") or []):
+        return {"request": None, "withheld": "awaiting_answer"}
+    assembled = handoff_conditions(view, request)
+    if assembled["withheld"]:
+        return {"request": None, "withheld": assembled["withheld"]}
+    conditions = {c["table_id"]: c for c in assembled["conditions"]}
+    tables = []
+    for table in request["tables"]:
+        condition = copy.deepcopy(conditions[table["table_id"]])
+        condition.pop("table_id")
+        condition["answers"] = [
+            {k: copy.deepcopy(v) for k, v in answer.items() if k != "table_id"}
+            for answer in request.get("period_answers") or []
+            if answer.get("kind") in ("period", "frequency")
+            and targets.intersection(answer.get("statistics") or [])
+        ]
+        tables.append({**copy.deepcopy(table), "period_condition": condition})
+    try:
+        model = BRequest(query=view["session"]["question"], as_of=view["session"]["as_of"], tables=tables)
+    except ValidationError as exc:
+        codes = [e["type"] for e in exc.errors(include_input=False, include_url=False)]
+        code = next((c for c in codes if c.startswith("period_condition_")), "period_condition_invalid")
+        return {"request": None, "withheld": code}
+    return {"request": model.model_dump(), "withheld": None}

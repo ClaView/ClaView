@@ -16,6 +16,8 @@ Synthetic outputs check shapes and wiring only, never accuracy.
 
 Use --a-http-only to wrap the existing synthetic AView fixtures for the new HTTP boundary,
 without rebuilding any legacy A, B or C fixture.
+Use --period-contract-only for the synthetic period request/result examples and updated
+AView/HTTP wrappers only. It imports common models, never module services or providers.
 """
 
 from __future__ import annotations
@@ -31,10 +33,10 @@ GOLDEN = ROOT / "eval" / "cases" / "golden" / "golden_set_v1.json"
 AS_OF = "2026-10-22"
 
 
-def write(kind: str, name: str, value) -> None:
+def write(kind: str, name: str, value, *, indent: int = 1) -> None:
     path = OUT / kind / f"{name}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=indent) + "\n", encoding="utf-8", newline="\n")
 
 
 def write_http_fixtures() -> None:
@@ -49,7 +51,111 @@ def write_http_fixtures() -> None:
         write("a_http_result", path.stem, result.model_dump())
 
 
+def write_period_contract_fixtures() -> None:
+    """Illustrative invented tables and answers, validated by the shared contracts."""
+    from claview_common.contracts import BRequest, PeriodCondition, PeriodResolution
+    from claview_common.contracts.a_view import A_VIEW_VERSION, AView
+
+    for name in ("focus_legacy_quote", "focus_model_scope"):
+        view = json.loads((OUT / "a_view" / f"{name}.json").read_text(encoding="utf-8"))
+        view["contract_version"] = A_VIEW_VERSION
+        for request in view["handoff"]["ready"]:
+            request["b_request"] = None
+            request["b_request_issue"] = None
+        write("a_view", name, AView.model_validate(view).model_dump(), indent=2)
+    write_http_fixtures()
+
+    def answer(kind, statistics, *, question_id=None, value=None, text=None):
+        return {"kind": kind, "question_id": question_id or f"synthetic:{kind}:s1",
+                "question_version": 1, "statistics": statistics, "option_id": None,
+                "value": value, "text": text, "source": "user_answer"}
+
+    period_answer = answer("period", ["s1"], value="2024년", text="2024년")
+    frequency_answer = answer("frequency", ["s1"], value="M")
+    cases = [
+        {"name": "period_answer_only", "query": "합성 예시 지표를 월별로 보여줘",
+         "table_id": "DEMO_PERIOD_ONLY", "frequency": "M", "period_source": "user_answer",
+         "frequency_source": "question", "answers": [period_answer]},
+        {"name": "frequency_answer_only", "query": "2024년 합성 예시 지표를 보여줘",
+         "table_id": "DEMO_FREQUENCY_ONLY", "frequency": "Q", "period_source": "quoted",
+         "frequency_source": "user_answer", "answers": [answer("frequency", ["s1"], value="Q")]},
+        {"name": "both_answers", "query": "합성 예시 지표의 전년 동월 대비 변화를 보여줘",
+         "table_id": "DEMO_BOTH_ANSWERS", "frequency": "M", "period_source": "user_answer",
+         "frequency_source": "user_answer", "answers": [period_answer, frequency_answer]},
+        {"name": "quoted_reference", "query": "최근 12개월 합성 예시 지표를 월별로 보여줘",
+         "table_id": "DEMO_QUOTED_REFERENCE", "frequency": "M", "period_source": "quoted",
+         "frequency_source": "question", "answers": []},
+        {"name": "same_table_two_statistics", "query": "합성 계열 가와 계열 나를 월별로 보여줘",
+         "table_id": "DEMO_SHARED_TABLE", "frequency": "M", "period_source": "user_answer",
+         "frequency_source": "question", "statistics": ["s1", "s2"], "answers": [
+             answer("period", ["s1"], question_id="synthetic:period:s1", value="2024년", text="2024년"),
+             answer("period", ["s2"], question_id="synthetic:period:s2", value="2024년", text="2024년"),
+         ]},
+    ]
+    for case in cases:
+        frequency = case["frequency"]
+        statistics = case.get("statistics", ["s1"])
+        period = [{"start": "2024-01", "end": "2024-12"}]
+        reference_only = case["name"] == "quoted_reference"
+        condition = PeriodCondition.model_validate({
+            "frequency": frequency, "frequency_source": case["frequency_source"],
+            "period": period, "period_source": case["period_source"], "statistics": statistics,
+            "period_phrase": "최근 12개월" if reference_only else "2024년",
+            "answers": case["answers"],
+        })
+        request = BRequest.model_validate({
+            "query": case["query"], "as_of": "2025-01-31", "tables": [{
+                "org_id": "DEMO", "table_id": case["table_id"], "table_name": "합성 계약 예시표",
+                "focus": "합성 계열 가 · 합성 계열 나" if len(statistics) > 1 else "합성 예시 지표",
+                "period_condition": condition.model_dump(),
+            }],
+        })
+        write("b_period_request", case["name"], request.model_dump())
+
+        def span(start, end):
+            return {"frequency": frequency, "start": start, "end": end}
+
+        requested = span("202401", "202404" if frequency == "Q" else "202412")
+        fetched = span("202401", "202403" if frequency == "Q" else "202409")
+        missing = [span("202404", "202404")] if frequency == "Q" else [span("202410", "202412")]
+        unavailable_code = ("confirmed_period_partly_unavailable" if case["period_source"] == "user_answer"
+                            else "requested_period_partly_unavailable")
+        notices = [{"code": unavailable_code, "visible": True,
+                    "message": "합성 예시: 요청 기간을 보존하고 미수록 기간은 조회하지 않았습니다."}]
+        if reference_only:
+            # B's invented newer metadata changes a reference, not an authoritative user answer.
+            requested = fetched = span("202402", "202501")
+            missing = []
+            notices = [{"code": "reference_period_differs", "visible": False,
+                        "message": "합성 예시: B 수록 기준으로 계산한 기간이 A 참고 기간과 다릅니다."}]
+        fetched_ranges = [fetched]
+        extra = []
+        if case["name"] == "both_answers":
+            baseline = span("202301", "202309")
+            fetched_ranges.insert(0, baseline)
+            extra = [{**baseline, "purpose": "yoy_baseline"}]
+            notices.append({"code": "calculation_range_extended", "visible": False,
+                            "message": "합성 예시: 표시 기간은 유지하고 전년 동월 비교 구간을 추가 조회했습니다."})
+        resolution = PeriodResolution.model_validate({
+            "table_id": case["table_id"], "statistics": statistics, "frequency": frequency,
+            "frequency_alternatives": [], "requested": [requested], "fetched": fetched_ranges,
+            "missing": missing, "calculation_extra": extra,
+            "applied_sources": {
+                "period": "a_user_answer" if case["period_source"] == "user_answer" else "b_computed",
+                "frequency": "a_user_answer" if case["frequency_source"] == "user_answer" else "b_computed",
+            },
+            "substituted": False,
+            "reference": {"period": period, "frequency": frequency,
+                          "differs": {"period": reference_only, "frequency": False}},
+            "notices": notices,
+        })
+        write("b_period_resolution", case["name"], resolution.model_dump())
+
+
 def main() -> int:
+    if "--period-contract-only" in sys.argv:
+        write_period_contract_fixtures()
+        return 0
     if "--a-http-only" in sys.argv:
         write_http_fixtures()
         return 0

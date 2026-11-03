@@ -1,4 +1,7 @@
-"""Q1/Q3 rule functions copied from the old A pipeline (commit 55fd41b), unchanged except one rule change below.
+"""Q1/Q3 rules copied from the old A pipeline (commit 55fd41b), with the current direct-answer additions below.
+
+Counted years accept equivalent N개년 spellings. A counted range can retain an adjacent explicit end in either
+order; it stays unresolved here so the period resolver owns the date calculation.
 
 Changed for the new A (plan 36, user 2026-10-28 14:59 UTC; partly changes the Q3 decision of 2026-10-13): a bare
 "월말" is the monthly frequency and "연말"/"년말" the yearly one, with the end point (``anchor="end"``) left by
@@ -137,10 +140,16 @@ _SEP = r"\s*(?:부터|에서|~|-|–)\s*"
 _RANGE = re.compile(_yr(1) + _sub(1) + "?" + _SEP
                     + rf"(?:{_yr(2)}{_sub(2)}?|(?P<omit>{_sub(3)})(?=\s*까지))" + r"\s*(?:까지)?")
 _SINCE = re.compile(_yr(1) + _sub(1) + r"?\s*(?:이후|부터|이래)")
-# "최근 8개 분기"/"최근 2개 반기" are the same request as "최근 8분기"/"최근 2반기" (user 2026-10-29 07:51 UTC)
-_RECENT = re.compile(r"(?:최근|지난)\s*(\d{1,2})\s*(년|개월|달|개\s*분기|분기|개\s*반기|반기)(?:\s*(?:간|동안))?")
+# Count spellings share one structure; an explicit end is retained for the period resolver.
+_RECENT_TEXT = (r"(?:최근|지난)\s*(?P<amount>\d{1,2})\s*"
+                r"(?P<recent_unit>개\s*년도?|년도?|개월|달|개\s*분기|분기|개\s*반기|반기)"
+                r"(?:\s*(?:간|동안))?")
+_RECENT = re.compile(_RECENT_TEXT)
+_RECENT_END = _yr(1).replace(f"|(?P<a1>{_ALIAS})", "") + _sub(1) + r"?\s*까지"
+_RECENT_END_FIRST = re.compile(_RECENT_END + r"\s*(?:의\s*)?" + _RECENT_TEXT)
+_RECENT_END_LAST = re.compile(_RECENT_TEXT + r"\s*" + _RECENT_END)
 _RECENT_UNIT = {"년": "year", "개월": "month", "달": "month", "분기": "quarter", "반기": "half",
-                "개분기": "quarter", "개반기": "half"}
+                "개분기": "quarter", "개반기": "half", "년도": "year", "개년": "year", "개년도": "year"}
 # 연도 별칭 시점: 올해 2분기, 작년 하반기, 작년 말, 작년 한 해, 올해 들어(→ 이후)
 _REL = re.compile(rf"(?P<a1>{_ALIAS}){_sub(1)}?(?:\s*(?P<eoy>말)(?!잔)|\s*(?P<whole>한\s*해)|\s*(?P<into>들어))?"
                   r"|(?P<olinto>올\s+들어)")
@@ -211,7 +220,7 @@ def _is_relative(m, *ns: int) -> bool:
 def find_periods(query: str, as_of: str | None) -> list[dict]:
     """{kind, start, end, status, i, j[, amount, unit, relative]} 목록.
 
-    겹치면 앞선 규칙(범위 → 이후 → 최근 → 연도 별칭 → 달·분기 상대 → 시점)이 이긴다.
+    Overlaps prefer the earlier rule: range, since, bounded recent, recent, year alias, relative unit, point.
     relative=true는 as_of에 기대는 표현이라는 표시다. as_of가 없거나 달·분기 단위라 풀지 못하면 start/end=None, unresolved다.
     """
     taken: list[tuple[int, int]] = []
@@ -263,9 +272,17 @@ def find_periods(query: str, as_of: str | None) -> list[dict]:
             continue
         y1, u1 = _year(m, 1, as_of), _unit(m, 1)
         add(m, "since", _bounds(y1, u1)[0] if y1 and u1 else None, None, relative=relative)
+    for pattern in (_RECENT_END_FIRST, _RECENT_END_LAST):
+        for m in pattern.finditer(query):
+            if free(m):
+                amount = int(m.group("amount"))
+                unit = _RECENT_UNIT[re.sub(r"\s+", "", m.group("recent_unit"))]
+                # The caller reads the written end; computing dates remains the resolver's job.
+                add(m, "recent", None, None, relative=True, amount=amount, unit=unit)
     for m in _RECENT.finditer(query):
         if free(m):
-            amount, unit = int(m.group(1)), _RECENT_UNIT[re.sub(r"\s+", "", m.group(2))]
+            amount = int(m.group("amount"))
+            unit = _RECENT_UNIT[re.sub(r"\s+", "", m.group("recent_unit"))]
             start = end = None
             if as_of and unit == "year":  # 연 단위만 푼다. 월·분기·반기와 공표 지연 규칙은 D7
                 start, end = _shift_year(as_of, amount), as_of[:4]

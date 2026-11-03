@@ -2,6 +2,8 @@
 
 이 문서는 기존 A 포트 경로의 설명이다. 새 A 화면 경로의 대상 요약과 원문 인용 분리는 [새 A focus와 출처](A_focus_출처.md)를 따른다. B가 받는 선택 문자열 `focus`의 모양과 100자 제한은 같다.
 
+기간 조건을 포함하는 공용 모델과 A의 준비 요청은 [A→B 기간 조건 공용 모델과 송신부](A_B_기간조건_공용모델과_A송신부.md)를 따른다. 이번 단계는 `handoff.ready[].b_request`를 조립하며, 아래 기존 포트의 전송 필드와 보류는 아직 바꾸지 않는다.
+
 코드: `pipeline/claview_pipeline/b_port.py`(요청·결과·검사), `modules/a/claview_a/agent/b_connection.py`(A의 `AdapterPort`, `connect`). 판본 상수: `TABLE_LIST_CONTRACT = "flow-table-list/2026-10-23.1"`(포트 자체 모양이며 B 계약 판본이 아니다).
 
 ## 언제 부르나

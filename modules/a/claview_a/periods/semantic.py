@@ -1,9 +1,9 @@
-"""Periods and frequencies the model structured (contracts .8 and .9): the values it gave move into the resolver's
+"""Periods and frequencies the model structured (contracts .8 onward): the values it gave move into the resolver's
 condition shape; nothing of the quoted words is read again (``read_quotes`` stays for answers of older contracts).
 
 A period row means ``range`` with ``form`` ``absolute`` (``start`` and ``end`` calendar values ``YYYY``, ``YYYY-MM``,
 ``YYYY-Qn``, ``YYYY-Hn``; ``end`` ``same`` for one point, ``open`` for an open end) or ``relative`` (``count`` and
-``unit`` counted back from the catalog reference under the current recent-data policy), or .9 ``calendar_offset``
+``unit`` counted back from the catalog reference, or from an explicit ``end`` in .10), or .9 ``calendar_offset``
 (a signed offset in one calendar unit, computed here from as_of). An incomplete user range may retain one explicit
 endpoint; other meanings
 carry no values (``none``). ``read``
@@ -24,6 +24,8 @@ from __future__ import annotations
 
 import re
 from datetime import date
+
+from .. import contract as K
 
 _YEAR = re.compile(r"(\d{4})")
 _POINT = re.compile(r"(\d{4})(?:-(0[1-9]|1[0-2])|-Q([1-4])|-H([12]))?")
@@ -92,7 +94,8 @@ def _calendar_offset(row: dict, as_of: str | None) -> tuple[dict | None, str | N
     return {"form": "range", **base, "start_expr": _expr(text(first)), "end_expr": _expr(text(last))}, None
 
 
-def _period(row: dict, as_of: str | None = None) -> tuple[dict | None, str | None]:
+def _period(row: dict, as_of: str | None = None,
+            answer_contract: str = K.CONTRACT_VERSION) -> tuple[dict | None, str | None]:
     """(the resolver's attrs, None) of a range row, or (None, why) when its values do not make one."""
     form = row.get("form")
     if form == "calendar_offset":
@@ -103,9 +106,16 @@ def _period(row: dict, as_of: str | None = None) -> tuple[dict | None, str | Non
             return None, "count_invalid"
         if unit not in UNITS:
             return None, "unit_invalid"
-        if any(row.get(k) not in (None, "none") for k in ("start", "end")):
+        if row.get("start") not in (None, "none"):
             return None, "relative_with_calendar_values"
-        return {"form": "recent", "start_expr": None, "end_expr": None, "open_end": False, "amount": int(count),
+        end = None
+        if row.get("end") not in (None, "none"):
+            if answer_contract not in K.BOUNDED_RECENT_CONTRACTS:
+                return None, "relative_with_calendar_values"
+            end = _expr(row.get("end"))
+            if end is None:
+                return None, "relative_end_invalid"
+        return {"form": "recent", "start_expr": None, "end_expr": end, "open_end": False, "amount": int(count),
                 "unit": UNITS[unit], "relative": True, "invalid": False, "extract_status": "structured"}, None
     if form != "absolute":
         return None, "form_invalid"
@@ -175,7 +185,8 @@ def _partial(row: dict) -> dict:
     return {"quote": row["quote"], **bounds}
 
 
-def read_rows(period_rows: list[dict], frequency_rows: list[dict], as_of: str | None = None) -> dict:
+def read_rows(period_rows: list[dict], frequency_rows: list[dict], as_of: str | None = None,
+              answer_contract: str = K.CONTRACT_VERSION) -> dict:
     """{conditions, readings, problems} of the structured rows of one statistic (``read_quotes``'s shape). Only rows
     meaning ``range`` give period conditions; the caller handles the other meanings (latest, same period, undecided)
     as before. Every row keeps its quote and the structured values it was read from."""
@@ -212,7 +223,7 @@ def read_rows(period_rows: list[dict], frequency_rows: list[dict], as_of: str | 
             partial_periods.append(_partial(row))
         if row.get("meaning") != "range":
             continue
-        attrs, why = _period(row, as_of)
+        attrs, why = _period(row, as_of, answer_contract)
         if attrs is None:
             problems.append({"code": "period_structure_invalid", "quote": row["quote"], "why": why,
                              "structured": values})
@@ -261,9 +272,10 @@ def structured_key(row: dict, kind: str) -> tuple:
             row.get("unit"), tuple(sorted(row.get("refers_to") or [])))
 
 
-def failed_rows(period_rows: list[dict], frequency_rows: list[dict]) -> set[str]:
+def failed_rows(period_rows: list[dict], frequency_rows: list[dict],
+                answer_contract: str = K.CONTRACT_VERSION) -> set[str]:
     """The quotes of failed rows. Recovery must preserve their scope when correcting them."""
-    got = read_rows(period_rows, frequency_rows)
+    got = read_rows(period_rows, frequency_rows, answer_contract=answer_contract)
     failed = {p["quote"] for p in got["problems"]
               if p["code"] in ("period_structure_invalid", "frequency_unreadable")}
     return failed

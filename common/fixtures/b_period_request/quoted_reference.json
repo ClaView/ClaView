@@ -1,0 +1,29 @@
+{
+ "query": "최근 12개월 합성 예시 지표를 월별로 보여줘",
+ "tables": [
+  {
+   "org_id": "DEMO",
+   "table_id": "DEMO_QUOTED_REFERENCE",
+   "table_name": "합성 계약 예시표",
+   "focus": "합성 예시 지표",
+   "period_condition": {
+    "frequency": "M",
+    "frequency_source": "question",
+    "period": [
+     {
+      "start": "2024-01",
+      "end": "2024-12"
+     }
+    ],
+    "period_source": "quoted",
+    "statistics": [
+     "s1"
+    ],
+    "period_phrase": "최근 12개월",
+    "latest_unpublished": null,
+    "answers": []
+   }
+  }
+ ],
+ "as_of": "2025-01-31"
+}

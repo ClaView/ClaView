@@ -1,0 +1,49 @@
+{
+ "table_id": "DEMO_QUOTED_REFERENCE",
+ "statistics": [
+  "s1"
+ ],
+ "frequency": "M",
+ "frequency_alternatives": [],
+ "requested": [
+  {
+   "frequency": "M",
+   "start": "202402",
+   "end": "202501"
+  }
+ ],
+ "fetched": [
+  {
+   "frequency": "M",
+   "start": "202402",
+   "end": "202501"
+  }
+ ],
+ "missing": [],
+ "calculation_extra": [],
+ "applied_sources": {
+  "period": "b_computed",
+  "frequency": "b_computed"
+ },
+ "substituted": false,
+ "reference": {
+  "period": [
+   {
+    "start": "2024-01",
+    "end": "2024-12"
+   }
+  ],
+  "frequency": "M",
+  "differs": {
+   "period": true,
+   "frequency": false
+  }
+ },
+ "notices": [
+  {
+   "code": "reference_period_differs",
+   "visible": false,
+   "message": "합성 예시: B 수록 기준으로 계산한 기간이 A 참고 기간과 다릅니다."
+  }
+ ]
+}

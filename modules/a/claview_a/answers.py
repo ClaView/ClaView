@@ -36,7 +36,7 @@ from . import periods as PR
 from .cards import ASK_AXES
 from .periods.contract import check_conditions
 
-ANSWERS_VERSION = "tl-answers-2026-11-02.6"  # .6: validate recent answers against their supported frequencies
+ANSWERS_VERSION = "tl-answers-2026-11-03.7"  # .7: typed periods cannot expand to fit an explicit frequency
 ANSWER_SOURCE = "user_answer"
 ERRORS = ("no_reply", "reply_shape", "stale_question", "duplicate_reply", "question_not_pending",
           "option_not_offered", "no_record", "answer_unreadable")
@@ -206,6 +206,16 @@ def _validate(state: dict, replies, layer) -> list[tuple[dict, dict]]:
     frequency_answers = {sid: option["value"] for q, option in out if q["kind"] == "frequency"
                          for sid in q["statistics"]}
     for q, conditions, option in period_checks:
+        decisions = {d["statistic"]: d for d in state["record"]["decisions"]}
+        for sid in q["statistics"]:
+            frequency = decisions[sid].get("frequency") or {}
+            explicit = frequency_answers.get(sid) or (frequency.get("value") if
+                frequency.get("source") in ("question", "user_answer") else None)
+            offered = frequency.get("offered") or []
+            if explicit and not PR.frequency_fit(conditions, explicit, state["as_of"]):
+                raise AnswerError("answer_unreadable", "period_condition_not_representable")
+            if not explicit and offered and not PR.valid_frequencies(conditions, offered, state["as_of"]):
+                raise AnswerError("answer_unreadable", "period_condition_not_representable")
         if why := _answer_partial_problem(state, q, conditions, layer, option=option,
                                           frequency_answers=frequency_answers):
             raise AnswerError("answer_unreadable", why)
@@ -308,7 +318,8 @@ def _finish(d: dict) -> None:
 def _context(state: dict) -> dict:
     contract = (state["record"].get("parse") or {}).get("answer_contract")
     return {"question": state["record"]["question"], "out": state["record"]["model_output"],
-            "polar": contract in CH.POLARITY_CONTRACTS, "semantic": contract in CH.SEMANTIC_PERIOD_CONTRACTS}
+            "polar": contract in CH.POLARITY_CONTRACTS, "semantic": contract in CH.SEMANTIC_PERIOD_CONTRACTS,
+            "answer_contract": contract}
 
 
 def _resettle(state: dict, d: dict, lk: CH.Cards) -> None:
@@ -317,7 +328,7 @@ def _resettle(state: dict, d: dict, lk: CH.Cards) -> None:
     period checks, or the statistic stops as the check would."""
     ctx = _context(state)
     reading = CH.condition_reading(d, ctx["question"], ctx["out"], ctx["polar"], semantic=ctx["semantic"],
-                                   as_of=state["as_of"])
+                                   as_of=state["as_of"], answer_contract=ctx["answer_contract"])
     d["ask_feasibility"] = CH._ask_feasibility(d, d["quote"], reading, lk, state["as_of"])
     got = CH.settle_asks(d, d["quote"], reading, lk, state["as_of"])
     if got:
@@ -391,7 +402,8 @@ def _answer_reading(state: dict, d: dict) -> dict:
     """Select a reader by the recorded contract, never reinterpret structured model quotes."""
     ctx = _context(state)
     if ctx["semantic"]:
-        return CH.condition_reading(d, ctx["question"], ctx["out"], ctx["polar"], semantic=True, as_of=state["as_of"])
+        return CH.condition_reading(d, ctx["question"], ctx["out"], ctx["polar"], semantic=True, as_of=state["as_of"],
+                                     answer_contract=ctx["answer_contract"])
     sid, out = d["statistic"], ctx["out"]
     return PR.read_quotes([r["quote"] for r in out["periods"] if sid in r["for"]],
                           [r["quote"] for r in out["frequencies"] if sid in r["for"]])
