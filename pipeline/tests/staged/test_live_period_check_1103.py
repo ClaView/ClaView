@@ -58,7 +58,7 @@ def test_dry_run_writes_the_summary_and_stops_at_the_limit(tmp_path, base):
     assert "중단" in (tmp_path / "summary.md").read_text(encoding="utf-8")
 
 
-def test_dry_run_of_every_case_passes_its_own_checks(tmp_path, base):
+def test_dry_run_of_every_case_passes_its_own_checks(tmp_path, historical_metadata):
     assert check.main(["--dry-run", "--out", str(tmp_path)]) == 0
     rows = json.loads((tmp_path / "summary.json").read_text(encoding="utf-8"))
     assert len(rows) == len(check.CASES)

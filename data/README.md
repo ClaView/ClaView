@@ -1,5 +1,17 @@
 # 실행 자료 안내
 
+## 현재 실행 자료 (2026-11-03)
+
+KOSIS 한국은행 소관 기존 등록 **349표**의 공식 목록·설명 메타를 갱신했다. 추가 발견 산업연관표 34개는 [등록 대기 자료](catalog/discovered_tables_20261103.json)에 보관하며 검색·조회 대상에 넣지 않았다. 통계 수치와 모델은 이번 갱신에서 호출하지 않았다.
+
+A·B는 같은 [목록](catalog/search_catalog.json)과 [원메타](raw/boK_meta_raw.jsonl)를 읽는다. 두 파일 모두 Git으로 공유한다. [스냅샷 manifest](catalog/metadata_snapshot.json)에 수집 범위·시각·구신 해시·검증 한계를, [pipeline manifest](catalog/pipeline_manifest.json)에 현재 실행 메타 해시를 기록했다. `import_date`는 최초 이관일이다.
+
+`boK_tables.csv`, `boK_meta_status.csv`, `자료_이관정보.json`, 검색·매핑 검수 초안은 과거 판으로 보존하며 최신 실행 메타로 쓰지 않는다. 옛 메타에 맞춰 작성된 경계·저장 응답 시험만 [고정 fixture](../eval/fixtures/metadata_before_2026_11_03.zip)를 쓴다. 실제 실행과 나머지 시험은 갱신본을 쓴다.
+
+[갱신 절차](../docs/guides/카탈로그_갱신.md)와 [이번 변경·검증 결과](../docs/records/카탈로그_갱신_20261103.md)를 따른다. 프로세스는 자료를 캐시하므로 운영 적용 시에는 검토한 판으로 이미지를 다시 만들고 A·B의 파일 해시를 확인한다. 서버 기록과 실제 호출 원장은 유지한다. 사전 연동은 별도 작업이다.
+
+## 과거 이관 안내 (현재 갱신 절차로 사용하지 않음)
+
 > **2026-10-23(계획 26) 안내**: 이 문서가 부르는 준비 스크립트(`scripts/prepare_document_corpus.py`)는 옛 A 모듈을 import해서 옛 A와 함께 저장소에서 지웠다. 같은 파일이 원격 이력(`b172d75`, `origin/integrated-router-20261022`)과 원본 작업 폴더(B b-1020 사본 등)에 남아 있다. 지금 저장소에서는 아래 재생성 절차를 실행할 수 없고, 이미 만든 자료(`data/` 아래)는 그대로 쓴다. 재생성이 필요하면 옛 A 의존을 걷어 낸 도구를 새로 만든다.
 
 공식349표의 저장 목록·메타를 사용합니다. 이번 정리는 자료·골든셋을 변경하지 않았으며 API를 재수집하지 않았습니다.
@@ -7,7 +19,7 @@
 | 위치 | 용도 |
 |---|---|
 | [search_catalog.json](catalog/search_catalog.json) | 공식 표명·ID·전체 목록 경로 |
-| `raw/boK_meta_raw.jsonl` | 저장 메타 원문, Git 제외 |
+| `raw/boK_meta_raw.jsonl` | 저장 메타 원문, 현재 Git으로 공유 |
 | [search_definitions.json](catalog/search_definitions.json) | 검색 정의·근거 |
 | [pipeline_manifest.json](catalog/pipeline_manifest.json) | 이관 해시 |
 | [runtime 사전](mappings/runtime/README.md) | 79건, 승인0 |

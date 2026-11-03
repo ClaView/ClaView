@@ -80,6 +80,40 @@ def layer():
     return load_layer()
 
 
+@pytest.fixture(scope="session")
+def frozen_metadata_layer(tmp_path_factory):
+    """Opt-in historical inputs; the ordinary layer fixture keeps using current runtime metadata."""
+    import hashlib
+    import json
+    from zipfile import ZipFile
+
+    from claview_a.catalog.layer import load_layer
+
+    # The A boundary forbids claview_common imports, including its test helper.
+    # Read the same shared, hash-checked snapshot using only the standard library.
+    fixture_root = Path(__file__).resolve().parents[3] / "eval" / "fixtures"
+    snapshot = fixture_root / "metadata_before_2026_11_03"
+    manifest = json.loads(snapshot.with_suffix(".json").read_text(encoding="utf-8"))
+    members = {"data/catalog/search_catalog.json", "data/raw/boK_meta_raw.jsonl",
+               "data/mappings/runtime/unit_supplement.json"}
+    assert set(manifest["files"]) == members
+    destination = tmp_path_factory.mktemp("metadata_before_2026_11_03")
+    with ZipFile(snapshot.with_suffix(".zip")) as archive:
+        assert set(archive.namelist()) == members | {"manifest.json"}
+        assert len(archive.namelist()) == len(members) + 1
+        assert json.loads(archive.read("manifest.json")) == manifest
+        for name in sorted(members):
+            data = archive.read(name)
+            expected = manifest["files"][name]
+            assert len(data) == expected["bytes"]
+            assert hashlib.sha256(data).hexdigest() == expected["sha256"]
+            path = destination / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(data)
+    return load_layer(search_catalog=destination / "data/catalog/search_catalog.json",
+                      meta_raw=destination / "data/raw/boK_meta_raw.jsonl")
+
+
 @pytest.fixture(autouse=True)
 def _no_refusal():
     v0, n0 = len(_guard.VIOLATIONS), len(_guard.NETWORK_ATTEMPTS)

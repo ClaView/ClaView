@@ -16,6 +16,7 @@ pipeline은 module-a/b/c 컨테이너를 부르지 않는다. A HTTP 전환은 �
 
 - **처음이면: [팀 작업 가이드](docs/guides/팀_작업_가이드.md)** (설치, 매일 작업 흐름, 담당별 시험, 첫 과제)
 - 결정 사항: [결정 기록](docs/design/결정_기록.md)
+- 실행 메타: [2026-11-03 카탈로그 갱신](docs/records/카탈로그_갱신_20261103.md) · 기존 등록 349표 갱신, 추가 발견 34표는 등록 검수 대기
 - 구조·의존 규칙: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · 협업 규칙: [CONTRIBUTING.md](CONTRIBUTING.md) · 단계 사이 계약: [docs/contracts](docs/contracts/README.md)
 
 ## 1. 폴더와 담당
