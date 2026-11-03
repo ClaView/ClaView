@@ -1,0 +1,285 @@
+{
+ "schema_version": "claview-b/explicit-partial-coverage/0.1",
+ "note": "실제 BService + 합성 모델·조회. 명시 연도가 표의 수록 범위에 일부만 걸칠 때의 기대값은 규칙(수록된 부분만 조회, 미수록은 알림, 요청 범위는 유지)으로 먼저 정했고 코드 결과에 맞춰 바꾸지 않음. 합성 값이며 실호출 입력이 아님.",
+ "cases": [
+  {
+   "id": "PX-01",
+   "note": "명시 연도 일부가 표 끝보다 뒤: 수록된 부분만 조회하고 미수록을 알림(요청 범위는 그대로)",
+   "query": "M2 통화량 2020년부터 2027년까지 월별",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2020-01",
+       "2027-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2020년부터 2027년까지",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202001",
+      "202712"
+     ],
+     "fetched": [
+      "M",
+      "202001",
+      "202607"
+     ],
+     "extra": null,
+     "missing": [
+      [
+       "M",
+       "202608",
+       "202712"
+      ]
+     ],
+     "notices": [
+      "requested_period_partly_unavailable"
+     ],
+     "fetch": [
+      "M",
+      "202001",
+      "202607"
+     ],
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     }
+    }
+   }
+  },
+  {
+   "id": "PX-02",
+   "note": "명시 연도 일부가 표 시작보다 앞: 수록된 부분만 조회하고 미수록을 알림",
+   "query": "M2 통화량 2000년부터 2005년까지 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2000-01",
+       "2005-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2000년부터 2005년까지",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2000",
+      "2005"
+     ],
+     "fetched": [
+      "Y",
+      "2003",
+      "2005"
+     ],
+     "extra": null,
+     "missing": [
+      [
+       "Y",
+       "2000",
+       "2002"
+      ]
+     ],
+     "notices": [
+      "requested_period_partly_unavailable"
+     ],
+     "fetch": [
+      "Y",
+      "2003",
+      "2005"
+     ]
+    }
+   }
+  },
+  {
+   "id": "PX-03",
+   "note": "조건 없는 요청(구 A)에서도 같은 규칙",
+   "query": "M2 통화량 2020년부터 2027년까지 월별",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": null
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "fetch": [
+      "M",
+      "202001",
+      "202607"
+     ]
+    }
+   }
+  },
+  {
+   "id": "PX-04",
+   "note": "요청이 표 안에 모두 있음: 미수록 없음, 안내 없음",
+   "query": "M2 통화량 2020년부터 2024년까지 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2020-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2020년부터 2024년까지",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2020",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2020",
+      "2024"
+     ],
+     "missing": [],
+     "notices": [],
+     "fetch": [
+      "Y",
+      "2020",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "PX-05",
+   "note": "일부 미수록 + 전년 대비: 계산용 앞 구간은 표 안에서만 읽음",
+   "query": "M2 통화량 2024년부터 2027년까지 연간 전년 대비",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2027-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년부터 2027년까지",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2024",
+      "2027"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2025"
+     ],
+     "extra": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "missing": [
+      [
+       "Y",
+       "2026",
+       "2027"
+      ]
+     ],
+     "notices": [
+      "requested_period_partly_unavailable",
+      "calculation_range_extended"
+     ],
+     "fetch": [
+      "Y",
+      "2023",
+      "2025"
+     ]
+    }
+   }
+  },
+  {
+   "id": "PX-06",
+   "note": "표 시작 연도에 전년 대비: 기준 연도가 표에 없어도 멈추지 않고 있는 부분만 조회",
+   "query": "M2 통화량 2003년 연간 전년 대비",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2003-01",
+       "2003-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2003년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2003",
+      "2003"
+     ],
+     "fetched": [
+      "Y",
+      "2003",
+      "2003"
+     ],
+     "extra": null,
+     "missing": [],
+     "notices": [],
+     "fetch": [
+      "Y",
+      "2003",
+      "2003"
+     ]
+    }
+   }
+  }
+ ]
+}

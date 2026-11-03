@@ -910,9 +910,15 @@ def explicit_period_detail(query: str, table: Json, freq: str | None) -> Json | 
     "2024년 1~3월" -> 202401~202403; a comparison wording ("전년보다", "가장 크게 변했는지") starts
     earlier by the periods the calculation needs. Returns None when the question has no stated year,
     still has relative wording (that goes through resolve_relative_period) or the frequency is not in
-    the table; the model's own period and `validate_period` then decide as before. A period outside
-    the table's coverage raises the same error `validate_period` gives, and a named part of a year the
-    frequency cannot show exactly ("2024년 상반기 연간") is refused rather than widened.
+    the table; the model's own period and `validate_period` then decide as before. A named part of a
+    year the frequency cannot show exactly ("2024년 상반기 연간") is refused rather than widened, and so is
+    a range that runs backwards ("2024년부터 2020년까지": invalid_period).
+
+    The stated years are read where the table holds them (2026-11-03): a request that is only partly inside
+    the table's coverage reads the part inside, says what is missing (`missing`, kind
+    `requested_period_partly_unavailable`) and keeps the stated years as `requested`. A request with nothing
+    inside the coverage still stops with metadata_refresh_required: it is not replaced by another period, as a
+    relative one is, because the user named these years (the metadata may also be out of date).
     """
     if freq is None or freq not in table["periods"] or has_relative_words(query, table):
         return None
@@ -921,25 +927,38 @@ def explicit_period_detail(query: str, table: Json, freq: str | None) -> Json | 
     span = _explicit_span(query, freq)
     if span is None:
         raise StageFailure("conditions_incomplete", "unresolved")
-    start_idx, end_idx = span
+    if span[0] > span[1]:
+        raise StageFailure("invalid_period")
+    bounds = coverage_span(table, freq)
+    shared = intersect(span, bounds) if bounds else None
+    if shared is None:
+        raise StageFailure("metadata_refresh_required", "unresolved")
     extension = detect_baseline_extension(query, freq)
-    if extension:
-        start_idx -= extension
-    period = {
+    start_idx = max(bounds[0], span[0] - extension) if extension else shared[0]
+    start_idx = min(start_idx, shared[0])
+    end_idx = shared[1]
+    missing = subtract(span, shared)
+    fetched = {
         "frequency": freq,
         "start": _index_to_period(start_idx, freq),
         "end": _index_to_period(end_idx, freq),
     }
-    validate_period(period, table, query=None)
+    message = None
+    if missing:
+        gone = ", ".join(f"{period_text(a, freq)}~{period_text(b, freq)}" for a, b in missing)
+        message = (
+            f"요청하신 기간 중 일부({gone})가 표에 수록되어 있지 않아 조회 가능한 기간으로 자료를 조회합니다.\n"
+            f"조회 기간: {fetched['start']} ~ {fetched['end']}"
+        )
     return {
-        "period": period,
+        "period": fetched,
         "requested": span,
         "fetched": (start_idx, end_idx),
-        "extra": (start_idx, span[0] - 1) if extension else None,
-        "missing": [],
+        "extra": (start_idx, span[0] - 1) if start_idx < span[0] else None,
+        "missing": missing,
         "substituted": False,
-        "kind": None,
-        "message": None,
+        "kind": "requested_period_partly_unavailable" if missing else None,
+        "message": message,
     }
 
 
@@ -1108,7 +1127,11 @@ def plan_table_period(query: str, table: Json, config: Config, raw_condition: An
             continue
         alternative_rows.append({"frequency": other, "period": _as_period(other, other_detail["fetched"])})
     legacy = detail.get("legacy")
-    if legacy is None and detail["kind"] in {"confirmed_period_partly_unavailable", "a_quoted_period_used"}:
+    if legacy is None and detail["kind"] in {
+        "confirmed_period_partly_unavailable",
+        "a_quoted_period_used",
+        "requested_period_partly_unavailable",
+    }:
         legacy = {
             "status": "needs_confirmation",
             "code": "period_requires_confirmation",
