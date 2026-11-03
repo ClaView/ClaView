@@ -6,11 +6,64 @@ from pathlib import Path
 import httpx
 import pytest
 
+from claview_b import search_documents as search_documents_module
 from claview_b.contracts import StageFailure
 from claview_b.embeddings import NcpEmbedder, VectorIndex, build_vector_index, unit_vector
 from claview_b.metadata import MetadataStore
 from claview_b.search import SearchIndex
-from claview_b.search_documents import build_search_documents, chunks, filter_note
+from claview_b.search_documents import build_search_documents, chunks, clean_text, filter_note
+
+
+@pytest.mark.parametrize(
+    ("source", "expected"),
+    [
+        ('<p data-note="1 > 0">금리&nbsp;<strong>주석</strong><br/>비교</p>', "금리 주석 비교"),
+        (
+            "통계<6.2.4. 소비자동향조사(지역, 월)>에서 제공",
+            "통계<6.2.4. 소비자동향조사(지역, 월)>에서 제공",
+        ),
+        ("근거 <지역별 통계> 및 <2026년 기준> 참고", "근거 <지역별 통계> 및 <2026년 기준> 참고"),
+        ("기준 1 < 2, 규모 > 0; &amp; 유지", "기준 1 < 2, 규모 > 0; & 유지"),
+        (
+            "<DIV class='meta'>주석</DIV>\n<!-- internal -->&lt;6.2.4. 지역 통계&gt;",
+            "주석 <6.2.4. 지역 통계>",
+        ),
+    ],
+)
+def test_clean_text_preserves_non_html_references(source, expected):
+    assert clean_text(source) == expected
+
+
+def test_official_note_table_reference_survives_search_document(store):
+    key = "301:DT_401Y018"
+    note = "공식 통계<6.2.4. 소비자동향조사(지역, 월)>에서 제공"
+    store.records[key]["meta"]["CMMT"] = [{"CMMT_NM": "통계표", "CMMT_DC": note}]
+    corpus = build_search_documents(store)
+    note_docs = [d for d in corpus["documents"] if d["doc_id"] == key and d["kind"] == "notes"]
+    assert note_docs and note in "\n".join(d["text"] for d in note_docs)
+    assert store.records[key]["meta"]["CMMT"][0]["CMMT_DC"] == note
+
+
+def test_preserved_reference_invalidates_old_vectors_and_reuses_unchanged_chunks(store, tmp_path, monkeypatch):
+    key = "301:DT_401Y018"
+    reference = "<6.2.4. 소비자동향조사(지역, 월)>"
+    store.records[key]["meta"]["CMMT"] = [{"CMMT_NM": "통계표", "CMMT_DC": f"공식 통계{reference}에서 제공"}]
+    with monkeypatch.context() as legacy:
+        legacy.setattr(
+            search_documents_module, "clean_text", lambda value: clean_text(str(value).replace(reference, " "))
+        )
+        old_corpus = build_search_documents(store)
+    provider = SyntheticEmbedder()
+    path = tmp_path / "vectors.json"
+    build_vector_index(old_corpus, provider, path)
+    old_index = json.loads(path.read_text(encoding="utf-8"))
+    new_corpus = build_search_documents(store)
+    assert old_corpus["corpus_id"] != new_corpus["corpus_id"]
+    with pytest.raises(StageFailure, match="vector_index_incompatible"):
+        VectorIndex(new_corpus, old_index, provider)
+    report = build_vector_index(new_corpus, provider, path)
+    assert report["new"] == 1
+    assert report["reused"] == len(new_corpus["documents"]) - 1
 
 
 def test_contact_filter_preserves_statistical_notes():
