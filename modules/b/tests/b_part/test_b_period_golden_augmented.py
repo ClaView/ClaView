@@ -117,7 +117,7 @@ def test_period_augmented_tables_are_all_in_the_catalog(period_augmented_cases, 
 
 @pytest.mark.parametrize("case_id", _RESOLVED_CASE_IDS)
 def test_resolved_or_confirmed_cases_match_expected_period(
-    case_id, period_augmented_cases, store, config
+    case_id, period_augmented_cases, historical_store, config
 ):
     """ "implemented" and "assumption_untested" cases must resolve the
     relative-period wording to exactly the case's recorded expected period.
@@ -128,6 +128,8 @@ def test_resolved_or_confirmed_cases_match_expected_period(
     a period notice (status "needs_confirmation", informing only); a "작년"
     case whose closed year the table fully has carries none. Whether a notice
     is present must agree with resolve_relative_period itself."""
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     case = next(c for c in period_augmented_cases if c["case_id"] == case_id)
     result = _run_b(case, store, config)
     expected_period = case["expected"]["B"]["selections"][0]["period"]

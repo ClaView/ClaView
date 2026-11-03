@@ -146,7 +146,7 @@ def test_b_reproduces_golden_selections(case_id, golden_cases, store, config):
 
 
 @pytest.mark.parametrize("case_id", sorted(RELATIVE_PERIOD_EXACT_CASES))
-def test_b_resolves_relative_period_notifies_and_proceeds(case_id, golden_cases, store, config):
+def test_b_resolves_relative_period_notifies_and_proceeds(case_id, golden_cases, historical_store, config):
     """All 8 relative-period cases (CV-AB-12 included, with its expected
     period corrected to the unified sliding window on 2026-10-06): B resolves
     the "최근/이후" wording to exactly the golden answer's period. Because the
@@ -154,6 +154,8 @@ def test_b_resolves_relative_period_notifies_and_proceeds(case_id, golden_cases,
     notice (status "needs_confirmation") with the periods involved -- and then,
     per the 2026-10-06 flow change, carries on to a normal status=ok result so
     the pipeline goes on to fetch. The notice only informs; it asks nothing."""
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     case = next(c for c in golden_cases if c["case_id"] == case_id)
     result = _run_b(case, store, config)
     assert result["status"] == "ok", (case_id, result["status"], result["issues"])
@@ -197,10 +199,12 @@ def test_b_resolved_period_known_discrepancies(case_id, golden_cases, store, con
     )
 
 
-def test_known_outcome_shape_is_stable(golden_cases, store, config):
+def test_known_outcome_shape_is_stable(golden_cases, historical_store, config):
     """Guards against silent regressions: since the 2026-10-06 flow change every
     one of the 22 cases comes back status=ok; exactly the 8 relative-period
     cases carry a period notice, and the other 14 carry none."""
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     noticed, plain, other = set(), set(), {}
     for case in golden_cases:
         result = _run_b(case, store, config)

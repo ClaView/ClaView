@@ -86,7 +86,10 @@ def tables_for(case: dict, metadata) -> list[dict]:
     out = []
     for index, table in enumerate(case["tables"]):
         meta = metadata.get("301", table["table_id"])
-        row = {"org_id": "301", "table_id": table["table_id"], "table_name": meta["table_name"], "focus": table["focus"]}
+        row = {
+            "org_id": "301", "table_id": table["table_id"],
+            "table_name": meta["table_name"], "focus": table["focus"],
+        }
         raw = table["condition"]
         if raw is not None:
             row["period_condition"] = {
@@ -122,12 +125,16 @@ def run(case: dict, metadata) -> dict:
         }
     service.fetch(result)
     for params in client.calls:
-        record["tables"].setdefault(params["tblId"], {})["fetch"] = [params["prdSe"], params["startPrdDe"], params["endPrdDe"]]
+        record["tables"].setdefault(params["tblId"], {})["fetch"] = [
+            params["prdSe"], params["startPrdDe"], params["endPrdDe"],
+        ]
     return record
 
 
 @pytest.mark.parametrize("case", CASES, ids=[c["id"] for c in CASES])
-def test_the_service_reads_the_part_inside_the_coverage(case, store, monkeypatch):
+def test_the_service_reads_the_part_inside_the_coverage(case, historical_store, monkeypatch):
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     monkeypatch.setattr(service_module, "store", lambda: store)
     record = run(case, store)
     assert record["status"] == "ok", record["issues"]

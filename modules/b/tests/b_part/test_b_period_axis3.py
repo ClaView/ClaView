@@ -117,11 +117,13 @@ def test_axis3_selections_reference_real_catalog_items_and_dimensions(store):
 
 
 @pytest.mark.parametrize("case_id", _ALL_IDS)
-def test_axis3_case_replays_to_its_recorded_period(case_id, store, config):
+def test_axis3_case_replays_to_its_recorded_period(case_id, historical_store, config):
     """B must resolve each case to exactly its recorded period and answer with
     status=ok. When the table lags as_of (the usual case) the result also
     carries a period notice (status "needs_confirmation") with the same period;
     since the 2026-10-06 flow change B no longer stops there."""
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     case = next(c for _, c in _ALL if c["case_id"] == case_id)
     result = _run_b(case, store, config)
     assert result["status"] == "ok", (case_id, result["status"], result.get("issues"))
@@ -139,11 +141,13 @@ def test_axis3_case_replays_to_its_recorded_period(case_id, store, config):
 
 
 @pytest.mark.parametrize("case_id", _ALL_IDS)
-def test_axis3_candidates_follow_their_definitions(case_id, store):
+def test_axis3_candidates_follow_their_definitions(case_id, historical_store):
     """Recomputes the three candidate periods independently of the generator
     (and of resolve_relative_period) from the table's own coverage bounds, and
     checks the file's recorded candidates equal them -- and that the recorded
     expected period is one of them."""
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     case = next(c for _, c in _ALL if c["case_id"] == case_id)
     t = case["expected"]["A"]["tables"][0]
     table = store.get(t["org_id"], t["table_id"])

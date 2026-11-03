@@ -1165,8 +1165,10 @@ def test_named_children_keep_the_models_own_duplicates():
     assert codes(result) == ["A", "A"] and notices == []
 
 
-def test_cv_ab_13_named_funds_give_the_3_golden_series(golden_cases, store, config):
+def test_cv_ab_13_named_funds_give_the_3_golden_series(golden_cases, historical_store, config):
     """HCX answers `children` of 총대출금 (then 27 series after promotion); 3 are named."""
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     case = next(c for c in golden_cases if c["case_id"] == "CV-AB-13")
     table = store.get("301", "DT_104Y016")
     root = next(c for c in table["dimensions"]["objL1"]["values"] if c.endswith(".BDCA1"))
@@ -1299,9 +1301,11 @@ def _replay(case, store, config, selections):
 
 
 def test_cv_ab_07_children_on_two_bottom_level_values_give_the_2_golden_series(
-    golden_cases, store, config
+    golden_cases, historical_store, config
 ):
     """HCX picked both values and added `children` to each; twice, so a retry cannot help."""
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     case = next(c for c in golden_cases if c["case_id"] == "CV-AB-07")
     selections = [
         {
