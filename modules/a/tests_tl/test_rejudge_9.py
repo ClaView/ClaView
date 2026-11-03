@@ -186,6 +186,11 @@ def test_a_correction_with_the_slot_used_ends_without_a_call_and_says_so(layer):
 
 def test_a_target_basis_change_with_its_quote_and_reason_is_merged_and_recorded():
     rec1 = first()
+    # A change reason is necessary, but table research alone never licenses weakening a valid basis.
+    # This fixture specifically diagnoses the polarity being corrected; the assertions remain the same.
+    rec1["decisions"][1].update(outcome="failed", reasons=[{"code": "basis_polarity_invalid",
+        "detail": {"cause": "polarity_conflict", "detail": {"axis": "seasonal", "value": "원계열"}}}])
+    rec1["rejudge"]["targets"][0]["kind"] = "correction"
     rec1["question"] = "2024년 월별 원/달러 환율을 원계열 없이는 안 되게 보여줘"
     out = output([("s1", "M2 총액"), ("s2", "원/달러 환율")], periods=[("2024년", ["s1", "s2"])],
                  frequencies=[("월별", ["s1", "s2"])], splitters=[("seasonal", "원계열", "allowed", ["s2"])])

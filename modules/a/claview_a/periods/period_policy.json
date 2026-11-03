@@ -1,6 +1,6 @@
 {
-  "policy_version": "period-policy/2026-11-02.4",
-  "about": "A's period policy. recent_anchor_rule data_latest counts recent N units back from the catalog's latest period of the selected table and frequency. anchor_rule as_of_calendar remains for calendar-relative expressions and explicit open ends; explicit closed dates stay fixed. condition_rule ask_condition asks when the user has not supplied a period or frequency and never applies a default. default_recent_years remains for historical resolver compatibility only. B's final query interpretation and updated metadata are a separate connection contract.",
+  "policy_version": "period-policy/2026-11-03.5",
+  "about": "A's period policy. recent_anchor_rule data_latest counts recent N units back from the catalog's latest period of the selected table and frequency. anchor_rule as_of_calendar remains for calendar-relative expressions and explicit open ends; explicit closed dates stay fixed. A single closed explicit request with a verified continuous available prefix and only a future missing tail is handed to B unchanged, with separate available and missing range notices. Past shortfall, unavailable whole requests and edition compatibility guards remain. condition_rule ask_condition asks when the user has not supplied a period or frequency and never applies a default. default_recent_years remains for historical resolver compatibility only. B's final query interpretation and updated metadata are a separate connection contract.",
   "frequency_order": ["Y", "H", "Q", "M"],
   "periods_per_year": {"Y": 1, "H": 2, "Q": 4, "M": 12},
   "default_recent_years": {"Y": 10, "H": 5, "Q": 5, "M": 3},

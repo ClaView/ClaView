@@ -82,11 +82,17 @@ def _a_periods(spans, frequency) -> set:
 def warning_text(w: dict) -> str:
     d = w["detail"] if isinstance(w.get("detail"), dict) else {}
     head = f"{w['statistic']} ‘{w['quote']}’"
+    if w["code"] == "period_partial_coverage":
+        covered = ", ".join(f"{r['start']} ~ {r['end']}" for r in d.get("covered") or [])
+        return (
+            f"{head}: 요청 기간은 그대로 보존했습니다. A 카탈로그의 수록 구간은 {covered or '일부 구간'}입니다. "
+            "조회 가능한 범위와 미수록 구간은 B 결과에서 구분해 안내합니다."
+        )
     if w["code"] == "stated_basis_unverified":
         stated = ", ".join(d.get("stated") or []) or "명시 값"
         return (
             f"{head}: 질문에 적힌 {d.get('axis_label') or d.get('axis') or '기준'}({stated})을 표 {d.get('table')}에서 "
-            "확인하지 못했습니다. 다른 검사는 통과해 조회했습니다."
+            "확인하지 못했습니다. 다른 검사는 통과했습니다."
         )
     return f"{head}: A 검사 경고 {w['code']}" + (f" ({d.get('axis')})" if d.get("axis") else "")
 
@@ -510,7 +516,8 @@ class ScreenPipeline(Pipeline):
             for case in state["ui_cases"]:
                 shown = set(str(case.get("tableId", "")).split(" · "))
                 case["warnings"] = list(case.get("warnings") or []) + [
-                    "기준 미확인 · " + w["text"] for w in warnings if shown & set(w["tables"])
+                    ("기간 수록 안내 · " if w["code"] == "period_partial_coverage" else "기준 미확인 · ") + w["text"]
+                    for w in warnings if shown & set(w["tables"])
                 ]
             if state.get("status") == "ok":
                 state["message"] = (

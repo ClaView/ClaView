@@ -268,7 +268,7 @@
     // A의 검사 경고(예: 기준 미확인)와 B 계약으로 넘기지 못한 연결 항목은 결과 상태와 별도로 항상 보인다.
     if((m.aWarnings||[]).length){
       var warnBox=el('aside',{class:'confirmation-warning a-warnings',role:'note'});
-      warnBox.append(el('strong',{text:'A 검사 경고 '+m.aWarnings.length+'건 · 조회는 진행했습니다'}));
+      warnBox.append(el('strong',{text:'A 검사 경고 '+m.aWarnings.length+'건 · '+(isAOnlyResult(m)?'조회 미실행':'조회는 진행했습니다')}));
       var wl=el('ul');m.aWarnings.forEach(function(w){wl.append(el('li',{text:w.text||w.code}));});warnBox.append(wl);body.append(warnBox);
     }
     if((m.unsupportedLinks||[]).length){
@@ -330,10 +330,11 @@
     var answer=body.querySelector('.answer p');if(answer)answer.textContent=CV.ux.text(m.answer);
   }
   function receiveResult(m,result){
-    m.execution.stages=result.stages;m.cases=result.ui_cases||[];m.kind=m.cases.length?'result':'stopped';m.runStatus=result.status;
+    m.execution.stages=result.stages;m.cases=result.ui_cases||[];m.runStatus=result.status;
     m.aWarnings=result.a_warnings||[];m.unsupportedLinks=result.unsupported_links||[];
     m.finishedAt=result.finished_at;m.runId=result.run_id;m.confirmation=result.confirmation;m.userConfirmation=result.user_confirmation;
     m.conditionEditor=result.condition_editor;m.resumeKind=result.resume_kind||m.resumeKind;
+    m.kind=m.cases.length?'result':isAOnlyPartial(m)?'a_partial':isAOnlyVerified(m)?'verified':'stopped';
     m.answer=result.message;m.callCounts=result.calls;m.jobSettled=true;
     delete m.recoveryState;delete m.recoveryNote;saveStore();
   }

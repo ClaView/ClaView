@@ -249,7 +249,7 @@ class Gate:
     def check(self, question_key: str, ledger, reserved: bool = False) -> None:
         """Every refusal for the next A call of ``question_key`` (read only). ``reserved``: the call's own reservation
         is already in the ledger (right before the send). Under an allowance the question's calls are this
-        approval's only, and the next one is its first judgment until that is used, then its re-judgment."""
+        approval's only. An allotted first judgment comes before the re-judgment; a recovery-only allowance skips it."""
         if self.now() >= self.until:
             self._refuse("approval_expired", self.approval["valid_until"])
         if question_key not in self.keys:
@@ -261,7 +261,8 @@ class Gate:
             used = ledger.used_under("a_first", self.approval_id) + ledger.used_under("a_self_rejudge",
                                                                                       self.approval_id)
             if not reserved:
-                slot = "a_first" if ledger.used_under("a_first", self.approval_id) == 0 else "a_self_rejudge"
+                first = self.approval["allowance"]["slots"].get("a_first", 0)
+                slot = "a_first" if first and ledger.used_under("a_first", self.approval_id) == 0 else "a_self_rejudge"
                 if (why := ledger.allowance_refusal(slot, allowance)) is not None:
                     self._refuse("allowance_slot_used" if why in ("allowance_slot_used", "allowance_slot_missing")
                                  else why, slot)

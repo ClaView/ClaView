@@ -87,7 +87,8 @@ from ..search.families import FREQUENCY_WORDS as _FREQUENCY_WORDS
 # .16: the three edition judgments, the relation status and the relation file (plan 56 order 7)
 # .17: the edition reasons (edition_relation_conflict, edition_evidence_insufficient) and the judgments trace
 # .18: the latest month held elsewhere on the card bounds the latest-unpublished months (plan 56 order 8)
-PERIODS_VERSION = "tl-periods-2026-11-03.21"  # .21: bounded recent windows preserve their explicit endpoint
+PERIODS_VERSION = "tl-periods-2026-11-03.24"  # .24: preserve explicit requests with a partially available future tail
+# .23: allow future ranges actually covered by compatible editions
 MAX_STITCH = 3  # tables joined across edition boundaries for one statistic
 
 _MONTH_RANGE = re.compile(r"(\d{4})\s*년\s*(\d{1,2})\s*월?\s*[~\-–]\s*(\d{1,2})\s*월")
@@ -388,6 +389,44 @@ def _unpublished(result: dict) -> list[dict]:
             if k["kind"] == "latest_unpublished"]
 
 
+def _future_partial(result: dict, conditions: list[dict], as_of: str, top: int | None) -> dict | None:
+    """A closed explicit request with a verified continuous prefix may proceed unchanged.
+
+    This is partial availability, never full coverage. No past gap, stale edition,
+    multi-span request, relative interpretation or wholly unavailable request gains
+    a new success route (user decision 2026-11-03).
+    """
+    stated = [c for c in conditions if c["kind"] == "period"]
+    if len(stated) != 1:
+        return None
+    attrs = stated[0]["attrs"]
+    if attrs.get("form") not in ("range", "point") or attrs.get("relative") or attrs.get("open_end"):
+        return None
+    periods = result.get("periods") or {}
+    requested, covered = _months(periods.get("requested_months")), _months(periods.get("covered_months"))
+    frequency = result.get("frequency")
+    if (result.get("status") != "ok" or len(requested) != 1 or len(covered) != 1 or
+            frequency not in ("Y", "H", "Q", "M") or not as_of or
+            not any(k["kind"] == "after_as_of" for k in periods.get("missing_kinds") or [])):
+        return None
+    start, end = requested[0]
+    held_start, held_end = covered[0]
+    if held_start != start or not start <= held_end < end or (top is not None and held_end < top):
+        return None
+    width = {"Y": 12, "H": 6, "Q": 3, "M": 1}[frequency]
+    anchor_end = (P.month(as_of[:7]) // width + 1) * width - 1
+    if end <= anchor_end:
+        return None
+    missing = []
+    if held_end < anchor_end:
+        missing.append({"start": P.month_text(held_end + 1), "end": P.month_text(min(end, anchor_end)),
+                        "kind": "latest_unpublished"})
+    missing.append({"start": P.month_text(max(held_end + 1, anchor_end + 1)), "end": P.month_text(end),
+                    "kind": "after_as_of"})
+    return {"requested": copy.deepcopy(periods["requested_months"]), "covered": copy.deepcopy(periods["covered_months"]),
+            "missing_kinds": missing, "source": "a_catalog", "as_of": as_of}
+
+
 def _calendar_context(rep: str, conditions: list[dict], as_of: str) -> dict | None:
     """The as_of calendar context of a request with a quoted period, when the policy's anchor rule is the calendar."""
     if not any(c["kind"] == "period" for c in conditions) or not as_of:
@@ -496,8 +535,6 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
             results = {t: resolve(conditions, views[t], as_of, context=context) for t in candidates}
     report = _report(results, usable)
     base = {"results": report, "anchor": anchor}
-    bounded_recent = any(c.get("kind") == "period" and c["attrs"].get("form") == "recent"
-                         and c["attrs"].get("end_expr") for c in conditions)
     bad = [r for r in results.values() if r["status"] in ("invalid_input", "unresolved")]
     if bad and len(bad) == len(results):
         code = (bad[0].get("issue") or {}).get("code") or bad[0]["status"]
@@ -529,20 +566,37 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
                                                   "frequency": results[t].get("frequency"), **status,
                                                   **({"latest_unpublished": unpublished} if unpublished else {})}],
                 "reason": None, "detail": None, **tie, **base}
-    if bounded_recent and any(k.get("kind") == "after_as_of" for r in results.values()
-                              for k in (r.get("periods") or {}).get("missing_kinds") or []):
-        # Full candidates have already been selected above. A missing future interval must not
-        # become successful merely because the stitch fallback shortens it to available history.
-        return {"status": "failed", "tables": [], "reason": "period_not_covered",
-                "detail": "after_as_of", **base}
+    partial = {t: note for t in order if t in usable and t in allowed
+               if (note := _future_partial(results[t], conditions, as_of, top)) is not None}
+    if partial:
+        # Prefer an unchanged representative only when no candidate holds a newer
+        # part of the request. Full actual coverage above always takes precedence.
+        t = rep if rep in partial else next(iter(partial))
+        notice = {"table_id": t, **partial[t]}
+        unpublished = [{"start": k["start"], "end": k["end"]} for k in notice["missing_kinds"]
+                       if k["kind"] == "latest_unpublished"]
+        row = {"table_id": t, "period": copy.deepcopy(notice["requested"]), "frequency": results[t]["frequency"],
+               **({"latest_unpublished": unpublished} if unpublished else {}),
+               **({"relation_status": judged[t]["relation_status"]} if t != rep else {})}
+        return {"status": "selected", "tables": [row], "reason": None, "detail": "partial_future_coverage",
+                "coverage_notice": notice, **base}
     requested = next((_months((r.get("periods") or {}).get("requested_months")) for r in results.values()
                       if (r.get("periods") or {}).get("requested_months")), [])
+    full_request = list(requested)
     frequencies = {results[t].get("frequency") for t in order if t in usable and results[t].get("frequency")}
     covered_any = {t: _months((results[t].get("periods") or {}).get("covered_months")) for t in order
                    if t in usable and results[t]["status"] in ("ok", "no_data_in_range")}
     # the representative first, then newest first; only tables the edition judgment allows
     covered = {t: covered_any[t] for t in ([rep] if rep in covered_any else []) + [x for x in covered_any if x != rep]
                if t in allowed}
+    if any(k.get("kind") == "after_as_of" for r in results.values()
+           for k in (r.get("periods") or {}).get("missing_kinds") or []) and not (
+            requested and len(frequencies) == 1
+            and _need(requested) <= {m for spans in covered.values() for m in _have(spans)}):
+        # A candidate's missing future range may already be held by a compatible edition. Only actual
+        # coverage of the whole request can proceed to stitching; an unheld future tail cannot be clipped.
+        return {"status": "failed", "tables": [], "reason": "period_not_covered",
+                "detail": "after_as_of", **base}
     unpublished_rows = []
     if top is not None and requested and max(b for _, b in requested) > top:
         # the months after every usable candidate's latest one are latest_unpublished: no table is needed for them
@@ -553,8 +607,18 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
         chosen = _cover_set(requested, covered, rep)
         if chosen:
             spans = _assign(requested, chosen, covered)
+            if unpublished_rows:
+                # Selection needs published coverage, but emitted assignments must retain the user's entire
+                # request. Its unpublished tail belongs to the edition holding the preceding covered month.
+                tails = _months(unpublished_rows)
+                for start, end in tails:
+                    owner = next((t for t in chosen if spans[t] and spans[t][-1][1] == start - 1), None)
+                    if owner is None:
+                        return {"status": "failed", "tables": [], "reason": "stitch_check_failed",
+                                "detail": "unpublished request has no adjacent edition share", **base}
+                    spans[owner][-1] = (spans[owner][-1][0], end)
             shares = [m for t in chosen for m in sorted(_have(spans[t]))]
-            if sorted(shares) != sorted(_need(requested)) or len(shares) != len(set(shares)):
+            if sorted(shares) != sorted(_need(full_request)) or len(shares) != len(set(shares)):
                 return {"status": "failed", "tables": [], "reason": "stitch_check_failed",
                         "detail": "shares leave a gap or overlap", **base}
             rows = []
@@ -572,7 +636,9 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
                 if not _full(again) or again.get("frequency") not in frequencies:
                     return {"status": "failed", "tables": [], "reason": "stitch_check_failed",
                             "detail": f"{t} does not cover its share", **base}
+                unpublished = _unpublished(again)
                 rows.append({"table_id": t, "period": assignment, "frequency": again.get("frequency"),
+                             **({"latest_unpublished": unpublished} if unpublished else {}),
                              **({"relation_status": judged[t]["relation_status"]} if t != rep else {})})
             rows.sort(key=lambda r: order.index(r["table_id"]))  # shown newest first, as before; assigned rep first
             return {"status": "selected", "tables": rows, "reason": None, "detail": "stitched",

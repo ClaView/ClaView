@@ -644,7 +644,7 @@ class Pipeline:
                     raise StageFailure(capability["code"], capability["status"])
                 b_requests, a_failures, listing = self._run_a(state, query, _resume, update)
                 if through == "A":
-                    state["status"] = "a_verified"
+                    state["status"] = "a_partial" if a_failures else "a_verified"
                 else:
                     b = self.b_factory(model, client, self.mode)
                     self._run_b(state, b_requests, b, through, update, run_id, traces, listing, a_failures)
@@ -1142,11 +1142,16 @@ class Pipeline:
         )
 
     def _finish(self, state, emit):
+        a_only_result = state["status"] in {"a_verified", "a_partial"}
+        if a_only_result:
+            state.setdefault("message", "A 일부 조건 미확정 · 조회 미실행" if state["status"] == "a_partial"
+                             else "A 조건 확정 · 조회 미실행")
         for stage in state["stages"]:
             if stage["status"] in {"pending", "running"}:
                 stage.update(
                     status="not_run",
-                    summary="앞 단계 미확정 또는 지정된 검수 범위 때문에 실행하지 않았습니다.",
+                    summary=("A 조건 확인까지만 실행하여 이후 조회·표현 단계는 실행하지 않았습니다."
+                             if a_only_result else "앞 단계 미확정 또는 지정된 검수 범위 때문에 실행하지 않았습니다."),
                 )
         state["finished_at"] = now()
         # 진단 원본은 로컬 runs에만 저장한다. 키 문자열이 섞이면 저장 전에 막는다.
