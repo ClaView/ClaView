@@ -91,6 +91,9 @@ class BService:
     client: Any
     mode: str
     counters: dict = field(default_factory=dict)
+    # B applies A's structured `period_condition` (docs/contracts/A_B_기간조건_공용모델과_A송신부.md); the
+    # HTTP guard lets such requests through only for a receiver that says so.
+    accepts_period_condition: bool = True
 
     @classmethod
     def from_env(cls) -> BService:

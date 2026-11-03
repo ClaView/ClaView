@@ -1,0 +1,1002 @@
+{
+  "schema_version": "claview-ab/period-condition-samples/0.1-draft",
+  "note": "설명용 합성 값과 가상 표 ID. 실제 모델 응답이나 실호출 입력이 아님. 필드 이름과 형식은 합의 대상(B 회신 확정안 2~5절). B 수신부는 아직 구현 전.",
+  "requests": {
+    "period_only": {
+      "desc": "기간만 답함: 기간은 A 확정값, 주기는 B가 정함(A 주기는 참고, source=catalog)",
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "catalog",
+              "period": [
+                {
+                  "start": "2023-09",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "frequency_only": {
+      "desc": "주기만 답함: 주기는 A 확정값, 기간은 B가 계산(A 기간은 참고, source=quoted)",
+      "request": {
+        "query": "M2 통화량을 최근 8개 분기로 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_Q",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "Q",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2024-07",
+                  "end": "2026-06"
+                }
+              ],
+              "period_source": "quoted",
+              "period_phrase": "최근 8개 분기",
+              "answers": [
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-02",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-quarterly",
+                  "value": "Q",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "both_answered": {
+      "desc": "기간과 주기를 모두 답함: 두 값 모두 A 확정값",
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-09",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-01",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "reference_only": {
+      "desc": "참고값만 전달: 답 목록이 비어 있고 출처는 quoted/question. B가 계산하고 A 값은 기록만 함",
+      "request": {
+        "query": "M2 통화량을 최근 3년 월별로 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "question",
+              "period": [
+                {
+                  "start": "2023-09",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "quoted",
+              "period_phrase": "최근 3년",
+              "answers": []
+            }
+          }
+        ]
+      }
+    },
+    "direct_input": {
+      "desc": "직접 입력 답: option_id는 null, value와 text에 원답 보존. B는 원답을 다시 해석하지 않음",
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2024-03",
+                  "end": "2024-09"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "2024년 3월부터 9월까지",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-03",
+                  "question_version": 2,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": null,
+                  "value": "direct_input",
+                  "text": "2024년 3월부터 9월까지",
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-03",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "two_tables_common_range": {
+      "desc": "두 표에 같은 확정 범위: 표마다 자기 period_condition을 가짐(표당 하나)",
+      "request": {
+        "query": "두 통계를 비교해줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표 가",
+            "focus": "지표 가",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-07",
+                  "end": "2026-06"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-04",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-04",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          },
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M06",
+            "table_name": "설명용 통계표 나",
+            "focus": "지표 나",
+            "period_condition": {
+              "statistics": [
+                "s2"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-07",
+                  "end": "2026-06"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-04",
+                  "question_version": 0,
+                  "statistics": [
+                    "s2"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-04",
+                  "question_version": 1,
+                  "statistics": [
+                    "s2"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "no_condition": {
+      "desc": "period_condition 없음(선택 필드): 기존 경로와 동일",
+      "request": {
+        "query": "작년 월별 환율을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표"
+          }
+        ]
+      }
+    }
+  },
+  "responses": {
+    "both_answered_table_ends_202606": {
+      "desc": "both_answered 요청, 표의 최신이 2026-06인 경우: 요청 범위는 보존하고 조회·미수록을 분리",
+      "period_resolutions": [
+        {
+          "table_id": "T_EXAMPLE_M",
+          "statistics": [
+            "s1"
+          ],
+          "frequency": "M",
+          "requested": [
+            {
+              "frequency": "M",
+              "start": "202309",
+              "end": "202608"
+            }
+          ],
+          "fetched": [
+            {
+              "frequency": "M",
+              "start": "202309",
+              "end": "202606"
+            }
+          ],
+          "missing": [
+            {
+              "frequency": "M",
+              "start": "202607",
+              "end": "202608"
+            }
+          ],
+          "calculation_extra": [],
+          "applied_sources": {
+            "period": "a_user_answer",
+            "frequency": "a_user_answer"
+          },
+          "substituted": false,
+          "reference": {
+            "period": [
+              {
+                "start": "2023-09",
+                "end": "2026-08"
+              }
+            ],
+            "frequency": "M",
+            "differs": {
+              "period": false,
+              "frequency": false
+            }
+          },
+          "notices": [
+            {
+              "code": "confirmed_period_partly_unavailable",
+              "visible": true,
+              "message": "요청하신 2026-07~2026-08 자료는 표에 아직 없어 2023-09~2026-06을 조회합니다."
+            }
+          ]
+        }
+      ]
+    },
+    "period_only_picks_frequency": {
+      "desc": "period_only 요청, 표가 Y·Q·M을 가진 경우(기간은 A값, 주기는 B가 정함: 정확히 표현되는 가장 긴 주기)",
+      "period_resolutions": [
+        {
+          "table_id": "T_EXAMPLE_YQM",
+          "statistics": [
+            "s1"
+          ],
+          "frequency": "Y",
+          "frequency_alternatives": [
+            "Q",
+            "M"
+          ],
+          "requested": [
+            {
+              "frequency": "Y",
+              "start": "2024",
+              "end": "2024"
+            }
+          ],
+          "fetched": [
+            {
+              "frequency": "Y",
+              "start": "2024",
+              "end": "2024"
+            }
+          ],
+          "missing": [],
+          "calculation_extra": [],
+          "applied_sources": {
+            "period": "a_user_answer",
+            "frequency": "b_computed"
+          },
+          "substituted": false,
+          "reference": {
+            "period": [
+              {
+                "start": "2024-01",
+                "end": "2024-12"
+              }
+            ],
+            "frequency": "Q",
+            "differs": {
+              "period": false,
+              "frequency": true
+            }
+          },
+          "notices": []
+        }
+      ]
+    },
+    "calendar_substitution": {
+      "desc": "no_condition 요청(작년), 표가 2024년까지만 있는 연 표 / 2026-10-29 기준: B가 계산한 달력 표현의 대체",
+      "period_resolutions": [
+        {
+          "table_id": "T_EXAMPLE_Y24",
+          "statistics": [],
+          "frequency": "Y",
+          "requested": [
+            {
+              "frequency": "Y",
+              "start": "2025",
+              "end": "2025"
+            }
+          ],
+          "fetched": [
+            {
+              "frequency": "Y",
+              "start": "2024",
+              "end": "2024"
+            }
+          ],
+          "missing": [
+            {
+              "frequency": "Y",
+              "start": "2025",
+              "end": "2025"
+            }
+          ],
+          "calculation_extra": [],
+          "applied_sources": {
+            "period": "b_computed",
+            "frequency": "b_computed"
+          },
+          "substituted": true,
+          "reference": null,
+          "notices": [
+            {
+              "code": "requested_period_substituted",
+              "visible": true,
+              "message": "작년(2025년)에 해당하는 자료가 표에 아직 없어 표의 최신 수록 시점(2024) 기준으로 조회합니다."
+            }
+          ]
+        }
+      ]
+    },
+    "calculation_extra": {
+      "desc": "전년 대비 계산: 표시 범위는 2024년, 조회는 2023년을 더함(계산용 구간 분리)",
+      "period_resolutions": [
+        {
+          "table_id": "T_EXAMPLE_M",
+          "statistics": [],
+          "frequency": "M",
+          "requested": [
+            {
+              "frequency": "M",
+              "start": "202401",
+              "end": "202412"
+            }
+          ],
+          "fetched": [
+            {
+              "frequency": "M",
+              "start": "202301",
+              "end": "202412"
+            }
+          ],
+          "missing": [],
+          "calculation_extra": [
+            {
+              "frequency": "M",
+              "start": "202301",
+              "end": "202312",
+              "purpose": "yoy_baseline"
+            }
+          ],
+          "applied_sources": {
+            "period": "b_computed",
+            "frequency": "b_computed"
+          },
+          "substituted": false,
+          "reference": null,
+          "notices": [
+            {
+              "code": "calculation_range_extended",
+              "visible": false,
+              "message": "전년 대비 계산을 위해 2023-01~2023-12를 함께 조회함"
+            }
+          ]
+        }
+      ]
+    },
+    "a_quoted_fallback": {
+      "desc": "B가 질문에서 기간을 해석하지 못하고 A의 기간 출처가 quoted인 경우 A 값을 사용",
+      "period_resolutions": [
+        {
+          "table_id": "T_EXAMPLE_Y25",
+          "statistics": [
+            "s1"
+          ],
+          "frequency": "Y",
+          "requested": [
+            {
+              "frequency": "Y",
+              "start": "2025",
+              "end": "2025"
+            }
+          ],
+          "fetched": [
+            {
+              "frequency": "Y",
+              "start": "2025",
+              "end": "2025"
+            }
+          ],
+          "missing": [],
+          "calculation_extra": [],
+          "applied_sources": {
+            "period": "a_quoted_fallback",
+            "frequency": "b_computed"
+          },
+          "substituted": false,
+          "reference": {
+            "period": [
+              {
+                "start": "2025-01",
+                "end": "2025-12"
+              }
+            ],
+            "frequency": "Y",
+            "differs": {
+              "period": false,
+              "frequency": false
+            }
+          },
+          "notices": [
+            {
+              "code": "a_quoted_period_used",
+              "visible": true,
+              "message": "질문에서 기간을 해석하지 못해 A가 질문에서 읽은 2025년 자료를 조회합니다."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "invalid_requests": {
+    "default_source": {
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-09",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "default",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-01",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected_error": "period_condition_invalid",
+      "reason": "기간 출처는 quoted/user_answer만 허용. default는 거절(참고로도 받지 않음)"
+    },
+    "two_intervals": {
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-09",
+                  "end": "2026-08"
+                },
+                {
+                  "start": "2020-01",
+                  "end": "2020-12"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-01",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected_error": "period_condition_invalid",
+      "reason": "period는 구간 정확히 한 개"
+    },
+    "bad_month_format": {
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-9",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-01",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected_error": "period_condition_invalid",
+      "reason": "YYYY-MM 형식이 아님"
+    },
+    "reversed": {
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2026-09",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-01",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected_error": "period_condition_invalid",
+      "reason": "시작이 끝보다 뒤"
+    },
+    "user_answer_without_answer": {
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-09",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": []
+            }
+          }
+        ]
+      },
+      "expected_error": "period_condition_answer_missing",
+      "reason": "period_source=user_answer인데 period 답 기록이 없음"
+    },
+    "answer_for_other_statistic": {
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-09",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s9"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-01",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected_error": "period_condition_answer_missing",
+      "reason": "답의 적용 통계(s9)가 이 조건의 통계(s1)를 포함하지 않음"
+    },
+    "conflicting_answers": {
+      "request": {
+        "query": "M2 통화량을 보여줘",
+        "as_of": "2026-10-29",
+        "tables": [
+          {
+            "org_id": "301",
+            "table_id": "T_EXAMPLE_M",
+            "table_name": "설명용 통계표",
+            "focus": "M2 통화량",
+            "period_condition": {
+              "statistics": [
+                "s1"
+              ],
+              "frequency": "M",
+              "frequency_source": "user_answer",
+              "period": [
+                {
+                  "start": "2023-09",
+                  "end": "2026-08"
+                }
+              ],
+              "period_source": "user_answer",
+              "period_phrase": "최근 3년",
+              "answers": [
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-3y",
+                  "value": "최근 3년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "period",
+                  "question_id": "example-period-01",
+                  "question_version": 0,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-recent-5y",
+                  "value": "최근 5년",
+                  "text": null,
+                  "source": "user_answer"
+                },
+                {
+                  "kind": "frequency",
+                  "question_id": "example-frequency-01",
+                  "question_version": 1,
+                  "statistics": [
+                    "s1"
+                  ],
+                  "option_id": "example-monthly",
+                  "value": "M",
+                  "text": null,
+                  "source": "user_answer"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "expected_error": "period_condition_answer_conflict",
+      "reason": "같은 질문 ID·버전·kind인데 값이 다름(같은 값의 중복은 허용)"
+    }
+  }
+}

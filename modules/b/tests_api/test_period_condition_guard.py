@@ -23,7 +23,18 @@ def request():
 @pytest.mark.parametrize("endpoint", ["/b/resolve", "/b/run"])
 @pytest.mark.parametrize("capability", [None, False, 1, "true"])
 def test_unsupported_receiver_refuses_before_resolve_or_fetch(monkeypatch, endpoint, capability):
-    receiver = BService(None, None, "synthetic")
+    # a receiver that does not say it applies conditions (an older B or another implementation);
+    # BService itself says so since B applies them (see test_b_service_accepts_period_conditions)
+    class Receiver:
+        mode = "synthetic"
+
+        def resolve(self, *args, **kwargs):
+            raise AssertionError("must not be reached")
+
+        def fetch(self, *args, **kwargs):
+            raise AssertionError("must not be reached")
+
+    receiver = Receiver()
     if capability is not None:
         receiver.accepts_period_condition = capability
 
@@ -93,3 +104,7 @@ def test_legacy_request_needs_no_new_capability(monkeypatch, endpoint):
         response = client.post(endpoint, json=payload)
     assert response.status_code == 200 and response.json()["outcome"]["status"] == "ok"
     assert receiver.received == [BRequest.model_validate(payload).model_dump()]
+
+
+def test_b_service_accepts_period_conditions():
+    assert BService(None, None, "synthetic").accepts_period_condition is True

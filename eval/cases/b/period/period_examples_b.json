@@ -1,0 +1,2453 @@
+{
+  "schema_version": "claview-ab/period-examples-b/0.1-draft",
+  "note": "B가 규칙으로 먼저 정한 기대값. 범위 표기는 B의 selections[].period와 같음(Y=YYYY, H/Q=YYYY+순번 2자리, M=YYYYMM). A의 YYYY-MM 월 구간은 period_condition.period에만 쓰임.",
+  "tables": {},
+  "cases": [
+    {
+      "case_id": "PC-01",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "작년 지역별 수출을 연도별로 보여줘",
+      "rule": "작년 = as_of 달력의 전년. 표가 전부 가지면 그대로, 안내 없음",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2025",
+                "end": "2025"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2025",
+                "end": "2025"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-02",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "작년 지역별 수출을 연도별로 보여줘",
+      "rule": "작년 전체가 표 끝 뒤: 표의 최신 연도로 대체하고 안내. 요청 범위는 2025로 유지하고 대체 표시",
+      "tables": [
+        {
+          "table_id": "T_Y24",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2024"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2025",
+                "end": "2025"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2024",
+                "end": "2024"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "Y",
+                "start": "2025",
+                "end": "2025"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": true,
+            "notices": [
+              {
+                "code": "requested_period_substituted",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-03",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "작년 월별 환율을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202501",
+                "end": "202512"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202501",
+                "end": "202512"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-04",
+      "group": "작년·올해",
+      "as_of": "2027-03-01",
+      "query": "작년 분기별 소득을 보여줘",
+      "rule": "작년 일부만 표에 있음: 자르고 안내. 대체 아님",
+      "tables": [
+        {
+          "table_id": "T_Q",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Q",
+            "requested": [
+              {
+                "frequency": "Q",
+                "start": "202601",
+                "end": "202604"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Q",
+                "start": "202601",
+                "end": "202602"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "Q",
+                "start": "202603",
+                "end": "202604"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "requested_period_partly_unavailable",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-05",
+      "group": "작년·올해",
+      "as_of": "2027-03-01",
+      "query": "작년 분기별 소득을 보여줘",
+      "rule": "작년(2026) 전체가 표 끝(2025Q4) 뒤: 표의 최신 연도로 대체",
+      "tables": [
+        {
+          "table_id": "T_Q25",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202504"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Q",
+            "requested": [
+              {
+                "frequency": "Q",
+                "start": "202601",
+                "end": "202604"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Q",
+                "start": "202501",
+                "end": "202504"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "Q",
+                "start": "202601",
+                "end": "202604"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": true,
+            "notices": [
+              {
+                "code": "requested_period_substituted",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-06",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "작년 지역별 수출을 연도별로 보여줘",
+      "rule": "작년이 표 시작 전: 대체하지 않고 중단",
+      "tables": [
+        {
+          "table_id": "T_Y26",
+          "coverage": {
+            "Y": {
+              "start": "2026",
+              "end": "2026"
+            }
+          },
+          "expected": {
+            "status": "error",
+            "error_code": "metadata_refresh_required"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-07",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "올해 지역별 수출을 연도별로 보여줘",
+      "rule": "올해 = 표의 최신 연도까지. 표 최신이 전년이면 대체로 표시",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2026",
+                "end": "2026"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2025",
+                "end": "2025"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "Y",
+                "start": "2026",
+                "end": "2026"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": true,
+            "notices": [
+              {
+                "code": "requested_period_substituted",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-08",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "올해 월별 환율을 보여줘",
+      "rule": "올해 요청은 as_of 월까지, 조회는 표 끝까지",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202601",
+                "end": "202610"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202601",
+                "end": "202608"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "M",
+                "start": "202609",
+                "end": "202610"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "requested_period_partly_unavailable",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-09",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "올해 분기별 소득을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_Q",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Q",
+            "requested": [
+              {
+                "frequency": "Q",
+                "start": "202601",
+                "end": "202604"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Q",
+                "start": "202601",
+                "end": "202602"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "Q",
+                "start": "202603",
+                "end": "202604"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "requested_period_partly_unavailable",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-10",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "올해 반기별 자료를 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_H",
+          "coverage": {
+            "H": {
+              "start": "202001",
+              "end": "202601"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "H",
+            "requested": [
+              {
+                "frequency": "H",
+                "start": "202601",
+                "end": "202602"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "H",
+                "start": "202601",
+                "end": "202601"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "H",
+                "start": "202602",
+                "end": "202602"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "requested_period_partly_unavailable",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-11",
+      "group": "작년·올해",
+      "as_of": "2026-10-29",
+      "query": "올해 월별 환율을 보여줘",
+      "rule": "표가 as_of 월까지 있으면 안내 없음",
+      "tables": [
+        {
+          "table_id": "T_M10",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202610"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202601",
+                "end": "202610"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202601",
+                "end": "202610"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-12",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "최근 3년 연도별 수출을 보여줘",
+      "rule": "최근 N = 표의 최신 시점을 끝으로 거꾸로 N기간(요청=조회). 기준일 대비 표 지연은 안내",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2025"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2025"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-13",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "최근 8개 분기 소득을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_Q",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Q",
+            "requested": [
+              {
+                "frequency": "Q",
+                "start": "202403",
+                "end": "202602"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Q",
+                "start": "202403",
+                "end": "202602"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-14",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "최근 6개월 분기별 소득을 보여줘",
+      "rule": "6개월 = 2분기 (정확히 나누어떨어질 때만 환산)",
+      "tables": [
+        {
+          "table_id": "T_Q",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Q",
+            "requested": [
+              {
+                "frequency": "Q",
+                "start": "202601",
+                "end": "202602"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Q",
+                "start": "202601",
+                "end": "202602"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-15",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "최근 5개월 분기별 소득을 보여줘",
+      "rule": "5개월은 분기로 나누어떨어지지 않음: 근사하지 않고 중단",
+      "tables": [
+        {
+          "table_id": "T_Q",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            }
+          },
+          "expected": {
+            "status": "error",
+            "error_code": "conditions_incomplete"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-16",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "최근 3개년 수출을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2025"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2025"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-17",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "2025년까지 최근 3년 월별 환율을 보여줘",
+      "rule": "사용자가 말한 끝(2025)이 끝. 지연 안내 없음",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202512"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202512"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-18",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "2027년까지 최근 3년 연도별 수출을 보여줘",
+      "rule": "말한 끝이 표 끝 뒤: 표의 최신 시점을 끝으로 하고 안내",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2025"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2025"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "stated_end_beyond_table",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-19",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "2020년부터 월별 환율을 보여줘",
+      "rule": "끝을 말하지 않은 열린 기간 = 표의 최신 시점까지",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202001",
+                "end": "202608"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202001",
+                "end": "202608"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-20",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "2020년 3월부터 월별 환율을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202003",
+                "end": "202608"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202003",
+                "end": "202608"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-21",
+      "group": "최근 N·열린 기간",
+      "as_of": "2026-10-29",
+      "query": "지난 3년 연도별 수출을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2025"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2023",
+                "end": "2025"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-22",
+      "group": "달력 한 기간",
+      "as_of": "2026-10-29",
+      "query": "지난달 월별 환율을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202609",
+                "end": "202609"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202608",
+                "end": "202608"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "M",
+                "start": "202609",
+                "end": "202609"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": true,
+            "notices": [
+              {
+                "code": "requested_period_substituted",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-23",
+      "group": "달력 한 기간",
+      "as_of": "2026-10-29",
+      "query": "지난 분기 분기별 소득을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_Q",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Q",
+            "requested": [
+              {
+                "frequency": "Q",
+                "start": "202603",
+                "end": "202603"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Q",
+                "start": "202602",
+                "end": "202602"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "Q",
+                "start": "202603",
+                "end": "202603"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": true,
+            "notices": [
+              {
+                "code": "requested_period_substituted",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-24",
+      "group": "달력 한 기간",
+      "as_of": "2026-08-15",
+      "query": "이번 분기 월별 환율을 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202607",
+                "end": "202609"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202607",
+                "end": "202608"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "M",
+                "start": "202609",
+                "end": "202609"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "requested_period_partly_unavailable",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-25",
+      "group": "달력 한 기간",
+      "as_of": "2027-02-01",
+      "query": "지난 반기 반기별 자료를 보여줘",
+      "rule": "",
+      "tables": [
+        {
+          "table_id": "T_H",
+          "coverage": {
+            "H": {
+              "start": "202001",
+              "end": "202601"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "H",
+            "requested": [
+              {
+                "frequency": "H",
+                "start": "202602",
+                "end": "202602"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "H",
+                "start": "202601",
+                "end": "202601"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "H",
+                "start": "202602",
+                "end": "202602"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": true,
+            "notices": [
+              {
+                "code": "requested_period_substituted",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-26",
+      "group": "달력 한 기간",
+      "as_of": "2026-10-29",
+      "query": "지난달 연도별 자료를 보여줘",
+      "rule": "지난달을 연 단위로 정확히 표현할 수 없음: 넓히지 않고 중단",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "expected": {
+            "status": "error",
+            "error_code": "conditions_incomplete"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-27",
+      "group": "계산용 구간",
+      "as_of": "2026-10-29",
+      "query": "2024년 월별 환율이 전년 대비 얼마나 올랐는지 보여줘",
+      "rule": "표시 범위는 2024년, 조회는 전년 구간까지. 추가 구간은 계산용으로 구분",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202412"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [
+              {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202312",
+                "purpose": "yoy_baseline"
+              }
+            ],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "calculation_range_extended",
+                "visible": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-28",
+      "group": "계산용 구간",
+      "as_of": "2026-10-29",
+      "query": "2024년 월별 환율이 전년 대비 얼마나 올랐는지 보여줘",
+      "rule": "A가 확정한 기간에도 계산용 앞 구간은 B가 더함(A 기간에는 포함되지 않음)",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2024-01",
+                "end": "2024-12"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": "2024년",
+            "answers": [
+              "period",
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202412"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [
+              {
+                "frequency": "M",
+                "start": "202301",
+                "end": "202312",
+                "purpose": "yoy_baseline"
+              }
+            ],
+            "applied_sources": {
+              "period": "a_user_answer",
+              "frequency": "a_user_answer"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "calculation_range_extended",
+                "visible": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-29",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 보여줘",
+      "rule": "기간·주기 모두 답함: A 값을 그대로 사용, 질문에서 다시 해석하지 않음",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2023-09",
+                "end": "2026-08"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": "최근 3년",
+            "answers": [
+              "period",
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "a_user_answer",
+              "frequency": "a_user_answer"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-30",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 보여줘",
+      "rule": "확정 기간이 표 끝을 넘음: 교집합 조회, 미수록 안내, 확정 범위를 덮어쓰지 않음",
+      "tables": [
+        {
+          "table_id": "T_M06",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202606"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2023-09",
+                "end": "2026-08"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": "최근 3년",
+            "answers": [
+              "period",
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202606"
+              }
+            ],
+            "missing": [
+              {
+                "frequency": "M",
+                "start": "202607",
+                "end": "202608"
+              }
+            ],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "a_user_answer",
+              "frequency": "a_user_answer"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "confirmed_period_partly_unavailable",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-31",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 보여줘",
+      "rule": "B 메타가 더 최신이어도 A가 보여 준 확정 날짜를 유지(다시 최근으로 계산하지 않음)",
+      "tables": [
+        {
+          "table_id": "T_M10",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202610"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2023-09",
+                "end": "2026-08"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": "최근 3년",
+            "answers": [
+              "period",
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "a_user_answer",
+              "frequency": "a_user_answer"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-32",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 보여줘",
+      "rule": "확정 기간이 표와 겹치지 않음: 다른 기간으로 바꾸지 않고 중단",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2027-01",
+                "end": "2027-12"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": null,
+            "answers": [
+              "period",
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "error",
+            "error_code": "period_condition_out_of_coverage"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-33",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 보여줘",
+      "rule": "기간만 답함: 주기는 B가 정함(단서 없으면 정확히 표현 가능한 가장 긴 주기). A의 주기는 참고",
+      "tables": [
+        {
+          "table_id": "T_YQM",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            },
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            },
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "Q",
+            "frequency_source": "catalog",
+            "period": [
+              {
+                "start": "2024-01",
+                "end": "2024-12"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": "2024년",
+            "answers": [
+              "period"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2024",
+                "end": "2024"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2024",
+                "end": "2024"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "a_user_answer",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [],
+            "frequency_alternatives": [
+              "Q",
+              "M"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-34",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 보여줘",
+      "rule": "2024-02~05는 분기로 정확히 표현할 수 없음: 월로 표현(분기로 넓히지 않음)",
+      "tables": [
+        {
+          "table_id": "T_QM",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            },
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "Q",
+            "frequency_source": "catalog",
+            "period": [
+              {
+                "start": "2024-02",
+                "end": "2024-05"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": null,
+            "answers": [
+              "period"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202402",
+                "end": "202405"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202402",
+                "end": "202405"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "a_user_answer",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-35",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 분기별로 보여줘",
+      "rule": "질문이 분기를 말했지만 확정 기간이 분기 경계가 아님: 넓히지 않고 중단",
+      "tables": [
+        {
+          "table_id": "T_QM",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            },
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "Q",
+            "frequency_source": "catalog",
+            "period": [
+              {
+                "start": "2024-02",
+                "end": "2024-05"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": null,
+            "answers": [
+              "period"
+            ]
+          },
+          "expected": {
+            "status": "error",
+            "error_code": "period_condition_not_representable"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-36",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 보여줘",
+      "rule": "표가 분기만 가지고 확정 기간이 분기 경계가 아님",
+      "tables": [
+        {
+          "table_id": "T_Q",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            }
+          },
+          "period_condition": {
+            "frequency": "Q",
+            "frequency_source": "catalog",
+            "period": [
+              {
+                "start": "2024-02",
+                "end": "2024-05"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": null,
+            "answers": [
+              "period"
+            ]
+          },
+          "expected": {
+            "status": "error",
+            "error_code": "period_condition_not_representable"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-37",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "소득을 최근 8개 분기로 보여줘",
+      "rule": "주기만 답함: A 주기를 쓰고 기간은 B가 계산(A 기간은 참고)",
+      "tables": [
+        {
+          "table_id": "T_Q",
+          "coverage": {
+            "Q": {
+              "start": "200001",
+              "end": "202602"
+            }
+          },
+          "period_condition": {
+            "frequency": "Q",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2024-07",
+                "end": "2026-06"
+              }
+            ],
+            "period_source": "quoted",
+            "period_phrase": "최근 8개 분기",
+            "answers": [
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Q",
+            "requested": [
+              {
+                "frequency": "Q",
+                "start": "202403",
+                "end": "202602"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Q",
+                "start": "202403",
+                "end": "202602"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "a_user_answer"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ],
+            "reference_differs": {
+              "period": false,
+              "frequency": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-38",
+      "group": "사용자 확정",
+      "as_of": "2026-10-29",
+      "query": "통화량을 최근 3년 보여줘",
+      "rule": "사용자가 고른 주기를 표가 지원하지 않음: 다른 주기로 대체하지 않고 중단",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "Q",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2023-10",
+                "end": "2026-06"
+              }
+            ],
+            "period_source": "quoted",
+            "period_phrase": "최근 3년",
+            "answers": [
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "error",
+            "error_code": "period_condition_frequency_unsupported"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-39",
+      "group": "참고값",
+      "as_of": "2026-10-29",
+      "query": "통화량을 최근 3년 월별로 보여줘",
+      "rule": "둘 다 답이 아님: B가 계산하고 A 값은 기록만 함",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "question",
+            "period": [
+              {
+                "start": "2023-09",
+                "end": "2026-08"
+              }
+            ],
+            "period_source": "quoted",
+            "period_phrase": "최근 3년",
+            "answers": []
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ],
+            "reference_differs": {
+              "period": false,
+              "frequency": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-40",
+      "group": "참고값",
+      "as_of": "2026-10-29",
+      "query": "작년 월별 환율을 보여줘",
+      "rule": "A 참고 기간이 달라도 중단하지 않음. 차이는 기록만 하고 화면에는 내지 않음(상대 표현)",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "question",
+            "period": [
+              {
+                "start": "2024-01",
+                "end": "2024-12"
+              }
+            ],
+            "period_source": "quoted",
+            "period_phrase": "작년",
+            "answers": []
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202501",
+                "end": "202512"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202501",
+                "end": "202512"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "reference_period_differs",
+                "visible": false
+              }
+            ],
+            "reference_differs": {
+              "period": true,
+              "frequency": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-41",
+      "group": "참고값",
+      "as_of": "2026-10-29",
+      "query": "지금 상황을 연도별로 보여줘",
+      "rule": "B가 해석하지 못하고 A 출처가 quoted: A 값을 쓰고 안내",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "period_condition": {
+            "frequency": "Y",
+            "frequency_source": "question",
+            "period": [
+              {
+                "start": "2025-01",
+                "end": "2025-12"
+              }
+            ],
+            "period_source": "quoted",
+            "period_phrase": null,
+            "answers": []
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "Y",
+            "requested": [
+              {
+                "frequency": "Y",
+                "start": "2025",
+                "end": "2025"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "Y",
+                "start": "2025",
+                "end": "2025"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "a_quoted_fallback",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "a_quoted_period_used",
+                "visible": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-42",
+      "group": "참고값",
+      "as_of": "2026-10-29",
+      "query": "지금 상황을 연도별로 보여줘",
+      "rule": "B가 해석하지 못하고 A 값도 없음: 기존처럼 중단",
+      "tables": [
+        {
+          "table_id": "T_Y25",
+          "coverage": {
+            "Y": {
+              "start": "2010",
+              "end": "2025"
+            }
+          },
+          "expected": {
+            "status": "error",
+            "error_code": "conditions_incomplete"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-43",
+      "group": "여러 표",
+      "as_of": "2026-10-29",
+      "query": "두 표의 최근 3년 월별 값을 비교해줘",
+      "rule": "상대 표현은 표마다 그 표의 최신 시점 기준. 표별로 달라도 중단하지 않음",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "question",
+            "period": [
+              {
+                "start": "2023-09",
+                "end": "2026-08"
+              }
+            ],
+            "period_source": "quoted",
+            "period_phrase": "최근 3년",
+            "answers": []
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202309",
+                "end": "202608"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              }
+            ],
+            "reference_differs": {
+              "period": false,
+              "frequency": false
+            }
+          }
+        },
+        {
+          "table_id": "T_M06",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202606"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "question",
+            "period": [
+              {
+                "start": "2023-09",
+                "end": "2026-08"
+              }
+            ],
+            "period_source": "quoted",
+            "period_phrase": "최근 3년",
+            "answers": []
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202307",
+                "end": "202606"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202307",
+                "end": "202606"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": [
+              {
+                "code": "table_lag",
+                "visible": true
+              },
+              {
+                "code": "reference_period_differs",
+                "visible": false
+              }
+            ],
+            "reference_differs": {
+              "period": true,
+              "frequency": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-44",
+      "group": "여러 표",
+      "as_of": "2026-10-29",
+      "query": "두 표의 값을 비교해줘",
+      "rule": "공통 확정 범위는 표마다 그대로 보존",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2023-07",
+                "end": "2026-06"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": "최근 3년",
+            "answers": [
+              "period",
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202307",
+                "end": "202606"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202307",
+                "end": "202606"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "a_user_answer",
+              "frequency": "a_user_answer"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        },
+        {
+          "table_id": "T_M06",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202606"
+            }
+          },
+          "period_condition": {
+            "frequency": "M",
+            "frequency_source": "user_answer",
+            "period": [
+              {
+                "start": "2023-07",
+                "end": "2026-06"
+              }
+            ],
+            "period_source": "user_answer",
+            "period_phrase": "최근 3년",
+            "answers": [
+              "period",
+              "frequency"
+            ]
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202307",
+                "end": "202606"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202307",
+                "end": "202606"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "a_user_answer",
+              "frequency": "a_user_answer"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "PC-45",
+      "group": "여러 표",
+      "as_of": "2026-10-29",
+      "query": "2024년 두 표의 월별 값을 비교해줘",
+      "rule": "질문에 명시한 연도는 표마다 같은 값",
+      "tables": [
+        {
+          "table_id": "T_M",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202608"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        },
+        {
+          "table_id": "T_M06",
+          "coverage": {
+            "M": {
+              "start": "200001",
+              "end": "202606"
+            }
+          },
+          "expected": {
+            "status": "ok",
+            "frequency": "M",
+            "requested": [
+              {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              }
+            ],
+            "fetched": [
+              {
+                "frequency": "M",
+                "start": "202401",
+                "end": "202412"
+              }
+            ],
+            "missing": [],
+            "calculation_extra": [],
+            "applied_sources": {
+              "period": "b_computed",
+              "frequency": "b_computed"
+            },
+            "substituted": false,
+            "notices": []
+          }
+        }
+      ]
+    }
+  ]
+}
