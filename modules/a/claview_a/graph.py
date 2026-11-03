@@ -51,7 +51,8 @@ RESEARCH_VERSION = "tl-research-2026-10-29.2"  # .2: own judge and settings; unr
 # frequency and anchor, same-period references); only the rows the first round failed to structure (by the code's
 # check, never the model's word) may be corrected, recorded in ``condition_corrections``; a statistic with applied
 # user answers is never taken from a second round (BOK20 live check 11-02, owner 02:37 and 02:47 UTC)
-REJUDGE_VERSION = "tl-rejudge-2026-11-03.14"  # .14: copy valid scope before checking a partial recovery
+REJUDGE_VERSION = "tl-rejudge-2026-11-03.15"  # .15: item identity and diagnosed calculation quote repairs
+# .14: copy valid scope before checking a partial recovery
 # .8: a merged focus limit is checked before recovery and after adoption; shared-limit facts accompany targets
 # .7: scope fact errors share the existing recovery slot; .6: fixed statistics referable; .5: the whole ID map at
 # once; .2: corrections sent (contract .6), changes with reasons
@@ -540,6 +541,38 @@ def _focus_repair_losses(first: dict, second: dict, sid: str, other: str, errors
     return lost
 
 
+def _calculation_repair_losses(first: dict, second: dict, sid: str, other: str, decision: dict) -> list[str]:
+    """Only a diagnosed source-quote error may change during another allowed recovery.
+
+    Normal calculation rows and the number of rows remain fixed. The contract has
+    no structured calculation meaning: a new source quote is evidence, not a code
+    proof that the model interpreted the requested calculation correctly.
+    """
+    from collections import Counter
+
+    from .quotes import quote_in_question
+    from .search.tables import nospace
+
+    question = first.get("question") or ""
+    diagnosed = {nospace(w["detail"]) for w in decision.get("warnings") or []
+                 if w.get("code") == "calculation_quote_not_in_question" and isinstance(w.get("detail"), str)}
+    mine = [r for r in first["model_output"].get("calculations") or [] if sid in r["for"]]
+    theirs = [r for r in second["model_output"].get("calculations") or [] if other in r["for"]]
+    broken = Counter(nospace(r["quote"]) for r in mine if nospace(r["quote"]) in diagnosed and
+                     not quote_in_question(r["quote"], question))
+    if not broken:
+        return ([] if _preserved_rows(first["model_output"], sid, "calculations") ==
+                _preserved_rows(second["model_output"], other, "calculations") else ["calculations:changed"])
+    fixed = Counter(nospace(r["quote"]) for r in mine) - broken
+    supplied = Counter(nospace(r["quote"]) for r in theirs)
+    if len(mine) != len(theirs) or fixed - supplied:
+        return ["calculations:changed"]
+    # An unchanged invalid row retains the existing warning; every actual edit must
+    # be grounded in the question. No row may disappear or create an extra slot.
+    edits = (supplied - fixed) - broken
+    return ["calculations:changed"] if any(not quote_in_question(q, question) for q in edits) else []
+
+
 def condition_preservation(first: dict, second: dict, sid: str, other: str) -> list[str]:
     """What the second round lost of the first round's conditions for statistic ``sid`` (as ``other`` there): each
     period and frequency quote, and each basis row (value and polarity) the first round attached to it (plan 56 order
@@ -573,6 +606,9 @@ def condition_preservation(first: dict, second: dict, sid: str, other: str) -> l
     for kind in ("focuses", "calculations", "aggregations"):
         if kind == "focuses" and focus_errors:
             lost += _focus_repair_losses(first, second, sid, other, focus_errors)
+            continue
+        if kind == "calculations":
+            lost += _calculation_repair_losses(first, second, sid, other, original)
             continue
         if _preserved_rows(first["model_output"], sid, kind) != _preserved_rows(second["model_output"], other, kind):
             lost.append(f"{kind}:changed")

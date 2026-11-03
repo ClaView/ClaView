@@ -88,9 +88,24 @@ def _table_ids(decision: dict) -> list[str]:
     return [r["table_id"] if isinstance(r, dict) else r for r in decision.get("final_tables") or []]
 
 
-def _item_scope(table: str, items: list[str], lookup: CH.Cards) -> bool:
+def _item_scope(table: str, items: list[str], lookup: CH.Cards) -> list[dict] | None:
+    """Bind each citable name to one actual object/item, not merely one card spelling.
+
+    Item IDs may be reused across objects. A name or ID with more than one catalog
+    owner is not enough evidence for this limited table replacement.
+    """
     facts = lookup.facts_by_kind(table)["item"]
-    return all(item in facts and len(lookup.resolve_item(table, item).get("item_ids") or []) == 1 for item in items)
+    result = []
+    for name in items:
+        ids = lookup.resolve_item(table, name).get("item_ids") or []
+        if name not in facts or len(ids) != 1:
+            return None
+        owners = [it for it in lookup.views[table].items if it.item_id == ids[0]]
+        named = [it for it in lookup.views[table].items if it.name_raw == name]
+        if len(owners) != 1 or len(named) != 1 or owners[0].name_raw != name or not owners[0].obj_id:
+            return None
+        result.append({"name": name, "object_id": owners[0].obj_id, "item_id": owners[0].item_id})
+    return result
 
 
 def prepare(record: dict, cards: list[dict], views: dict) -> None:
@@ -142,7 +157,7 @@ def prepare(record: dict, cards: list[dict], views: dict) -> None:
         frequency = frequencies[0]["value"]
         if len(requested) != 1:
             continue
-        allowed = []
+        allowed, item_scopes = [], {}
         for table in refs:
             if table == origin or table not in views:
                 continue
@@ -151,7 +166,8 @@ def prepare(record: dict, cards: list[dict], views: dict) -> None:
             if lookup.row[origin].get("basis", {}) != lookup.row[table].get("basis", {}):
                 continue
             before_units, after_units = PR._units(views[origin]), PR._units(views[table])
-            if before_units != after_units or not _item_scope(table, items, lookup):
+            item_scope = _item_scope(table, items, lookup)
+            if before_units != after_units or not item_scope:
                 continue
             result = PR.resolve(conditions, views[table], record["as_of"],
                                 context=PR._calendar_context(table, conditions, record["as_of"]))
@@ -165,7 +181,10 @@ def prepare(record: dict, cards: list[dict], views: dict) -> None:
                 continue
             allowed.append({"table": refs[table], "table_id": table, "items": items,
                             "frequency": frequency, "period": deepcopy(requested)})
+            item_scopes[table] = item_scope
         if allowed:
+            # Internal checked identities only; keep the recovery model's facts unchanged.
+            d["period_reselection_items"] = item_scopes
             d["period_reselection"] = {"code": "period_table_reselection", "origin": origin,
                                        "candidates": allowed, "period": deepcopy(requested),
                                        "frequency": frequency, "items": items,
@@ -190,8 +209,15 @@ def period_losses(first: dict, second: dict, sid: str, other: str) -> list[str]:
     if (len(assigned) != 1 or assigned[0].get("period") != bound["period"] or
             (after.get("frequency") or {}).get("value") != bound["frequency"]):
         return ["period_reselection:request_changed"]
-    cited = {e["text"] for e in after.get("model_evidence") or []
-             if e.get("kind") == "item" and e.get("table") == tables[0]}
-    if (not set(bound["items"]) <= cited or (after.get("citation") or {}).get("status") != "verified"):
+    expected = {r["item_id"]: r for r in (before.get("period_reselection_items") or {}).get(tables[0], [])}
+    cited = set()
+    for evidence in after.get("model_evidence") or []:
+        item = evidence.get("item") or {}
+        ids = item.get("item_ids") or []
+        if (evidence.get("kind") == "item" and evidence.get("table") == tables[0] and
+                "item" in (evidence.get("fact_of_table") or []) and len(ids) == 1 and
+                ids[0] in expected and item.get("name") == expected[ids[0]]["name"]):
+            cited.add(ids[0])
+    if (not expected or not set(expected) <= cited or (after.get("citation") or {}).get("status") != "verified"):
         return ["period_reselection:item_evidence_missing"]
     return []
