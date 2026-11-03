@@ -10,18 +10,25 @@ that stops the whole check (the case in progress is recorded as stopped) when a 
     python -B -X utf8 pipeline/scripts/live_period_check.py --out runs/live-period-1103 --max-openai 12 --max-kosis 30
     python -B -X utf8 pipeline/scripts/live_period_check.py --dry-run --out runs/live-period-dry    (synthetic, no key)
 
+Cases L7-L10 (2026-11-03) cover the later period changes: one B call per requirement group with the other groups'
+period wording handed over (L7, L10), stated years only partly inside the table (L8, L9) and the faded base period
+of a year-over-year request (L4). L7 lifts A's block on statistics with different periods for this check only
+(`view._months`, the way it would be after A relaxes it); nothing else in A changes.
+
 Keys are read from the environment only (OPENAI_API_KEY, KOSIS_API_KEY) and never printed or written.
 """
 
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import os
 import sys
 from pathlib import Path
 
 from claview_a_api import screen as a_screen
+from claview_a_api import view as a_view
 from claview_a_api.synthetic_judges import ScriptJudge, by_question
 from claview_b_api import service as b_service
 from claview_common.settings import usable_key
@@ -29,7 +36,9 @@ from claview_pipeline import FlowSession
 from claview_pipeline.screen import ScreenPipeline
 
 STATISTIC = [{"id": "s1", "quote": "M2 통화량", "name": "M2"}]
-TABLE = "DT_161Y014"  # M2 기관별 구성내역(말잔): the table every case reads
+TWO_STATISTICS = [*STATISTIC, {"id": "s2", "quote": "예금은행 대출금리", "name": "rate"}]
+TABLE = "DT_161Y014"  # M2 기관별 구성내역(말잔): the table most cases read
+RATE_TABLE = "DT_121Y006"  # 예금은행 대출금리(신규취급액 기준): the second table of L7 and L10
 AS_OF = "2026-11-03"
 
 
@@ -87,6 +96,16 @@ def script(period: str, frequency: str | None = "월별") -> dict:
 
 def card_ok(state):
     return bool(state.get("ui_cases"))
+
+
+def card_of(state, table_id):
+    """The card of one table (cards of different tables are separate), or None."""
+    return next((c for c in state.get("ui_cases") or [] if c["tableId"] == table_id), None)
+
+
+def card_range(state, table_id):
+    c = card_of(state, table_id)
+    return (c["freq"], c["start"], c["end"]) if c else None
 
 
 def first(state):
@@ -161,6 +180,13 @@ CASES = [
             and info(s).get("fetched") == ["2023년 1월 ~ 2024년 12월"],
             "표시 범위가 요청 기간": lambda s: first(s)["requestedPeriod"]
             == {"frequency": "M", "start": "202401", "end": "202412"},
+            "기준 연도(2023년)를 따로 실음": lambda s: first(s).get("baseline", {}).get("labels", [])[:1]
+            == ["2023년 1월"]
+            and len(first(s)["baseline"]["periods"]) == 12,
+            "기준 값이 실제로 조회됨": lambda s: any(
+                v is not None for values in first(s)["baseline"]["values"].values() for v in values
+            ),
+            "표 값은 요청 기간만": lambda s: all(len(x["values"]) == 12 for x in first(s)["series"]),
         },
     },
     {
@@ -183,6 +209,61 @@ CASES = [
             "연간 3시점": lambda s: (first(s)["freq"], len(first(s)["periods"])) == ("Y", 3),
         },
     },
+    {
+        "id": "L7_two_tables_own_years",
+        "query": "M2 통화량 2023년과 예금은행 대출금리 2024년 연간",
+        "script": {
+            "statistics": TWO_STATISTICS,
+            "periods": [{"quote": "2023년", "for": ["s1"]}, {"quote": "2024년", "for": ["s2"]}],
+            "frequencies": [{"quote": "연간", "for": ["s1", "s2"]}],
+            "choices": [{"for": ["s1"], "table": TABLE}, {"for": ["s2"], "table": RATE_TABLE}],
+        },
+        "lift_a_block": True,
+        "checks": {
+            "카드 두 장": lambda s: len(s.get("ui_cases") or []) == 2,
+            "M2는 2023년만": lambda s: card_range(s, TABLE) == ("Y", "2023년", "2023년"),
+            "대출금리는 2024년만": lambda s: card_range(s, RATE_TABLE) == ("Y", "2024년", "2024년"),
+            "표마다 B를 따로 호출": lambda s: len(s["stage_outcomes"]["B"]) == 2,
+        },
+    },
+    {
+        "id": "L8_partly_outside_table",
+        "query": "M2 통화량 2020년부터 2027년까지 월별로 보여줘",
+        "script": script("2020년부터 2027년까지"),
+        "checks": {
+            "카드 있음": card_ok,
+            "수록된 부분만 표시": lambda s: first(s)["start"] == "2020년 1월" and first(s)["end"] == "2026년 7월",
+            "미수록 구간을 알림": lambda s: info(s).get("missing") == ["2026년 8월 ~ 2027년 12월"],
+            "안내 문구가 한 번": lambda s: said(s) == 1,
+            "조회된 값 있음": lambda s: first(s)["quality"]["observed_values"] >= 1,
+        },
+    },
+    {
+        "id": "L9_first_year_yoy",
+        "query": "M2 통화량 2003년 연간 전년 대비 증감 보여줘",
+        "script": script("2003년", "연간"),
+        "checks": {
+            "멈추지 않고 카드 있음": card_ok,
+            "2003년 한 시점": lambda s: shown(s) == ("Y", "2003년", "2003년"),
+            "표에 없는 기준 연도는 읽지 않음": lambda s: not info(s).get("extra") and "baseline" not in first(s),
+        },
+    },
+    {
+        "id": "L10_one_statistic_dropped",
+        "query": "M2 통화량 2023년과 예금은행 대출금리 2024년 연간",
+        "script": {
+            "statistics": TWO_STATISTICS,
+            "periods": [{"quote": "2023년", "for": ["s1"]}, {"quote": "2024년", "for": ["s2"]}],
+            "frequencies": [{"quote": "연간", "for": ["s1", "s2"]}],
+            "choices": [{"for": ["s2"], "table": RATE_TABLE}],
+            "missing": [{"for": ["s1"], "search_words": ["M2"]}],
+        },
+        "checks": {
+            "남은 표의 카드 있음": lambda s: card_range(s, RATE_TABLE) is not None,
+            "남은 표는 2024년만": lambda s: card_range(s, RATE_TABLE) == ("Y", "2024년", "2024년"),
+            "일부 통계만 조회": lambda s: s["status"] == "partial",
+        },
+    },
 ]
 
 
@@ -198,6 +279,20 @@ def build_clients(dry_run: bool, budget: Budget):
     return CountedModel(model, budget), CountedClient(client, budget)
 
 
+@contextlib.contextmanager
+def lifted_a_block(on: bool):
+    """For this check only: A's block on statistics with different periods is lifted (A relaxes it later)."""
+    if not on:
+        yield
+        return
+    original = a_view._months
+    a_view._months = lambda stat: frozenset()
+    try:
+        yield
+    finally:
+        a_view._months = original
+
+
 def run_case(case: dict, model, client, session, runs_dir: Path):
     judge = ScriptJudge(by_question({case["query"]: case["script"]}))
     pipeline = ScreenPipeline(
@@ -207,7 +302,8 @@ def run_case(case: dict, model, client, session, runs_dir: Path):
         session=session,
         judges_factory=lambda: a_screen.Judges(judge, judge, "script"),
     )
-    state = pipeline.run(case["query"], as_of=case.get("as_of", AS_OF))
+    with lifted_a_block(case.get("lift_a_block", False)):
+        state = pipeline.run(case["query"], as_of=case.get("as_of", AS_OF))
     if case.get("answer") and state["status"] == "needs_confirmation":
         card = state["confirmation"]
         (question,) = card["groups"]
@@ -228,8 +324,11 @@ def run_case(case: dict, model, client, session, runs_dir: Path):
 
 
 def summarize(case: dict, state: dict, used_before: dict, used: dict) -> dict:
-    b = (state.get("stage_outcomes", {}).get("B") or [{}])[0] or {}
-    rows = (b.get("result") or {}).get("period_resolutions") or []
+    rows = [
+        row
+        for b in state.get("stage_outcomes", {}).get("B") or []
+        for row in ((b or {}).get("result") or {}).get("period_resolutions") or []
+    ]
     cards = state.get("ui_cases") or []
     checks = {}
     for name, predicate in case["checks"].items():
@@ -248,12 +347,19 @@ def summarize(case: dict, state: dict, used_before: dict, used: dict) -> dict:
         "period_resolutions": rows,
         "cards": [
             {
+                "tableId": c["tableId"],
                 "start": c["start"],
                 "end": c["end"],
                 "freq": c["freq"],
                 "periods": len(c["periods"]),
                 "requestedPeriod": c["requestedPeriod"],
                 "periodInfo": c.get("periodInfo"),
+                **(
+                    {"baseline": {"periods": len(c["baseline"]["periods"]), "labels": c["baseline"]["labels"][:1]
+                                  + c["baseline"]["labels"][-1:]}}
+                    if c.get("baseline")
+                    else {}
+                ),
                 "warnings": c["warnings"],
                 "notices": c["notices"],
                 "quality": c["quality"],
