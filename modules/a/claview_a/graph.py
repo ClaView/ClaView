@@ -30,7 +30,6 @@ from typing import Any, TypedDict
 from langgraph.graph import END, START, StateGraph
 
 from . import check as CH
-from . import condition_coverage as CC
 from . import contract as K
 from . import reselection as RS
 from .cards import build_cards
@@ -52,7 +51,7 @@ RESEARCH_VERSION = "tl-research-2026-10-29.2"  # .2: own judge and settings; unr
 # frequency and anchor, same-period references); only the rows the first round failed to structure (by the code's
 # check, never the model's word) may be corrected, recorded in ``condition_corrections``; a statistic with applied
 # user answers is never taken from a second round (BOK20 live check 11-02, owner 02:37 and 02:47 UTC)
-REJUDGE_VERSION = "tl-rejudge-2026-11-03.15"  # .15: omitted explicit anchors share the one recovery
+REJUDGE_VERSION = "tl-rejudge-2026-11-03.14"  # .14: copy valid scope before checking a partial recovery
 # .8: a merged focus limit is checked before recovery and after adoption; shared-limit facts accompany targets
 # .7: scope fact errors share the existing recovery slot; .6: fixed statistics referable; .5: the whole ID map at
 # once; .2: corrections sent (contract .6), changes with reasons
@@ -62,7 +61,7 @@ _FACT_GAP = ("target_table_unconfirmed", "content_unverified", "retention_unveri
 # a fact on the card the model misread, misquoted or did not attribute: the model reviews it (⑥ table)
 _CORRECTABLE = ("basis_polarity_invalid", "rejudge_pending", "period_rows_inconsistent", "basis_attribution_unresolved",
                 "period_unresolved", "focus_quote_not_in_question", "focus_too_long",
-                "focus_catalog_condition_missing", *CC.CODES, *CH.SEMANTIC_INTERNAL)
+                "focus_catalog_condition_missing", *CH.SEMANTIC_INTERNAL)
 JUDGE_ERRORS = ("transport", "timeout", "incomplete", "refusal", "empty_output", "response_format", "key_unavailable")
 
 
@@ -161,10 +160,6 @@ def node_check(state: TLState, config) -> dict:
         parsed = {**parsed, "scope_statistic_count": len(first_out.get("statistics") or []),
                   "reference_periods": {x: [r for r in first_out.get("periods") or [] if x in r["for"]]
                                                   for x in sorted(named)}}
-        first_record = state["first_round"]["record"]
-        targets = {t["statistic"] for t in first_record.get("rejudge", {}).get("targets", [])}
-        parsed["coverage_fixed"] = {"output": first_out,
-            "decisions": [d for d in first_record["decisions"] if d["statistic"] not in targets]}
     patch = []
     raw_output = None
     if state.get("round", 1) == 2 and state.get("first_round"):
@@ -511,9 +506,6 @@ def _basis_change_allowed(decision: dict, row: dict) -> bool:
     from .search.tables import nospace
 
     for reason in decision.get("reasons") or []:
-        if reason.get("code") == CC.UNREADABLE and isinstance(reason.get("detail"), dict):
-            if CC.unresolved_row(row, reason["detail"]["anchor"]):
-                return True
         if reason.get("code") != "basis_polarity_invalid" or not isinstance(reason.get("detail"), dict):
             continue
         detail = reason["detail"]
@@ -607,8 +599,7 @@ def _recovery(record: dict, rejudge: dict, status: str) -> None:
                 r["detail"]["recovery"] = {**(r["detail"].get("recovery") or {}), "status": status}
 
 
-_REF_KEYS = ("statistic", "statistics", "for", "refers_to", "review_statistics",
-             "catalog_unconfirmed_statistics")  # statistic-reference keys
+_REF_KEYS = ("statistic", "statistics", "for", "refers_to")  # the keys whose values name statistics
 
 
 def _rename_refs(value, names: dict[str, str]):
@@ -776,16 +767,6 @@ def merge_rounds(first: dict, second: dict, targets: list[dict]) -> dict:
                                                           "reason": c["reason"]})
         if names and record.get("model_output") and second.get("model_output"):
             _adopt_rows(record["model_output"], second["model_output"], names)
-            if "condition_coverage" in record:
-                coverage = CC.apply(record["question"], record["model_output"], record["decisions"],
-                                    mutable=set(accepted))
-                record["condition_coverage"] = {"version": CC.VERSION, "anchors": coverage,
-                                                "semantic_fulfillment": "not_checked"}
-                for d in record["decisions"]:
-                    if d["statistic"] in accepted and any(r["code"] in CC.CODES for r in d["reasons"]):
-                        d["outcome"] = "failed"
-                        CH.annotate(d, record["model_output"])
-                        d["failure_kinds"] = CH.failure_kinds(d)
             # the merged statistics are asked together again where they share a period row or a same_as link
             CH.group_condition_asks({d["statistic"]: d for d in record["decisions"]}, record["model_output"])
             # A correction may join a fixed statistic's table. Check the composed group, but only the accepted
@@ -840,7 +821,7 @@ def rejudge_input(record: dict, targets: list[dict]) -> list[dict]:
                                for f in d.get("rejudge_targets") or []] +
                               [{"code": r["code"], **r["detail"]} for r in d.get("reasons") or []
                                if isinstance(r.get("detail"), dict) and
-                               (r["code"] == "focus_catalog_condition_missing" or r["code"] in CC.CODES or
+                               (r["code"] == "focus_catalog_condition_missing" or
                                 (r["code"] == "focus_too_long" and r["detail"].get("scope") == "handoff_group"))],
                      **({"focus": {**d["focus"], "quotes": list(d["focus"]["quotes"])}}
                         if (d.get("focus") or {}).get("source") == "model_scope" else {}),

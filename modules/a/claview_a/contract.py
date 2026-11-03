@@ -75,7 +75,7 @@ OPTION_EVIDENCE_CONTRACTS = ("tl-contract-2026-10-28.3", "tl-contract-2026-10-28
 # .2: the average basis and quotes that state it (plan 56 6-3c); .3: the re-judgment of the targets only and its
 # changes, an ask only when the meaning differs and two grounded alternatives remain, options of other cards (plan 56
 # orders 9 and 12, ⑥-다); .6: periods and frequencies structured by meaning, one row of each per statistic (contract .8)
-PROMPT_VERSION = "tl-prompt-2026-11-03.11"
+PROMPT_VERSION = "tl-prompt-2026-11-03.10"
 POLARITIES = ("required", "any_of", "excluded", "allowed", "undetermined", "unreadable", "not_basis")
 PERIOD_MEANINGS = ("range", "latest_available", "same_as", "user_undecided")
 # contract .8: an excluded period (a first-stage limit, as before) and a period the user did not state
