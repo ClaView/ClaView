@@ -62,6 +62,28 @@ def test_separate_answers_for_the_same_table_keep_each_target_and_cover_both():
     assert len({a["question_id"] for a in condition["answers"]}) == 2
 
 
+def test_different_tables_keep_separate_confirmed_periods_and_answer_targets():
+    answers = {sid: [answer("period", sid), answer("frequency", sid)] for sid in ("s1", "s2")}
+    view, _ = case("user_answer", "user_answer", 2, answers)
+    second = view["statistics"][1]["tables"][0]
+    second.update(table_id="T_OTHER", period=[{"start": "2023-01", "end": "2023-12"}],
+                  period_phrase={"text": "2023년", "source": "user_answer"})
+    answers["s2"][0].update(value="2023년", text="2023년")
+    ready, blocked = V._handoff(view["session"], view["statistics"], set(), answers)
+    assert blocked == [] and len(ready) == 2
+    before = copy.deepcopy(view)
+    prepared = [V.prepare_b_request(view, request) for request in ready]
+    assert view == before and all(p["withheld"] is None for p in prepared)
+    conditions = [p["request"]["tables"][0]["period_condition"] for p in prepared]
+    assert [c["period"] for c in conditions] == [
+        [{"start": "2024-01", "end": "2024-12"}], [{"start": "2023-01", "end": "2023-12"}],
+    ]
+    for sid, condition in zip(("s1", "s2"), conditions, strict=True):
+        assert condition["statistics"] == [sid]
+        assert condition["period_source"] == condition["frequency_source"] == "user_answer"
+        assert condition["frequency"] == "M" and condition["answers"] == answers[sid]
+
+
 def test_shared_answer_duplicates_are_removed_without_changing_their_scope():
     shared = answer("period", question_id="shared", statistics=["s1", "s2"])
     view, ready = case("user_answer", "catalog", 2, {"s1": [shared], "s2": [shared]})

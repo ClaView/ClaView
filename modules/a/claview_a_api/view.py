@@ -7,12 +7,12 @@ table, drops no question and turns no failure into a success. What may go to B:
 - a statistic A ``selected`` (verified) with final tables, and no pending question of its own -> ``handoff.ready``;
 - everything else -> ``handoff.blocked`` with the reason (``awaiting_answer``, ``a_evidence_unverified``,
   ``not_in_pool``, ``a_failed``);
-- B's table list carries no period or frequency: B reads them again from the whole question. So a request is sent
-  only when that cannot drop what A decided, compared on A's own structured decisions (final tables, requested
-  months, frequency), never on the quoted words and never read again here:
+- A prepares per-table period conditions alongside the legacy table list. Different tables may have different
+  requested months; the pipeline checks whether its B supports both conditions and per-table wording context.
+  Requests that cannot be represented separately remain blocked, compared on A's structured decisions
+  (final tables, requested months, frequency), never on quoted words and never read again here:
   - a statistic whose period A split over editions (several final tables) -> ``edition_period_split``;
   - a table with separate requested spans (a gap between them) -> ``disjoint_period_not_in_b_contract``;
-  - requests whose requested months differ from each other -> ``period_differs_between_requests`` (all of them);
   - statistics with the same final tables are one request only when their tables, months, frequencies and period
     answers are the same (the focus joined with " / "), else ``same_table_conditions_differ``. Different calculation
     quotes do not stop them; the request keeps them and notes ``calculation_not_in_b_contract``.
@@ -421,13 +421,6 @@ def _handoff(session: dict, statistics: list[dict], asked: set, period_answers: 
             blocked.append({"statistics": sids, "code": "same_table_conditions_differ", "detail": _assigned(members)})
             continue
         candidates.append((sids, members))
-    if len({_months(members[0]) for _, members in candidates}) > 1:
-        # B reads one period from the whole question for every request: different months cannot all survive
-        blocked += [
-            {"statistics": sids, "code": "period_differs_between_requests", "detail": _assigned(members)}
-            for sids, members in candidates
-        ]
-        candidates = []
     ready = []
     for sids, members in candidates:
         focus = FOCUS_JOIN.join(dict.fromkeys(m["focus"].strip() for m in members if m["focus"]))
