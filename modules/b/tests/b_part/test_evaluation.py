@@ -90,13 +90,16 @@ def test_b_success_false_when_expected_has_mixed_periods():
     assert b_success(b, expected) is False
 
 
-def test_golden_set_b_success_count_is_22_of_22(golden_cases, store, search, config):
+def test_golden_set_b_success_count_is_22_of_22(golden_cases, historical_store, historical_search, config):
     """All 22 golden cases now count as B successes under the new metric:
     14 reproduce the golden selections exactly (status=ok), and the other 8
     correctly resolve their relative-period wording and stop to confirm
     (status=needs_confirmation) -- both are success, not just the first
     kind. This is the concrete number the 2026-10-01 README flagged as
     "undercounted" (14/22) before this metric existed."""
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
+    search = historical_search
     result = evaluate(golden_cases, store, search, config, mode="replay")
     assert result["summary"]["b_success_count"] == 22
     for row in result["cases"]:

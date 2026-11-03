@@ -41,7 +41,9 @@ def response(state, kind, value, *, typed=False):
 
 @pytest.mark.parametrize("end,frequency,start", [("2025-12", "Y", "2023-01"), ("2026-06", "Q", "2023-07")])
 @pytest.mark.parametrize("typed", [False, True])
-def test_partial_end_recent_answer_uses_a_supporting_frequency(layer, end, frequency, start, typed):
+def test_partial_end_recent_answer_uses_a_supporting_frequency(frozen_metadata_layer, end, frequency, start, typed):
+    # Fix the catalog endpoints that define this explicit-boundary policy case.
+    layer = frozen_metadata_layer
     state = state_for(layer, end)
     before = copy.deepcopy(state)
     ask = next(q for q in AN.questions(state) if q["kind"] == "period")

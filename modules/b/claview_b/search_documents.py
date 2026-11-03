@@ -13,6 +13,11 @@ from .contracts import Json, StageFailure, fingerprint
 from .metadata import MetadataStore
 
 DOCUMENT_VERSION = "claview-search/2"
+HTML_MARKUP = re.compile(
+    r"<!--.*?-->|<![A-Za-z][^<>]*>|</?[A-Za-z][A-Za-z0-9:_-]*"
+    r"(?:\s+(?:\"[^\"]*\"|'[^']*'|[^'\"<>])*)?\s*/?>",
+    re.DOTALL,
+)
 
 
 def digest(value) -> str:
@@ -22,7 +27,8 @@ def digest(value) -> str:
 
 
 def clean_text(value) -> str:
-    return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", str(value or ""))).split())
+    # Numeric/Korean references in angle brackets are text, not HTML tag names.
+    return " ".join(html.unescape(HTML_MARKUP.sub(" ", str(value or ""))).split())
 
 
 def approved_aliases(store: MetadataStore, path: Path | None) -> tuple[dict, Json]:

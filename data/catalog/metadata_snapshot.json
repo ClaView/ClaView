@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "kosis-bok-metadata-2026-11-03-active349",
+  "scope": "KOSIS Bank of Korea metadata; no model or numeric data verification",
+  "source": {
+    "provider": "KOSIS",
+    "org_id": "301",
+    "org_name": "한국은행",
+    "list_view": "MT_OTITLE",
+    "root_list_id": "301",
+    "metadata_types": [
+      "TBL",
+      "PRD",
+      "ITM",
+      "UNIT",
+      "CMMT"
+    ],
+    "guides": [
+      "https://kosis.kr/openapi/devGuide/devGuide_0101List.do",
+      "https://kosis.kr/openapi/devGuide/devGuide_060101List.do"
+    ]
+  },
+  "collection": {
+    "date": "2026-11-03",
+    "attempts": 3,
+    "http_sends_including_stopped_attempts": 2068,
+    "unique_responses": 2053,
+    "final_attempt_started_at": "2026-11-03T11:46:30.380401+00:00",
+    "ended_at": "2026-11-03T11:58:07.908380+00:00",
+    "final_attempt_sends": 1742,
+    "reused_responses": 311,
+    "automatic_retries": 0,
+    "model_calls": 0,
+    "numeric_data_calls": 0,
+    "raw_bytes_preserved": true,
+    "parsing_normalization": {
+      "kind": "invalid_backslash_escape_only",
+      "responses": 1,
+      "escapes": 6
+    },
+    "collected_tables": 383,
+    "all_tables_catalog_sha256": "2f46a0e533f24e82a07727f6ffb0bd92c793429f637e3e1c25bc62441ecf2773",
+    "all_tables_metadata_sha256": "c1d0bbdb5866595b16749e2d2ccf18982e5600ddf28254000d0f24d6ca19866e"
+  },
+  "active": {
+    "tables": 349,
+    "selection": "Refresh previously registered table IDs only; no removals",
+    "files": {
+      "data/catalog/search_catalog.json": {
+        "sha256": "8f091d3c360d14895bffe44e702b79aff64dc3b75fd5c38975c09d6dad32ed4c"
+      },
+      "data/raw/boK_meta_raw.jsonl": {
+        "sha256": "aab8909d5d3d31aa59261933cdfb8a251fdf97ba2c475da79dabd4dfe39a25db"
+      }
+    },
+    "adapters": [
+      "modules/a/claview_a/catalog/loader.py",
+      "modules/b/claview_b/metadata.py"
+    ]
+  },
+  "registration_pending": {
+    "tables": 34,
+    "path": "data/catalog/discovered_tables_20261103.json",
+    "sha256": "8ccef3cba53e90bf61efef76a033cd64311518d532e966fc8de4f37f2f58b927",
+    "active": false,
+    "reason": "Review axis roles, two-axis selection, editions and irregular frequency before registration",
+    "unknown_axes": 68,
+    "unknown_axis_values": 4194,
+    "irregular_frequency_tables": [
+      "DT_271Y013",
+      "DT_271Y014",
+      "DT_271Y073",
+      "DT_271Y074"
+    ]
+  },
+  "previous": {
+    "catalog_sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+    "metadata_sha256": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+    "historical_test_archive": "eval/fixtures/metadata_before_2026_11_03.zip",
+    "historical_test_archive_sha256": "f20784284d57dfa4d038826197a2aabf21c218660ca53f44be973c95774aea64"
+  },
+  "validation": {
+    "compared_a_b_period_tables": 348,
+    "equal_a_b_period_tables": 348,
+    "new_errors": 0,
+    "existing_errors": [
+      {
+        "code": "item_name_type_or_missing",
+        "table": "301:DT_404Y017",
+        "obj": "13999000",
+        "item": "DATA"
+      },
+      {
+        "code": "axis_name_missing",
+        "table": "301:DT_404Y017",
+        "obj": "13999000"
+      },
+      {
+        "code": "table_adapter_failed",
+        "table": "301:DT_404Y017",
+        "error": {
+          "type": "StageFailure",
+          "code": "metadata_incomplete",
+          "message": "metadata_incomplete"
+        }
+      }
+    ],
+    "a62": {
+      "cases": 62,
+      "saved_responses": 63,
+      "request_exact": 0,
+      "safe_reference_gaps": 0,
+      "kind": "conditional_saved_response_replay"
+    },
+    "pipeline12": {
+      "cases": 12,
+      "replayed": 9,
+      "numeric_response_gaps": [
+        "CV-AB-07",
+        "FN-RECENT-M2",
+        "FN-FUTURE-M2"
+      ]
+    },
+    "model_quality_measured": false,
+    "report": "docs/records/카탈로그_갱신_20261103.md"
+  }
+}

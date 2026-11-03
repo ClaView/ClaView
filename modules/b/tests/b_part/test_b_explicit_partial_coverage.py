@@ -22,7 +22,8 @@ from tests.b_part.test_b_unit import make_table
 from claview_b.contracts import StageFailure
 from claview_b.stages import explicit_period_detail
 from claview_b.synthetic import SyntheticFetchClient, SyntheticSelectionModel
-from claview_b_api.service import BService, store
+from claview_b_api import service as service_module
+from claview_b_api.service import BService
 
 DATA = Path(__file__).resolve().parents[4] / "eval/cases/b/period/explicit_partial_coverage_b.json"
 CASES = json.loads(DATA.read_text(encoding="utf-8"))["cases"]
@@ -81,11 +82,14 @@ def test_the_calculation_range_is_read_only_where_the_table_has_it():
     assert partly["fetched"] == (2023, 2024) and partly["extra"] == (2023, 2023) and partly["missing"] == [(2025, 2026)]
 
 
-def tables_for(case: dict) -> list[dict]:
+def tables_for(case: dict, metadata) -> list[dict]:
     out = []
     for index, table in enumerate(case["tables"]):
-        meta = store().get("301", table["table_id"])
-        row = {"org_id": "301", "table_id": table["table_id"], "table_name": meta["table_name"], "focus": table["focus"]}
+        meta = metadata.get("301", table["table_id"])
+        row = {
+            "org_id": "301", "table_id": table["table_id"],
+            "table_name": meta["table_name"], "focus": table["focus"],
+        }
         raw = table["condition"]
         if raw is not None:
             row["period_condition"] = {
@@ -101,10 +105,10 @@ def tables_for(case: dict) -> list[dict]:
     return out
 
 
-def run(case: dict) -> dict:
+def run(case: dict, metadata) -> dict:
     client = SyntheticFetchClient()
-    service = BService(SyntheticSelectionModel(store()), client, "synthetic")
-    outcome, _ = service.resolve(case["query"], tables_for(case), case["as_of"])
+    service = BService(SyntheticSelectionModel(metadata), client, "synthetic")
+    outcome, _ = service.resolve(case["query"], tables_for(case, metadata), case["as_of"])
     record = {"status": outcome["status"], "issues": [i["code"] for i in outcome.get("issues") or []], "tables": {}}
     if outcome["status"] != "ok":
         return record
@@ -121,13 +125,18 @@ def run(case: dict) -> dict:
         }
     service.fetch(result)
     for params in client.calls:
-        record["tables"].setdefault(params["tblId"], {})["fetch"] = [params["prdSe"], params["startPrdDe"], params["endPrdDe"]]
+        record["tables"].setdefault(params["tblId"], {})["fetch"] = [
+            params["prdSe"], params["startPrdDe"], params["endPrdDe"],
+        ]
     return record
 
 
 @pytest.mark.parametrize("case", CASES, ids=[c["id"] for c in CASES])
-def test_the_service_reads_the_part_inside_the_coverage(case):
-    record = run(case)
+def test_the_service_reads_the_part_inside_the_coverage(case, historical_store, monkeypatch):
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
+    monkeypatch.setattr(service_module, "store", lambda: store)
+    record = run(case, store)
     assert record["status"] == "ok", record["issues"]
     for table_id, expected in case["expect"].items():
         for field, value in expected.items():

@@ -80,7 +80,9 @@ OVER_CARD_SIZE = {"expected240": ["A:CX-Q004", "A:CX-Q019", "A:CX-Q021", "A:CX-Q
 
 
 @pytest.mark.parametrize("name, rows", [("expected240", _rows), ("check40", _check40)])
-def test_pool_recall_and_input_size_as_measured(layer, name, rows):
+def test_pool_recall_and_input_size_as_measured(frozen_metadata_layer, name, rows):
+    # The recorded sizes belong to this snapshot; current metadata has its own functional tests.
+    layer = frozen_metadata_layer
     ids = [r[0] for r in rows()]
     found, sizes, missed, payloads = _measure(list(rows()), layer)
     print(name, found, len(sizes), statistics.median(sizes), max(sizes), missed,

@@ -133,7 +133,8 @@ def test_an_answered_period_is_reported_with_its_source(base):
     assert c["requestedPeriod"] is None  # nothing was read beyond what is shown
 
 
-def test_a_period_the_table_lacks_is_reported_and_said_once(base):
+def test_a_period_the_table_lacks_is_reported_and_said_once(historical_metadata):
+    base = historical_metadata
     q = "M2 통화량 올해 월별로 보여줘"
     state = runner(base, q, script("올해")).run(q, as_of=AS_OF)
     c = card(state)
@@ -144,7 +145,8 @@ def test_a_period_the_table_lacks_is_reported_and_said_once(base):
     assert len(said) == 1
 
 
-def test_a_substituted_period_is_reported(base):
+def test_a_substituted_period_is_reported(historical_metadata):
+    base = historical_metadata
     q = "M2 통화량 작년 월별로 보여줘"
     state = runner(base, q, script("작년")).run(q, as_of="2028-03-01")
     (info,) = card(state)["periodInfo"]

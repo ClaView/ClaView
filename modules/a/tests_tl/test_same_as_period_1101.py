@@ -157,7 +157,9 @@ def stored_run(layer):
     return state, calls
 
 
-def test_the_stored_live_answers_ask_one_shared_period_and_answer_both(layer):
+def test_the_stored_live_answers_ask_one_shared_period_and_answer_both(frozen_metadata_layer):
+    # The stored response and its recent-period boundary use the original catalog snapshot.
+    layer = frozen_metadata_layer
     state, calls = stored_run(layer)
     assert calls == ["gpt-6.1-terra"]  # before the fix: s1 failed (period_quote_missing) and the Sol answer was refused
     q, after = answer_period(state, layer, "최근 3년")

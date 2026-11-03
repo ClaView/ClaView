@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "metadata_before_2026_11_03",
+  "purpose": "Historical offline regression inputs; not current runtime data.",
+  "files": {
+    "data/catalog/search_catalog.json": {
+      "sha256": "0ff158a8717c1c5fae924d36ddb086c7538d59c3768a93bb4914349f8844f551",
+      "bytes": 304331
+    },
+    "data/raw/boK_meta_raw.jsonl": {
+      "sha256": "b604e909d40f42286b1ce31c11b173dd022477c7840c5873b35650e8563d921e",
+      "bytes": 8193318
+    },
+    "data/mappings/runtime/unit_supplement.json": {
+      "sha256": "4bee75568ae7c4a1ac1193d04e0c69599663e44d3ec94e7fa7fd2b7a742b13e7",
+      "bytes": 1839
+    }
+  }
+}

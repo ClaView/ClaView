@@ -3,7 +3,8 @@
 from test_screen_period_condition_1103 import AS_OF, runner
 
 
-def test_explicit_future_tail_reaches_b_without_a_assignment_truncation(base):
+def test_explicit_future_tail_reaches_b_without_a_assignment_truncation(historical_metadata):
+    base = historical_metadata
     query = "M2 통화량 2020년부터 2027년까지 월별로 보여줘"
     script = {
         "statistics": [{"id": "s1", "quote": "M2 통화량", "name": "M2"}],

@@ -185,7 +185,9 @@ def test_relative_period_with_no_stated_frequency_uses_the_default_instead_of_st
     assert (int(end[:4]) * 12 + int(end[4:])) - (int(start[:4]) * 12 + int(start[4:])) == 59
 
 
-def test_every_golden_case_still_matches_its_golden_series(golden_cases, store, config):
+def test_every_golden_case_still_matches_its_golden_series(golden_cases, historical_store, config):
+    # Preserve the coverage used by the archived expected periods.
+    store = historical_store
     for case in golden_cases:
         out = _run(case, store, config)
         assert out["status"] == "ok", (case["case_id"], out["issues"])

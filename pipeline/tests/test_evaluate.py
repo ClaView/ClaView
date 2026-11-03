@@ -42,7 +42,8 @@ ROW_KEYS = {
 }
 
 
-def test_golden_replay_runs_every_case_to_the_end(base):
+def test_golden_replay_runs_every_case_to_the_end(historical_metadata):
+    base = historical_metadata
     cases = load_cases(cli.GOLDEN)
     report = evaluate(cases, as_of=AS_OF, base=base)
     rows, summary = report["cases"], report["summary"]

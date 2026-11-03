@@ -28,11 +28,11 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            shared: ['common/**', 'requirements*.txt', 'pyproject.toml', 'data/**', 'eval/cases/**']
-            a: ['modules/a/**', 'common/**', 'requirements*.txt', 'data/**', 'eval/cases/**']
-            b: ['modules/b/**', 'common/**', 'requirements*.txt', 'data/**', 'eval/cases/**']
+            shared: ['common/**', 'requirements*.txt', 'pyproject.toml', 'data/**', 'eval/cases/**', 'eval/fixtures/**']
+            a: ['modules/a/**', 'common/**', 'requirements*.txt', 'data/**', 'eval/cases/**', 'eval/fixtures/**']
+            b: ['modules/b/**', 'common/**', 'requirements*.txt', 'data/**', 'eval/cases/**', 'eval/fixtures/**']
             c: ['modules/c/**', 'common/**', 'requirements*.txt']
-            pipeline: ['pipeline/**', 'modules/**', 'common/**', 'frontend/**', 'requirements*.txt', 'Dockerfile', 'docker-compose*.yaml']
+            pipeline: ['pipeline/**', 'modules/**', 'common/**', 'frontend/**', 'requirements*.txt', 'data/**', 'eval/fixtures/**', 'Dockerfile', 'docker-compose*.yaml']
 
   lint:
     runs-on: ubuntu-latest

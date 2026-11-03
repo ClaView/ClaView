@@ -5,7 +5,8 @@ from __future__ import annotations
 from test_screen_period_condition_1103 import AS_OF, runner
 
 
-def test_stated_years_partly_after_the_table_are_read_up_to_its_end_and_said_once(base):
+def test_stated_years_partly_after_the_table_are_read_up_to_its_end_and_said_once(historical_metadata):
+    base = historical_metadata
     q = "M2 통화량 2020년부터 2027년까지 월별로 보여줘"
     script = {
         "statistics": [{"id": "s1", "quote": "M2 통화량", "name": "M2"}],

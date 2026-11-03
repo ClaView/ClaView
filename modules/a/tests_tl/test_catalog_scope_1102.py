@@ -11,7 +11,7 @@ from test_focus_contract_1102 import FOCUS7, QUESTION, ScopeJudge, output
 from test_focus_contract_1102 import case as case
 
 from claview_a import check as CH, contract as K, graph as G
-from claview_a.cards import build_cards, card_facts, render_card
+from claview_a.cards import AXIS_LIST_MAX, build_cards, card_facts, render_card
 from claview_a.catalog_scope import contains, matches, missing_scope
 from claview_a.pool import build_pool
 from claview_a.search.tables import selection_catalog
@@ -118,4 +118,9 @@ def test_large_catalog_axis_exposes_the_matching_value_without_listing_all(layer
     assert lookup.resolve_item("DT_501Y013", "2024년기준")["item_ids"] == [got[0]["item_id"]]
     assert not lookup.kinds_of("DT_501Y079", "2024년기준")
     assert "질문과 일치하는 분류값" in render_card(card)
-    assert any(not a["listed"] for a in card["axes"]["DT_501Y013"] if a["count"] == 13)
+    axis = next(a for a in layer.catalog.tables["DT_501Y013"].axes
+                if any(item.item_id == got[0]["item_id"] for item in a.items))
+    expected_count = sum(bool(item.name) for item in axis.items)
+    shown_axis = next(a for a in card["axes"]["DT_501Y013"] if a["axis"] == axis.name)
+    assert shown_axis["count"] == expected_count > AXIS_LIST_MAX
+    assert not shown_axis["listed"] and shown_axis["values"] == []
