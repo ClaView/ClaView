@@ -62,6 +62,10 @@ UNSUPPORTED = (
 NOTE_TEXT = {
     "calculation_not_in_b_contract": "같은 표로 함께 넘긴 통계의 계산 요청이 서로 다릅니다. B 계약에는 통계별 계산 칸이 없어 원질문으로만 전달됩니다.",
 }
+EXPLICIT_CONDITION_TEXT = {
+    "explicit_condition_missing": "질문에 명시된 조건이 A의 해석 결과에서 누락되어 전달하지 않았습니다.",
+    "explicit_condition_unreadable": "질문에 명시된 조건을 A가 해석하지 못해 전달하지 않았습니다.",
+}
 
 
 def _a_periods(spans, frequency) -> set:
@@ -362,8 +366,15 @@ class ScreenPipeline(Pipeline):
             f"{', '.join(n['statistics'])}: {NOTE_TEXT.get(n['code'], n['code'])}" for n in state["handoff_notes"]
         ]
         notes += [f"경고 · {w['text']}" for w in state["a_warnings"]]
+        condition_failures = [
+            f"{s['statistic']} ‘{s['quote']}’: {EXPLICIT_CONDITION_TEXT[r['code']]}"
+            for s in stats if s["statistic"] not in sent
+            for r in s.get("reasons", []) if r["code"] in EXPLICIT_CONDITION_TEXT
+        ]
+        notes += condition_failures
         if not b_requests:
-            code = "a_handoff_unsupported" if state["unsupported_links"] else "a_no_table"
+            code = ("a_handoff_unsupported" if state["unsupported_links"] else
+                    "a_explicit_condition_unverified" if condition_failures else "a_no_table")
             update("table", "failed", MESSAGES[code], listing=listing, note="\n".join(notes))
             raise StageFailure(code, "unsupported" if state["unsupported_links"] else "unresolved")
         update(

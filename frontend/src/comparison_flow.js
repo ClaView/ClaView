@@ -3,8 +3,11 @@
   function hasComparisonResult(m){
     return m.kind==='result'&&Array.isArray(m.cases)&&m.cases.length>0;
   }
+  function isAOnlyVerified(m){
+    return m.runStatus==='a_verified'&&!(m.cases||[]).length&&!m.confirmation&&!m.conditionEditor;
+  }
   function isPreviousStop(m){
-    return m.role==='ai'&&m.kind==='stopped'&&!m.savedRecord&&!m.resumedJobId&&!m.confirmation&&!m.conditionEditor&&(!m.jobId||m.finishedAt||m.jobSettled)&&
+    return m.role==='ai'&&m.kind==='stopped'&&!isAOnlyVerified(m)&&!m.savedRecord&&!m.resumedJobId&&!m.confirmation&&!m.conditionEditor&&(!m.jobId||m.finishedAt||m.jobSettled)&&
       (!m.flowVersion||m.loadedFromHistory===true);
   }
   function historyBadge(cv){
@@ -12,6 +15,7 @@
     if(!last)return null;
     if(last.recoveryState==='expired')return el('span',{class:'history-badge previous',text:'상태 확인 불가'});
     if(last.jobId&&!last.finishedAt&&!last.confirmation&&!last.conditionEditor&&!last.resumedJobId&&!last.savedRecord&&!last.jobSettled)return el('span',{class:'history-badge waiting',text:'진행 상태 확인'});
+    if(isAOnlyVerified(last))return el('span',{class:'history-badge complete',text:'A 조건 확정 · 조회 미실행'});
     if(isPreviousStop(last))return el('span',{class:'history-badge previous',text:'이전 중단 기록'});
     if(hasComparisonResult(last))return el('span',{class:'history-badge complete',text:last.mode==='sample'?
       (last.cases.some(function(c){return c.synthetic;})?'합성·결측 시험':'저장 샘플'):'조회 완료'});
