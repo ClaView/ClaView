@@ -87,7 +87,7 @@ from ..search.families import FREQUENCY_WORDS as _FREQUENCY_WORDS
 # .16: the three edition judgments, the relation status and the relation file (plan 56 order 7)
 # .17: the edition reasons (edition_relation_conflict, edition_evidence_insufficient) and the judgments trace
 # .18: the latest month held elsewhere on the card bounds the latest-unpublished months (plan 56 order 8)
-PERIODS_VERSION = "tl-periods-2026-11-03.21"  # .21: bounded recent windows preserve their explicit endpoint
+PERIODS_VERSION = "tl-periods-2026-11-03.23"  # .23: allow future ranges actually covered by compatible editions
 MAX_STITCH = 3  # tables joined across edition boundaries for one statistic
 
 _MONTH_RANGE = re.compile(r"(\d{4})\s*년\s*(\d{1,2})\s*월?\s*[~\-–]\s*(\d{1,2})\s*월")
@@ -496,8 +496,6 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
             results = {t: resolve(conditions, views[t], as_of, context=context) for t in candidates}
     report = _report(results, usable)
     base = {"results": report, "anchor": anchor}
-    bounded_recent = any(c.get("kind") == "period" and c["attrs"].get("form") == "recent"
-                         and c["attrs"].get("end_expr") for c in conditions)
     bad = [r for r in results.values() if r["status"] in ("invalid_input", "unresolved")]
     if bad and len(bad) == len(results):
         code = (bad[0].get("issue") or {}).get("code") or bad[0]["status"]
@@ -529,20 +527,23 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
                                                   "frequency": results[t].get("frequency"), **status,
                                                   **({"latest_unpublished": unpublished} if unpublished else {})}],
                 "reason": None, "detail": None, **tie, **base}
-    if bounded_recent and any(k.get("kind") == "after_as_of" for r in results.values()
-                              for k in (r.get("periods") or {}).get("missing_kinds") or []):
-        # Full candidates have already been selected above. A missing future interval must not
-        # become successful merely because the stitch fallback shortens it to available history.
-        return {"status": "failed", "tables": [], "reason": "period_not_covered",
-                "detail": "after_as_of", **base}
     requested = next((_months((r.get("periods") or {}).get("requested_months")) for r in results.values()
                       if (r.get("periods") or {}).get("requested_months")), [])
+    full_request = list(requested)
     frequencies = {results[t].get("frequency") for t in order if t in usable and results[t].get("frequency")}
     covered_any = {t: _months((results[t].get("periods") or {}).get("covered_months")) for t in order
                    if t in usable and results[t]["status"] in ("ok", "no_data_in_range")}
     # the representative first, then newest first; only tables the edition judgment allows
     covered = {t: covered_any[t] for t in ([rep] if rep in covered_any else []) + [x for x in covered_any if x != rep]
                if t in allowed}
+    if any(k.get("kind") == "after_as_of" for r in results.values()
+           for k in (r.get("periods") or {}).get("missing_kinds") or []) and not (
+            requested and len(frequencies) == 1
+            and _need(requested) <= {m for spans in covered.values() for m in _have(spans)}):
+        # A candidate's missing future range may already be held by a compatible edition. Only actual
+        # coverage of the whole request can proceed to stitching; an unheld future tail cannot be clipped.
+        return {"status": "failed", "tables": [], "reason": "period_not_covered",
+                "detail": "after_as_of", **base}
     unpublished_rows = []
     if top is not None and requested and max(b for _, b in requested) > top:
         # the months after every usable candidate's latest one are latest_unpublished: no table is needed for them
@@ -553,8 +554,18 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
         chosen = _cover_set(requested, covered, rep)
         if chosen:
             spans = _assign(requested, chosen, covered)
+            if unpublished_rows:
+                # Selection needs published coverage, but emitted assignments must retain the user's entire
+                # request. Its unpublished tail belongs to the edition holding the preceding covered month.
+                tails = _months(unpublished_rows)
+                for start, end in tails:
+                    owner = next((t for t in chosen if spans[t] and spans[t][-1][1] == start - 1), None)
+                    if owner is None:
+                        return {"status": "failed", "tables": [], "reason": "stitch_check_failed",
+                                "detail": "unpublished request has no adjacent edition share", **base}
+                    spans[owner][-1] = (spans[owner][-1][0], end)
             shares = [m for t in chosen for m in sorted(_have(spans[t]))]
-            if sorted(shares) != sorted(_need(requested)) or len(shares) != len(set(shares)):
+            if sorted(shares) != sorted(_need(full_request)) or len(shares) != len(set(shares)):
                 return {"status": "failed", "tables": [], "reason": "stitch_check_failed",
                         "detail": "shares leave a gap or overlap", **base}
             rows = []
@@ -572,7 +583,9 @@ def final_tables(rep: str, candidates: list[str], usable: dict[str, str], views:
                 if not _full(again) or again.get("frequency") not in frequencies:
                     return {"status": "failed", "tables": [], "reason": "stitch_check_failed",
                             "detail": f"{t} does not cover its share", **base}
+                unpublished = _unpublished(again)
                 rows.append({"table_id": t, "period": assignment, "frequency": again.get("frequency"),
+                             **({"latest_unpublished": unpublished} if unpublished else {}),
                              **({"relation_status": judged[t]["relation_status"]} if t != rep else {})})
             rows.sort(key=lambda r: order.index(r["table_id"]))  # shown newest first, as before; assigned rep first
             return {"status": "selected", "tables": rows, "reason": None, "detail": "stitched",

@@ -31,6 +31,7 @@ from langgraph.graph import END, START, StateGraph
 
 from . import check as CH
 from . import contract as K
+from . import reselection as RS
 from .cards import build_cards
 from .catalog_scope import contains as scope_contains
 from .pool import EXTRA_CAP, build_pool, pool_tables
@@ -50,7 +51,7 @@ RESEARCH_VERSION = "tl-research-2026-10-29.2"  # .2: own judge and settings; unr
 # frequency and anchor, same-period references); only the rows the first round failed to structure (by the code's
 # check, never the model's word) may be corrected, recorded in ``condition_corrections``; a statistic with applied
 # user answers is never taken from a second round (BOK20 live check 11-02, owner 02:37 and 02:47 UTC)
-REJUDGE_VERSION = "tl-rejudge-2026-11-03.12"  # .12: preserve a bounded recent range under its answer contract
+REJUDGE_VERSION = "tl-rejudge-2026-11-03.14"  # .14: copy valid scope before checking a partial recovery
 # .8: a merged focus limit is checked before recovery and after adoption; shared-limit facts accompany targets
 # .7: scope fact errors share the existing recovery slot; .6: fixed statistics referable; .5: the whole ID map at
 # once; .2: corrections sent (contract .6), changes with reasons
@@ -159,8 +160,20 @@ def node_check(state: TLState, config) -> dict:
         parsed = {**parsed, "scope_statistic_count": len(first_out.get("statistics") or []),
                   "reference_periods": {x: [r for r in first_out.get("periods") or [] if x in r["for"]]
                                                   for x in sorted(named)}}
+    patch = []
+    raw_output = None
+    if state.get("round", 1) == 2 and state.get("first_round"):
+        from copy import deepcopy
+
+        raw_output = deepcopy(parsed["output"])
+        parsed, patch = prepare_recovery_output(state["first_round"]["record"], parsed)
     record = CH.check(state["question"], state["cards"], parsed, views, state["as_of"])
+    if raw_output is not None:
+        record["recovery_raw_output"] = raw_output
+        record["recovery_patch"] = patch
     if state.get("round", 1) == 1:  # the one self-recovery's targets, recorded on every first round (⑧-가)
+        RS.identities(record, state["cards"], views)
+        RS.prepare(record, state["cards"], views)
         record["rejudge"] = {"version": REJUDGE_VERSION, **rejudge_targets(record), "merged": [], "rejected": [],
                              "ledger_slot": "a_self_rejudge"}
     return {"record": record}
@@ -197,7 +210,10 @@ def rejudge_targets(record: dict) -> dict:
             continue
         fixes = [t for t in d.get("rejudge_targets") or []]
         cause = (d.get("period") or {}).get("cause")
-        if cause == "unsupported_expression":
+        if d.get("period_reselection"):
+            targets.append({"statistic": sid, "kind": "correction", "code": "period_table_reselection",
+                            "reasons": codes, "fixes": [d["period_reselection"]]})
+        elif cause == "unsupported_expression":
             excluded.append({"statistic": sid, "why": "unsupported_expression", "code": codes[0] if codes else None})
         elif fixes or any(c in _CORRECTABLE for c in codes) or "period_quote_missing" in codes and \
                 cause == "extraction_missing":
@@ -223,7 +239,73 @@ def _match(first: dict, second: dict, sid: str) -> str | None:
     if same:
         return same[0]
     by_quote = [s["id"] for s in stats if s["quote"] == quote]
-    return by_quote[0] if len(by_quote) == 1 else None
+    if len(by_quote) == 1:
+        return by_quote[0]
+    from .search.tables import nospace
+
+    normalized = nospace(quote)
+    own = [s for s in first["model_output"]["statistics"] if nospace(s["quote"]) == normalized]
+    matches = [s["id"] for s in stats if nospace(s["quote"]) == normalized]
+    return matches[0] if len(own) == len(matches) == 1 else None
+
+
+def prepare_recovery_output(first: dict, parsed: dict) -> tuple[dict, list[dict]]:
+    """Copy valid non-target scope before the ordinary check; never infer synonymous intent.
+
+    The raw model response stays separate. A replacement table is checked against the original scope and
+    calculation requirements, rather than losing a valid repair because the model rephrased those fields.
+    Focuses diagnosed as invalid are left to the existing recovery guard. Joining an old valid scope to an
+    arbitrary model repair would not prove that the new wording preserves that scope.
+    """
+    from copy import deepcopy
+
+    from .quotes import quote_in_question
+
+    if not first.get("model_output"):
+        return parsed, []
+    result = deepcopy(parsed)
+    output = result["output"]
+    raw = {"model_output": parsed["output"]}
+    wanted = {t["statistic"] for t in (first.get("rejudge") or {}).get("targets") or []}
+    patches = []
+
+    def replace(kind, sid, rows, why):
+        supplied = [deepcopy(r) for r in output.get(kind) or [] if sid in r["for"]]
+        replacement = [{**deepcopy(r), "for": [sid]} for r in rows]
+        if supplied == replacement:
+            return
+        kept = []
+        for r in output.get(kind) or []:
+            rest = [s for s in r["for"] if s != sid]
+            if rest:
+                kept.append({**r, "for": rest})
+        output[kind] = kept + replacement
+        patches.append({"statistic": sid, "kind": kind, "why": why,
+                        "supplied": supplied, "applied": deepcopy(replacement)})
+
+    for d in first.get("decisions") or []:
+        sid = d["statistic"]
+        if sid not in wanted or d.get("condition_answers") or d.get("answered_asks"):
+            continue
+        other = _match(first, raw, sid)
+        if other is None:
+            continue
+        original = first["model_output"]
+        quote = next(s["quote"] for s in original["statistics"] if s["id"] == sid)
+        stat = next(s for s in output["statistics"] if s["id"] == other)
+        if stat["quote"] != quote:
+            patches.append({"statistic": other, "kind": "statistic_quote", "why": "same_source_whitespace",
+                            "supplied": stat["quote"], "applied": quote})
+            stat["quote"] = quote
+        focus_errors = {r["code"] for r in d.get("reasons") or []} & {
+            "focus_quote_not_in_question", "focus_too_long", "focus_catalog_condition_missing"}
+        focus_rows = [r for r in original.get("focuses") or [] if sid in r["for"]]
+        if focus_rows and not focus_errors and (d.get("focus") or {}).get("status") == "grounded":
+            replace("focuses", other, focus_rows, "valid_scope_kept")
+        calculations = [r for r in original.get("calculations") or [] if sid in r["for"]]
+        if all(quote_in_question(r["quote"], first["question"]) for r in calculations):
+            replace("calculations", other, calculations, "valid_calculations_kept")
+    return result, patches
 
 
 def _changes(first: dict, second: dict, sid: str, other: str) -> dict:
@@ -393,13 +475,80 @@ def condition_corrections(first: dict, second: dict, sid: str, other: str) -> li
     return _semantic_plan(first, second, sid, other)[1]
 
 
+def _preserved_rows(out: dict, sid: str, kind: str) -> set[str]:
+    """Compare a statistic's intent, independent of ID, row order and quote whitespace.
+
+    Aggregation evidence belongs to the selected card and may change with that card; the requested method,
+    frequencies, source basis and weights must not change during an unrelated repair.
+    """
+    from .search.tables import nospace
+
+    def normalized(value):
+        if isinstance(value, str):
+            return nospace(value)
+        if isinstance(value, dict):
+            return {k: normalized(v) for k, v in value.items()}
+        if isinstance(value, list):
+            return sorted((normalized(v) for v in value), key=K.canonical)
+        return value
+
+    omitted = {"for"} | ({"evidence", "average_evidence"} if kind == "aggregations" else set())
+    return {K.canonical(normalized({k: v for k, v in row.items() if k not in omitted}))
+            for row in out.get(kind) or [] if sid in row.get("for", [])}
+
+
+def _basis_change_allowed(decision: dict, row: dict) -> bool:
+    """A reason for another component, or a table/basis mismatch, never licenses changing valid polarity.
+
+    Narrow row diagnostics retain their value/quote scope. An axis-level polarity conflict is the only broad
+    scope here; its repair still needs the existing change provenance and must pass the second-round check.
+    """
+    from .search.tables import nospace
+
+    for reason in decision.get("reasons") or []:
+        if reason.get("code") != "basis_polarity_invalid" or not isinstance(reason.get("detail"), dict):
+            continue
+        detail = reason["detail"]
+        for problem in detail.get("problems") or [detail]:
+            if problem.get("cause") not in {"quote_not_in_question", "unreadable_row", "value_not_in_axis",
+                                             "polarity_conflict"}:
+                continue
+            scope = problem.get("detail") or {}
+            if scope.get("axis") != row["axis"]:
+                continue
+            if "value" in scope and scope["value"] != row.get("value"):
+                continue
+            if "quote" in scope and nospace(scope["quote"]) != nospace(row.get("quote", "")):
+                continue
+            return True
+    return False
+
+
+def _focus_repair_losses(first: dict, second: dict, sid: str, other: str, errors: set[str]) -> list[str]:
+    """An erroneous focus still owns its valid source quotes; missing selectors only permit additions."""
+    from .quotes import quote_in_question
+    from .search.tables import nospace
+
+    mine = [r for r in first["model_output"].get("focuses") or [] if sid in r["for"]]
+    theirs = [r for r in second["model_output"].get("focuses") or [] if other in r["for"]]
+    quotes = [nospace(q) for r in theirs for q in r["quotes"]]
+    lost = [f"focus_quote:{q}" for r in mine for q in r["quotes"]
+            if quote_in_question(q, first.get("question") or "") and not any(nospace(q) in new for new in quotes)]
+    if errors == {"focus_catalog_condition_missing"}:
+        texts = [nospace(r["text"]) for r in theirs]
+        lost += ["focuses:scope_changed" for r in mine if not any(nospace(r["text"]) in new for new in texts)]
+    return lost
+
+
 def condition_preservation(first: dict, second: dict, sid: str, other: str) -> list[str]:
     """What the second round lost of the first round's conditions for statistic ``sid`` (as ``other`` there): each
     period and frequency quote, and each basis row (value and polarity) the first round attached to it (plan 56 order
-    9, 10-31 16:28 UTC). A change of a basis row needs its quote and reason (contract .6); without them it is lost.
+    9, 10-31 16:28 UTC). A basis change needs a matching code diagnosis plus its quote and reason (contract .6).
     Contract .8: the periods and frequencies by their structured values (``_semantic_lost``), and the user's applied
-    answers. Empty: the conditions are kept."""
+    answers. Normal focus, calculation intent and aggregation intent also survive unrelated repairs.
+    Empty: the conditions are kept."""
     lost = []
+    original = next((d for d in first.get("decisions", []) if d["statistic"] == sid), {})
     if _semantic(first):
         lost += _semantic_lost(first, second, sid, other)
         d = next((x for x in first.get("decisions") or [] if x["statistic"] == sid), {})
@@ -409,15 +558,24 @@ def condition_preservation(first: dict, second: dict, sid: str, other: str) -> l
         for key in ("periods", "frequencies"):
             mine, theirs = _quotes(first["model_output"], sid, key), set(_quotes(second["model_output"], other, key))
             lost += [f"{key}:{q}" for q in mine if q not in theirs]
-    rows = [(r["axis"], r.get("value"), r.get("polarity")) for r in first["model_output"]["splitters"]
-            if sid in r["for"] and r.get("value")]
+    rows = [r for r in first["model_output"]["splitters"] if sid in r["for"] and r.get("value")]
     again = {(r["axis"], r.get("value"), r.get("polarity")) for r in second["model_output"]["splitters"]
              if other in r["for"]}
     changed = _changes(first, second, sid, other)
-    lost += [f"splitters:{a}:{v}:{p}" for a, v, p in rows if (a, v, p) not in again
-             and not (changed.get((a, v)) and changed[(a, v)]["from"] == p
-                      and (a, v, changed[(a, v)]["to"]) in {(x, y, z) for x, y, z in again})]
-    original = next((d for d in first.get("decisions", []) if d["statistic"] == sid), {})
+    for row in rows:
+        a, v, p = row["axis"], row["value"], row.get("polarity")
+        if (a, v, p) not in again and not (
+                _basis_change_allowed(original, row) and changed.get((a, v)) and changed[(a, v)]["from"] == p
+                and (a, v, changed[(a, v)]["to"]) in again):
+            lost.append(f"splitters:{a}:{v}:{p}")
+    focus_errors = {r.get("code") for r in original.get("reasons") or []} & {
+        "focus_quote_not_in_question", "focus_too_long", "focus_catalog_condition_missing"}
+    for kind in ("focuses", "calculations", "aggregations"):
+        if kind == "focuses" and focus_errors:
+            lost += _focus_repair_losses(first, second, sid, other, focus_errors)
+            continue
+        if _preserved_rows(first["model_output"], sid, kind) != _preserved_rows(second["model_output"], other, kind):
+            lost.append(f"{kind}:changed")
     corrected = next((d for d in second.get("decisions", []) if d["statistic"] == other), {})
     for reason in original.get("reasons", []):
         if reason["code"] == "focus_catalog_condition_missing":
@@ -583,7 +741,8 @@ def merge_rounds(first: dict, second: dict, targets: list[dict]) -> dict:
             if other is None or other not in by_sid:
                 rejudge["rejected"].append({"statistic": sid, "why": "statistic_not_matched"})
                 continue
-            lost = condition_preservation(first, second, sid, other)
+            lost = (condition_preservation(first, second, sid, other) +
+                    RS.identity_losses(first, second, sid, other) + RS.period_losses(first, second, sid, other))
             if lost:
                 rejudge["rejected"].append({"statistic": sid, "why": "condition_lost", "lost": lost})
                 continue
@@ -622,6 +781,9 @@ def merge_rounds(first: dict, second: dict, targets: list[dict]) -> dict:
                                          if d["statistic"] == merged["statistic"])
         _recovery(record, rejudge, "attempted_failed")
         rejudge["second_round_output"] = copy.deepcopy(second.get("model_output"))
+        rejudge["second_round_raw_output"] = copy.deepcopy(second.get("recovery_raw_output",
+                                                                    second.get("model_output")))
+        rejudge["preserved_fields"] = copy.deepcopy(second.get("recovery_patch") or [])
     record["rejudge"] = rejudge
     record["route"] = CH.route(record)
     return record
@@ -652,7 +814,10 @@ def rejudge_input(record: dict, targets: list[dict]) -> list[dict]:
                          "condition_problems": _row_problems(out, sid, record.get("as_of"),
                                                              (record.get("parse") or {}).get("answer_contract"))}
                         if _semantic(record) else {}),
-                     "facts": [{k: v for k, v in f.items() if k in ("code", "axis", "candidates", "problems")}
+                     "facts": ([d["period_reselection"]] if d.get("period_reselection") else []) +
+                              ([record["recovery_identity_ambiguities"][sid]]
+                               if sid in record.get("recovery_identity_ambiguities", {}) else []) +
+                              [{k: v for k, v in f.items() if k in ("code", "axis", "candidates", "problems")}
                                for f in d.get("rejudge_targets") or []] +
                               [{"code": r["code"], **r["detail"]} for r in d.get("reasons") or []
                                if isinstance(r.get("detail"), dict) and

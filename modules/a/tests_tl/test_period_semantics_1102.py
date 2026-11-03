@@ -255,7 +255,7 @@ def test_a_failed_row_is_corrected_and_the_correction_recorded(layer):
     (fix,) = merged["rejudge"]["condition_corrections"]
     assert fix["quote"] == "2024년 한 해" and fix["first"][0]["read"] == "failed"
     assert fix["second"][0]["start"] == "2024" and "period_structure_invalid" in fix["why"]
-    assert merged["rejudge"]["version"] == "tl-rejudge-2026-11-03.12"
+    assert merged["rejudge"]["version"] == "tl-rejudge-2026-11-03.14"
 
 
 CHANGED = [  # a valid row of the first round changed by the second: the target stays as it was
