@@ -194,6 +194,8 @@ def resolution_row(table_id: str, condition: PeriodCondition | None, plan: Json)
 
 PHRASE_SEPARATOR = " / "  # A joins several quotes of one statistic with this (claview_a_api.view)
 MIN_PHRASE_CHARS = 2
+MAX_CONTEXT_ROWS = 50
+MAX_CONTEXT_PHRASE = 200  # A's phrase is at most 60 characters; room for the joined quotes of several statistics
 
 
 def phrase_fragments(phrase: str | None) -> list[str]:
@@ -203,7 +205,31 @@ def phrase_fragments(phrase: str | None) -> list[str]:
     return [f for f in (part.strip() for part in phrase.split(PHRASE_SEPARATOR)) if len(f) >= MIN_PHRASE_CHARS]
 
 
-def table_period_query(query: str, key: str, conditions: Json) -> str:
+OUTSIDE_PREFIX = "\0outside:"  # owner keys of phrases that belong to tables outside this B call (never a table key)
+
+
+def period_context_phrases(raw: Any) -> list[str]:
+    """The period wording of tables handled in OTHER B calls of the same question, as the pipeline hands it over.
+
+    `raw` is a list of `{"ref": str, "period_phrase": str}` (`ref`: the other table's id, or the id of a statistic A
+    did not hand over); only the phrase is used (to hide that wording from the tables of this call). Anything else is
+    refused as an invalid request: the pipeline builds it, not the user.
+    """
+    if raw is None:
+        return []
+    if not isinstance(raw, list) or len(raw) > MAX_CONTEXT_ROWS:
+        raise StageFailure("invalid_a_result")
+    out = []
+    for row in raw:
+        phrase = row.get("period_phrase") if isinstance(row, dict) else None
+        ref = row.get("ref") if isinstance(row, dict) else None
+        if not isinstance(ref, str) or not isinstance(phrase, str) or len(phrase) > MAX_CONTEXT_PHRASE:
+            raise StageFailure("invalid_a_result")
+        out.append(phrase)
+    return out
+
+
+def table_period_query(query: str, key: str, conditions: Json, outside: list[str] | tuple[str, ...] = ()) -> str:
     """The question as table `key` reads its period: the period wording A attached to other tables is hidden.
 
     `conditions` maps each table key to its received condition (`period_phrase` is A's optional reference text).
@@ -212,11 +238,19 @@ def table_period_query(query: str, key: str, conditions: Json) -> str:
     did not send this phrase is replaced by a blank of the same length. Nothing is hidden when the table's own
     phrase cannot be found in the question (no phrase, a different spelling, an answered period): then the table
     keeps reading the whole question as before, and a phrase shared by several tables stays visible to all of them.
+
+    `outside` is the wording of tables that B does not receive in this call (the pipeline hands over one request per
+    group of statistics, so the other groups' tables are not in `conditions`): their phrases count as owned by someone
+    else, exactly like another table's phrase inside this call. A phrase that a table of this call shares with them
+    stays visible to it.
     """
     owners: dict[str, set[str]] = {}
     for other, raw in conditions.items():
         for fragment in phrase_fragments((raw or {}).get("period_phrase")):
             owners.setdefault(fragment, set()).add(other)
+    for n, phrase in enumerate(outside):
+        for fragment in phrase_fragments(phrase):
+            owners.setdefault(fragment, set()).add(f"{OUTSIDE_PREFIX}{n}")
     taken = [False] * len(query)
     spans: list[tuple[int, int, set[str]]] = []
     for fragment in sorted(owners, key=len, reverse=True):

@@ -769,6 +769,26 @@ class Pipeline:
         """Extra B inputs of one request (none on the legacy path)."""
         return {}
 
+    @staticmethod
+    def _period_context(group, b_requests, b):
+        """The period wording of the question that this request's tables must not read (only to a B that takes it).
+
+        B gets one request per group, so a table never sees the other groups' tables, and a statistic A did not hand to
+        B (blocked, failed) is not in any request. Their wording stays in the question, so it is handed over, each
+        entry as `{"ref": table id or statistic id, "period_phrase": wording}`, and B uses it only to hide it from this
+        group's tables. A question with nothing else in it gives nothing.
+        """
+        if getattr(b, "accepts_period_context", False) is not True:
+            return []
+        others = [
+            {"ref": table["table_id"], "period_phrase": phrase}
+            for other in b_requests
+            if other is not group
+            for table in other["tables"]
+            if isinstance(phrase := (table.get("period_condition") or {}).get("period_phrase"), str) and phrase
+        ]
+        return others + copy.deepcopy(group.get("unhanded_period_wording") or [])
+
     def _b_conditions_lost(self, state, group, b_outcome):
         """A failure code when B's answer drops a condition A handed over (no check on the legacy path)."""
         return None
@@ -787,7 +807,11 @@ class Pipeline:
         # One B call per requirement group A hands over (related requirements share a call).
         results = []
         for group in b_requests:
-            b_outcome, _ = b.resolve(state["query"], group["tables"], state["as_of"], **self._resolve_extra(group, b))
+            extra = self._resolve_extra(group, b)
+            context = self._period_context(group, b_requests, b)
+            if context:
+                extra["period_context"] = context
+            b_outcome, _ = b.resolve(state["query"], group["tables"], state["as_of"], **extra)
             ok = b_outcome["status"] == "ok"
             result = {
                 "b_outcome": b_outcome,
