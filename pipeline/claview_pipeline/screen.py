@@ -342,6 +342,16 @@ class ScreenPipeline(Pipeline):
                     **({"period_condition": True} if prepared else {}),
                 }
             )
+        # The wording of statistics that are NOT handed to B (blocked, failed, awaiting an answer) stays in the question:
+        # B must hide it from the statistics it does read, so it travels with every request (see `_period_context`).
+        handed = {sid for request in b_requests for sid in request["requirement_ids"]}
+        unhanded = [
+            {"ref": s["statistic"], "period_phrase": " / ".join(q for q in s["conditions"]["periods"] if q)}
+            for s in stats
+            if s["statistic"] not in handed and any((s.get("conditions") or {}).get("periods") or [])
+        ]
+        for request in b_requests:
+            request["unhanded_period_wording"] = copy.deepcopy(unhanded)
         blocked = view["handoff"]["blocked"] + unsupported
         state["b_requests"] = copy.deepcopy(b_requests)
         state["unsupported_links"] = [copy.deepcopy(b) for b in blocked if b["code"] in UNSUPPORTED]

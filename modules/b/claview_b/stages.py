@@ -26,6 +26,7 @@ from .period_condition import (
     resolution_row,
     span_from_json,
     subtract,
+    period_context_phrases,
     table_period_query,
 )
 from .period_condition import end_slot as _end_slot
@@ -2447,6 +2448,8 @@ class BSteps:
                 "table_metadata": metadata,
                 "selections_by_table": {},
                 "period_conditions": conditions,
+                # period wording of tables handled in other B calls of the same question (pipeline, optional)
+                "period_outside": period_context_phrases(state.get("period_context")),
             }
         except (KeyError, TypeError):
             return {"stage_outcome": outcome("B", failure=StageFailure("invalid_a_result"))}
@@ -2469,7 +2472,10 @@ class BSteps:
             table_meta = state["table_metadata"][key]
             conditions = state.get("period_conditions", {})
             # each table reads the period wording A attached to it, not the other tables' (docs: B 표별 기간 해석)
-            plan = plan_table_period(table_period_query(query, key, conditions), table_meta, s.config, conditions.get(key))
+            outside = state.get("period_outside") or ()
+            plan = plan_table_period(
+                table_period_query(query, key, conditions, outside), table_meta, s.config, conditions.get(key)
+            )
             resolved_period = plan["period"]
             # the model is told only a period computed from relative wording; stated years, an answered
             # period and A's quoted period are applied in code and never shown (see the note above)
