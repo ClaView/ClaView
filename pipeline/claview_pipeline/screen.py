@@ -18,12 +18,29 @@ A 단계만 `staged.Pipeline`과 다르다. 새 A의 공개 결과(AView)만 읽
 from __future__ import annotations
 
 import copy
+import os
 
 from claview_a_api import screen as a_screen
+from claview_a_api.live_gate import ApprovalRefused
+from claview_a_api.run_record import RunRecordError
+from claview_a_api.runtime import LedgerError, ProviderError
 from claview_common.periods import PeriodError, period_index, periods_between
 
 from .confirmation import _label_card, _table_card, _table_index, validate_confirmation
 from .staged import MESSAGES, Pipeline, StageFailure, now
+
+
+def _sent_a(judges, query):
+    if judges.kind != "live":
+        return None
+    if judges.gate is not None:
+        key = a_screen.key_of(query)
+        return sum(row.get("n", 1) for row in judges.gate.usage.events()
+                   if row.get("kind") == "count" and row.get("what") == "a" and row.get("question_key") == key)
+    from claview_a_api.runtime import sent_for
+
+    return sent_for(judges, query)
+
 
 STATE_LABEL = {
     "selected": "확정",
@@ -189,20 +206,47 @@ class ScreenPipeline(Pipeline):
     a_model_mode = "new_a"
     a_running_text = "새 A가 질문을 읽고 통계표를 고릅니다(모델 판단 + 코드 검사)."
 
-    def __init__(self, *args, judges_factory=None, period_questions=None, b_factory=None, **kwargs):
+    def __init__(self, *args, judges_factory=None, period_questions=None, b_factory=None,
+                 run_store=None, service_runtime=None, **kwargs):
         super().__init__(*args, **kwargs)
-        # judges_factory() -> claview_a_api.screen.Judges; the default refuses live calls (a_live_disabled)
+        self.service_runtime = service_runtime
+        self.run_store = run_store
+        if self.run_store is None and judges_factory is None:
+            from claview_a_api.runtime import service_store
+
+            self.run_store = service_store(self.mode)
+        # Custom judges keep their test/replay storage policy; the default service is durable.
         self.judges_factory = judges_factory or self._default_judges
         self.period_questions = period_questions  # tests and the screen demo only (synthetic period questions)
         if b_factory is not None:
             self.b_factory = b_factory
 
     def _default_judges(self):
-        # A's approved transport is available through its API, but this main screen path does not yet connect
-        # persistent records and downstream call caps. Keep its previous live-disabled behavior until that PR.
         if self.mode == "live":
-            raise a_screen.LiveDisabled()
+            if os.environ.get("CLAVIEW_A_LIVE_APPROVAL"):
+                return a_screen.live_judges(self.run_store)
+            from claview_a_api.runtime import service_live_judges
+
+            return service_live_judges(self.run_store)
         return a_screen.judges_for(self.mode)
+
+    def run(self, query, **kwargs):
+        if self.service_runtime is not None:
+            self.service_runtime.start()
+        return super().run(query, **kwargs)
+
+    def _fail(self, state, exc, update, current):
+        messages = {
+            "credential_halted": "모델 인증 오류로 실행을 중단했습니다. 서버 설정을 확인해 주세요.",
+            "service_credential_halted": "모델 또는 자료 조회 인증 오류로 이후 호출을 중단했습니다. 서버 설정을 확인해 주세요.",
+            "run_record_busy": "이 기록을 처리 중입니다. 진행 중인 작업이 끝난 뒤 확인해 주세요.",
+            "ledger_busy": "이 질문을 처리 중입니다. 중복 호출하지 않고 기다립니다.",
+            "run_record_unavailable": "실행 기록을 보관할 수 없어 호출하지 않았습니다. 서버 저장 경로를 확인해 주세요.",
+            "key_unavailable": "실제 A 실행에 필요한 OpenAI 키가 없습니다. 서버 설정을 확인해 주세요.",
+        }
+        if exc.code in messages:
+            state["capability"] = {"message": messages[exc.code]}
+        return super()._fail(state, exc, update, current)
 
     # ---- resume -----------------------------------------------------------------------
     def validate_resume(self, paused, confirmation):
@@ -216,9 +260,12 @@ class ScreenPipeline(Pipeline):
         if not isinstance(confirmation["session_id"], str) or not isinstance(confirmation["answers"], list):
             raise ValueError("답변 형식이 올바르지 않습니다.")
         try:  # a dry run on a copy: nothing is kept, no model is called
-            a_screen.answer(paused["a_checkpoint"], confirmation["session_id"], copy.deepcopy(confirmation["answers"]))
+            checkpoint = a_screen.latest(self.run_store, paused["a_checkpoint"])
+            a_screen.answer(checkpoint, confirmation["session_id"], copy.deepcopy(confirmation["answers"]))
         except a_screen.AnswerRejected as exc:
             raise ValueError(_answer_rejection_message(exc)) from None
+        except (RunRecordError, LedgerError):
+            raise ValueError("저장된 확인 기록을 사용할 수 없습니다. 서버 기록에서 가장 최근 실행을 불러와 주세요.") from None
         return {
             "kind": "a_view",
             "session_id": confirmation["session_id"],
@@ -238,7 +285,7 @@ class ScreenPipeline(Pipeline):
             paused, answer = resume
             state["parent_run_id"] = paused["run_id"]
             state["resume_kind"] = "a_answer"
-            out = a_screen.answer(paused["a_checkpoint"], answer["session_id"], answer["answers"])
+            out = a_screen.answer(paused["a_checkpoint"], answer["session_id"], answer["answers"], store=self.run_store)
             state["user_confirmation"] = {
                 "source": "user_confirmation",
                 "parent_run_id": paused["run_id"],
@@ -254,8 +301,29 @@ class ScreenPipeline(Pipeline):
             except a_screen.LiveDisabled:
                 update("question", "failed", MESSAGES["a_live_disabled"], [["질문", query]])
                 raise StageFailure("a_live_disabled", "error") from None
-            out = a_screen.select(query, state["as_of"], judges, self.period_questions)
-            state["extra_calls"] = {"A_judge": len(judges.requests)}
+            except (ApprovalRefused, RunRecordError, LedgerError) as exc:
+                state["extra_calls"] = {"A_judge": 0}
+                raise StageFailure(exc.code, "error") from None
+            before = _sent_a(judges, query)
+            try:
+                out = a_screen.select(query, state["as_of"], judges, self.period_questions, store=self.run_store)
+            except (RunRecordError, ApprovalRefused, LedgerError) as exc:
+                if exc.code == "question_budget_used":
+                    from .saved_runs import listing
+
+                    state["saved_records"] = listing(self.runs_dir, query=query)
+                    state["capability"] = {"message": "이 질문의 A 판단은 이미 실행했습니다. 서버 기록에서 이전 결과를 불러와 주세요."}
+                raise StageFailure(exc.code, "unresolved") from None
+            except ProviderError as exc:
+                state["extra_calls"] = {"A_judge": 0}
+                code = str(exc) if str(exc) in {"key_unavailable", "credential_halted", "a_service_busy"} else "a_judge_failed"
+                raise StageFailure(code, "error") from None
+            from claview_a_api.runtime import credential_halted
+
+            actual = max(0, _sent_a(judges, query) - before) if before is not None else len(judges.requests)
+            state["extra_calls"] = {"A_judge": actual}
+            if credential_halted(judges):
+                raise StageFailure("service_credential_halted", "error")
             state["a_judge_models"] = list(judges.requests)
             judges_kind = judges.kind
         view, checkpoint = out["view"], out["checkpoint"]
@@ -510,6 +578,12 @@ class ScreenPipeline(Pipeline):
         return "b_answered_period_not_applied"
 
     def _finish(self, state, emit):
+        state["claview_mode"] = self.mode
+        if self.service_runtime is not None:
+            state["logical_calls"] = copy.deepcopy(state.get("calls") or {})
+            state["calls"].update(HCX=self.service_runtime.sends["B_model"],
+                                  KOSIS=self.service_runtime.sends["KOSIS"])
+            state["transport_halt"] = self.service_runtime.halted
         warnings = state.get("a_warnings") or []
         if warnings and state.get("ui_cases"):
             # shown on the result cards of the tables they are about; the run status does not change for them
@@ -535,7 +609,20 @@ class ScreenPipeline(Pipeline):
                 + " / ".join(lines)
                 + (f" 그 밖의 중단 사유: {', '.join(others)}" if others else "")
             )
-        return super()._finish(state, emit)
+        def with_mode(event):
+            if event.get("type") == "result":
+                event["result"]["claview_mode"] = self.mode
+                if state.get("saved_records"):
+                    event["result"]["saved_records"] = copy.deepcopy(state["saved_records"])
+                # The base writes the snapshot before emit; preserve these public service fields too.
+                if self.runs_dir:
+                    import json
+
+                    (self.runs_dir / state["run_id"] / "response.json").write_text(
+                        json.dumps(event["result"], ensure_ascii=False), encoding="utf-8")
+            emit(event)
+
+        return super()._finish(state, with_mode)
 
     def _resolve_extra(self, group, b):
         if group.get("period_answers") and getattr(b, "accepts_period_answers", False):

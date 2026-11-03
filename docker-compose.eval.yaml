@@ -13,6 +13,7 @@ x-eval: &eval
     - ./runs:/claview/runs
   environment:
     PYTHONHASHSEED: "0"
+    CLAVIEW_MODE: synthetic  # This runner replays golden answers and uses synthetic fetches.
     # Module evaluation runners (design step 6) call the module APIs at these addresses.
     A_URL: http://module-a:8888
     B_URL: http://module-b:8888

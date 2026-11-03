@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+from types import SimpleNamespace
 
 import pytest
 
@@ -27,7 +28,8 @@ def test_period_failure_cause_is_not_reported_as_a_length_error(monkeypatch, cau
 
     monkeypatch.setattr(a_screen, "answer", reject)
     with pytest.raises(ValueError, match=message):
-        ScreenPipeline.validate_resume(None, paused, {"session_id": "session", "answers": []})
+        ScreenPipeline.validate_resume(SimpleNamespace(run_store=None), paused,
+                                       {"session_id": "session", "answers": []})
     assert paused == before
 
 

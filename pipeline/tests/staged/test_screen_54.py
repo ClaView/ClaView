@@ -131,32 +131,50 @@ def test_selected_statistic_runs_every_stage_with_focus(screen):
     assert {c["tableId"] for c in state["ui_cases"]} == {"DT_161Y014"}
 
 
-def test_default_judges_are_synthetic_and_live_is_refused(screen, monkeypatch):
+def test_missing_live_key_never_falls_back_to_synthetic(screen, monkeypatch, tmp_path):
+    import http.client
+
+    from claview_a_api.run_record import RunStore
     from claview_pipeline.screen import ScreenPipeline
 
     p = screen()
     state = p.run(M2, as_of=AS_OF)
     assert p.judges_made[0].kind == "synthetic" and state["calls"]["A_judge"] >= 1
-    live = ScreenPipeline(model=None, client=None, runs_dir=None, session=p)
+    def refuse(*args, **kwargs):
+        raise AssertionError("no model transport or synthetic fallback is allowed without a live key")
+
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("CLAVIEW_A_LIVE_APPROVAL", raising=False)
+    monkeypatch.setattr(http.client, "HTTPSConnection", refuse)
+    monkeypatch.setattr(a_screen, "synthetic_judges", refuse)
+    live = ScreenPipeline(model=None, client=None, runs_dir=None, session=p, run_store=RunStore(tmp_path / "service"))
     live.mode = "live"
     state = live.run(M2, as_of=AS_OF)
-    assert state["error_code"] == "a_live_disabled" and stage_status(state)["question"] == "failed"
+    # Deployment live is enabled now; missing credentials still send nothing and never substitute a fake A.
+    assert state["error_code"] == "key_unavailable" and stage_status(state)["question"] == "failed"
+    assert "a_view" not in state
+    assert state["calls"]["A_judge"] == 0
     assert state["calls"]["HCX"] == state["calls"]["KOSIS"] == 0
 
 
-def test_an_a_approval_does_not_enable_the_unconnected_main_screen(screen, monkeypatch):
-    def refuse(*args, **kwargs):
-        raise AssertionError("the main screen must not open an A live gate yet")
+def test_explicit_invalid_approval_never_falls_back_to_service_live(screen, monkeypatch, tmp_path):
+    from claview_a_api import runtime
+    from claview_a_api.run_record import RunStore
 
-    monkeypatch.setenv("CLAVIEW_A_LIVE_APPROVAL", "not-opened.json")
-    monkeypatch.setattr(a_screen, "live_judges", refuse)
+    def refuse(*args, **kwargs):
+        raise AssertionError("an invalid explicit evaluation approval must not use deployment live")
+
+    approval = tmp_path / "invalid_approval.json"
+    approval.write_text("{", encoding="utf-8")
+    monkeypatch.setenv("CLAVIEW_A_LIVE_APPROVAL", str(approval))
+    monkeypatch.setattr(runtime, "service_live_judges", refuse)
     from claview_pipeline.screen import ScreenPipeline
 
     p = screen()
-    live = ScreenPipeline(model=None, client=None, runs_dir=None, session=p)
+    live = ScreenPipeline(model=None, client=None, runs_dir=None, session=p, run_store=RunStore(tmp_path / "eval"))
     live.mode = "live"
     state = live.run(M2, as_of=AS_OF)
-    assert state["error_code"] == "a_live_disabled"
+    assert state["error_code"] == "approval_invalid" and state["calls"]["A_judge"] == 0
     assert state["calls"]["HCX"] == state["calls"]["KOSIS"] == 0
 
 
@@ -236,7 +254,8 @@ def test_judge_failure_stops_before_b(screen):
 
 
 def period_supplier(view):
-    return [{"question_id": f"p:{s['statistic']}", "statistics": [s["statistic"]], "text": "기간을 확인해 주세요(시험용).",
+    return [{"question_id": f"p:{s['statistic']}", "statistics": [s["statistic"]],
+             "text": "기간을 확인해 주세요(시험용).",
              "input": "choice_or_text", "options": [{"option_id": f"p:{s['statistic']}:o1", "label": "질문에 적힌 기간",
                                                      "value": "as_quoted"}]}
             for s in view["statistics"] if s["outcome"] == "selected"]

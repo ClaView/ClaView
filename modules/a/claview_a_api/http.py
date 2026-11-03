@@ -6,17 +6,17 @@ import os
 from collections.abc import Callable
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache
-from pathlib import Path
 from typing import Annotated
 
 from fastapi import Depends, HTTPException
 
 from claview_a.budget import LedgerError
+from claview_a.transport.provider import ProviderError
 from claview_common.api import timed
 from claview_common.contracts import Meta
 from claview_common.contracts.a_http import A_HTTP_VERSION, AHTTPAnswerRequest, AHTTPResult, AHTTPSelectRequest
 
-from . import live_gate, screen
+from . import live_gate, runtime, screen
 from .run_record import RunRecordError, RunStore
 
 SEOUL = timezone(timedelta(hours=9), "Asia/Seoul")
@@ -45,8 +45,7 @@ def server_mode() -> str:
 @lru_cache(maxsize=1)
 def get_store() -> RunStore:
     """The configured server location, fixed on first use; constructing it writes nothing."""
-    root = os.environ.get("CLAVIEW_A_RUN_ROOT") or Path(__file__).resolve().parents[3] / "runs" / "a_http"
-    return _guarded(lambda: RunStore(Path(root).resolve()))
+    return _guarded(lambda: runtime.service_store(server_mode()))
 
 
 def _http_error(exc: Exception) -> HTTPException:
@@ -55,6 +54,8 @@ def _http_error(exc: Exception) -> HTTPException:
         return exc
     if isinstance(exc, screen.LiveDisabled):
         return HTTPException(status_code=503, detail="a_live_disabled")
+    if isinstance(exc, ProviderError) and str(exc) == "key_unavailable":
+        return HTTPException(status_code=503, detail="key_unavailable")
     if isinstance(exc, RunRecordError):
         status = {"run_record_missing": 404, "run_record_busy": 409, "question_budget_used": 403}.get(exc.code, 410)
         return HTTPException(status_code=status, detail=exc.code)
@@ -84,7 +85,8 @@ def _guarded[T](operation: Callable[[], T]) -> T:
 def get_judges(body: AHTTPSelectRequest, store: Annotated[RunStore, Depends(get_store)]) -> screen.Judges:
     """Resolve only the server's mode after the versioned body validates; there is no replay fallback."""
     del body  # Its validation must precede opening an approval; it supplies no execution controls.
-    return _guarded(lambda: screen.live_judges(store) if server_mode() == "live" else screen.synthetic_judges())
+    return _guarded(lambda: runtime.service_live_judges(store)
+                    if server_mode() == "live" else screen.synthetic_judges())
 
 
 def _record_mode(checkpoint: dict) -> str:
@@ -115,7 +117,7 @@ def _response(out: dict, elapsed: float, llm_calls: int = 0) -> AHTTPResult:
 def _sent_for(judges: screen.Judges, query: str) -> int:
     """The gate's real sends for this question only; synthetic judgments do not count as model calls."""
     if judges.kind != "live" or judges.gate is None:
-        return 0
+        return runtime.sent_for(judges, query) if judges.kind == "live" else 0
     key = screen.key_of(query)
     return sum(row.get("n", 1) for row in judges.gate.usage.events()
                if row.get("kind") == "count" and row.get("what") == "a" and row.get("question_key") == key)
@@ -129,6 +131,8 @@ def select(body: AHTTPSelectRequest, store: RunStore, judges: screen.Judges) -> 
         out, elapsed = timed(lambda: screen.select(body.query, as_of, judges, store=store))
         # A refusal arising inside the graph is still a refusal, not a successful HTTP execution.
         failure = (out["view"].get("failure") or {}).get("code")
+        if failure == "key_unavailable":
+            raise HTTPException(status_code=503, detail=failure)
         if failure in live_gate.REFUSALS or failure in _LEDGER_REFUSALS:
             raise HTTPException(status_code=403, detail=failure)
         return _response(out, elapsed, max(0, _sent_for(judges, body.query) - before))
