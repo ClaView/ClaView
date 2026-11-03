@@ -35,8 +35,49 @@
       nodes.forEach(function(n){n.nodeValue=text(n.nodeValue);});return root;
     }
   };
+  // 증감 계산용으로 조회한 기준 시점(c.baseline)은 차트 앞쪽에 흐리게 덧그린다.
+  // 표·CSV·요약의 값 목록은 요청한 기간만 쓰므로 여기서는 차트 설정만 보탠다.
+  var baselineOf=new WeakMap();
+  function registerBaseline(c){
+    if(!c.baseline||!c.labels||baselineOf.has(c.labels))return;
+    var b=c.baseline,values={};
+    c.series.forEach(function(s){values[s.name]=(b.values[s.id]||[]).map(function(v){return v==null?null:+v;});});
+    baselineOf.set(c.labels,{axis:b.periods.map(function(p){return CV.axisLabel(c.freq,p);}),
+      full:b.labels.map(function(l){return l+' (비교 기준)';}),values:values});
+  }
+  function fadeBaseline(host,count,small){
+    var chart=(window.Highcharts&&Highcharts.charts||[]).filter(function(h){return h&&h.renderTo===host;})[0];
+    if(!chart)return;
+    var th=CV.theme();
+    chart.series.forEach(function(s){
+      var faded=Highcharts.color(s.color).setOpacity(0.35).get('rgba');
+      s.update({zoneAxis:'x',zones:[{value:count-0.5,color:faded,dashStyle:'Dot'},{}]},false);
+    });
+    chart.xAxis[0].addPlotBand({from:-0.5,to:count-0.5,id:'baseline-band',className:'baseline-band',
+      color:Highcharts.color(th.text2).setOpacity(0.08).get('rgba'),
+      label:small?undefined:{text:'비교 기준',style:{color:th.text2,fontSize:'10px',fontFamily:th.font},verticalAlign:'top',y:12}});
+    chart.redraw(false);
+  }
+  function wrapAdapter(){
+    var adapter=CV.adapter;
+    if(!adapter||adapter.baselineWrapped)return;
+    adapter.baselineWrapped=true;
+    var create=adapter.create;
+    adapter.create=function(host,cfg){
+      var b=cfg.type!=='horizontal'&&cfg.full&&baselineOf.get(cfg.full);
+      if(!b)return create.call(adapter,host,cfg);
+      var count=b.axis.length;
+      var next=Object.assign({},cfg,{labels:b.axis.concat(cfg.labels),full:b.full.concat(cfg.full),
+        series:cfg.series.map(function(s){
+          return Object.assign({},s,{data:(b.values[s.name]||new Array(count).fill(null)).concat(s.data)});})});
+      var handle=create.call(adapter,host,next);
+      fadeBaseline(host,count,!!cfg.small);
+      return handle;
+    };
+  }
   var original=CV.createResult;
   CV.createResult=function(c,saved,hooks){
+    registerBaseline(c);wrapAdapter();
     var summaryUnit,shownCount;
     var r=original(c,saved,{onChange:function(state){
       if(summaryUnit)summaryUnit.textContent=CV.currentData(c,state.kind).unit;
@@ -55,7 +96,7 @@
         line('조회한 기간',(row.fetched.join(', ')||'조회한 기간 없음')+' · '+row.freqName);
         if(row.missing.length)line('표에 없는 기간',row.missing.join(', '));
         if(row.substituted)line('대체 조회','요청한 기간이 표에 없어 조회 가능한 기간으로 바꿔 조회했습니다.');
-        row.extra.forEach(function(x){line('계산용 기준 기간',x.range+' · '+x.purpose+' (화면에는 표시하지 않음)');});
+        row.extra.forEach(function(x){line('계산용 기준 기간',x.range+' · '+x.purpose+(c.baseline?' (차트에 흐리게 표시, 표·내려받기 파일에는 넣지 않음)':' (화면에는 표시하지 않음)'));});
         var src=row.sources||{},how=[];
         if(src.period)how.push('기간: '+src.period);
         if(src.frequency)how.push('주기: '+src.frequency);
