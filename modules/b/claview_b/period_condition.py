@@ -2,7 +2,8 @@
 
 Pure helpers only: reading the condition, converting its month ranges to the table's periods,
 range arithmetic and the `period_resolutions` rows. Which period a question asks for is still
-decided in `stages` (it owns the wording rules); this module never reads the question.
+decided in `stages` (it owns the wording rules); the only thing done to the question here is hiding the period
+wording that A attached to OTHER tables (`table_period_query`), so a table reads its own wording.
 
 Ranges here are (first, last) period indexes of one frequency (`metadata.period_number`).
 """
@@ -189,3 +190,47 @@ def resolution_row(table_id: str, condition: PeriodCondition | None, plan: Json)
         "notices": [dict(n) for n in plan["notices"]],
     }
     return row
+
+
+PHRASE_SEPARATOR = " / "  # A joins several quotes of one statistic with this (claview_a_api.view)
+MIN_PHRASE_CHARS = 2
+
+
+def phrase_fragments(phrase: str | None) -> list[str]:
+    """The quotes inside A's `period_phrase` (one per statistic quote), without blanks and one-letter noise."""
+    if not isinstance(phrase, str):
+        return []
+    return [f for f in (part.strip() for part in phrase.split(PHRASE_SEPARATOR)) if len(f) >= MIN_PHRASE_CHARS]
+
+
+def table_period_query(query: str, key: str, conditions: Json) -> str:
+    """The question as table `key` reads its period: the period wording A attached to other tables is hidden.
+
+    `conditions` maps each table key to its received condition (`period_phrase` is A's optional reference text).
+    Every phrase found in the question is assigned to the tables that sent exactly that text, longest phrase first,
+    so a short phrase inside a longer one of another table stays with the longer one. The text of tables that
+    did not send this phrase is replaced by a blank of the same length. Nothing is hidden when the table's own
+    phrase cannot be found in the question (no phrase, a different spelling, an answered period): then the table
+    keeps reading the whole question as before, and a phrase shared by several tables stays visible to all of them.
+    """
+    owners: dict[str, set[str]] = {}
+    for other, raw in conditions.items():
+        for fragment in phrase_fragments((raw or {}).get("period_phrase")):
+            owners.setdefault(fragment, set()).add(other)
+    taken = [False] * len(query)
+    spans: list[tuple[int, int, set[str]]] = []
+    for fragment in sorted(owners, key=len, reverse=True):
+        start = query.find(fragment)
+        while start != -1:
+            end = start + len(fragment)
+            if not any(taken[start:end]):
+                taken[start:end] = [True] * len(fragment)
+                spans.append((start, end, owners[fragment]))
+            start = query.find(fragment, start + 1)
+    if not any(key in who for _, _, who in spans):
+        return query
+    text = list(query)
+    for start, end, who in spans:
+        if key not in who:
+            text[start:end] = [" "] * (end - start)
+    return "".join(text)

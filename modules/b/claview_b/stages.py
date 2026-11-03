@@ -26,6 +26,7 @@ from .period_condition import (
     resolution_row,
     span_from_json,
     subtract,
+    table_period_query,
 )
 from .period_condition import end_slot as _end_slot
 from .period_condition import slot as _slot
@@ -2466,7 +2467,9 @@ class BSteps:
             notices = state.get("period_notices", {})
             alternatives = state.get("frequency_alternatives", {})
             table_meta = state["table_metadata"][key]
-            plan = plan_table_period(query, table_meta, s.config, state.get("period_conditions", {}).get(key))
+            conditions = state.get("period_conditions", {})
+            # each table reads the period wording A attached to it, not the other tables' (docs: B 표별 기간 해석)
+            plan = plan_table_period(table_period_query(query, key, conditions), table_meta, s.config, conditions.get(key))
             resolved_period = plan["period"]
             # the model is told only a period computed from relative wording; stated years, an answered
             # period and A's quoted period are applied in code and never shown (see the note above)
