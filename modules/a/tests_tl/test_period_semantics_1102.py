@@ -89,7 +89,7 @@ def test_contract_8_is_strict_and_structures_periods_and_frequencies():
     assert frequency["properties"]["value"]["enum"] == ["Y", "H", "Q", "M", "not_stated", "unreadable"]
     assert V7 in K.EARLIER_CONTRACTS and K.output_schema(V7)["properties"]["periods"]["items"]["required"] == [
         "quote", "for", "meaning", "refers_to"]  # the older answers keep their shape
-    assert V8 in K.SEMANTIC_PERIOD_CONTRACTS and K.PROMPT_VERSION == "tl-prompt-2026-11-03.10"
+    assert V8 in K.SEMANTIC_PERIOD_CONTRACTS and K.PROMPT_VERSION == "tl-prompt-2026-11-03.11"
 
 
 # ---------------------------------------------------------------- same request, .7 quotes vs .8 rows
@@ -255,7 +255,7 @@ def test_a_failed_row_is_corrected_and_the_correction_recorded(layer):
     (fix,) = merged["rejudge"]["condition_corrections"]
     assert fix["quote"] == "2024년 한 해" and fix["first"][0]["read"] == "failed"
     assert fix["second"][0]["start"] == "2024" and "period_structure_invalid" in fix["why"]
-    assert merged["rejudge"]["version"] == "tl-rejudge-2026-11-03.14"
+    assert merged["rejudge"]["version"] == "tl-rejudge-2026-11-03.15"
 
 
 CHANGED = [  # a valid row of the first round changed by the second: the target stays as it was

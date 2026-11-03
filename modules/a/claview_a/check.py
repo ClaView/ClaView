@@ -118,6 +118,8 @@ from .contract import CONTRACT_VERSION as K_CONTRACT
 from .contract import EARLIER_CONTRACTS
 from .contract import OPTION_EVIDENCE_CONTRACTS
 from .contract import SEMANTIC_PERIOD_CONTRACTS
+from .contract import FOCUS_CONTRACTS
+from . import condition_coverage as CC
 from .periods import semantic as SP
 from .focus import check_scope, legacy_scope
 from .catalog_scope import missing_scope
@@ -149,7 +151,7 @@ from .quotes import quote_in_question
 # .33: a period option says the range choosing it requests, in the decided frequency or each one left (13-4)
 # .40: contract .8 periods and frequencies read from the model's structured rows (``periods.semantic``), never the quote
 # reader nor words outside the quotes; the failure kind of every ending reason recorded (BOK20 live check 11-02)
-CHECK_VERSION = "tl-check-2026-11-03.45"
+CHECK_VERSION = "tl-check-2026-11-03.46"
 # the model's failures to structure a period or frequency it quoted or to give a row: one recovery may correct them
 SEMANTIC_INTERNAL = ("period_structure_invalid", "frequency_unreadable", "period_meaning_conflict",
                      "frequency_conflict", "period_row_missing", "frequency_row_missing")
@@ -552,7 +554,9 @@ def polarity_problems(sid: str, splitters: list[dict], d: dict, lk) -> list[dict
     asked = {a["axis"] for a in d["asks"]}
     rep_card = lk.card_of.get(d["representative"]) if d.get("representative") else None
     for axis, pols in by_axis.items():
-        if {"required", "any_of"} <= pols:
+        # "other" contains independent semantic axes (such as a money unit and
+        # an index base). Unlike a catalog basis axis it is not one choice set.
+        if axis != "other" and {"required", "any_of"} <= pols:
             out.append({"cause": "polarity_conflict", "detail": {"axis": axis, "polarities": ["any_of", "required"]}})
         if "allowed" in pols and axis in asked:
             out.append({"cause": "ask_on_allowed_axis", "detail": {"axis": axis}})
@@ -2457,6 +2461,10 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
             if b.get("excluded"):
                 d["warnings"].append({"code": "basis_excluded", "axis": axis, "excluded": list(b["excluded"])})
     for d in D.values():
+        d["condition_catalog_facts"] = CC.catalog_facts(d, views)
+    coverage = CC.apply(question, out, list(D.values()), parsed.get("coverage_fixed")) \
+        if parsed.get("answer_contract") in FOCUS_CONTRACTS else []
+    for d in D.values():
         if d["model_kind"] == "choice" or d["model_kind"] == "ask_corrected":
             d["checks_not_done"] = [x for x in STAGES if x not in d["checks_done"]]
         if d["reasons"]:
@@ -2485,6 +2493,8 @@ def check(question: str, cards: list[dict], parsed: dict, views: dict, as_of: st
                         "answer_contract": parsed.get("answer_contract")},
               "checks": checks, "decisions": [D[s["id"]] for s in out["statistics"]],
               "alternatives": copy.deepcopy(out["alternatives"])}
+    record["condition_coverage"] = {"version": CC.VERSION, "anchors": coverage,
+                                    "semantic_fulfillment": "not_checked"}
     record["route"] = route(record)
     return record
 
