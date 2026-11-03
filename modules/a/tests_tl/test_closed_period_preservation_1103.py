@@ -27,6 +27,12 @@ def resolve(start, end, views, rep=None, form="absolute", count="none"):
 @pytest.mark.parametrize("start,end", [("2015", "2027"), ("2027", "same")])
 def test_missing_future_absolute_range_is_not_shortened_into_success(start, end):
     got = resolve(start, end, {"T": annual("T", "2015", "2025")})
+    if start == "2015":
+        # 2026-11-03: permit B's partial query, while preserving the full explicit request.
+        assert got["status"] == "selected"
+        assert got["tables"][0]["period"] == [{"start": "2015-01", "end": "2027-12"}]
+        assert got["coverage_notice"]["covered"] == [{"start": "2015-01", "end": "2025-12"}]
+        return
     assert got["status"] == "failed"
     assert got["tables"] == []
     assert got["reason"] == "period_not_covered"

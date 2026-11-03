@@ -149,7 +149,7 @@ from .quotes import quote_in_question
 # .33: a period option says the range choosing it requests, in the decided frequency or each one left (13-4)
 # .40: contract .8 periods and frequencies read from the model's structured rows (``periods.semantic``), never the quote
 # reader nor words outside the quotes; the failure kind of every ending reason recorded (BOK20 live check 11-02)
-CHECK_VERSION = "tl-check-2026-11-03.45"
+CHECK_VERSION = "tl-check-2026-11-03.47"  # explicit future tails retain the request and report partial availability
 # the model's failures to structure a period or frequency it quoted or to give a row: one recovery may correct them
 SEMANTIC_INTERNAL = ("period_structure_invalid", "frequency_unreadable", "period_meaning_conflict",
                      "frequency_conflict", "period_row_missing", "frequency_row_missing")
@@ -1385,6 +1385,7 @@ def decide_periods(d: dict, quote: str, rep: str, reading: dict, lk: Cards, as_o
     ``context`` ({question, out}): with the condition rule ``ask_condition`` the reading is ``condition_reading``
     (the caller's ``reading`` is not used) and a missing period or frequency is asked, never defaulted."""
     rows = {r["table_id"]: r for r in lk.card_of[rep]["tables"]}
+    d["warnings"] = [w for w in d.get("warnings") or [] if w.get("code") != "period_partial_coverage"]
     asking = PR.condition_rule() == "ask_condition" and context is not None
     polar = bool(asking and context.get("polar"))
     if asking:
@@ -1520,6 +1521,8 @@ def decide_periods(d: dict, quote: str, rep: str, reading: dict, lk: Cards, as_o
         d["reasons"].append({"code": "final_recheck_failed", "detail": problems})
         return False
     d["final_tables"] = got["tables"]
+    if got.get("coverage_notice"):
+        d["warnings"].append({"code": "period_partial_coverage", "detail": got["coverage_notice"]})
     if [r["table_id"] for r in got["tables"]] != [rep]:
         # policy ⑦ (plan 56 order 7): which edition replaced or was stitched to the representative, and on what;
         # final_tables_by_period stays the last correction, as before

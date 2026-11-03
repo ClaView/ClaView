@@ -120,7 +120,7 @@ def test_the_packaged_policy_names_the_calendar_rule():
     assert policy.anchor_rule == "as_of_calendar" and policy.relative_rules_version
     # .4 changes recent windows only; calendar offsets, explicit periods and no-default questions retain their rules.
     assert policy.recent_anchor_rule == "data_latest"
-    assert policy.version == "period-policy/2026-11-02.4"
+    assert policy.version == "period-policy/2026-11-03.5"
 
 
 def test_a_period_after_as_of_is_never_unpublished():
