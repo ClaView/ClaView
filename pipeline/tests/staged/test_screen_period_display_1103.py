@@ -32,7 +32,8 @@ def script(quote):
 
 
 def card(state):
-    (only,) = state["ui_cases"]
+    """The one raw card. A year-over-year request on an amount series also gets C's derived rate card (2026-11-04)."""
+    (only,) = [c for c in state["ui_cases"] if not c.get("derived")]
     return only
 
 

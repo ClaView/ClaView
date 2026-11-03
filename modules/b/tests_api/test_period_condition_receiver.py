@@ -168,11 +168,20 @@ class SpyModel:
         return self.inner.complete(name, system, context, schema, *args, **kwargs)
 
 
-def test_the_model_never_sees_the_condition_or_an_answered_period():
+def test_the_model_never_sees_the_condition_but_is_shown_the_period_the_user_answered():
+    """2026-11-03 (B-1): the condition itself (sources, answers, A's wording) stays out of the model request, but the
+    period the user answered is not in the question, so `resolved_period` carries it: a question without any period
+    made the model return no selection."""
     model = SpyModel()
     service = BService(model, synthetic_clients()[1], "synthetic")
     envelope, _calls = service.resolve("경상수지를 보여줘", [{**TABLE, "period_condition": condition()}], AS_OF)
     assert envelope["status"] == "ok"
     (context,) = model.seen
     assert all("period_condition" not in table for table in context["selected_tables"])
-    assert "period_condition" not in str(context) and context["resolved_period"] is None
+    assert "period_condition" not in str(context) and "user_answer" not in str(context)
+    shown = context["resolved_period"]
+    assert shown is not None and shown["start"][:4] == "2020" and shown["end"][:4] == "2024"
+    selected = envelope["result"]["selections"][0]["period"]
+    assert (selected["frequency"], selected["start"], selected["end"]) == (
+        shown["frequency"], shown["start"], shown["end"]
+    )  # what the model is told is what the code selects

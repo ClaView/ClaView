@@ -67,11 +67,12 @@ def test_dry_run_of_every_case_passes_its_own_checks(tmp_path, historical_metada
 
 def test_the_new_cases_are_part_of_the_check():
     ids = [c["id"] for c in check.CASES]
-    assert ids[-4:] == [
+    assert ids[-5:] == [
         "L7_two_tables_own_years",
         "L8_partly_outside_table",
         "L9_first_year_yoy",
         "L10_one_statistic_dropped",
+        "L11_answered_monthly",
     ]
 
 

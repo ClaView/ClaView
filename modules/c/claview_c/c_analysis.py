@@ -7,7 +7,7 @@ import re
 import unicodedata
 from decimal import Decimal, localcontext
 
-from .c_renderer import renderer as base_renderer, period_label, period_index, periods_between
+from .c_renderer import WIDTH, renderer as base_renderer, period_label, period_index, periods_between
 from .composition import verify_composition, number
 from .chart_policy import apply as apply_chart_policy, choose as choose_chart_view
 
@@ -36,6 +36,112 @@ def display_units(data_result):
     return data,notices
 
 
+# 전년 동기 대비 표현("전년 동월 대비", "전년동월비", "전년 같은 달보다", "작년 대비" 등). B의 YEAR_OVER_YEAR와 같은 뜻이다.
+# C는 B를 가져다 쓰지 않으므로(모듈 독립) 따로 둔다.
+YOY_WORDS = re.compile(r"(?:전년도?|작년)\s*(?:동월|동기|동분기|같은\s*(?:달|분기|기간)|대비|보다)|전년동(?:월|기)비")
+SAME_PERIOD_NAME = {"M": "전년 동월", "Q": "전년 동분기", "H": "전년 동반기", "Y": "전년"}
+YOY_NOT_CALCULATED = "calculation_not_calculated"
+
+
+def shift_back_one_year(period, frequency):
+    """같은 주기에서 1년 앞선 시점. 월 -12, 분기 -4, 반기 -2, 연 -1."""
+    n = period_index(period, frequency) - WIDTH[frequency]
+    return str(n) if frequency == "Y" else f"{n // WIDTH[frequency]:04d}{n % WIDTH[frequency] + 1:02d}"
+
+
+def amount_unit(unit):
+    """증감률을 C가 계산해도 되는 단위인가. 금액·수량 단위만 해당하며 %·지수(기준연도=100)는 아니다."""
+    text = unicodedata.normalize("NFKC", unit or "").strip()
+    return bool(text) and "%" not in text and "지수" not in text and not re.search(r"\d{4}\s*=\s*100", text) \
+        and text not in {"퍼센트", "비율"}
+
+
+def yoy_target_periods(query, data, frequency):
+    """계산할 시점(요청·표시 기간). 근거가 없으면 None이며 임의로 정하지 않는다.
+
+    우선순위: B가 알려 준 요청 표시 기간 → 사용자가 확정한 기간 → 질문에 연도가 하나뿐일 때 그 해 전체.
+    """
+    requested = data.get("requested_period")
+    if isinstance(requested, dict) and requested.get("frequency") == frequency:
+        return periods_between(requested["start"], requested["end"], frequency)
+    manual = [r["requested"] for r in data.get("user_periods", []) if isinstance(r.get("requested"), dict)]
+    if len(manual) == 1:
+        return periods_between(manual[0]["start"], manual[0]["end"], frequency)
+    years = set(re.findall(r"(?<!\d)((?:19|20)\d{2})년", query))
+    if len(years) == 1:
+        year = next(iter(years))
+        if frequency == "Y":
+            return [year]
+        return periods_between(year + "01", year + f"{WIDTH[frequency]:02d}", frequency)
+    return None
+
+
+def yoy_amounts(query, data):
+    """금액·수량 단위 계열의 전년 동기 대비 증감률. (계산 결과 | None, 계산하지 못한 사유 | None)를 돌려준다.
+
+    계산식은 (해당 시점 값 ÷ 1년 앞선 같은 시점 값 − 1) × 100이며 Decimal로 계산한다. 현재값·기준값이 없거나
+    기준값이 0 이하이면 그 시점은 계산하지 않고 빈 값으로 둔다(0%로 채우지 않는다). 질문에 전년 대비 표현이
+    없거나 단위가 %·지수·미제공이면 아무것도 하지 않는다: 이미 공표된 증감률은 공표값 그대로 표시한다.
+    """
+    series = data.get("series") or []
+    if not series or not YOY_WORDS.search(query):
+        return None, None
+    units = [s.get("unit") for s in series]
+    if not all(amount_unit(u) for u in units):
+        return None, None
+    freqs = {s["frequency"] for s in series}
+    if len(freqs) != 1 or next(iter(freqs)) not in WIDTH:
+        return None, None
+    frequency = next(iter(freqs))
+    name = SAME_PERIOD_NAME[frequency]
+    try:
+        periods = yoy_target_periods(query, data, frequency)
+    except ValueError:
+        periods = None
+    if not periods:
+        return None, "전년 대비 증감률을 계산할 요청 기간을 확정하지 못해 계산하지 않았습니다. 원자료만 표시합니다."
+    rows, results = [], []
+    for s in series:
+        lookup = {p["period"]: p for p in s["points"]}
+        values = []
+        for p in periods:
+            base = shift_back_one_year(p, frequency)
+            now, before = number(lookup.get(p)), number(lookup.get(base))
+            issue = "현재값 또는 기준값 없음" if now is None or before is None else "기준값이 0 이하" if before <= 0 else None
+            with localcontext() as ctx:
+                ctx.prec = 28
+                rate = (now / before - 1) * 100 if issue is None else None
+            values.append(None if rate is None else str(rate))
+            rows.append({"series_id": s["series_id"], "name": s["selection"]["label"].split(" / ", 1)[-1],
+                         "period": p, "baseline_period": base, "current_value": None if now is None else str(now),
+                         "baseline_value": None if before is None else str(before), "value": values[-1], "issue": issue})
+        results.append({"id": s["series_id"], "name": s["selection"]["label"].split(" / ", 1)[-1],
+                        "full": s["selection"]["label"], "unit": "%", "values": values})
+    valid = [r for r in rows if r["value"] is not None]
+    if not valid:
+        return None, f"{name}의 비교 기준값이 없거나 0 이하여서 증감률을 계산하지 않았습니다. 원자료만 표시합니다."
+    complete = len(valid) == len(rows)
+    summary = []
+    for r in results:
+        got = [(p, Decimal(v)) for p, v in zip(periods, r["values"]) if v is not None]
+        if not got:
+            summary.append(f"{r['name']}: 계산 불가")
+        elif len(periods) == 1:
+            summary.append(f"{r['name']} {got[0][1]:+.2f}%")
+        else:
+            low, high = min(got, key=lambda g: g[1]), max(got, key=lambda g: g[1])
+            summary.append(f"{r['name']}: 최근 {period_label(got[-1][0], frequency)} {got[-1][1]:+.2f}% "
+                           f"(기간 중 {period_label(low[0], frequency)} {low[1]:+.2f}% ~ {period_label(high[0], frequency)} {high[1]:+.2f}%)")
+    shown_units = sorted({unicodedata.normalize("NFKC", u) for u in units})
+    return {"kind": "yoy_amount", "periods": periods, "frequency": frequency, "unit": "%",
+            "source_unit": ", ".join(shown_units), "source_name": "원자료",
+            "title": f"{name} 대비 증감률",
+            "policy": f"KOSIS 원자료({', '.join(shown_units)})를 {name} 값과 비교해 C에서 직접 계산했습니다. "
+                      "한국은행이 공표한 증감률이 아닙니다. 현재값·기준값이 없거나 기준값이 0 이하인 시점은 계산하지 않고 비웠습니다.",
+            "formula": f"(해당 시점 값 ÷ {name} 값 − 1) × 100", "series": results, "rows": rows,
+            "complete": complete, "summary": " · ".join(summary), "highlights": [], "version": VERSION}, None
+
+
 def calculate_rates(query, data):
     series = data["series"]
     tables = {s["selection"]["table_id"] for s in series}
@@ -43,7 +149,8 @@ def calculate_rates(query, data):
     units = {unicodedata.normalize("NFKC", s.get("unit") or "") for s in series}
     # 기존에 %로 제공된 통계에는 증감률을 다시 계산하지 않는다.
     if len(units) != 1 or not re.fullmatch(r"\d{4}=100", next(iter(units), "")):
-        return None
+        # 지수가 아닌 계열(금액·수량 단위)의 전년 동기 대비는 일반 경로에서 계산한다. 이미 %인 값은 계산하지 않는다.
+        return yoy_amounts(query, data)[0]
     years = set(re.findall(r"(?<!\d)(20\d{2})년", query))
     manual_periods = [r["requested"] for r in data.get("user_periods", [])]
     manual = manual_periods[0] if len(manual_periods) == 1 else None
@@ -138,7 +245,12 @@ def renderer(query, data_result):
             if blocked["kind"] in {"stacked", "percent_stacked"}:
                 blocked["reason"] = composition["reason"]
         chart["warnings"].append({"code": "composition_not_verified", "message": composition["reason"]})
-    chart["calculation"] = calculate_rates(query, data_result)
+    chart["calculation"] = calculate_rates(query, prepared)
+    if not chart["calculation"]:
+        # 전년 대비를 물었는데 계산하지 못했다면 이유를 남긴다(원자료만 보인다는 점이 요약에 드러나야 한다).
+        reason = yoy_amounts(query, prepared)[1]
+        if reason:
+            chart["warnings"].append({"code": YOY_NOT_CALCULATED, "message": reason})
     apply_chart_policy(chart,query)
     return out
 
@@ -161,13 +273,15 @@ def decorate_cards(chart, raw_cards):
     raw = raw_cards[0]
     derived = copy.deepcopy(raw)
     derived.update(id=raw["id"] + "-" + calculation["kind"], derived=True, calculation=calculation,
-                   tableName=("전월 대비 변화율 · 최대 변화 월" if calculation["kind"] == "mom_peak" else "전년 대비 증감률") + " · " + raw["tableName"],
+                   tableName=calculation.get("title", "전월 대비 변화율 · 최대 변화 월" if calculation["kind"] == "mom_peak" else "전년 대비 증감률") + " · " + raw["tableName"],
                    series=calculation["series"], periods=calculation["periods"], labels=[period_label(p, raw["freq"]) for p in calculation["periods"]],
                    unit="%", maxDecimals=2, defaultView="bar", kinds=["bar", "table"],
                    kindTitles={"bar": "변화율 막대", "line": "변화율 선", "horizontal": "변화율 가로막대", "table": "계산값 표"},
                    recommend=calculation["summary"], highlights=calculation["highlights"],
                    warnings=[] if calculation["complete"] else ["일부 변화율은 기준값 누락·0 이하로 계산하지 않았습니다. 빈 값을 0으로 대체하지 않습니다."],
-                   notices=[calculation["policy"], "C에서 계산한 값입니다. 한국은행이 별도로 공표한 증감률이 아니며, 원지수는 아래 원자료 카드에 보존됩니다."], blocked=[])
+                   notices=[calculation["policy"], f"C에서 계산한 값입니다. 한국은행이 별도로 공표한 증감률이 아니며, {calculation.get('source_name', '원지수')}는 아래 원자료 카드에 보존됩니다."], blocked=[])
+    # 원자료 카드의 기준 구간(흐리게 표시)은 원자료 값이다. %로 바뀐 계산 카드에는 이어 붙이지 않는다.
+    derived.pop("baseline", None)
     if len(derived["periods"]) > 1:
         derived["kinds"].insert(1, "line")
     elif len(derived["series"]) > 1:
@@ -180,7 +294,7 @@ def decorate_cards(chart, raw_cards):
     size = len(calculation["rows"])
     missing = sum(r["value"] is None for r in calculation["rows"])
     derived["quality"] = {"total_cells": size, "observed_values": size - missing, "missing_values": missing}
-    derived["params"] = {**raw["params"], "계산식": calculation["formula"], "계산 정책": calculation["policy"], "원지수 단위": calculation["source_unit"]}
+    derived["params"] = {**raw["params"], "계산식": calculation["formula"], "계산 정책": calculation["policy"], f"{calculation.get('source_name', '원지수')} 단위": calculation["source_unit"]}
     raw["notices"].append("원자료 카드입니다. 위 계산 결과와 구분해 보세요. 비교 계산에 필요한 이전 기준 시점도 보존합니다.")
-    raw["recommend"] = "계산에 사용한 원지수입니다. 값과 기준 시점은 수정하지 않았습니다."
+    raw["recommend"] = f"계산에 사용한 {calculation.get('source_name', '원지수')}입니다. 값과 기준 시점은 수정하지 않았습니다."
     return [derived, raw]
