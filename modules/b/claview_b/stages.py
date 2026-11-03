@@ -61,7 +61,11 @@ PERIOD_OVER_PERIOD = (
 )
 
 
-YEAR_OVER_YEAR = r"전년\s*(대비|보다|동기)|작년\s*(대비|보다)"
+# "전년 동월 대비 / 전년동월비 / 전년 같은 달보다" ask for the same period of the year before just like
+# "전년 대비": this one pattern decides the calculation range for every path (stated years, an answered period,
+# relative wording, validate_period). 2026-11-03: the 동월·동분기·같은 달 wordings were missing, so a
+# year-over-year question on a monthly table read only the requested year and nothing to compare with.
+YEAR_OVER_YEAR = r"(?:전년도?|작년)\s*(?:대비|보다|동기|동월|동분기|같은\s*(?:달|분기|기간))"
 
 
 UNRESOLVED_CALC_WORDS = r"기여도|연쇄가중"
@@ -1155,6 +1159,17 @@ def plan_table_period(query: str, table: Json, config: Config, raw_condition: An
         "applied": applied_now,
         "substituted": detail["substituted"],
         "notices": notices,
+    }
+
+
+def period_not_in_question(plan: Json) -> bool:
+    """The planned period comes from a user's answer or A's quoted period, not from the question's own words.
+
+    Such a period is the only place the model can learn it from, so it is shown (`resolved_period`).
+    """
+    return plan.get("period") is not None and plan.get("applied", {}).get("period") in {
+        "a_user_answer",
+        "a_quoted_fallback",
     }
 
 
@@ -2500,9 +2515,13 @@ class BSteps:
                 table_period_query(query, key, conditions, outside), table_meta, s.config, conditions.get(key)
             )
             resolved_period = plan["period"]
-            # the model is told only a period computed from relative wording; stated years, an answered
-            # period and A's quoted period are applied in code and never shown (see the note above)
-            shown_period = resolved_period if plan["show"] else None
+            # the model is told a period computed from relative wording, and (2026-11-03) a period the question
+            # itself does not hold: the user's answer and A's quoted period. Without it the model reads a question
+            # with no period at all, finds "근거가 부족" and returns no selection (FN-PERIOD-ASK: "2024년 월별"
+            # answered, empty selections, conditions_incomplete). Years the question states are still applied in
+            # code and never shown (see the note above: CV-AB-04). The model's own period stays ignored; the code
+            # applies `resolved_period` after the selection (apply_resolved_period).
+            shown_period = resolved_period if plan["show"] or period_not_in_question(plan) else None
             if plan["legacy"]:
                 # 2026-10-06 flow 변경: 조회 가능 기간을 안내(period_notices)로 저장하고
                 # 같은 기간으로 다음 단계(선택·검증·조회)를 계속 진행함. 되묻지 않음.

@@ -1,0 +1,642 @@
+{
+ "note": "B-1(사용자 답 기간의 모델 입력)·B-2(전년 동월 대비 기준 구간) 사례. 기대값은 규칙에 따라 코드 수정 전에 정함. 합성 모델·합성 조회(외부 호출 없음).",
+ "cases": [
+  {
+   "id": "AP-01",
+   "note": "기간만 답함(주기는 질문의 '월별'): 모델에 답한 기간 2024년 월별 표시, 기간 출처만 사용자 답",
+   "query": "M2 기관별 구성내역 월별",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "user_answer",
+      "phrase": "2024년 월별",
+      "answers": [
+       "period"
+      ]
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "a_user_answer",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "M",
+      "202401",
+      "202412"
+     ]
+    }
+   },
+   "model_shown": {
+    "DT_161Y014": {
+     "frequency": "M",
+     "start": "202401",
+     "end": "202412"
+    }
+   }
+  },
+  {
+   "id": "AP-02",
+   "note": "주기만 답함(기간은 질문의 2024년): 질문에 적힌 연도는 모델에 보이지 않음, 주기 출처만 사용자 답",
+   "query": "M2 기관별 구성내역 2024년",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "user_answer",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": [
+       "frequency"
+      ]
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "a_user_answer"
+     },
+     "fetch": [
+      "M",
+      "202401",
+      "202412"
+     ]
+    }
+   },
+   "model_shown": {
+    "DT_161Y014": null
+   }
+  },
+  {
+   "id": "AP-03",
+   "note": "기간·주기 둘 다 답함: 둘 다 사용자 답, 모델에 답한 기간 표시",
+   "query": "M2 기관별 구성내역",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "user_answer",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "user_answer",
+      "phrase": "2024년 월별",
+      "answers": [
+       "period",
+       "frequency"
+      ]
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "a_user_answer",
+      "frequency": "a_user_answer"
+     },
+     "fetch": [
+      "M",
+      "202401",
+      "202412"
+     ]
+    }
+   },
+   "model_shown": {
+    "DT_161Y014": {
+     "frequency": "M",
+     "start": "202401",
+     "end": "202412"
+    }
+   }
+  },
+  {
+   "id": "AP-04",
+   "note": "두 표 중 한 표만 기간을 답함: 답한 표의 모델 입력에만 2024년 월별, 다른 표(질문의 2023년)는 보이지 않음. 주기는 표별이 아니라 질문 전체의 '월별'을 읽음(표별 주기는 미지원)",
+   "query": "M2 기관별 구성내역 2023년과 예금은행 대출금리 월별",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "user_answer",
+      "phrase": "2024년 월별",
+      "answers": [
+       "period"
+      ]
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "fetched": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "M",
+      "202301",
+      "202312"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "a_user_answer",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "M",
+      "202401",
+      "202412"
+     ]
+    }
+   },
+   "model_shown": {
+    "DT_161Y014": null,
+    "DT_121Y006": {
+     "frequency": "M",
+     "start": "202401",
+     "end": "202412"
+    }
+   }
+  },
+  {
+   "id": "YY-01",
+   "note": "전년 동월 대비: 2024년 요청은 그대로, 2023년 같은 달들을 계산용 앞선 구간으로 함께 조회",
+   "query": "2024년 M2 기관별 구성내역 월별 전년 동월 대비 증감률",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202301",
+      "202412"
+     ],
+     "extra": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "fetch": [
+      "M",
+      "202301",
+      "202412"
+     ]
+    }
+   }
+  },
+  {
+   "id": "YY-02",
+   "note": "붙여 쓴 전년동월대비: 2024년 요청은 그대로, 2023년 같은 달들을 계산용 앞선 구간으로 함께 조회",
+   "query": "2024년 M2 기관별 구성내역 월별 전년동월대비 증감률",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202301",
+      "202412"
+     ],
+     "extra": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "fetch": [
+      "M",
+      "202301",
+      "202412"
+     ]
+    }
+   }
+  },
+  {
+   "id": "YY-03",
+   "note": "전년동월비: 2024년 요청은 그대로, 2023년 같은 달들을 계산용 앞선 구간으로 함께 조회",
+   "query": "2024년 M2 기관별 구성내역 월별 전년동월비",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202301",
+      "202412"
+     ],
+     "extra": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "fetch": [
+      "M",
+      "202301",
+      "202412"
+     ]
+    }
+   }
+  },
+  {
+   "id": "YY-04",
+   "note": "전년 같은 달보다: 2024년 요청은 그대로, 2023년 같은 달들을 계산용 앞선 구간으로 함께 조회",
+   "query": "2024년 M2 기관별 구성내역 월별 전년 같은 달보다 얼마나 늘었는지",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202301",
+      "202412"
+     ],
+     "extra": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "fetch": [
+      "M",
+      "202301",
+      "202412"
+     ]
+    }
+   }
+  },
+  {
+   "id": "YY-05",
+   "note": "기존 '전년 대비'(변화 없음 확인): 2024년 요청은 그대로, 2023년 같은 달들을 계산용 앞선 구간으로 함께 조회",
+   "query": "2024년 M2 기관별 구성내역 월별 전년 대비 증감률",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202301",
+      "202412"
+     ],
+     "extra": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "fetch": [
+      "M",
+      "202301",
+      "202412"
+     ]
+    }
+   }
+  },
+  {
+   "id": "YY-06",
+   "note": "사용자가 답한 기간(2024년 월별)에도 전년 동월 대비 기준 구간을 더함, 답한 기간은 요청 범위로 유지",
+   "query": "M2 기관별 구성내역 월별 전년 동월 대비 증감률",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "user_answer",
+      "phrase": "2024년 월별",
+      "answers": [
+       "period"
+      ]
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202301",
+      "202412"
+     ],
+     "extra": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "sources": {
+      "period": "a_user_answer",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "M",
+      "202301",
+      "202412"
+     ]
+    }
+   }
+  },
+  {
+   "id": "YY-07",
+   "note": "분기별: 전년 동분기 대비는 네 분기 앞서 조회",
+   "query": "2024년 M2 기관별 구성내역 분기별 전년 동분기 대비 증감률",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "Q",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Q",
+      "202401",
+      "202404"
+     ],
+     "fetched": [
+      "Q",
+      "202301",
+      "202404"
+     ],
+     "extra": [
+      "Q",
+      "202301",
+      "202304"
+     ],
+     "fetch": [
+      "Q",
+      "202301",
+      "202404"
+     ]
+    }
+   }
+  },
+  {
+   "id": "YY-08",
+   "note": "비교 표현이 없으면 앞선 구간을 더하지 않음(대조)",
+   "query": "2024년 M2 기관별 구성내역 월별 증감률",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 기관별 구성내역",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "extra": null,
+     "fetch": [
+      "M",
+      "202401",
+      "202412"
+     ]
+    }
+   }
+  }
+ ]
+}

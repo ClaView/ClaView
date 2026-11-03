@@ -15,6 +15,10 @@ period wording handed over (L7, L10), stated years only partly inside the table 
 of a year-over-year request (L4). L7 lifts A's block on statistics with different periods for this check only
 (`view._months`, the way it would be after A relaxes it); nothing else in A changes.
 
+L4 also checks the % card C now calculates for a year-over-year request on an amount series (2026-11-04), and L11 the
+month-wise period a user answered (B-1: the answered period is part of the model request). The expected end of L8
+follows the table's metadata, which is refreshed from time to time.
+
 Keys are read from the environment only (OPENAI_API_KEY, KOSIS_API_KEY) and never printed or written.
 """
 
@@ -109,7 +113,22 @@ def card_range(state, table_id):
 
 
 def first(state):
-    return state["ui_cases"][0]
+    """The first RAW card (a rate C calculates puts its derived card in front of the raw one)."""
+    return next(c for c in state["ui_cases"] if not c.get("derived"))
+
+
+def derived_cards(state):
+    return [c for c in state.get("ui_cases") or [] if c.get("derived")]
+
+
+def m2_coverage():
+    """(label of the table's last month, label of the first month after it) from the metadata B reads.
+
+    The expected end of a partly-outside request follows the metadata, which is refreshed from time to time."""
+    end = b_service.store().get("301", TABLE)["periods"]["M"]["end"]
+    year, month = int(end[:4]), int(end[4:])
+    after = (year + (month == 12), month % 12 + 1)
+    return f"{year}년 {month}월", f"{after[0]}년 {after[1]}월"
 
 
 def info(state):
@@ -187,6 +206,14 @@ CASES = [
                 v is not None for values in first(s)["baseline"]["values"].values() for v in values
             ),
             "표 값은 요청 기간만": lambda s: all(len(x["values"]) == 12 for x in first(s)["series"]),
+            # 2026-11-04: M2 금액 계열의 전년 동월 대비를 C가 직접 계산한다(원자료 카드는 그대로 두고 앞에 둔다)
+            "증감률(%) 계산 카드가 12개월": lambda s: any(
+                c["unit"] == "%"
+                and len(c["series"][0]["values"]) == 12
+                and all(v is not None for v in c["series"][0]["values"])
+                and "baseline" not in c
+                for c in derived_cards(s)
+            ),
         },
     },
     {
@@ -232,8 +259,8 @@ CASES = [
         "script": script("2020년부터 2027년까지"),
         "checks": {
             "카드 있음": card_ok,
-            "수록된 부분만 표시": lambda s: first(s)["start"] == "2020년 1월" and first(s)["end"] == "2026년 7월",
-            "미수록 구간을 알림": lambda s: info(s).get("missing") == ["2026년 8월 ~ 2027년 12월"],
+            "수록된 부분만 표시": lambda s: first(s)["start"] == "2020년 1월" and first(s)["end"] == m2_coverage()[0],
+            "미수록 구간을 알림": lambda s: info(s).get("missing") == [f"{m2_coverage()[1]} ~ 2027년 12월"],
             "안내 문구가 한 번": lambda s: said(s) == 1,
             "조회된 값 있음": lambda s: first(s)["quality"]["observed_values"] >= 1,
         },
@@ -262,6 +289,24 @@ CASES = [
             "남은 표의 카드 있음": lambda s: card_range(s, RATE_TABLE) is not None,
             "남은 표는 2024년만": lambda s: card_range(s, RATE_TABLE) == ("Y", "2024년", "2024년"),
             "일부 통계만 조회": lambda s: s["status"] == "partial",
+        },
+    },
+    {
+        # 2026-11-04 (B-1): the period the user answered is not in the question; the model request carries it
+        "id": "L11_answered_monthly",
+        "query": "M2 통화량을 월별로 보여줘",
+        "script": {
+            "statistics": STATISTIC,
+            "choices": [{"for": ["s1"], "table": TABLE}],
+            "frequencies": [{"quote": "월별", "for": ["s1"]}],
+        },
+        "answer": "2024년 월별",
+        "checks": {
+            "카드 있음": card_ok,
+            "기간 출처가 사용자 답": lambda s: info(s).get("sources", {}).get("period") == "사용자가 고른 값",
+            "월별 2024년 1~12월": lambda s: shown(s) == ("M", "2024년 1월", "2024년 12월")
+            and len(first(s)["periods"]) == 12,
+            "요청과 조회가 같음": lambda s: info(s).get("requested") == info(s).get("fetched"),
         },
     },
 ]
