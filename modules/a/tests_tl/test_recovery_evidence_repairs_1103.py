@@ -127,6 +127,24 @@ def test_valid_calculation_cannot_become_editable_from_a_spurious_warning():
     assert "calculations:changed" in G.condition_preservation(first, second, "s1", "s1")
 
 
+def test_invalid_calculation_cannot_disappear_into_a_duplicate_of_a_valid_row():
+    q, out, cards, views, first, new = calculation_fixture()
+    new["calculations"][1]["quote"] = "증감률"
+    second = checked(q, new, cards, views)
+    assert "calculations:changed" in G.condition_preservation(first, second, "s1", "s1")
+    assert G.merge_rounds(first, second, first["rejudge"]["targets"])["rejudge"]["rejected"]
+
+
+def test_original_duplicate_calculations_remain_preserved_during_a_quote_repair():
+    q, out, cards, views, _, new = calculation_fixture()
+    out["calculations"].append(deepcopy(out["calculations"][0]))
+    new["calculations"].append(deepcopy(new["calculations"][0]))
+    first = checked(q, out, cards, views)
+    second = checked(q, new, cards, views)
+    assert G.condition_preservation(first, second, "s1", "s1") == []
+    assert G.merge_rounds(first, second, first["rejudge"]["targets"])["rejudge"]["merged"]
+
+
 def test_full_graph_accepts_checked_repairs_with_the_same_one_recovery(monkeypatch):
     q, out, cards, views, _, new = calculation_fixture()
     monkeypatch.setattr(G, "build_pool", lambda *a, **kw: {})

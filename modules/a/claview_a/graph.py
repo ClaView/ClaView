@@ -563,9 +563,14 @@ def _calculation_repair_losses(first: dict, second: dict, sid: str, other: str, 
     if not broken:
         return ([] if _preserved_rows(first["model_output"], sid, "calculations") ==
                 _preserved_rows(second["model_output"], other, "calculations") else ["calculations:changed"])
-    fixed = Counter(nospace(r["quote"]) for r in mine) - broken
+    original = Counter(nospace(r["quote"]) for r in mine)
+    fixed = original - broken
     supplied = Counter(nospace(r["quote"]) for r in theirs)
     if len(mine) != len(theirs) or fixed - supplied:
+        return ["calculations:changed"]
+    if any(count > max(1, original[q]) for q, count in supplied.items()):
+        # Repeating a retained row cannot stand in for a different broken one.
+        # Duplicates that already existed remain protected, not newly prohibited.
         return ["calculations:changed"]
     # An unchanged invalid row retains the existing warning; every actual edit must
     # be grounded in the question. No row may disappear or create an extra slot.
