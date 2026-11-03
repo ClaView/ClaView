@@ -59,7 +59,7 @@ BLOCKED_TEXT = {
     "period_answer_contract_pending": "기간 답변을 받을 B 계약이 아직 없어 전달하지 않았습니다(기간 정책 확정 후 연결).",
     "edition_period_split": "A가 기간을 판본별 표로 나눠 정했는데, B 계약에는 표별 기간 칸이 없어 전달하지 않았습니다.",
     "disjoint_period_not_in_b_contract": "A가 정한 기간이 떨어진 구간인데, B 계약은 한 범위만 받아 전달하지 않았습니다.",
-    "period_differs_between_requests": "통계마다 A가 정한 기간이 달라, 질문 전체에서 기간을 다시 읽는 현재 B 계약으로 전달하지 않았습니다.",
+    "period_differs_between_requests": "통계마다 기간이 다르지만 연결된 B에 표별 기간 조건과 다른 표의 기간 문구를 안전하게 전달할 수 없어 조회하지 않았습니다.",
     "b_period_differs_from_a": "B가 고른 기간·주기가 A가 정한 것과 달라 조회하지 않았습니다(계산용 기준 시점 추가도 B가 그 범위를 결과에 밝히기 전까지는 같게 봅니다).",
     "period_condition_not_prepared": "A가 이용자가 고른 기간·주기를 B로 보낼 형태로 만들지 못해 전달하지 않았습니다(답을 빼고 조회하지 않음).",
     "b_answered_period_not_applied": "B가 이용자가 고른 기간·주기를 그대로 적용했다고 결과에서 확인하지 못해 조회하지 않았습니다.",
@@ -416,6 +416,35 @@ class ScreenPipeline(Pipeline):
                     **({"period_condition": True} if prepared else {}),
                 }
             )
+        # A can prepare different single spans on different tables. A legacy receiver (or a preparation fallback)
+        # must not read all of them from the same question without the per-table condition/context capabilities.
+        # Include requests withheld above: their wording still exists in the original question.
+        ranges = {
+            frozenset((span["start"], span["end"]) for a in request["assignments"] for span in a["period"])
+            for request in view["handoff"]["ready"]
+        }
+        if len(ranges) > 1 and not (
+            getattr(self.b_factory, "accepts_period_context", False) is True
+            and all(request.get("period_condition") for request in b_requests)
+        ):
+            unsupported.extend(
+                {
+                    "statistics": request["requirement_ids"],
+                    "code": "period_differs_between_requests",
+                    "detail": [
+                        {
+                            "statistic": sid,
+                            "tables": [
+                                {k: copy.deepcopy(a[k]) for k in ("table_id", "frequency", "period")}
+                                for a in request["assignments"]
+                            ],
+                        }
+                        for sid in request["requirement_ids"]
+                    ],
+                }
+                for request in b_requests
+            )
+            b_requests = []
         # The wording of statistics that are NOT handed to B (blocked, failed, awaiting an answer) stays in the question:
         # B must hide it from the statistics it does read, so it travels with every request (see `_period_context`).
         handed = {sid for request in b_requests for sid in request["requirement_ids"]}

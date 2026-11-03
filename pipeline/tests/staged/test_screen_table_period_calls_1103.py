@@ -6,8 +6,8 @@ period quote), the real BService, the synthetic fetch client. The cases and thei
 (`eval/cases/b/period/table_period_pipeline_calls_b.json`) are the per-table intent of the question and were fixed
 before the code was changed.
 
-A's own block on statistics with different periods (`period_differs_between_requests`) is lifted in the test only,
-the way it would be after A's relaxation: `view._months` is made equal for all statistics. Nothing else in A changes.
+A's actual handoff is used without bypasses. Only B instances with prepared period conditions and the capability
+to scope other groups' period wording may receive different ranges; legacy receivers remain protected.
 
 `python pipeline/tests/staged/test_screen_table_period_calls_1103.py` prints the record of every case:
 question -> calls (tables, received period, wording handed over) -> B request range -> read range -> fetch parameters.
@@ -22,7 +22,6 @@ import pytest
 from test_screen_54 import RecordingB
 
 from claview_a_api import screen as a_screen
-from claview_a_api import view
 from claview_a_api.synthetic_judges import ScriptJudge, by_question
 from claview_pipeline.screen import ScreenPipeline
 from claview_pipeline.synthetic import SyntheticFetchClient, SyntheticSelectionModel
@@ -64,11 +63,6 @@ def make(base, query, script, b=ContextB, client=None):
         judges_factory=lambda: a_screen.Judges(judge, judge, "script"),
         b_factory=b,
     )
-
-
-@pytest.fixture(autouse=True)
-def _lift_a_period_block(monkeypatch):
-    monkeypatch.setattr(view, "_months", lambda stat: frozenset())
 
 
 def record(base, case, b=ContextB):
@@ -126,10 +120,39 @@ def test_the_other_groups_wording_is_handed_over_and_nothing_else(base):
     assert second["period_context"] == [{"ref": "DT_161Y014", "period_phrase": "2023년"}]
 
 
-def test_a_b_without_the_capability_gets_no_context(base):
+def test_a_b_without_context_cannot_receive_different_ranges(base):
     case = next(c for c in CASES if c["id"] == "PC-01")
-    got = record(base, case, WithoutContextB)
-    assert all(c["period_context"] is None for c in got["calls"])
+    state = make(base, case["query"], case["script"], WithoutContextB).run(case["query"], as_of=case["as_of"])
+    assert state["status"] == "unsupported" and WithoutContextB.calls == []
+    assert {r["code"] for r in state["unsupported_links"]} == {"period_differs_between_requests"}
+    assert state["calls"]["KOSIS"] == 0
+
+
+def test_a_b_without_period_conditions_cannot_receive_different_ranges(base):
+    class ContextOnlyB(ContextB):
+        accepts_period_condition = False
+
+    case = next(c for c in CASES if c["id"] == "PC-01")
+    state = make(base, case["query"], case["script"], ContextOnlyB).run(case["query"], as_of=case["as_of"])
+    assert state["status"] == "unsupported" and ContextOnlyB.calls == []
+    assert {r["code"] for r in state["unsupported_links"]} == {"period_differs_between_requests"}
+
+
+def test_failed_preparation_never_falls_back_to_unscoped_different_ranges(base, monkeypatch):
+    from claview_a_api import view
+
+    prepare = view.prepare_b_request
+
+    def missing_one(view_state, request):
+        if request["statistics"] == ["s1"]:
+            return {"request": None, "withheld": "period_condition_invalid"}
+        return prepare(view_state, request)
+
+    monkeypatch.setattr(view, "prepare_b_request", missing_one)
+    case = next(c for c in CASES if c["id"] == "PC-01")
+    state = make(base, case["query"], case["script"]).run(case["query"], as_of=case["as_of"])
+    assert state["status"] == "unsupported" and ContextB.calls == []
+    assert {r["code"] for r in state["unsupported_links"]} == {"period_differs_between_requests"}
 
 
 def test_a_single_request_has_nothing_to_hand_over(base):
@@ -146,7 +169,6 @@ def test_a_single_request_has_nothing_to_hand_over(base):
 if __name__ == "__main__":  # record of every case: question -> calls -> request range -> read range -> fetch parameters
     from claview_pipeline import FlowSession
 
-    view._months = lambda stat: frozenset()  # the test-only lift of A's block, as in the fixture
     session = FlowSession.load()
     for item in CASES:
         got = record(session, item)
@@ -157,3 +179,27 @@ if __name__ == "__main__":  # record of every case: question -> calls -> request
         for table_id, row in got["tables"].items():
             print(f"  {table_id}: 요청={row.get('requested')} 읽은 범위={row.get('fetched')} 계산용={row.get('extra')} "
                   f"조회={row.get('fetch')}")
+
+
+def test_legacy_b_keeps_different_period_guard_after_answered_group_is_filtered(base):
+    from test_screen_54 import period_answer, period_supplier
+
+    case = next(c for c in CASES if c["id"] == "PC-01")
+    client = SyntheticFetchClient()
+    runner = make(base, case["query"], case["script"], RecordingB, client)
+    # This existing test-only supplier exercises the real answer/resume/filter path.
+    # Both years remain in the original question after the answered s1 group is withheld.
+    runner.period_questions = lambda view_state: [
+        question for question in period_supplier(view_state) if question["statistics"] == ["s1"]
+    ]
+    waiting = runner.run(case["query"], as_of=case["as_of"])
+    assert waiting["status"] == "needs_confirmation" and RecordingB.calls == []
+    done = runner.resume(waiting, period_answer(waiting, "2023년"))
+    assert done["status"] == "unsupported"
+    assert RecordingB.calls == [] and client.calls == []
+    assert done["calls"]["HCX"] == done["calls"]["KOSIS"] == done["calls"]["A_judge"] == 0
+    blocked = {(tuple(row["statistics"]), row["code"]) for row in done["unsupported_links"]}
+    assert blocked == {
+        (("s1",), "period_answer_contract_pending"),
+        (("s2",), "period_differs_between_requests"),
+    }

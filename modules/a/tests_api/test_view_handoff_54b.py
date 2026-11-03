@@ -55,10 +55,12 @@ def test_same_months_other_frequency_on_one_table_are_not_merged():
     assert ready == [] and blocked[0]["code"] == "same_table_conditions_differ"
 
 
-def test_different_ranges_on_different_tables_are_not_sent():
+def test_different_ranges_on_different_tables_are_preserved_for_supported_b():
     ready, blocked = handoff(stat("s1", [("T1", "Y", Y2023)]), stat("s2", [("T2", "Y", Y2024)]))
-    assert ready == [] and [(b["statistics"], b["code"]) for b in blocked] == [
-        (["s1"], "period_differs_between_requests"), (["s2"], "period_differs_between_requests")]
+    # A describes each validated result; the pipeline checks the actual receiver's capabilities.
+    assert blocked == [] and [r["statistics"] for r in ready] == [["s1"], ["s2"]]
+    assert [r["assignments"][0]["period"] for r in ready] == [Y2023, Y2024]
+    assert [r["tables"][0]["focus"] for r in ready] == ["지표s1", "지표s2"]
 
 
 def test_same_range_on_different_tables_is_sent_as_two_requests():
