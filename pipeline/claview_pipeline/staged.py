@@ -107,7 +107,6 @@ MESSAGES = {
     "a_judge_failed": "A의 판단 단계가 실패했습니다. 결과를 임의로 대신 만들지 않았습니다. 잠시 후 다시 질문해 주세요.",
     "a_live_disabled": "새 A 화면 경로의 실제 모델 호출은 아직 켜지 않았습니다(호출 한도 검사 연결 전). 합성 모드에서 확인해 주세요.",
     "a_handoff_unsupported": "표는 정했지만 현재 B 계약으로 전달할 수 없는 요청이라 조회하지 않았습니다(미지원 연결 항목). 아래 사유를 확인해 주세요.",
-    "a_explicit_condition_unverified": "질문에 명시된 조건을 확인하지 못해 전달하지 않았습니다. 아래 검사 사유를 확인해 주세요.",
     "b_period_differs_from_a": "B가 고른 기간·주기가 A가 표마다 정한 기간·주기와 달라 조회하지 않았습니다(미지원 연결 항목). 조건을 바꾼 결과를 완료로 보여 주지 않습니다.",
     "b_answered_period_not_applied": "B가 이용자가 고른 기간·주기를 그대로 적용했다고 결과에서 확인하지 못해 조회하지 않았습니다. 조건을 바꾼 결과를 완료로 보여 주지 않습니다.",
     "period_condition_not_prepared": "이용자가 고른 기간·주기를 B로 보낼 형태로 만들지 못해 조회하지 않았습니다. 답을 빼고 조회하지 않습니다.",
@@ -143,7 +142,6 @@ HARD_STOPS = {
     "a_judge_failed",
     "a_live_disabled",
     "a_handoff_unsupported",
-    "a_explicit_condition_unverified",
     "b_period_differs_from_a",
     "b_answered_period_not_applied",
     "period_condition_not_prepared",
@@ -646,7 +644,7 @@ class Pipeline:
                     raise StageFailure(capability["code"], capability["status"])
                 b_requests, a_failures, listing = self._run_a(state, query, _resume, update)
                 if through == "A":
-                    state["status"] = "a_verified"
+                    state["status"] = "a_partial" if a_failures else "a_verified"
                 else:
                     b = self.b_factory(model, client, self.mode)
                     self._run_b(state, b_requests, b, through, update, run_id, traces, listing, a_failures)
@@ -1144,15 +1142,16 @@ class Pipeline:
         )
 
     def _finish(self, state, emit):
-        a_only_verified = state["status"] == "a_verified"
-        if a_only_verified:
-            state.setdefault("message", "A 조건 확정 · 조회 미실행")
+        a_only_result = state["status"] in {"a_verified", "a_partial"}
+        if a_only_result:
+            state.setdefault("message", "A 일부 조건 미확정 · 조회 미실행" if state["status"] == "a_partial"
+                             else "A 조건 확정 · 조회 미실행")
         for stage in state["stages"]:
             if stage["status"] in {"pending", "running"}:
                 stage.update(
                     status="not_run",
                     summary=("A 조건 확인까지만 실행하여 이후 조회·표현 단계는 실행하지 않았습니다."
-                             if a_only_verified else "앞 단계 미확정 또는 지정된 검수 범위 때문에 실행하지 않았습니다."),
+                             if a_only_result else "앞 단계 미확정 또는 지정된 검수 범위 때문에 실행하지 않았습니다."),
                 )
         state["finished_at"] = now()
         # 진단 원본은 로컬 runs에만 저장한다. 키 문자열이 섞이면 저장 전에 막는다.
