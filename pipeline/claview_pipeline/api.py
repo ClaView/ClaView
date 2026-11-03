@@ -26,12 +26,14 @@ import secrets
 import threading
 from uuid import uuid4
 
-from fastapi import Header, Request
+from fastapi import Header, Query, Request
 from fastapi.responses import JSONResponse
 
 from claview_common.api import create_app
-from claview_common.settings import B_MODEL_ID, load, reveal
+from claview_common.settings import B_MODEL_ID, PATHS, load, reveal
 
+from . import saved_runs
+from .runtime import ServiceTransports
 from .screen import ScreenPipeline
 from .staged import Pipeline, validate_query
 
@@ -59,15 +61,21 @@ class _State:
 
 
 def _make_runner() -> Pipeline:
-    """The screen's runner: the new A (claview_pipeline.screen). The old A is not used here and is never a fallback;
-    in live mode the new A's model calls stay off (a_live_disabled) until they go through an approved call gate."""
+    """The new A service and the actual B/fetch/C path, with no evaluation manifest required."""
     cfg = load()
     if cfg.live:
-        return ScreenPipeline(reveal(cfg.openai_key), reveal(cfg.kosis_key))
+        runtime = ServiceTransports()
+        openai, kosis = reveal(cfg.openai_key), reveal(cfg.kosis_key)
+        model, client = runtime.clients(openai, kosis)
+        runner = ScreenPipeline(model=model, client=client, service_runtime=runtime,
+                                runs_dir=PATHS.runs / "pipeline" / "live")
+        runner.secrets = tuple(key for key in (openai, kosis) if key)
+        runner.deployed_service = True
+        return runner
     from claview_b_api.service import synthetic_clients
 
     model, client = synthetic_clients()
-    return ScreenPipeline(model=model, client=client)
+    return ScreenPipeline(model=model, client=client, runs_dir=PATHS.runs / "pipeline" / "synthetic")
 
 
 STATE = _State()
@@ -75,6 +83,34 @@ STATE = _State()
 
 def _error(code: int, message: str) -> JSONResponse:
     return JSONResponse(status_code=code, content={"error": message})
+
+
+def _service_issue(runner, cfg):
+    """No transport or credential preflight; stored configuration and halt flags only."""
+    if not cfg.live or not getattr(runner, "deployed_service", False):
+        return None
+    if cfg.openai_key is None:
+        return "openai_key_missing"
+    if cfg.kosis_key is None:
+        return "kosis_key_missing"
+    if getattr(runner.service_runtime, "halted", None):
+        return "service_credential_halted"
+    if not os.environ.get("CLAVIEW_A_LIVE_APPROVAL"):
+        from claview_a_api.runtime import ServiceUsage
+
+        try:
+            if ServiceUsage(runner.run_store.root).halted():
+                return "credential_halted"
+        except (OSError, ValueError, RuntimeError):
+            return "a_record_unavailable"
+    return None
+
+
+def _ready_error():
+    issue = _service_issue(STATE.runner, load())
+    if issue:
+        return _error(503, f"실행 설정을 확인해 주세요({issue}). 모델·자료 조회는 시작하지 않았습니다.")
+    return None
 
 
 async def _payload(request: Request) -> dict | None:
@@ -92,6 +128,7 @@ async def _payload(request: Request) -> dict | None:
 def api_info() -> dict:
     cfg = load()
     runner = STATE.runner
+    issue = _service_issue(runner, cfg)
     return {
         "token": STATE.token,
         "mode": "actual_pipeline" if cfg.live else "synthetic_pipeline",
@@ -102,6 +139,11 @@ def api_info() -> dict:
         "server_pid": os.getpid(),
         "busy": STATE.busy.locked(),
         "a_mode": runner.a_model_mode,
+        "a_ready": not cfg.live or (cfg.openai_key is not None and issue not in {
+            "credential_halted", "service_credential_halted", "a_record_unavailable"}),
+        "a_unavailable_reason": issue if issue != "kosis_key_missing" else None,
+        "ready": not cfg.live or (cfg.openai_key is not None and cfg.kosis_key is not None and issue is None),
+        "unavailable_reason": issue,
         "hcx_ready": runner.model is not None,  # name kept for the frontend; it means "B model ready"
         "model_ready": runner.model is not None,
         "b_model": B_MODEL_ID if cfg.live else "synthetic",
@@ -120,10 +162,53 @@ def api_job(job_id: str, x_claview_token: str | None = Header(default=None)):
     return job if job else _error(404, "not_found")
 
 
+@app.get("/api/records")
+def api_records(limit: int = Query(default=30, ge=1, le=100), x_claview_token: str | None = Header(default=None)):
+    if x_claview_token != STATE.token:
+        return _error(403, "request_not_allowed")
+    return {"records": saved_runs.listing(STATE.runner.runs_dir, limit=limit),
+            "claview_mode": STATE.runner.mode}
+
+
+@app.post("/api/records/load")
+async def api_load_record(request: Request, x_claview_token: str | None = Header(default=None)):
+    if x_claview_token != STATE.token:
+        return _error(403, "request_not_allowed")
+    body = await _payload(request)
+    if not isinstance(body, dict) or set(body) != {"run_id"}:
+        return _error(400, "record_invalid")
+    if not STATE.busy.acquire(blocking=False):
+        return _error(409, "앞선 실행이 끝난 뒤 기록을 불러와 주세요.")
+    try:
+        state, response = saved_runs.read(STATE.runner.runs_dir, body["run_id"])
+        if saved_runs.claimed(STATE.runner.runs_dir, body["run_id"]):
+            return _error(409, "이미 이어 실행한 기록입니다. 서버 기록에서 가장 최근 결과를 불러와 주세요.")
+        if state.get("claview_mode") != STATE.runner.mode:
+            return _error(409, "기록의 실행 모드가 현재 서버와 다릅니다.")
+        job_id = uuid4().hex
+        with STATE.lock:
+            if len(STATE.jobs) >= MAX_JOBS:
+                oldest = next((key for key, value in STATE.jobs.items() if value["done"]), None)
+                if oldest:
+                    STATE.jobs.pop(oldest)
+                    STATE.checkpoints.pop(oldest, None)
+            STATE.jobs[job_id] = {"job_id": job_id, "done": True, "events": [], "result": response,
+                                  "loaded": True}
+            if state.get("confirmation") and state.get("status") == "needs_confirmation":
+                STATE.checkpoints[job_id] = state
+        return {"job_id": job_id, "loaded": True}
+    except saved_runs.SavedRunError:
+        return _error(404, "저장된 실행 기록을 찾거나 확인하지 못했습니다.")
+    finally:
+        STATE.busy.release()
+
+
 @app.post("/api/query", status_code=202)
 async def api_query(request: Request, x_claview_token: str | None = Header(default=None)):
     if x_claview_token != STATE.token:
         return _error(403, "request_not_allowed")
+    if (failure := _ready_error()) is not None:
+        return failure
     payload = await _payload(request)
     try:
         if payload is None or set(payload) != {"query"}:
@@ -140,6 +225,8 @@ async def api_query(request: Request, x_claview_token: str | None = Header(defau
 async def api_resume(request: Request, x_claview_token: str | None = Header(default=None)):
     if x_claview_token != STATE.token:
         return _error(403, "request_not_allowed")
+    if (failure := _ready_error()) is not None:
+        return failure
     payload = await _payload(request)
     if payload is None or set(payload) != {"job_id", "confirmation"} or not isinstance(payload["job_id"], str):
         return _error(400, "요청 형식이 올바르지 않습니다.")
@@ -148,7 +235,7 @@ async def api_resume(request: Request, x_claview_token: str | None = Header(defa
         original = STATE.jobs.get(source)
         if original is None:
             return _error(
-                410, "서버가 재시작되었거나 보관 한도가 지나 이 확인 기록이 없습니다. 같은 질문을 다시 입력해 주세요."
+                410, "서버가 재시작되었거나 보관 한도가 지났습니다. 서버 기록에서 이전 실행을 불러와 주세요."
             )
         if not original["done"] or original.get("resumed_job_id"):
             return _error(409, "이미 이어 실행했거나 아직 처리 중인 기록입니다. 중복 조회하지 않습니다.")
@@ -168,6 +255,16 @@ def _start(work, source: str | None = None):
     if not STATE.busy.acquire(blocking=False):
         return _error(409, "앞선 질문을 처리 중입니다. 중복 호출하지 않고 기다립니다.")
     job_id = uuid4().hex
+    source_run_id = None
+    if source:
+        with STATE.lock:
+            source_run_id = (STATE.checkpoints.get(source) or {}).get("run_id")
+        if source_run_id and STATE.runner.runs_dir:
+            try:
+                saved_runs.claim(STATE.runner.runs_dir, source_run_id)
+            except (saved_runs.SavedRunError, OSError):
+                STATE.busy.release()
+                return _error(409, "이미 이어 실행했거나 유효하지 않은 기록입니다. 최근 서버 기록을 불러와 주세요.")
     with STATE.lock:
         if len(STATE.jobs) >= MAX_JOBS:  # drop the oldest finished job, never a running one
             oldest = next((k for k in STATE.jobs if k != source and STATE.jobs[k]["done"]), None)
@@ -187,6 +284,8 @@ def _start(work, source: str | None = None):
     def run():
         try:
             state = work(emit)
+            if source_run_id and STATE.runner.runs_dir:
+                saved_runs.complete(STATE.runner.runs_dir, source_run_id, state)
             if state.get("confirmation"):
                 with STATE.lock:
                     STATE.checkpoints[job_id] = state

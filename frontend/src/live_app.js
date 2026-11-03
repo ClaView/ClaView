@@ -229,8 +229,16 @@
     });
     form.append(button,hint); box.append(form); refresh(); return box;
   }
+  function callCountsForDisplay(counts){
+    if(!counts||typeof counts!=='object'||Array.isArray(counts))return '이전 기록에는 별도 집계 없음';
+    return Object.fromEntries(Object.entries(counts).map(function(entry){
+      return [entry[0]==='HCX'?'B 모델':entry[0],entry[1]];
+    }));
+  }
   function fillAi(body,m,cv){
     body.innerHTML='';
+    var origin=recordOriginText(m);
+    if(origin&&(m.finishedAt||m.savedRecord))body.append(el('p',{class:'stage-note record-origin',text:origin}));
     if(isRecoverable(m)||m.recoveryState){body.append(recoveryEl(m,cv));}
     if(isPreviousStop(m)){body.append(previousStopEl(m));return;}
     var complete=hasComparisonResult(m);
@@ -243,7 +251,7 @@
     if(complete){
       progress.classList.add('completed-progress');
       var count=m.cases.reduce(function(n,c){return n+c.series.length;},0);
-      var resultLabel=m.savedRecord?'저장 자료':m.runStatus==='partial'?'일부만 조회(아래 안내 확인)':'조회 완료';
+      var resultLabel=m.savedRecord?'저장된 결과':m.runStatus==='partial'?'일부만 조회(아래 안내 확인)':'조회 완료';
       body.append(el('p',{class:'comparison-ready',role:'status',text:m.cases.length===1?
         resultLabel+' · '+count+'개 항목의 결과를 아래에서 확인하세요.':
         resultLabel+' · '+count+'개 항목을 주기·단위에 따라 '+m.cases.length+'개 결과로 나누었습니다.'}));
@@ -280,11 +288,13 @@
     if(m.conditionEditor&&!m.resumedJobId)body.append(conditionEditorEl(m));
     if(m.answer){
       var answer=el('div',{class:'answer',role:'status'});
-      if(m.savedRecord&&!complete)answer.append(el('p',{class:'stage-note',text:'당시 실행의 안내입니다. 이 저장 화면에서는 조건 수정이나 재실행을 하지 않습니다. 새 질문은 실제 실행 화면에서 진행하세요.'}));
+      if(m.savedRecord&&!complete)answer.append(el('p',{class:'stage-note',text:m.serverRecordLoaded&&m.confirmation?
+        '저장된 확인 대기 기록입니다. 불러오기로는 호출하지 않았습니다. 답을 선택하면 이 기록에서 조회를 이어갑니다.':
+        '당시 실행의 안내입니다. 기록을 불러오는 동안 모델이나 조회 API를 호출하지 않았습니다.'}));
       answer.append(el('p',{text:CV.ux.text(m.answer)}));body.append(answer);
     }
     if(m.callCounts||m.jobId||CV.ux.text(m.answer)!==(m.answer||''))body.append(el('details',{class:'technical-detail'},el('summary',{text:'실행 기록 자세히 보기'}),
-      el('pre',{text:JSON.stringify({실행번호:m.runId||m.jobId,호출횟수:m.callCounts||'이전 기록에는 별도 집계 없음',원래안내:m.answer},null,2)})));
+      el('pre',{text:JSON.stringify({실행번호:m.runId||m.jobId,호출횟수:callCountsForDisplay(m.callCounts),원래안내:m.answer},null,2)})));
     if(m.finishedAt)body.append(el('p',{class:'stage-note',text:'실행: '+new Date(m.finishedAt).toLocaleString('ko-KR')+' · 이력을 열어도 API를 다시 호출하지 않습니다.'}));
   }
   async function readJson(url,options){
@@ -293,7 +303,8 @@
     if(!(response.headers.get('Content-Type')||'').includes('application/json'))throw new Error('이 화면은 실행 서버에서 열어야 합니다. 기본 주소 http://localhost:10300/ 에서 확인해 주세요.');
     var data=await response.json(); if(!response.ok){var error=new Error(data.error||'실행 요청을 처리하지 못했습니다.');error.status=response.status;throw error;} return data;
   }
-  function newMessage(text){return {role:'ai',kind:'run',inputText:text,mode:'live',flowVersion:comparisonFlowVersion,execution:{mode:'live',stages:stageIds.map(function(id){
+  // execution.mode selects the existing server-stage renderer; dataMode records the actual source.
+  function newMessage(text){return {role:'ai',kind:'run',inputText:text,mode:'unknown',flowVersion:comparisonFlowVersion,execution:{mode:'live',stages:stageIds.map(function(id){
     return {id:id,status:'pending',summary:'서버 실행을 기다립니다.'};})},answer:'실행을 준비하고 있습니다.'};}
   async function resumeRun(original,confirmation){
     if(S.running||original.resumedJobId)return;
@@ -316,7 +327,7 @@
   function recoveryEl(m,cv){
     var expired=m.recoveryState==='expired',box=el('aside',{class:'recovery-box',role:'status'});
     box.append(el('strong',{text:expired?'이전 실행 상태를 더 이상 확인할 수 없습니다.':'이전 실행의 진행 상태를 확인할 수 있습니다.'}),
-      el('p',{text:expired?'서버가 다시 시작됐거나 보관된 작업이 없어졌습니다. 새 조회를 자동으로 시작하지 않았습니다. 질문을 다시 입력해 직접 실행할 수 있습니다.':
+      el('p',{text:expired?'서버가 다시 시작됐거나 보관된 작업이 없어졌습니다. 새 조회를 자동으로 시작하지 않았습니다. 연결 표시 옆의 ‘서버 복원’에서 저장된 실행을 찾아 불러오세요.':
         '화면 연결이 끊겨도 서버 작업은 계속될 수 있습니다. 아래 버튼은 기존 작업만 확인하며 질문을 다시 제출하거나 API를 중복 호출하지 않습니다.'}));
     if(m.recoveryNote)box.append(el('p',{text:m.recoveryNote}));
     var check=el('button',{type:'button',class:'example-action',text:'진행 상태 다시 확인',disabled:expired||!!S.running,onclick:function(){recoverMessage(m,cv);}});
@@ -330,6 +341,7 @@
     var answer=body.querySelector('.answer p');if(answer)answer.textContent=CV.ux.text(m.answer);
   }
   function receiveResult(m,result){
+    setRecordMode(m,result.claview_mode);
     m.execution.stages=result.stages;m.cases=result.ui_cases||[];m.runStatus=result.status;
     m.aWarnings=result.a_warnings||[];m.unsupportedLinks=result.unsupported_links||[];
     m.finishedAt=result.finished_at;m.runId=result.run_id;m.confirmation=result.confirmation;m.userConfirmation=result.user_confirmation;
@@ -337,6 +349,16 @@
     m.kind=m.cases.length?'result':isAOnlyPartial(m)?'a_partial':isAOnlyVerified(m)?'verified':'stopped';
     m.answer=result.message;m.callCounts=result.calls;m.jobSettled=true;
     delete m.recoveryState;delete m.recoveryNote;saveStore();
+  }
+  function setRecordMode(m,mode){
+    m.dataMode=['live','synthetic','replay'].includes(mode)?mode:'unknown';
+    m.mode=m.dataMode;m.execution.dataMode=m.dataMode;
+  }
+  function recordOriginText(m){
+    if(m.dataMode==='synthetic')return '테스트용 · 합성 데이터 · 실제 통계 수치가 아닙니다.';
+    if(m.dataMode==='live')return '';
+    if(m.dataMode==='replay')return '저장 응답 재생 결과 · 새 모델 판단이 아닙니다.';
+    return '이전 기록에는 자료 출처 정보가 없습니다.';
   }
   async function pollExistingJob(m,info,first){
     var deadline=Date.now()+15*60*1000;
@@ -380,20 +402,68 @@
     }catch(error){connectionFailure(m,error);}
     finally{S.running=null;D.sendBtn.disabled=location.protocol==='file:';saveStore();renderThread();renderHist();}
   }
+  function connectionText(info){
+    var note=info.claview_mode==='synthetic'?'테스트용 · 합성 데이터 · ':info.claview_mode==='replay'?'저장 응답 재생 · ':'';
+    if(info.ready===false||info.a_ready===false||!info.hcx_ready||!info.kosis_ready)return '서버 연결됨 · '+note+'실행에 필요한 인증·기록 설정을 확인해 주세요.';
+    return '서버 연결됨 · '+note+(info.busy?'조회 처리 중':'질문할 수 있습니다.');
+  }
+  function recordStatusLabel(status){
+    return ({ok:'조회 완료',partial:'일부 조회',needs_confirmation:'확인 대기',a_verified:'A 조건 확정 · 조회 미실행',
+      a_partial:'A 일부 미확정 · 조회 미실행',error:'실행 중단',failed:'실행 중단',unsupported:'지원 범위 확인 필요'})[status]||'저장된 실행';
+  }
+  async function loadServerRecord(record){
+    if(S.running)return;
+    var cv=active();
+    if(!cv){cv={id:uid(),title:record.query.slice(0,30),ts:Date.now(),msgs:[]};S.convs.push(cv);S.active=cv.id;}
+    var m=newMessage(record.query);m.savedRecord=true;m.serverRecordLoaded=true;
+    cv.msgs.push({role:'user',text:record.query},m);cv.ts=Date.now();
+    S.running=m;D.sendBtn.disabled=true;saveStore();renderThread();renderHist();
+    try{
+      var info=await readJson('/api/info');
+      var receipt=await readJson('/api/records/load',{method:'POST',headers:{'Content-Type':'application/json','X-Claview-Token':info.token},
+        body:JSON.stringify({run_id:record.run_id})});
+      m.jobId=receipt.job_id;m.serverInstance=String(info.server_pid||'');
+      await pollExistingJob(m,info);
+      if(connectionUi&&connectionUi.records)connectionUi.records.hidden=true;
+    }catch(error){connectionFailure(m,error);}
+    finally{S.running=null;D.sendBtn.disabled=location.protocol==='file:';saveStore();renderThread();renderHist();}
+  }
+  async function showServerRecords(){
+    if(!connectionUi||S.running)return;
+    var box=connectionUi.records;box.hidden=false;box.replaceChildren(el('p',{text:'저장된 실행 목록을 읽고 있습니다.'}));
+    connectionUi.recordsButton.disabled=true;
+    try{
+      var info=await readJson('/api/info');
+      var data=await readJson('/api/records?limit=30',{headers:{'X-Claview-Token':info.token}});
+      box.replaceChildren(el('strong',{text:'서버에 저장된 실행'}),el('p',{class:'stage-note',text:'불러오기는 모델·조회 API를 호출하지 않습니다. 확인 대기 기록은 답을 선택해 이어갈 수 있습니다.'}));
+      var rows=data.records||[];
+      if(!rows.length)box.append(el('p',{text:'저장된 실행이 없습니다.'}));
+      rows.forEach(function(record){
+        var row=el('div',{class:'server-record'});
+        row.append(el('p',{text:record.query}),el('span',{class:'stage-note',text:'기준일 '+record.as_of+' · '+recordStatusLabel(record.status)}),
+          el('button',{type:'button',class:'example-action',text:'불러오기',onclick:function(){loadServerRecord(record);}}));
+        box.append(row);
+      });
+      box.append(el('button',{type:'button',class:'example-action',text:'목록 닫기',onclick:function(){box.hidden=true;}}));
+    }catch(error){box.replaceChildren(el('p',{role:'status',text:error.message}));}
+    finally{connectionUi.recordsButton.disabled=false;}
+  }
   var connectionUi=null,checkingConnection=false;
   async function checkConnection(recover){
     if(checkingConnection||!connectionUi)return;
     checkingConnection=true;connectionUi.button.disabled=true;
     try{
       var info=await readJson('/api/info');connectionUi.root.dataset.state='online';
-      connectionUi.status.textContent=(!info.hcx_ready||!info.kosis_ready)?'서버 연결됨 · 조회에 필요한 인증 설정을 확인해 주세요.':info.busy?'서버 연결됨 · 조회 처리 중':'서버 연결됨 · 질문할 수 있습니다.';
+      connectionUi.status.textContent=connectionText(info);
       if(recover&&!S.running){var cv=active(),pending=cv&&cv.msgs.slice().reverse().find(isRecoverable);if(pending)await recoverMessage(pending,cv);}
     }catch(_){connectionUi.root.dataset.state='offline';connectionUi.status.textContent='서버 연결 끊김 · 기존 결과는 유지됩니다. 서버 실행 후 연결 확인을 눌러 주세요.';}
     finally{checkingConnection=false;connectionUi.button.disabled=false;}
   }
   function mountConnection(){
     var root=el('div',{class:'connection-bar','data-state':'checking'}),status=el('span',{role:'status','aria-live':'polite',text:'서버 연결 확인 중'}),button=el('button',{type:'button',class:'example-action',text:'연결 확인',onclick:function(){checkConnection(true);}});
-    root.append(el('span',{class:'connection-dot','aria-hidden':'true'}),status,button);D.scroller.before(root);connectionUi={root:root,status:status,button:button};
+    var recordsButton=el('button',{type:'button',class:'example-action',text:'서버 복원',title:'저장된 실행 결과를 불러옵니다.',onclick:showServerRecords});
+    var records=el('aside',{class:'recovery-box server-records','aria-label':'서버 실행 기록'});records.hidden=true;
+    root.append(el('span',{class:'connection-dot','aria-hidden':'true'}),status,button,recordsButton);D.scroller.before(root,records);connectionUi={root:root,status:status,button:button,records:records,recordsButton:recordsButton};
     checkConnection(true);setInterval(function(){if(!document.hidden)checkConnection(false);},30000);
   }
   async function executeMessage(m,cv,path,payload,source){
@@ -404,6 +474,7 @@
       if(path==='/api/resume'&&!info.confirmation_resume)throw new Error('서버가 이전 버전입니다. 최신 서버로 다시 시작해 주세요.');
       if(path==='/api/conditions'&&!info.b_condition_resume)throw new Error('조회 조건 수정 기능을 반영한 서버를 다시 실행해 주세요.');
       m.serverInstance=String(info.server_pid||'');
+      setRecordMode(m,info.claview_mode);
       var headers={'Content-Type':'application/json','X-Claview-Token':info.token};
       // 응답이 유실되면 자동 재제출하지 않는다. 중복 유료 호출을 방지한다.
       m.submissionUncertain=true;
@@ -435,7 +506,7 @@
     mountExampleLibrary();
     if(CV.SAVED_VIEW){
       var savedHint=el('aside',{class:'file-server-hint',role:'note'});
-      savedHint.append(el('strong',{text:'저장 자료 보기 · 이 화면에서는 새 조회를 실행하지 않습니다.'}),el('a',{href:'/',text:'새 질문 실행 화면으로 이동'}));
+      savedHint.append(el('strong',{text:'저장된 결과 · 이 화면에서는 새 조회를 실행하지 않습니다.'}),el('a',{href:'/',text:'새 질문 실행 화면으로 이동'}));
       D.composer.before(savedHint);D.input.disabled=true;D.sendBtn.disabled=true;
       D.exampleHint.textContent='저장된 결과를 보는 화면입니다. 새 질문은 위의 실제 실행 화면에서 입력해 주세요.';
       D.input.placeholder='새 질문은 실제 실행 화면에서 입력해 주세요.';

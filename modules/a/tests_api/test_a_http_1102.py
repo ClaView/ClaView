@@ -234,9 +234,12 @@ def test_unavailable_server_modes_never_fall_back_to_synthetic(http_case, monkey
     app.dependency_overrides.pop(H.get_judges)
     monkeypatch.setenv("CLAVIEW_MODE", mode)
     monkeypatch.delenv("CLAVIEW_A_LIVE_APPROVAL", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     monkeypatch.setattr(S, "synthetic_judges", no_judgments)
     response = client.post("/a/select", json={"contract_version": VERSION, "query": PERIOD_QUERY, "as_of": AS_OF})
     assert response.status_code == 503, response.text
+    # Deployment live mode now needs credentials, not an evaluation approval file.
+    assert response.json()["detail"] == ("key_unavailable" if mode == "live" else "replay_source_required")
     assert judge.calls == 0
     assert not list(store.root.glob("a_sessions/*/record.json"))
 

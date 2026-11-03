@@ -7,8 +7,9 @@ x-backend: &backend
   build: .
   image: claview-backend:latest
   env_file: .env
-  environment:
+  environment: &backend-env
     GIT_SHA: ${GIT_SHA:-unknown}      # shown in /info; set by `make up` (git rev-parse --short HEAD)
+    CLAVIEW_MODE: ${CLAVIEW_MODE:-live}  # production default; synthetic must be explicitly selected for dev/test
   restart: unless-stopped
   networks: [claview_net]
   healthcheck:
@@ -21,6 +22,12 @@ x-backend: &backend
 services:
   module-a:
     <<: *backend
+    environment:
+      <<: *backend-env
+      CLAVIEW_A_RUN_ROOT: /claview/runs/a_service
+    volumes:
+      - claview_runs:/claview/runs
+      - claview_a_live:/root/.claview/a_live
     command: ["uvicorn", "claview_a_api.api:app", "--host", "0.0.0.0", "--port", "8888", "--no-server-header"]
     ports: ["${A_PORT:-10311}:8888"]
 
@@ -36,6 +43,12 @@ services:
 
   pipeline:
     <<: *backend
+    environment:
+      <<: *backend-env
+      CLAVIEW_A_RUN_ROOT: /claview/runs/a_service
+    volumes:
+      - claview_runs:/claview/runs
+      - claview_a_live:/root/.claview/a_live
     command: ["uvicorn", "claview_pipeline.api:app", "--host", "0.0.0.0", "--port", "8888", "--no-server-header"]
     ports: ["${PIPELINE_PORT:-10301}:8888"]
 
@@ -58,3 +71,9 @@ services:
 networks:
   claview_net:
     driver: bridge
+
+# Keep A records shared between the screen and module-a, and retain evaluation ledgers on recreation.
+# `docker compose down` keeps these volumes; `down -v` removes them and their records.
+volumes:
+  claview_runs:
+  claview_a_live:

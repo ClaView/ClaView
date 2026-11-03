@@ -22,7 +22,7 @@ pipeline은 module-a/b/c 컨테이너를 부르지 않는다. A HTTP 전환은 �
 
 | 경로 | 내용 | 담당 |
 |---|---|---|
-| `modules/a/claview_a/` | **새 A(표 단위 경로). 화면 경로에 연결(합성 판단기로 확인, 실호출 꺼짐).** 공개 `run`(재검색 인자 전달), 기준 축 답변 적용 `answers`, CLI `python -m claview_a`. 표준 라이브러리·langgraph만 쓰는 패키지 규칙을 지킨다. [기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) · [55문항 측정판](docs/modules/a/A_측정판_55문항_20261029.md) · [계획 54](docs/plans/54_새A_화면연결.md) | A |
+| `modules/a/claview_a/` | **새 A(표 단위 경로). 기본 화면과 모듈 HTTP에 연결하며 실행 모드는 서버 설정으로 정한다.** 공개 `run`(재검색 인자 전달), 기준 축 답변 적용 `answers`, CLI `python -m claview_a`. 표준 라이브러리·langgraph만 쓰는 패키지 규칙을 지킨다. [기준판 문서](docs/modules/a/A_기준판_표단위경로_20261028.md) · [55문항 측정판](docs/modules/a/A_측정판_55문항_20261029.md) · [계획 54](docs/plans/54_새A_화면연결.md) | A |
 | `modules/a/claview_a_legacy/` | 기존 A(10/21판). `/a/legacy/select`·`/a/legacy/answer`, 옛 staged 실행기·`claview` 명령·골든 22 평가가 쓴다. 새 경로의 자동 대체로 쓰지 않는다 | A |
 | `modules/a/claview_a_api/` | 새 A 화면 service(`screen.py`), AView 어댑터(`view.py`), 세션을 저장하는 HTTP 경계(`http.py`, `api.py`). 기본 `/a/select`·`/a/answer`는 새 A이며 계약 판을 반드시 보낸다. 예전 `service.py`는 legacy 경로에 남는다 | A |
 | `modules/a/{tests,tests_tl,tests_legacy,tests_api,scripts}/` | 새 A 시험(옮긴 부품 / 표 단위 경로), 기존 A 시험, API 시험, 연구·평가 도구(새 A 평가기 `scripts/tl_eval`) | A |
@@ -39,7 +39,7 @@ pipeline은 module-a/b/c 컨테이너를 부르지 않는다. A HTTP 전환은 �
 ## 2. Docker로 실행
 
 ```bash
-cp .env.example .env                       # 키는 .env에만. 기본 CLAVIEW_MODE=synthetic(외부 호출 없음)
+test -f .env || cp .env.example .env        # 기존 .env는 유지. 기본 live, 키는 .env에만 입력
 docker compose up -d --build --wait        # frontend, pipeline, module-a/b/c (모두 healthy가 될 때까지 대기)
 docker compose ps                          # 다섯 서비스 (healthy) 확인
 docker compose down                        # 중지
@@ -49,11 +49,12 @@ docker compose down                        # 중지
 
 - 화면: http://localhost:10300/ · 파이프라인 API 문서: http://localhost:10301/docs · 모듈 API 문서: http://localhost:10311/docs (A), `10312`(B), `10313`(C)
 - 새 A HTTP 요청에는 `contract_version: "a-http/2026-11-02.1"`이 필요하다. 응답은 `view`(AView)와 실행 모드를 담으며, 확인 답은 서버에 저장한 세션에 적용한다. [요청·답변·기록 조회와 이전 방법](docs/contracts/A_HTTP_전환_20261102.md)
-- 모듈 A HTTP는 기본 합성 모드다. `live`에서도 기존 승인 게이트·호출 한도를 통과해야 전송하며, B·KOSIS는 호출하지 않는다. `CLAVIEW_A_RUN_ROOT`로 서버 기록 위치를 지정할 수 있고 기본은 저장소의 `runs/a_http`이다. 배포 시 기록을 유지할 저장 경로를 준비한다. HTTP에서 실행 모드·기록 경로·checkpoint를 주입하지 않는다.
+- Docker·일반 배포의 기본은 `CLAVIEW_MODE=live`다. 모듈 A HTTP는 A만 실제 호출하고, 전체 화면은 같은 A service 다음에 B·KOSIS·C를 실행한다. 키가 없으면 준비되지 않은 상태로 알리며 합성 출력으로 대체하지 않는다. 일반 실사용에는 평가 승인 JSON이 필요하지 않다. `CLAVIEW_A_LIVE_APPROVAL`을 명시한 평가 실행은 기존 승인·해시·원장 검사를 통과해야 하며, 거절될 때 일반 실사용으로 전환하지 않는다. HTTP에서 실행 모드·기록 경로·checkpoint를 주입하지 않는다.
+- Docker는 A HTTP와 화면의 A 기록을 `CLAVIEW_A_RUN_ROOT=/claview/runs/a_service`에 함께 저장한다. 일반 실행의 `live`·`synthetic` 기록은 하위 폴더로 분리하며, `claview_runs` named volume이 컨테이너 재생성 후에도 기록을 유지한다. 평가 원장은 별도 `claview_a_live` volume에 보관한다. `docker compose down`은 기록을 유지하고 **`down -v`는 이 volume과 기록을 삭제한다.**
 - 개발(소스 마운트 + 자동 재시작): `docker compose -f docker-compose.yaml -f docker-compose.local.yaml up --build`
 - 골든 통합 평가: `docker compose -f docker-compose.yaml -f docker-compose.eval.yaml run --rm eval-pipeline`
-- `CLAVIEW_MODE=synthetic`: B는 합성 모델(첫 항목·첫 분류값), 조회는 합성 값 "1". **배선 확인용이며 정확도가 아니다.** `live`는 B의 선택 모델(`gpt-6.1-terra`, OpenAI)과 KOSIS를 실제로 부른다. 호출 수·비용 승인 뒤에만 켠다(AGENTS.md). 새 A 화면 경로는 live에서 A의 모델 호출이 꺼져 있어 1단계에서 `a_live_disabled`로 멈춘다(호출 한도 검사 연결 전). B만 live로 확인하려면 B 모듈 API(`/b/resolve`)에 표를 직접 넘긴다.
-- live 준비 확인: `.env`에 `CLAVIEW_MODE=live`, `OPENAI_API_KEY`, `KOSIS_API_KEY`를 채우고(키는 채팅·로그에 쓰지 않는다) `docker compose up -d --force-recreate --wait`로 컨테이너를 다시 만든다. `.env`는 컨테이너를 만들 때 한 번만 읽는다. `curl -s http://localhost:10301/api/info`에서 `claview_mode`, `model_ready`, `kosis_ready`, `b_model`을 확인한다(`hcx_ready`는 이름만 남은 `model_ready`와 같은 값).
+- 개발·시험에서만 `CLAVIEW_MODE=synthetic`을 명시하면 A 판단·B 선택·조회가 합성이다. B는 첫 항목·첫 분류값을 고르고 조회 값은 "1"이다. **배선 확인용이며 정확도가 아니다.** 기본 `live`는 A 첫 판단과 필요한 경우의 복구, B 선택 모델, KOSIS를 실제로 부른다. A는 기존 첫 판단 1회·복구 최대 1회를 유지하고, 되묻기 답 적용은 A 모델을 다시 부르지 않는다. 일반 실사용에 평가용 전체 비용 상한이 자동 적용되는 것은 아니다. 저장된 실제 결과 불러오기는 합성 모드와 별개이며 새 외부 호출을 만들지 않는다.
+- live 준비 확인: `.env`에 `CLAVIEW_MODE=live`, `OPENAI_API_KEY`, `KOSIS_API_KEY`를 채우고(키는 채팅·로그에 쓰지 않는다) `docker compose up -d --build --force-recreate --wait`로 컨테이너를 다시 만든다. `.env`는 컨테이너를 만들 때 한 번만 읽는다. `/api/info`에서 `claview_mode`, `a_ready`, `model_ready`, `kosis_ready`, `ready`를 확인한다. 이는 설정 준비 상태이며 API 제공자의 인증·잔여 한도 확인은 아니다. [실행·기록 보존·되묻기 확인 안내](docs/guides/Docker_실호출_실행.md)
 - 의존성은 루트 `requirements.txt` 하나다. 모든 백엔드 서비스가 같은 이미지(`claview-backend`)를 쓰고 실행 명령만 다르다.
 
 ## 3. 로컬 시험 (Docker 없이, Python 3.12)
