@@ -265,6 +265,20 @@ def visible_period_notices(rows, table_ids):
     return out
 
 
+def baseline_block(base, series, lookup, freq):
+    """증감 계산용으로 조회한 기준 시점. 값이 하나라도 있어야 싣고, 표·내려받기 값 목록에는 넣지 않는다."""
+    if not base:
+        return None
+    values = {s["series_id"]: [lookup[s["series_id"]].get(p, {}).get("value") for p in base] for s in series}
+    if all(v is None for row in values.values() for v in row):
+        return None
+    return {
+        "periods": list(base),
+        "labels": [c_service.period_label(p, freq) for p in base],
+        "values": values,
+    }
+
+
 def ui_cases(chart, data_result, run_id, tables, resolutions=None):
     """C의 결과를 시안 A 카드 모델로 옮긴다. 단위/주기가 다르면 별도 카드."""
     spec = chart["views"][0]["spec"]
@@ -295,6 +309,9 @@ def ui_cases(chart, data_result, run_id, tables, resolutions=None):
         freq = group["frequency"]
         unit = group["unit"] if group["unit"] is not None else "단위 미제공"
         lookup = {s["series_id"]: {p["period"]: p for p in s["points"]} for s in series}
+        # 계산용 기준 시점(표시 기간 앞쪽)은 값 목록에 섞지 않고 따로 싣는다. 화면은 차트에 흐리게만 그린다.
+        base = [p for p in group["periods"] if requested and p < requested["start"]]
+        baseline = baseline_block(base, series, lookup, freq)
         rows = [p for s in series for p in s["points"] if p["period"] in periods]
         quality = {
             "total_cells": len(periods) * len(series),
@@ -399,6 +416,7 @@ def ui_cases(chart, data_result, run_id, tables, resolutions=None):
                 **({"periodInfo": info} if info else {}),
                 "periods": periods,
                 "labels": [c_service.period_label(p, freq) for p in periods],
+                **({"baseline": baseline} if baseline else {}),
                 "series": cards,
                 "kinds": [v["kind"] for v in allowed],
                 "kindTitles": {v["kind"]: v["title"] for v in allowed},
