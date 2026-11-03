@@ -16,3 +16,11 @@
 .recovery-box{margin:12px 0;padding:14px;border:1px solid var(--accent);border-radius:10px;background:var(--surface);}.recovery-box p{line-height:1.65;margin:8px 0;font-size:13px;}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
 @media(max-width:600px){.candidate-grid{grid-template-columns:1fr;}.result-facts{grid-template-columns:1fr 1fr;}.connection-bar{padding:7px 10px;}}
+.period-info{margin:12px 0 0;padding:10px 12px;border:1px solid var(--line,#dde1e6);border-radius:8px;font-size:12px;line-height:1.6;}
+.period-info h4{margin:0 0 6px;font-size:12px;font-weight:600;}
+.period-info-table+.period-info-table{margin-top:10px;padding-top:10px;border-top:1px solid var(--line,#dde1e6);}
+.period-info-list{display:grid;gap:4px;margin:0;}
+.period-info-list>div{display:grid;grid-template-columns:96px 1fr;gap:8px;}
+.period-info-list dt{color:var(--text2);margin:0;}
+.period-info-list dd{margin:0;overflow-wrap:anywhere;}
+@media (max-width:520px){.period-info-list>div{grid-template-columns:1fr;gap:0;}}

@@ -43,6 +43,28 @@
       if(shownCount)shownCount.textContent=state.checked.length+' / '+c.series.length+'개 표시';
       if(hooks&&hooks.onChange)hooks.onChange(state);
     }});
+    function periodInfoBlock(rows){
+      // B가 알려 준 기간 결정: 요청한 기간, 실제로 읽은 기간, 표에 없는 기간, 계산용 기준 기간, 결정 근거.
+      var wrap=el('section',{class:'period-info','aria-label':'기간 안내'});
+      rows.forEach(function(row){
+        var box=el('div',{class:'period-info-table'});
+        if(rows.length>1)box.append(el('h4',{text:row.tableName}));
+        var list=el('dl',{class:'period-info-list'});
+        function line(label,text){list.append(el('div',{},el('dt',{text:label}),el('dd',{text:text})));}
+        line('요청한 기간',row.requested.join(', ')||'기간 미지정');
+        line('조회한 기간',(row.fetched.join(', ')||'조회한 기간 없음')+' · '+row.freqName);
+        if(row.missing.length)line('표에 없는 기간',row.missing.join(', '));
+        if(row.substituted)line('대체 조회','요청한 기간이 표에 없어 조회 가능한 기간으로 바꿔 조회했습니다.');
+        row.extra.forEach(function(x){line('계산용 기준 기간',x.range+' · '+x.purpose+' (화면에는 표시하지 않음)');});
+        var src=row.sources||{},how=[];
+        if(src.period)how.push('기간: '+src.period);
+        if(src.frequency)how.push('주기: '+src.frequency);
+        if(how.length)line('결정 근거',how.join(' · '));
+        if(row.alternatives&&row.alternatives.length)line('다른 주기',row.alternatives.join(', ')+'도 가능하지만 자동으로 조회하지 않았습니다.');
+        box.append(list);wrap.append(box);
+      });
+      return wrap;
+    }
     r.parts.summary=function(){
       var box=el('section',{class:'result-overview','aria-label':'조회 결과 요약'});
       box.append(el('h3',{text:c.tableName}));
@@ -54,7 +76,8 @@
       fact('출처',(c.org||'제공 기관')+' · KOSIS');
       var fetched=new Date(c.fetchedAt),when=Number.isNaN(fetched.getTime())?(c.fetchedAt||'미제공'):fetched.toLocaleString('ko-KR',{timeZone:'Asia/Seoul'})+' (한국 시간)';
       fact('자료 조회 시각',when);box.append(facts);
-      if(c.requestedPeriod){var p=c.requestedPeriod;
+      if(c.periodInfo&&c.periodInfo.length){box.append(periodInfoBlock(c.periodInfo));}
+      else if(c.requestedPeriod){var p=c.requestedPeriod;
         box.append(el('p',{class:'requested-period',text:'요청 표시 기간: '+period(p.start,c.freq)+' ~ '+period(p.end,c.freq)+' · 실제 표시 범위는 위 기간을 확인하세요.'}));}
       if(c.synthetic)box.append(el('p',{class:'confirmation-warning',text:'결측 표시 시험용 합성 자료입니다. 실제 통계로 해석하지 마세요.'}));
       if(c.derived)box.append(el('p',{class:'stage-note',text:'조회한 원지수로 계산한 결과입니다. 아래에서 계산 기준과 원값을 확인할 수 있습니다.'}));
