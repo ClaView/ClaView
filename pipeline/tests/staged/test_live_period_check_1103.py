@@ -63,3 +63,24 @@ def test_dry_run_of_every_case_passes_its_own_checks(tmp_path, base):
     rows = json.loads((tmp_path / "summary.json").read_text(encoding="utf-8"))
     assert len(rows) == len(check.CASES)
     assert all(v is True for r in rows for v in r["checks"].values())
+
+
+def test_the_new_cases_are_part_of_the_check():
+    ids = [c["id"] for c in check.CASES]
+    assert ids[-4:] == [
+        "L7_two_tables_own_years",
+        "L8_partly_outside_table",
+        "L9_first_year_yoy",
+        "L10_one_statistic_dropped",
+    ]
+
+
+def test_the_lift_of_a_block_is_undone(base):
+    from claview_a_api import view
+
+    original = view._months
+    with check.lifted_a_block(True):
+        assert view._months is not original
+    assert view._months is original
+    with check.lifted_a_block(False):
+        assert view._months is original
