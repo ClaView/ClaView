@@ -94,6 +94,8 @@ class BService:
     # B applies A's structured `period_condition` (docs/contracts/A_B_기간조건_공용모델과_A송신부.md); the
     # HTTP guard lets such requests through only for a receiver that says so.
     accepts_period_condition: bool = True
+    # resolve() takes `period_context`: the period wording of the question's other requests (see resolve)
+    accepts_period_context: bool = True
 
     @classmethod
     def from_env(cls) -> BService:
@@ -106,8 +108,16 @@ class BService:
             return cls(model, client, cfg.mode)
         return cls(*synthetic_clients(), cfg.mode)
 
-    def resolve(self, query: str, tables: list[dict], as_of: str | None = None) -> tuple[dict, int]:
-        """(B envelope, model calls). A missing model is reported as a failed B stage, not invented."""
+    def resolve(
+        self, query: str, tables: list[dict], as_of: str | None = None, period_context: list[dict] | None = None
+    ) -> tuple[dict, int]:
+        """(B envelope, model calls). A missing model is reported as a failed B stage, not invented.
+
+        `period_context` (optional): `[{"ref", "period_phrase"}]`: the period wording of the question's other tables
+        (sent in OTHER resolve calls) and of statistics A did not hand over. It is used only to hide their period
+        wording from the tables of this call (a table reads the period attached to its own statistic); it adds no
+        table, series or period.
+        """
         trace = Trace()
         if self.model is None:
             return outcome("B", failure=StageFailure("openai_key_missing"), trace_ref=trace.run_id), 0
@@ -115,8 +125,11 @@ class BService:
         services = Services(store(), None, model, Config(as_of=as_of) if as_of else Config(), trace)
         a_result = {"tables": copy.deepcopy(tables)}
         try:
+            state = {"query": query, "a_result": a_result}
+            if period_context:
+                state["period_context"] = period_context
             result = build_b_graph(services).invoke(
-                {"query": query, "a_result": a_result}, {"recursion_limit": 10 + 4 * len(tables)}
+                state, {"recursion_limit": 10 + 4 * len(tables)}
             )["stage_outcome"]
         except StageFailure as exc:
             result = outcome("B", failure=exc, trace_ref=trace.run_id)

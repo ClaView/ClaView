@@ -176,7 +176,112 @@ def notices_text(notices):
     ]
 
 
-def ui_cases(chart, data_result, run_id, tables):
+SOURCE_LABELS = {
+    "a_user_answer": "사용자가 고른 값",
+    "b_computed": "질문 문구로 B가 계산",
+    "a_quoted_fallback": "A가 질문에서 읽은 기간",
+}
+EXTRA_PURPOSE_LABELS = {
+    "yoy_baseline": "전년 같은 기간과 비교하기 위한 기준 기간",
+    "previous_period_baseline": "직전 기간과 비교하기 위한 기준 기간",
+}
+
+
+def _range_text(span):
+    """'2024년 1월 ~ 2024년 6월' (one period when start and end are the same)."""
+    freq = span["frequency"]
+    try:
+        first, last = (c_service.period_label(span[k], freq) for k in ("start", "end"))
+    except ValueError:
+        first, last = span["start"], span["end"]
+    return first if first == last else f"{first} ~ {last}"
+
+
+def display_range(rows):
+    """The one range to show for a requirement, when B read a calculation range before it.
+
+    Each row reports `requested` (what the wording asks for), `fetched` (what was read, a leading
+    calculation range included) and `calculation_extra`. What the screen shows is the requested part of
+    what was read. It is only stated when every table agrees on it; otherwise None and the whole fetched
+    range stays on screen (the card then says the calculation range may be included).
+    """
+    spans = set()
+    extra = False
+    for row in rows or []:
+        if not row.get("requested") or not row.get("fetched"):
+            return None
+        req, got = row["requested"][0], row["fetched"][0]
+        if req["frequency"] != got["frequency"]:
+            return None
+        start, end = max(req["start"], got["start"]), min(req["end"], got["end"])
+        if start > end:
+            return None
+        spans.add((got["frequency"], start, end))
+        extra |= bool(row.get("calculation_extra"))
+    if len(spans) != 1 or not extra:
+        return None
+    frequency, start, end = next(iter(spans))
+    return {"frequency": frequency, "start": start, "end": end}
+
+
+def period_info(rows, table_ids, names):
+    """What B says about each table of a card: asked, read, not in the table, calculation range, source."""
+    out = []
+    for row in rows or []:
+        if row.get("table_id") not in table_ids:
+            continue
+        item = {
+            "tableId": row["table_id"],
+            "tableName": names.get(row["table_id"], row["table_id"]),
+            "frequency": row["frequency"],
+            "freqName": FREQ.get(row["frequency"], row["frequency"]),
+            "requested": [_range_text(r) for r in row.get("requested") or []],
+            "fetched": [_range_text(r) for r in row.get("fetched") or []],
+            "missing": [_range_text(r) for r in row.get("missing") or []],
+            "extra": [
+                {"range": _range_text(r), "purpose": EXTRA_PURPOSE_LABELS.get(r.get("purpose"), "계산용 기준 기간")}
+                for r in row.get("calculation_extra") or []
+            ],
+            "substituted": bool(row.get("substituted")),
+            "sources": {
+                key: SOURCE_LABELS.get(value, value)
+                for key, value in (row.get("applied_sources") or {}).items()
+            },
+            "alternatives": [FREQ.get(f, f) for f in row.get("frequency_alternatives") or []],
+        }
+        out.append(item)
+    return out
+
+
+def visible_period_notices(rows, table_ids):
+    """B's notices the user should read (visible ones), once each, in table order."""
+    seen, out = set(), []
+    for row in rows or []:
+        if row.get("table_id") not in table_ids:
+            continue
+        for notice in row.get("notices") or []:
+            message = notice.get("message")
+            if notice.get("visible") and message and message not in seen:
+                seen.add(message)
+                out.append(message)
+    return out
+
+
+def baseline_block(base, series, lookup, freq):
+    """증감 계산용으로 조회한 기준 시점. 값이 하나라도 있어야 싣고, 표·내려받기 값 목록에는 넣지 않는다."""
+    if not base:
+        return None
+    values = {s["series_id"]: [lookup[s["series_id"]].get(p, {}).get("value") for p in base] for s in series}
+    if all(v is None for row in values.values() for v in row):
+        return None
+    return {
+        "periods": list(base),
+        "labels": [c_service.period_label(p, freq) for p in base],
+        "values": values,
+    }
+
+
+def ui_cases(chart, data_result, run_id, tables, resolutions=None):
     """C의 결과를 시안 A 카드 모델로 옮긴다. 단위/주기가 다르면 별도 카드."""
     spec = chart["views"][0]["spec"]
     names = {t["table_id"]: t["table_name"] for t in tables}
@@ -206,6 +311,9 @@ def ui_cases(chart, data_result, run_id, tables):
         freq = group["frequency"]
         unit = group["unit"] if group["unit"] is not None else "단위 미제공"
         lookup = {s["series_id"]: {p["period"]: p for p in s["points"]} for s in series}
+        # 계산용 기준 시점(표시 기간 앞쪽)은 값 목록에 섞지 않고 따로 싣는다. 화면은 차트에 흐리게만 그린다.
+        base = [p for p in group["periods"] if requested and p < requested["start"]]
+        baseline = baseline_block(base, series, lookup, freq)
         rows = [p for s in series for p in s["points"] if p["period"] in periods]
         quality = {
             "total_cells": len(periods) * len(series),
@@ -268,6 +376,12 @@ def ui_cases(chart, data_result, run_id, tables):
             s["provenance"].get("fetched_at") for s in sources if s["provenance"].get("fetched_at")
         ]
         warnings = notices_text(chart["warnings"])
+        info = period_info(resolutions, table_ids, names)
+        known = "\n".join([*notes, *warnings])
+        for message in visible_period_notices(resolutions, table_ids):
+            # B의 안내가 이미 같은 문구로 실려 있으면 다시 싣지 않는다.
+            if message.split("\n")[0] not in known:
+                warnings.append(message)
         # B는 기준기간만 확장하며 계산 결과를 만들지 않는다. 가격수준을 증감률로 오인시키지 않는다.
         if not chart.get("calculation") and re.search(
             r"전월|전년|가장.*변|증감|증가율|기여도|비율", chart["query"]
@@ -279,6 +393,8 @@ def ui_cases(chart, data_result, run_id, tables):
         if (
             not requested
             and not data_result.get("user_periods")
+            # B가 기간별 결정을 알려 줬고 계산용 기준 기간이 없으면, 기준 시점이 섞였다고 안내하지 않는다.
+            and not (info and not any(row["extra"] for row in info))
             and re.search(r"전월|전년|가장.*변", chart["query"])
         ):
             warnings.append(
@@ -299,8 +415,10 @@ def ui_cases(chart, data_result, run_id, tables):
                 "start": c_service.period_label(periods[0], freq),
                 "end": c_service.period_label(periods[-1], freq),
                 "requestedPeriod": copy.deepcopy(requested),
+                **({"periodInfo": info} if info else {}),
                 "periods": periods,
                 "labels": [c_service.period_label(p, freq) for p in periods],
+                **({"baseline": baseline} if baseline else {}),
                 "series": cards,
                 "kinds": [v["kind"] for v in allowed],
                 "kindTitles": {v["kind"]: v["title"] for v in allowed},
@@ -671,6 +789,26 @@ class Pipeline:
         """Extra B inputs of one request (none on the legacy path)."""
         return {}
 
+    @staticmethod
+    def _period_context(group, b_requests, b):
+        """The period wording of the question that this request's tables must not read (only to a B that takes it).
+
+        B gets one request per group, so a table never sees the other groups' tables, and a statistic A did not hand to
+        B (blocked, failed) is not in any request. Their wording stays in the question, so it is handed over, each
+        entry as `{"ref": table id or statistic id, "period_phrase": wording}`, and B uses it only to hide it from this
+        group's tables. A question with nothing else in it gives nothing.
+        """
+        if getattr(b, "accepts_period_context", False) is not True:
+            return []
+        others = [
+            {"ref": table["table_id"], "period_phrase": phrase}
+            for other in b_requests
+            if other is not group
+            for table in other["tables"]
+            if isinstance(phrase := (table.get("period_condition") or {}).get("period_phrase"), str) and phrase
+        ]
+        return others + copy.deepcopy(group.get("unhanded_period_wording") or [])
+
     def _b_conditions_lost(self, state, group, b_outcome):
         """A failure code when B's answer drops a condition A handed over (no check on the legacy path)."""
         return None
@@ -689,7 +827,11 @@ class Pipeline:
         # One B call per requirement group A hands over (related requirements share a call).
         results = []
         for group in b_requests:
-            b_outcome, _ = b.resolve(state["query"], group["tables"], state["as_of"], **self._resolve_extra(group, b))
+            extra = self._resolve_extra(group, b)
+            context = self._period_context(group, b_requests, b)
+            if context:
+                extra["period_context"] = context
+            b_outcome, _ = b.resolve(state["query"], group["tables"], state["as_of"], **extra)
             ok = b_outcome["status"] == "ok"
             result = {
                 "b_outcome": b_outcome,
@@ -773,6 +915,9 @@ class Pipeline:
                         "data": self._render_data(result, fetched, b),
                         "tables": result["a_result"]["tables"],
                         "run_id": run_id + f"-{index}",
+                        "period_resolutions": copy.deepcopy(
+                            result["b_outcome"]["result"].get("period_resolutions") or []
+                        ),
                     }
                 )
         jobs = self._combine_jobs(state["query"], jobs)
@@ -788,6 +933,10 @@ class Pipeline:
         for field in ("requested_period", "period_notices", "user_periods"):
             if field in b_result and field not in data:
                 data[field] = copy.deepcopy(b_result[field])
+        # B가 기준기간을 앞에 더 읽었으면 화면에는 요청한 기간만 보인다. 표마다 범위가 같을 때만 정한다.
+        shown = display_range(b_result.get("period_resolutions"))
+        if shown is not None and "requested_period" not in data:
+            data["requested_period"] = shown
         if b.client is not None:
             attach_live_total(data, b)
         return data
@@ -802,6 +951,7 @@ class Pipeline:
                 "data": b_service.combine_results([j["data"] for j in jobs]),
                 "tables": tables,
                 "run_id": jobs[0]["run_id"],
+                "period_resolutions": [r for j in jobs for r in j.get("period_resolutions") or []],
             }
         ]
 
@@ -913,10 +1063,19 @@ class Pipeline:
         """One aligned data_result -> C -> UI cards (None when C refuses the input)."""
         out = c_service.present(state["query"], data)
         state["stage_outcomes"].setdefault("C", []).append(out)
+        if out["status"] not in {"ok", "partial"} and data.get("requested_period"):
+            # 표시 기간을 좁힌 것이 거부 사유일 수 있다: 조회된 전체 기간으로 한 번 더 그린다.
+            data = {k: v for k, v in data.items() if k != "requested_period"}
+            state.setdefault("display_range_dropped", []).append(job["run_id"])
+            out = c_service.present(state["query"], data)
+            state["stage_outcomes"]["C"].append(out)
         if out["status"] not in {"ok", "partial"}:
             return None
         state.setdefault("chart_results", []).append(out["result"])
-        return ui_cases(out["result"], data, job["run_id"], job["tables"]), out["status"]
+        return (
+            ui_cases(out["result"], data, job["run_id"], job["tables"], job.get("period_resolutions")),
+            out["status"],
+        )
 
     def _resume_alignment(self, state, resume, update, traces):
         """Apply the user's frequency choice to the stored fetch result (no HCX/KOSIS call)."""

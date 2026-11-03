@@ -1,0 +1,1207 @@
+{
+ "schema_version": "claview-b/table-period-context/0.1",
+ "note": "실제 BService + 합성 모델·조회. 기대값은 표별 의도(질문에서 그 표에 붙은 기간)로 정했고 코드 실행 결과에 맞춰 바꾸지 않음. 합성 값이며 실호출 입력이 아님.",
+ "cases": [
+  {
+   "id": "TP-01",
+   "note": "서로 다른 두 표에 서로 다른 연도(quoted): 각 표에 자기 연도만 적용, 2023~2024로 합치지 않음",
+   "query": "M2 통화량 2023년과 예금은행 대출금리 2024년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2023"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2024",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-02",
+   "note": "문장 순서와 표 순서를 뒤집은 같은 질문: 대상과 기간의 대응이 유지됨",
+   "query": "예금은행 대출금리 2024년과 M2 통화량 2023년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2023"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2024",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-02b",
+   "note": "문장 순서만 뒤집고 표 순서는 그대로",
+   "query": "예금은행 대출금리 2024년과 M2 통화량 2023년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2023"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2024",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-03",
+   "note": "두 표에 공통으로 2023~2024년 요청: 같은 범위를 두 표에 적용",
+   "query": "M2 통화량과 예금은행 대출금리 2023년부터 2024년까지 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년부터 2024년까지",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년부터 2024년까지",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2024"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2023",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-03b",
+   "note": "한 표의 문구가 다른 표의 문구를 포함: 긴 문구는 자기 표에만, 짧은 문구는 자기 표에만 적용",
+   "query": "M2 통화량 2023년부터 2024년까지 그리고 예금은행 대출금리 2024년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년부터 2024년까지",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2024"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2024",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-04",
+   "note": "최신 수록 시점이 다른 두 표(M2 2025, 국내총부가가치 2024)에 최근 3년: 표별 메타로 각각 계산",
+   "query": "M2 통화량과 경제활동별 국내총부가가치 최근 3년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2025-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "최근 3년",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_200Y114",
+     "focus": "경제활동별 국내총부가가치",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2025-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "최근 3년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2025"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2025"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2025"
+     ]
+    },
+    "DT_200Y114": {
+     "requested": [
+      "Y",
+      "2022",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2022",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2022",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-04b",
+   "note": "한 표는 최근 3년, 다른 표는 명시 연도: 명시 연도가 상대 표현으로 바뀌지 않음",
+   "query": "M2 통화량 최근 3년과 경제활동별 국내총부가가치 2022년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2025-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "최근 3년",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_200Y114",
+     "focus": "경제활동별 국내총부가가치",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2022-01",
+       "2022-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2022년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2025"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2025"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2025"
+     ]
+    },
+    "DT_200Y114": {
+     "requested": [
+      "Y",
+      "2022",
+      "2022"
+     ],
+     "fetched": [
+      "Y",
+      "2022",
+      "2022"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2022",
+      "2022"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-05",
+   "note": "두 표에 서로 다른 기간 답: 답한 값을 각 표에 그대로 적용",
+   "query": "M2 통화량과 예금은행 대출금리 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "user_answer",
+      "phrase": "2023년",
+      "answers": [
+       "period"
+      ]
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "user_answer",
+      "phrase": "2024년",
+      "answers": [
+       "period"
+      ]
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "a_user_answer",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2023"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "a_user_answer",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2024",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-06",
+   "note": "한 표에만 기간 답: 답한 표는 그대로, 다른 표는 자기 문구만 읽음(답으로 확장하지 않음)",
+   "query": "M2 통화량 예금은행 대출금리 2024년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "user_answer",
+      "phrase": "2023년",
+      "answers": [
+       "period"
+      ]
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "a_user_answer",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2023"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2024",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-07",
+   "note": "주기만 답한 요청: 주기만 사용자 답 우선, 기간 출처는 답으로 바뀌지 않음",
+   "query": "M2 통화량 2023년과 예금은행 대출금리 2024년",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "user_answer",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년",
+      "answers": [
+       "frequency"
+      ]
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "M",
+      "frequency_source": "user_answer",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": [
+       "frequency"
+      ]
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "fetched": [
+      "M",
+      "202301",
+      "202312"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "a_user_answer"
+     },
+     "fetch": [
+      "M",
+      "202301",
+      "202312"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "fetched": [
+      "M",
+      "202401",
+      "202412"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "a_user_answer"
+     },
+     "fetch": [
+      "M",
+      "202401",
+      "202412"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-08",
+   "note": "두 표에 공통으로 붙은 전년 대비: 표시 요청 기간과 계산용 앞 구간을 구분(두 표 모두에 해당)",
+   "query": "M2 통화량과 예금은행 대출금리 2024년 연간 전년 대비 증감",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2024"
+     ],
+     "extra": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2024"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2024"
+     ],
+     "extra": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-09",
+   "note": "단일 표 + 조건: 기존 정상 동작",
+   "query": "M2 통화량 2023년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2023년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2023"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-10",
+   "note": "단일 표 + 문구 없음(period_phrase 생략): 기존 정상 동작",
+   "query": "M2 통화량 2023년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "quoted",
+      "phrase": null,
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2023"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-11",
+   "note": "조건 없는 두 표(구 A): 질문 전체를 공통 기간으로 읽는 기존 동작을 유지",
+   "query": "M2 통화량 2023년과 예금은행 대출금리 2024년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": null
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": null
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "fetch": [
+      "Y",
+      "2023",
+      "2024"
+     ]
+    },
+    "DT_121Y006": {
+     "fetch": [
+      "Y",
+      "2023",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-12",
+   "note": "한 표만 문구가 있음(다른 표는 문구 없음): 문구 없는 표는 질문 전체를 읽는 기존 동작",
+   "query": "M2 통화량 예금은행 대출금리 2024년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": null,
+      "answers": []
+     }
+    },
+    {
+     "table_id": "DT_121Y006",
+     "focus": "예금은행 대출금리",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2024-01",
+       "2024-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "2024년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2024",
+      "2024"
+     ]
+    },
+    "DT_121Y006": {
+     "requested": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "fetched": [
+      "Y",
+      "2024",
+      "2024"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2024",
+      "2024"
+     ]
+    }
+   }
+  },
+  {
+   "id": "TP-13",
+   "note": "질문에 없는 문구(문구가 질문과 달리 정규화됨): 가리지 않고 기존 동작",
+   "query": "M2 통화량 2023년 연간",
+   "as_of": "2026-10-29",
+   "tables": [
+    {
+     "table_id": "DT_161Y014",
+     "focus": "M2 통화량",
+     "condition": {
+      "frequency": "Y",
+      "frequency_source": "question",
+      "period": [
+       "2023-01",
+       "2023-12"
+      ],
+      "period_source": "quoted",
+      "phrase": "이천이십삽년",
+      "answers": []
+     }
+    }
+   ],
+   "expect": {
+    "DT_161Y014": {
+     "requested": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "fetched": [
+      "Y",
+      "2023",
+      "2023"
+     ],
+     "extra": null,
+     "sources": {
+      "period": "b_computed",
+      "frequency": "b_computed"
+     },
+     "fetch": [
+      "Y",
+      "2023",
+      "2023"
+     ]
+    }
+   }
+  }
+ ]
+}
