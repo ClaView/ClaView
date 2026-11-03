@@ -108,6 +108,15 @@ MESSAGES = {
     "a_live_disabled": "새 A 화면 경로의 실제 모델 호출은 아직 켜지 않았습니다(호출 한도 검사 연결 전). 합성 모드에서 확인해 주세요.",
     "a_handoff_unsupported": "표는 정했지만 현재 B 계약으로 전달할 수 없는 요청이라 조회하지 않았습니다(미지원 연결 항목). 아래 사유를 확인해 주세요.",
     "b_period_differs_from_a": "B가 고른 기간·주기가 A가 표마다 정한 기간·주기와 달라 조회하지 않았습니다(미지원 연결 항목). 조건을 바꾼 결과를 완료로 보여 주지 않습니다.",
+    "b_answered_period_not_applied": "B가 이용자가 고른 기간·주기를 그대로 적용했다고 결과에서 확인하지 못해 조회하지 않았습니다. 조건을 바꾼 결과를 완료로 보여 주지 않습니다.",
+    "period_condition_not_prepared": "이용자가 고른 기간·주기를 B로 보낼 형태로 만들지 못해 조회하지 않았습니다. 답을 빼고 조회하지 않습니다.",
+    # B가 받은 기간 조건을 지킬 수 없어 멈춘 이유(다른 기간·주기로 바꾸지 않음)
+    "period_condition_not_representable": "선택하신 기간을 표가 가진 주기로 정확히 나타낼 수 없어 조회하지 않았습니다(기간을 넓히거나 바꾸지 않습니다). 기간이나 주기를 다시 골라 주세요.",
+    "period_condition_frequency_unsupported": "선택하신 주기를 이 표가 제공하지 않아 조회하지 않았습니다(다른 주기로 바꾸지 않습니다). 다른 주기를 골라 주세요.",
+    "period_condition_out_of_coverage": "선택하신 기간이 표의 수록 범위와 겹치지 않아 조회하지 않았습니다(다른 기간으로 바꾸지 않습니다). 기간을 다시 골라 주세요.",
+    "period_condition_invalid": "A가 보낸 기간 조건이 계약 형식과 맞지 않아 B가 거절했습니다.",
+    "period_condition_answer_missing": "A가 보낸 기간 조건에 이용자의 답이 연결되어 있지 않아 B가 거절했습니다.",
+    "period_condition_answer_conflict": "A가 보낸 기간 조건의 답이 서로 충돌해 B가 거절했습니다.",
 }
 # 여러 요구를 한 차트에 합치라는 표현이 있을 때만 요구별 결과를 합친다(그 외에는 요구별 카드).
 # "이중 축 말고 각각"처럼 표현 바로 뒤에서 거절하면 결합하지 않는다. 거절어와 조사는 C의
@@ -134,6 +143,8 @@ HARD_STOPS = {
     "a_live_disabled",
     "a_handoff_unsupported",
     "b_period_differs_from_a",
+    "b_answered_period_not_applied",
+    "period_condition_not_prepared",
 }
 
 
@@ -680,7 +691,10 @@ class Pipeline:
             ok = b_outcome["status"] == "ok"
             result = {
                 "b_outcome": b_outcome,
-                "a_result": {"tables": copy.deepcopy(group["tables"])},
+                # the condition travels to B only; what the cards read is the table itself
+                "a_result": {
+                    "tables": [{k: v for k, v in t.items() if k != "period_condition"} for t in copy.deepcopy(group["tables"])]
+                },
                 "selections": ((b_outcome["result"] or {}).get("selections") or []) if ok else [],
             }
             results.append(({"status": "returned", "requirement_ids": group["requirement_ids"], "group": group}, result))

@@ -7,8 +7,11 @@ A 단계만 `staged.Pipeline`과 다르다. 새 A의 공개 결과(AView)만 읽
 - 되묻기: AView의 질문을 확인 카드(kind `a_view`)로 보여 주고 멈춘다. 브라우저는 세션 ID와
   {question_id, question_version, option_id | text}만 돌려보낸다. 서버가 보관한 새 A 체크포인트에 적용하고
   (모델 재호출 없음), 질문이 남으면 다시 멈추며, 다 답하면 B로 넘긴다.
-- B 전달: `handoff.ready`만 보낸다(표마다 focus). `blocked`와 실제 B 계약으로 표현할 수 없는 요청
-  (기간 답변 `period_answer_contract_pending`)은 보내지 않고 미지원 연결 항목으로 남기며 결과는 partial이다.
+- B 전달: `handoff.ready`만 보낸다(표마다 focus). `blocked`와 B가 받을 수 없는 요청은 보내지 않고 미지원 연결 항목으로
+  남기며 결과는 partial이다. B가 `accepts_period_condition`을 밝히면 A가 준비한 `b_request`(표마다 `period_condition`,
+  사용자 답 포함)를 보내고, 그렇지 않은 B에는 기존 요청을 보내며 기간 답변은 `period_answer_contract_pending`으로 보류한다.
+- 지원 B로 보낸 요청은 B의 `period_resolutions`로 확인한다. 사용자가 고른 기간·주기를 B가 그대로 적용하지 않았으면
+  (`b_answered_period_not_applied`) 조회하지 않고, 아무도 답하지 않은 필드의 A·B 차이는 중단하지 않고 기록만 한다.
 - 기간 답변은 원문·적용 통계·출처를 그대로 넘길 뿐 날짜를 계산하거나 기본 기간을 채우지 않는다.
 """
 
@@ -41,6 +44,8 @@ BLOCKED_TEXT = {
     "disjoint_period_not_in_b_contract": "A가 정한 기간이 떨어진 구간인데, B 계약은 한 범위만 받아 전달하지 않았습니다.",
     "period_differs_between_requests": "통계마다 A가 정한 기간이 달라, 질문 전체에서 기간을 다시 읽는 현재 B 계약으로 전달하지 않았습니다.",
     "b_period_differs_from_a": "B가 고른 기간·주기가 A가 정한 것과 달라 조회하지 않았습니다(계산용 기준 시점 추가도 B가 그 범위를 결과에 밝히기 전까지는 같게 봅니다).",
+    "period_condition_not_prepared": "A가 이용자가 고른 기간·주기를 B로 보낼 형태로 만들지 못해 전달하지 않았습니다(답을 빼고 조회하지 않음).",
+    "b_answered_period_not_applied": "B가 이용자가 고른 기간·주기를 그대로 적용했다고 결과에서 확인하지 못해 조회하지 않았습니다.",
 }
 # Links the current B contract cannot carry (reported as unsupported links, apart from A's own outcomes)
 UNSUPPORTED = (
@@ -51,6 +56,8 @@ UNSUPPORTED = (
     "disjoint_period_not_in_b_contract",
     "period_differs_between_requests",
     "b_period_differs_from_a",
+    "period_condition_not_prepared",
+    "b_answered_period_not_applied",
 )
 NOTE_TEXT = {
     "calculation_not_in_b_contract": "같은 표로 함께 넘긴 통계의 계산 요청이 서로 다릅니다. B 계약에는 통계별 계산 칸이 없어 원질문으로만 전달됩니다.",
@@ -292,8 +299,27 @@ class ScreenPipeline(Pipeline):
             )
             raise StageFailure("a_answer_required", "needs_confirmation")
         b_requests, unsupported = [], []
+        # A B that applies A's structured period condition gets A's prepared request (per table `period_condition`,
+        # the user's answers inside it); any other B keeps today's request, and answers stay pending for it.
+        takes_condition = getattr(self.b_factory, "accepts_period_condition", False) is True
         for request in view["handoff"]["ready"]:
-            if request["period_answers"] and not getattr(self.b_factory, "accepts_period_answers", False):
+            prepared = request.get("b_request") if takes_condition else None
+            if takes_condition and prepared is None and request["period_answers"]:
+                # never deliver the request without the answers the user gave
+                unsupported.append(
+                    {
+                        "statistics": request["statistics"],
+                        "code": "period_condition_not_prepared",
+                        "detail": {
+                            "issue": request.get("b_request_issue"),
+                            "period_answers": copy.deepcopy(request["period_answers"]),
+                        },
+                    }
+                )
+                continue
+            if prepared is None and request["period_answers"] and not getattr(
+                self.b_factory, "accepts_period_answers", False
+            ):
                 unsupported.append(
                     {
                         "statistics": request["statistics"],
@@ -306,10 +332,14 @@ class ScreenPipeline(Pipeline):
                 {
                     "request_id": request["request_id"],
                     "requirement_ids": request["statistics"],
-                    "tables": [{k: v for k, v in t.items() if v is not None} for t in request["tables"]],
+                    "tables": [
+                        {k: v for k, v in t.items() if v is not None}
+                        for t in (prepared["tables"] if prepared else request["tables"])
+                    ],
                     "period_answers": copy.deepcopy(request["period_answers"]),
                     "assignments": copy.deepcopy(request["assignments"]),
                     "calculations": copy.deepcopy(request["calculations"]),
+                    **({"period_condition": True} if prepared else {}),
                 }
             )
         blocked = view["handoff"]["blocked"] + unsupported
@@ -342,7 +372,11 @@ class ScreenPipeline(Pipeline):
             f"통계 {sum(len(r['requirement_ids']) for r in b_requests)}개의 표를 B로 넘깁니다."
             + (" 일부 통계는 넘기지 않았습니다." if blocked else ""),
             [
-                ["B 전달 정보", "원래 질문 + 기관·표 코드·표 이름 + 표별 지표(focus)"],
+                [
+                    "B 전달 정보",
+                    "원래 질문 + 기관·표 코드·표 이름 + 표별 지표(focus)"
+                    + (" + 표별 기간 조건" if any(r.get("period_condition") for r in b_requests) else ""),
+                ],
                 ["확정 방식", "사용자 답변 적용 후 코드 검사" if resumed else "새 A 검사 통과"],
             ],
             [
@@ -361,6 +395,8 @@ class ScreenPipeline(Pipeline):
         condition: not fetched, reported. Periods B adds before A's start for a calculation are not allowed either:
         B's result does not state the calculation or the base range it added, so they cannot be told apart from a
         wider reading of the question (``kind: added_before_start`` in the detail; allowed only once B states them)."""
+        if group.get("period_condition"):
+            return self._answered_period_lost(state, group, b_outcome)
         if not group.get("assignments"):
             return None
         by_table = {a["table_id"]: a for a in group["assignments"]}
@@ -392,6 +428,70 @@ class ScreenPipeline(Pipeline):
         state.setdefault("unsupported_links", []).append(link)
         state.setdefault("a_blocked", []).append(link)
         return "b_period_differs_from_a"
+
+    def _answered_period_lost(self, state, group, b_outcome):
+        """B took A's period conditions: it must say, per table, what it applied (`period_resolutions`).
+
+        What stops the run is only a condition the USER set not being kept: a table without a resolution, an
+        answered period or frequency that B did not apply as given, or a selection outside the range B reports as
+        fetched. A difference in a field nobody answered (a relative wording, a catalog frequency) is B's own reading
+        and not a reason to stop; it is recorded in ``period_reference_differences``."""
+        result = b_outcome.get("result") or {}
+        rows = {r["table_id"]: r for r in result.get("period_resolutions") or []}
+        lost, differences = [], []
+        for table in group["tables"]:
+            condition, row = table["period_condition"], rows.get(table["table_id"])
+            if row is None:
+                lost.append({"table_id": table["table_id"], "kinds": ["resolution_missing"]})
+                continue
+            applied = row.get("applied_sources") or {}
+            differs = (row.get("reference") or {}).get("differs") or {}
+            kinds = []
+            if condition["period_source"] == "user_answer" and (
+                applied.get("period") != "a_user_answer" or differs.get("period") is not False
+            ):
+                kinds.append("answered_period_not_applied")
+            if condition["frequency_source"] == "user_answer" and (
+                applied.get("frequency") != "a_user_answer" or row.get("frequency") != condition["frequency"]
+            ):
+                kinds.append("answered_frequency_not_applied")
+            fetched = row.get("fetched") or []
+            first, last = min((x["start"] for x in fetched), default=None), max((x["end"] for x in fetched), default=None)
+            for sel in result.get("selections") or []:
+                p = sel.get("period") or {}
+                if sel.get("table_id") == table["table_id"] and (
+                    p.get("frequency") != row.get("frequency")
+                    or first is None
+                    or not first <= str(p.get("start")) <= str(p.get("end")) <= last
+                ):
+                    kinds.append("selection_outside_resolution")
+                    break
+            if kinds:
+                lost.append(
+                    {
+                        "table_id": table["table_id"],
+                        "kinds": kinds,
+                        "a": {
+                            "frequency": condition["frequency"],
+                            "period": copy.deepcopy(condition["period"]),
+                            "sources": {"period": condition["period_source"], "frequency": condition["frequency_source"]},
+                        },
+                        "b": {
+                            "frequency": row.get("frequency"),
+                            "requested": copy.deepcopy(row.get("requested")),
+                            "applied_sources": copy.deepcopy(applied),
+                        },
+                    }
+                )
+            elif differs.get("period") or differs.get("frequency"):
+                differences.append({"table_id": table["table_id"], "differs": copy.deepcopy(differs)})
+        state.setdefault("period_reference_differences", []).extend(differences)
+        if not lost:
+            return None
+        link = {"statistics": list(group["requirement_ids"]), "code": "b_answered_period_not_applied", "detail": lost}
+        state.setdefault("unsupported_links", []).append(link)
+        state.setdefault("a_blocked", []).append(link)
+        return "b_answered_period_not_applied"
 
     def _finish(self, state, emit):
         warnings = state.get("a_warnings") or []
