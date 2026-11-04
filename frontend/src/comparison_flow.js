@@ -31,7 +31,7 @@
   }
   function putQuestionBack(m){
     if(S.running){CV.toast('현재 실행이 끝난 뒤 질문을 입력해 주세요.');return;}
-    D.input.value=m.inputText||'';grow();refreshExampleHint();
+    D.input.value=m.inputText||'';grow();
     D.input.focus({preventScroll:true});
     CV.toast('질문만 입력했습니다. 실행을 눌러야 새 조회가 시작됩니다.');
   }
