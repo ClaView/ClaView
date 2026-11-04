@@ -12,7 +12,7 @@ SRC = FRONTEND / "src"                  # screen JS/CSS
 UI_ROOT = SRC / "template"              # Highcharts screen draft (kept unchanged; patched at build time)
 VENDOR = SRC / "vendor"
 DIST = Path(os.environ.get("CLAVIEW_DIST", FRONTEND / "dist"))
-# Repository root (eval/cases/golden for the example questions). In the image build: /build.
+# Repository root. In the image build: /build.
 ROOT = Path(os.environ.get("CLAVIEW_ROOT", FRONTEND.parent))
 
 

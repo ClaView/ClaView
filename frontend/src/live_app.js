@@ -1,82 +1,7 @@
   // 서버 응답만 사용한다. 후보 확인은 원래 실행과 연결된 별도 사용자 동작이다.
   var stageIds = ['question', 'table', 'conditions', 'fetch', 'chart'];
-  function exampleForQuery(query){
-    return CV.EXAMPLES.find(function(s){return s.q===(query||'').trim();});
-  }
-  function exampleNotice(s){
-    var notice=el('aside',{class:'example-notice',role:'note'});
-    notice.append(el('strong',{text:s.number+'번 · '+s.note.badge+' — 현재 구현 범위'}),el('span',{text:s.note.text}));
-    return notice;
-  }
-  function refreshExampleHint(){
-    if(!D.exampleHint)return;
-    var selected=exampleForQuery(D.input.value);
-    D.exampleHint.classList.toggle('has-selection',!!selected);
-    D.exampleHint.textContent=selected?selected.number+'번 질문을 입력했습니다. 수정한 뒤 ‘실행’을 눌러 주세요. 아직 조회하지 않았습니다.':
-      '실행 버튼을 누르면 조회합니다. Enter는 줄바꿈입니다.';
-    document.querySelectorAll('[data-example-id]').forEach(function(b){b.setAttribute('aria-pressed',String(!!selected&&b.dataset.exampleId===selected.id));});
-    D.exampleNote.replaceChildren();D.exampleNote.hidden=!(selected&&selected.note);
-    if(selected&&selected.note)D.exampleNote.append(exampleNotice(selected));
-  }
-  function selectExample(s){
-    // 숫자/정답을 불러오거나 run()을 호출하지 않는다. 실제 실행은 form 제출에서만 한다.
-    if(S.running){CV.toast('현재 실행이 끝나면 예시를 선택해 주세요.');return;}
-    D.input.value=s.q;grow();refreshExampleHint();
-    if(!D.input.disabled){D.input.focus({preventScroll:true});D.input.setSelectionRange(s.q.length,s.q.length);}
-  }
-  function filterExampleItems(groups,term,groupId){
-    // 예시 목록만 검색한다. 질문 해석이나 자동 표 선택 규칙과는 무관하다.
-    term=String(term||'').trim().toLocaleLowerCase().replace(/\s+/g,' ');
-    return groups.flatMap(function(g,index){return g.items.map(function(s){return {groupId:String(index),groupTitle:g.title,example:s};});})
-      .filter(function(row){return (groupId==='all'||row.groupId===groupId)&&
-        (!term||[row.example.id,row.example.number,row.example.label,row.example.q,row.groupTitle].join(' ').toLocaleLowerCase().replace(/\s+/g,' ').includes(term));});
-  }
-  function mountExampleLibrary(){
-    var library=el('section',{id:'exampleLibrary',class:'example-library','aria-label':'골든셋 예시 질문 22개'});
-    library.hidden=true;
-    var selectedGroup='all',grid=el('div',{id:'exampleGrid',class:'example-grid'}),cards=[],filters=[];
-    var search=el('input',{id:'exampleSearch',type:'search',class:'example-search',placeholder:'예: 물가, 대출금, GDP, 04',
-      'aria-label':'예시 질문 검색','aria-controls':'exampleGrid'});
-    var count=el('p',{class:'example-count',role:'status','aria-live':'polite'});
-    var noMatches=el('p',{class:'example-no-matches',text:'일치하는 예시가 없어요. 검색어나 유형을 바꿔 보세요.'});
-    var filterBar=el('div',{class:'example-filters',role:'group','aria-label':'예시 질문 유형'});
-    function filterButton(id,label,total){
-      var b=el('button',{type:'button',class:'example-filter','data-example-group':id,'aria-pressed':String(id===selectedGroup),
-        onclick:function(){selectedGroup=id;applyFilters();}},label,el('span',{class:'example-filter-count',text:String(total)}));
-      filters.push(b);filterBar.append(b);
-    }
-    filterButton('all','전체',22);
-    var shortGroups=['한 지표 추이','여러 지표 비교','구성 비교','규모·증감','변화 시점','수치표'];
-    CV.EXAMPLE_GROUPS.forEach(function(g,index){
-      filterButton(String(index),shortGroups[index]||g.title,g.items.length);
-      g.items.forEach(function(s){
-        var button=el('button',{type:'button',class:'example-item','data-example-id':s.id,'aria-pressed':'false',title:s.q,
-          'aria-label':s.number+'번 '+s.label.replace(/^\d+\s*·\s*/, '')+'. 질문 입력: '+s.q,onclick:function(){selectExample(s);}});
-        button.append(el('span',{class:'example-card-heading'},el('span',{class:'example-number',text:s.number}),
-          el('strong',{text:s.label.replace(/^\d+\s*·\s*/, '')})),el('span',{class:'example-card-type',text:shortGroups[index]||g.title}));
-        if(s.note)button.append(el('span',{class:'example-badge',text:s.note.badge}));
-        grid.append(button);cards.push({id:s.id,node:button});
-      });
-    });
-    var reset=el('button',{type:'button',class:'example-reset',text:'초기화',onclick:function(){search.value='';selectedGroup='all';applyFilters();search.focus();}});
-    function applyFilters(){
-      var matches=filterExampleItems(CV.EXAMPLE_GROUPS,search.value,selectedGroup),ids=new Set(matches.map(function(r){return r.example.id;}));
-      cards.forEach(function(c){c.node.hidden=!ids.has(c.id);});
-      filters.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.exampleGroup===selectedGroup));});
-      count.textContent='전체 22개 중 '+matches.length+'개';noMatches.hidden=matches.length>0;
-      reset.disabled=!search.value&&selectedGroup==='all';
-    }
-    search.addEventListener('input',applyFilters);
-    library.append(el('div',{class:'example-search-row'},el('label',{for:'exampleSearch',class:'example-search-label'},'예시 찾기',search),reset),
-      filterBar,count,grid,noMatches);applyFilters();
-    var toggle=el('button',{id:'examplesToggle',class:'example-action',type:'button','aria-expanded':'false','aria-controls':'exampleLibrary',text:'예시 질문 보기 · 22개'});
-    toggle.addEventListener('click',function(){
-      library.hidden=!library.hidden;toggle.setAttribute('aria-expanded',String(!library.hidden));
-      toggle.textContent=library.hidden?'예시 질문 보기 · 22개':'예시 질문 접기 · 22개';
-    });
-    // 사용자 첫 화면에는 예시 선택만 둔다. 개발용 검수 기록은 /review22 주소에 보존한다.
-    D.empty.append(el('div',{class:'example-actions'},toggle),
-      el('p',{class:'example-help',text:'예시 선택은 입력만 합니다. 내용을 수정한 뒤 실행하세요.'}),library);
+  function mountHome(){
+    // 첫 화면에는 질문 입력만 둔다(예시 질문 목록은 제거했다). 개발용 검수 기록은 /review22 주소에 보존한다.
     if(CV.REVIEW_MODE){
       var savedView=CV.SAVED_VIEW||{title:'저장된 실행 기록',description:'왼쪽 이력에서 결과를 선택하세요. 새 API 호출은 없습니다.'};
       var banner=el('aside',{class:'review-intro',role:'note'},el('strong',{text:savedView.title}),
@@ -85,24 +10,19 @@
       if(CV.SAVED_VIEW){
         D.empty.querySelector('h1').textContent=savedView.title;
         D.empty.querySelector('p').textContent='왼쪽 이력에서 보려는 결과를 선택하세요. 비교 그래프로 바로 이동합니다.';
-        toggle.hidden=true;
-        D.empty.querySelector('.example-help').hidden=true;
       }
     }
-    D.exampleHint=el('p',{id:'exampleInputHint',class:'example-input-hint',role:'status','aria-live':'polite'});
-    D.exampleNote=el('div',{id:'exampleInputNote'});
-    D.composer.querySelector('.box').after(D.exampleHint,D.exampleNote);
-    D.input.setAttribute('aria-describedby','exampleInputHint exampleInputNote');
-    D.input.addEventListener('input',refreshExampleHint);
+    D.inputHint=el('p',{id:'inputHint',class:'input-hint',role:'status','aria-live':'polite',text:'실행 버튼을 누르면 조회합니다. Enter는 줄바꿈입니다.'});
+    D.composer.querySelector('.box').after(D.inputHint);
+    D.input.setAttribute('aria-describedby','inputHint');
     D.sendBtn.textContent='실행';D.sendBtn.setAttribute('aria-label','질문 실행');D.sendBtn.title='입력한 질문으로 새 조회 시작';
-    // 동일한 form을 본문 밖 하단에 유지한다. 예시 목록을 스크롤해도 입력창은 보인다.
+    // 동일한 form을 본문 밖 하단에 유지한다. 본문을 스크롤해도 입력창은 보인다.
     CV.syncComposerPlacement=function(cv){
       var home=!CV.SAVED_VIEW&&!(cv&&cv.msgs.length);
       document.querySelector('.main').classList.toggle('home-mode',home);
       D.input.rows=1;grow();
     };
     CV.syncComposerPlacement(active());
-    refreshExampleHint();
   }
   // 새 A의 통계별 질문(kind a_view): 질문마다 답하고, 일부만 답해도 된다. 직접 입력은 적은 그대로 보낸다(날짜 계산 없음).
   function aViewConfirmationEl(m){
@@ -242,9 +162,6 @@
     if(isRecoverable(m)||m.recoveryState){body.append(recoveryEl(m,cv));}
     if(isPreviousStop(m)){body.append(previousStopEl(m));return;}
     var complete=hasComparisonResult(m);
-    var questionExample=exampleForQuery(m.inputText);
-    if(questionExample&&questionExample.note)body.append(exampleNotice(questionExample));
-    if(questionExample&&questionExample.note&&m.kind==='result'&&m.cases&&!m.cases.some(function(c){return c.analysisVersion;}))body.append(el('p',{class:'stage-note',text:'이 이력은 C 보완 전 저장 결과입니다. 최신 계산·누적 화면은 22건 검수 결과에서 확인하거나 새로 실행해 주세요.'}));
     if(m.parentRunId) body.append(el('p',{class:'stage-note',text:m.resumeKind==='b_conditions'?(m.kind==='result'?'수정한 조회 조건으로 이어 실행한 결과입니다. 원래 질문과 이전 기록은 위에 남아 있습니다.':'수정한 조회 조건을 전달했습니다. 아래에서 진행 상태를 확인하세요.'):(m.resumeKind==='alignment'?'선택한 방법으로 주기를 맞춰 이어 실행합니다. 이미 조회한 값을 사용하며 새로 조회하지 않습니다.':m.resumeKind==='a_answer'?'고른 답을 해당 통계에만 적용해 이어 실행합니다. 모델을 다시 부르지 않고 코드 검사만 다시 했습니다.':'선택한 표로 이어 실행합니다. 아래에서 조회 조건·데이터 조회·그래프 결과를 확인하세요.')}));
     else if(m.resumedJobId) body.append(el('p',{class:'stage-note',text:'이 확인에서 선택한 항목을 전달했습니다. 아래에 이어 실행 결과가 있습니다.'}));
     var progress=CV.ux.simplifyProgress(stepsEl(m)); progress.querySelector('details.steps').open=!complete&&!m.resumedJobId;
@@ -503,12 +420,12 @@
   var originalAppInit=CV.app.init;
   CV.app.init=function(){
     originalAppInit();
-    mountExampleLibrary();
+    mountHome();
     if(CV.SAVED_VIEW){
       var savedHint=el('aside',{class:'file-server-hint',role:'note'});
       savedHint.append(el('strong',{text:'저장된 결과 · 이 화면에서는 새 조회를 실행하지 않습니다.'}),el('a',{href:'/',text:'새 질문 실행 화면으로 이동'}));
       D.composer.before(savedHint);D.input.disabled=true;D.sendBtn.disabled=true;
-      D.exampleHint.textContent='저장된 결과를 보는 화면입니다. 새 질문은 위의 실제 실행 화면에서 입력해 주세요.';
+      D.inputHint.textContent='저장된 결과를 보는 화면입니다. 새 질문은 위의 실제 실행 화면에서 입력해 주세요.';
       D.input.placeholder='새 질문은 실제 실행 화면에서 입력해 주세요.';
       return;
     }

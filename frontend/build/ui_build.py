@@ -3,7 +3,6 @@ import json
 import re
 from pathlib import Path
 from paths import DIST, SRC as HERE, UI_ROOT, sha
-from example_questions import example_groups
 import brand
 
 SOURCE = UI_ROOT / "ClaView_시안A_인라인카드형_Highcharts.html"
@@ -24,22 +23,19 @@ def build():
                          "  var CV = (window.CV = { DATA: [], adapters: {}, layout: {}, adapter: null });\n", html)
     assert count == 1
     a, b = html.index("  /* ---------- engine ---------- */"), html.index("/* 진행 과정 표시 전용 코드.")
-    groups = json.dumps(example_groups(), ensure_ascii=False).replace("<", "\\u003c")
-    html = html[:a] + "  CV.EXAMPLE_GROUPS = " + groups + ";\n" + """
+    html = html[:a] + """
   CV.REVIEW_MODE = false;
   CV.SAVED_VIEW = null;
   CV.DISPLAY_VERSION = 'comparison-flow-20261021-v2';
-  CV.EXAMPLES = CV.EXAMPLE_GROUPS.flatMap(function(g){return g.items;});
   CV.SAMPLES = [];
   CV.STATE_SAMPLES = [];
 """ + html[b:]
-    # 첫 화면에는 질문 입력과 접힌 전체 예시 버튼만 둔다. 고정된 4개 카드는 생성하지 않는다.
+    # 첫 화면에는 질문 입력만 둔다. 고정된 4개 카드와 예시 질문 목록은 생성하지 않는다.
     replace("CV.SAMPLES.forEach(function (s) { D.chips.append(el('button', { type: 'button', class: 'chip', onclick: function () { run(s.q); } }, s.label)); });", "")
     replace("      if (D.stateChips) CV.STATE_SAMPLES.forEach(function (s) { D.stateChips.append(el('button', { type: 'button', class: 'chip ghost', onclick: function () { run(s.q); } }, s.label)); });\n", "")
     replace('<div id="chips" class="chips"></div><div id="stateChips" class="chips"></div>', '')
-    # 예시 클릭은 입력만 한다. 엔터도 줄바꿈으로 남겨 실행 버튼과 구분한다.
+    # 엔터는 줄바꿈으로 남겨 실행 버튼과 구분한다.
     replace("      D.input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); D.composer.requestSubmit(); } });\n", "")
-    replace("if (v) { D.input.value = ''; grow(); run(v); }", "if (v) { D.input.value = ''; grow(); refreshExampleHint(); run(v); }")
     replace("claview-mock-a-highcharts-v1", "claview-abc-live-v1")
     # 새로고침 때 기존 대화를 복원한다. 저장 자료 페이지는 원래처럼 목록에서 선택한다.
     replace("      S.active = null;", "      S.active = !CV.SAVED_VIEW && st && S.convs.some(function(c){return c.id===st.active;}) ? st.active : null;")
@@ -61,7 +57,7 @@ def build():
             '통계표와 조회 조건을 확인한 뒤 그래프를 볼 수 있습니다.')
     replace('시안 A · 인라인 카드형', '한국은행 통계 · KOSIS')
     replace("한국은행 통계를 자연어로 물어보면 표와 기간을 찾아 차트로 보여드립니다.",
-            "궁금한 통계와 기간을 적어 주세요. 예시를 골라 시작해도 좋아요.")
+            "궁금한 통계와 기간을 적어 주세요.")
     replace("개가 저장되어 있습니다.", "개를 조회했습니다.")
     replace("    if (freq === 'Q') return", "    if (freq === 'H') return p.slice(0, 4) + '년 ' + Number(p.slice(4)) + '반기';\n    if (freq === 'Q') return")
     # 원본 시안의 데이터/CSV를 보존하되 100% 선택 시에는 공식 전체 기준 %를 사용한다.
