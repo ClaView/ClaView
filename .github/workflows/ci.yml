@@ -29,10 +29,10 @@ jobs:
         with:
           filters: |
             shared: ['common/**', 'requirements*.txt', 'pyproject.toml', 'data/**', 'eval/cases/**', 'eval/fixtures/**']
-            a: ['modules/a/**', 'common/**', 'requirements*.txt', 'data/**', 'eval/cases/**', 'eval/fixtures/**']
-            b: ['modules/b/**', 'common/**', 'requirements*.txt', 'data/**', 'eval/cases/**', 'eval/fixtures/**']
-            c: ['modules/c/**', 'common/**', 'requirements*.txt']
-            pipeline: ['pipeline/**', 'modules/**', 'common/**', 'frontend/**', 'requirements*.txt', 'data/**', 'eval/fixtures/**', 'Dockerfile', 'docker-compose*.yaml']
+            a: ['modules/a/**', 'common/**', 'requirements*.txt', 'pyproject.toml', '.github/workflows/**', 'data/**', 'eval/cases/**', 'eval/fixtures/**']
+            b: ['modules/b/**', 'common/**', 'requirements*.txt', 'pyproject.toml', '.github/workflows/**', 'data/**', 'eval/cases/**', 'eval/fixtures/**']
+            c: ['modules/c/**', 'common/**', 'requirements*.txt', 'pyproject.toml', '.github/workflows/**']
+            pipeline: ['pipeline/**', 'modules/**', 'common/**', 'frontend/**', 'requirements*.txt', 'pyproject.toml', '.github/workflows/**', 'data/**', 'eval/cases/**', 'eval/fixtures/**', 'Dockerfile', '.dockerignore', 'docker-compose*.yaml']
 
   lint:
     runs-on: ubuntu-latest
@@ -62,9 +62,6 @@ jobs:
       - name: A table-level path (modules/a/tests_tl, evaluation bundle not connected)
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
         run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests_tl -q -p no:cacheprovider
-      - name: A legacy for the screen (modules/a/tests_legacy)
-        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
-        run: PYTHONPATH=modules/a python -B -X utf8 -m pytest modules/a/tests_legacy -q -p no:cacheprovider
       - name: A API (modules/a/tests_api)
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
         run: python -B -X utf8 -m pytest modules/a/tests_api -q -p no:cacheprovider
@@ -103,16 +100,19 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: python -B -X utf8 -m pytest pipeline/tests -q -p no:cacheprovider
       - run: python -B -X utf8 -m pytest pipeline/tests_api -q -p no:cacheprovider
+      - uses: actions/setup-node@v4
+        with: {node-version: "24"}
+      - run: node --test frontend/tests/*.cjs
       - name: Docker stack smoke (synthetic mode)
         env:
           CLAVIEW_MODE: synthetic
         run: |
-          cp .env.example .env
+          touch .env
           docker compose up -d --build --wait
           curl -fsS http://localhost:10300/health
           curl -fsS http://localhost:10301/health
           curl -fsS http://localhost:10311/health && curl -fsS http://localhost:10312/health && curl -fsS http://localhost:10313/health
           curl -fsS -X POST http://localhost:10311/a/select -H 'Content-Type: application/json' -d @common/fixtures/a_http_request/focus_model_scope.json > /dev/null
-          curl -fsS -X POST http://localhost:10311/a/legacy/select -H 'Content-Type: application/json' -d @common/fixtures/a_request/CV-AB-12.json > /dev/null
+          python pipeline/scripts/smoke_stack.py
       - if: always()
         run: docker compose down

@@ -1,51 +1,17 @@
-# A→B 표 목록 계약
+# A→B 표 목록과 전달 경계
 
-이 문서는 기존 A 포트 경로의 설명이다. 새 A 화면 경로의 대상 요약과 원문 인용 분리는 [새 A focus와 출처](A_focus_출처.md)를 따른다. B가 받는 선택 문자열 `focus`의 모양과 100자 제한은 같다.
-
-기간 조건을 포함하는 공용 모델과 A의 준비 요청은 [A→B 기간 조건 공용 모델과 송신부](A_B_기간조건_공용모델과_A송신부.md)를 따른다. 이번 단계는 `handoff.ready[].b_request`를 조립하며, 아래 기존 포트의 전송 필드와 보류는 아직 바꾸지 않는다.
-
-코드: `pipeline/claview_pipeline/b_port.py`(요청·결과·검사), `modules/a/claview_a/agent/b_connection.py`(A의 `AdapterPort`, `connect`). 판본 상수: `TABLE_LIST_CONTRACT = "flow-table-list/2026-10-23.1"`(포트 자체 모양이며 B 계약 판본이 아니다).
-
-## 언제 부르나
-
-A의 `connect`가 `question_route`가 `proceed`·`assume`·`partial`이고 실행할 요구가 있을 때만 포트를 부른다. 대기(`awaiting_answer`)·`no_result`·포트 없음(`b_port_not_configured`)이면 부르지 않는다. 관계로 묶인 요구는 한 번에 보낸다.
-
-## 요청 (`to_table_request(payload, a_assumptions=...)`)
+제품은 `claview_a_api.view`의 AView를 `claview_pipeline.screen.ScreenPipeline`에서 읽어 `claview_b_api.service.BService.resolve`로 전달한다. 공용 모델은 `common/claview_common/contracts/b.py`의 `BRequest`와 `BTableRef`다.
 
 ```text
-{
-  "contract_version": "flow-table-list/2026-10-23.1",
-  "query": <A가 받은 원질문>,
-  "as_of": <기준일 YYYY-MM-DD | None>,
-  "a_result": {"tables": [{"org_id", "table_id", "table_name", "focus"?}, ...]},   # B가 읽는 것은 이것과 query뿐
-  "a_assumptions": <A 공개 가정 봉투, 그대로 되돌려 준다>,
-  "scopes": [{"scope_id": <A 요구 ID>}, ...]                              # 보낸 요구마다 하나
-}
+query, as_of, tables: [{org_id, table_id, table_name, focus?, period_condition?}]
 ```
 
-- 표는 보낸 요구들의 선택 표를 A 순서대로, (org_id, table_id) 중복 없이 모은다. 필수 필드는 `B_TABLE_FIELDS = ("org_id", "table_id", "table_name")`이고(B 자체의 A→B 입력과 같다) 선택 필드 `OPTIONAL_TABLE_FIELDS = ("focus",)`가 하나 있다.
-- `focus`(선택, 제안 단계: [계획 32](../plans/32_A_B_표별_지표_focus_제안.md)): 질문 중 그 표가 맡은 지표 문구. 비어 있지 않은 문자열이며 100자 이내. 같은 표가 요구 여럿에 걸리면 지표를 ` / `로 이어 중복 없이 하나로 합친다. 있으면 B가 그 표의 모델 호출에만 `table_focus` 입력과 프롬프트 한 문장을 더한다. 없으면 기존과 같이 동작한다. 판본 상수는 아직 올리지 않았다(A 담당 협의 뒤 결정).
-- `check_table_request`가 막는 것: 원질문 없음, 표 0개, 표 필드가 다르거나(필수 필드 누락, 필수·선택 밖의 필드) org_id·table_id 빈 값(`table_fields`), `focus`가 문자열이 아니거나 비어 있음(`table_focus`), scope ID가 없거나 중복. 막히면 A는 그 요구를 `connection_error`로 남기고 B를 부르지 않는다. B 자신은 `focus`가 100자를 넘으면 `invalid_a_result`로 멈춘다.
+A의 `handoff.ready`만 실행하고 blocked·미확정 통계는 B에 보내지 않는다. 통계별 묶음의 원질문·표·focus를 보존하며 표별 기간 문맥을 분리한다. 표 코드·메타·정답은 질문을 대체하지 않는다.
 
-## 결과 (`run_b`)
+B가 구조화된 기간 계약을 지원하면 `handoff.ready[].b_request`의 표와 기간 조건을 보낸다. 사용자가 답한 기간·주기는 출처·대상·원문을 포함해 전달하며, 수신 계약이 지원하지 않는 경우 답을 빼고 조회하지 않는다. B 결과의 `period_resolutions`로 적용 여부를 확인한다.
 
-```text
-{
-  "contract_version": "flow-table-list/2026-10-23.1",
-  "a_assumptions": <요청과 같은 값>,
-  "a_result": <요청의 표 목록>,
-  "b_outcome": <B 단계 봉투: stage "B", status, result(b_result), issues, trace_ref>,
-  "scopes": [{"scope_id", "status": <b_outcome.status>, "issues": <b_outcome.issues>}, ...],
-  "selections": <status가 ok일 때 b_result.selections, 아니면 []>,
-  "fetch": <A의 AdapterPort가 붙인다: data_result | not_run 봉투 | None>
-}
-```
+- [focus와 출처](A_focus_출처.md)
+- [기간 공용 모델과 A 송신부](A_B_기간조건_공용모델과_A송신부.md)
+- [B 결과](B_결과.md), [조회 결과](조회_결과.md)
 
-- B 한 번의 실행이 요청 전체에 답하므로 묶인 요구들은 같은 상태를 나눠 갖는다.
-- B 그래프가 실패하면(모델 실패 포함) `b_outcome.status`가 실패 상태가 되고 `selections`는 비며 조회하지 않는다. 그래프 밖으로 `StageFailure`가 나와도 같은 봉투로 바꾼다.
-- 조회: 조회 클라이언트가 있으면 `fetch_data(b_outcome.result, ...)`의 결과([조회 결과](조회_결과.md)). 없으면 `{"status": "not_run", "reason": "no_fetch_client", "requests": [<KOSIS 요청 파라미터>, ...]}`(키 없음).
-- `check_table_result`: scope ID가 요청과 같은 순서로 같은지, `b_outcome.stage == "B"`, `selections`가 목록인지. `check_scope_result`: scope마다 `scope_id`·`status`가 문자열인지.
-
-## A 쪽 판정
-
-A의 `connect`가 요구별로 `{"requirement_keys", "status": "returned" | "connection_error", "result"}`를 쌓고, 모든 요구가 `returned`·모든 scope가 `ok`·조회가 `ok`일 때만 `execution_status = "completed"`다. 그 밖은 `partial` 또는 `not_executed`.
+회귀 시험: `pipeline/tests/staged/test_screen_54.py`, `test_screen_period_condition_1103.py`, `test_screen_table_period_calls_1103.py`, `test_screen_yoy_answered_1104.py`, `common/tests/test_b_period_contract.py`.

@@ -6,7 +6,7 @@
     combine_results([...])        -> one data_result from several requirements (one chart)
     merge_frequency_choices([...])-> one frequency question for several results aligned apart
 
-Clients follow CLAVIEW_MODE: "live" uses HCX and KOSIS (keys from the environment);
+Clients follow CLAVIEW_MODE: "live" uses OpenAI and KOSIS (keys from the environment);
 any other mode uses the synthetic model and fetch client (wiring only, not accuracy).
 """
 

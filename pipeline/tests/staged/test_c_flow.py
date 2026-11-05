@@ -1,7 +1,7 @@
 """C part on the integrated A -> B -> fetch flow, with SYNTHETIC B model and fetch client.
 
-These check wiring and stage reporting, never model or value accuracy. Questions are short
-probe sentences chosen for the route A's rules give them (proceed, wait for an answer, no table).
+These check wiring and stage reporting, never model or value accuracy. Scripted judgments drive
+the real AView service through selection, waiting for an answer, and missing-table outcomes.
 """
 
 from __future__ import annotations
@@ -9,11 +9,9 @@ from __future__ import annotations
 import json
 
 import pytest
+from flow_support import NO_TABLE_Q, PROCEED_Q, WAIT_Q, answer_payload
 
 AS_OF = "2026-10-22"
-PROCEED_Q = "GDP 2023년 보여줘"
-WAIT_Q = "총고정자본형성 2023년"
-NO_TABLE_Q = "수출 2023년 보여줘"
 
 
 def stage_status(state: dict) -> dict:
@@ -39,20 +37,13 @@ def test_a_question_pauses_then_answer_resumes(make_pipeline):
     assert waiting["status"] == "needs_confirmation"
     assert stage_status(waiting)["table"] == "needs_confirmation"
     assert stage_status(waiting)["conditions"] == "not_run"
-    assert waiting["calls"] == {"HCX": 0, "KOSIS": 0}
-    group = waiting["confirmation"]["groups"][0]
-    assert len(group["options"]) >= 2
-    table = group["options"][0]["tables"][0]
+    assert waiting["calls"] == {"HCX": 0, "KOSIS": 0, "A_judge": 1}
+    card = waiting["confirmation"]
+    question = card["groups"][0]
+    assert len(question["options"]) >= 2
+    table = question["options"][0]["tables"][0]
     assert table["table_id"] and table["frequencies"] and table["coverage"] and table["units"]
-    payload = {
-        "choices": [
-            {
-                "requirement_id": group["requirement_id"],
-                "option_id": group["options"][0]["option_id"],
-            }
-        ],
-        "interpretation_confirmed": False,
-    }
+    payload = answer_payload(waiting)
     resumed = pipeline.resume(waiting, payload)
     assert resumed["status"] == "ok"
     assert resumed["parent_run_id"] == waiting["run_id"]
@@ -60,37 +51,18 @@ def test_a_question_pauses_then_answer_resumes(make_pipeline):
     assert {c["tableId"] for c in resumed["ui_cases"]} == {table["table_id"]}
 
 
-@pytest.mark.parametrize(
-    "mutate",
-    [
-        lambda p, g: {**p, "choices": []},
-        lambda p, g: {
-            **p,
-            "choices": [{"requirement_id": "other", "option_id": g["options"][0]["option_id"]}],
-        },
-        lambda p, g: {
-            **p,
-            "choices": [{"requirement_id": g["requirement_id"], "option_id": "q:forged"}],
-        },
-        lambda p, g: {**p, "interpretation_confirmed": "yes"},
-        lambda p, g: {"choices": p["choices"]},
-    ],
-)
+@pytest.mark.parametrize("mutate", [
+    lambda p: {**p, "session_id": "forged"},
+    lambda p: {**p, "answers": [{**p["answers"][0], "option_id": "forged"}]},
+    lambda p: {**p, "answers": [{**p["answers"][0], "question_version": 999}]},
+    lambda p: {**p, "answers": [{**p["answers"][0], "question_id": "other"}]},
+    lambda p: {"answers": p["answers"]},
+])
 def test_resume_rejects_choices_not_offered(make_pipeline, mutate):
     pipeline = make_pipeline()
     waiting = pipeline.run(WAIT_Q, as_of=AS_OF)
-    group = waiting["confirmation"]["groups"][0]
-    good = {
-        "choices": [
-            {
-                "requirement_id": group["requirement_id"],
-                "option_id": group["options"][0]["option_id"],
-            }
-        ],
-        "interpretation_confirmed": False,
-    }
     with pytest.raises(ValueError):
-        pipeline.validate_resume(waiting, mutate(good, group))
+        pipeline.validate_resume(waiting, mutate(answer_payload(waiting)))
     assert pipeline.model.calls == [] and pipeline.client.calls == []
 
 
@@ -99,14 +71,14 @@ def test_no_table_stops_at_table_stage_without_b_calls(make_pipeline):
     state = pipeline.run(NO_TABLE_Q, as_of=AS_OF)
     assert state["status"] == "unresolved" and state["error_code"] == "a_no_table"
     assert stage_status(state)["table"] == "failed"
-    assert state["calls"] == {"HCX": 0, "KOSIS": 0}
+    assert state["calls"] == {"HCX": 0, "KOSIS": 0, "A_judge": 1}
     assert state["ui_cases"] == []
 
 
 def test_through_a_and_through_b_stop_early(make_pipeline):
     pipeline = make_pipeline()
     a_only = pipeline.run(PROCEED_Q, as_of=AS_OF, through="A")
-    assert a_only["status"] == "a_verified" and a_only["calls"] == {"HCX": 0, "KOSIS": 0}
+    assert a_only["status"] == "a_verified" and a_only["calls"] == {"HCX": 0, "KOSIS": 0, "A_judge": 1}
     assert stage_status(a_only)["conditions"] == "not_run"
     b_only = pipeline.run(PROCEED_Q, as_of=AS_OF, through="B")
     assert (
@@ -164,7 +136,9 @@ def test_run_record_has_no_synthetic_secret_and_is_json(make_pipeline, tmp_path)
 
 def test_golden_queries_never_end_in_integration_error(make_pipeline):
     """All 22 golden questions end ok/partial or at A's own stop, never in an error."""
-    from claview_pipeline.session import ROOT as REPO_ROOT
+    from claview_common.settings import PATHS
+
+    REPO_ROOT = PATHS.root
 
     cases = json.loads(
         (REPO_ROOT / "eval/cases/golden/golden_set_v1.json").read_text(encoding="utf-8")
@@ -177,7 +151,8 @@ def test_golden_queries_never_end_in_integration_error(make_pipeline):
         assert state["status"] != "error", (case["case_id"], state.get("exception_type"))
         if state["status"] in {"ok", "partial"}:
             assert state["ui_cases"]
-    assert sum(s == "ok" for s in outcomes.values()) >= 15, outcomes
+    assert set(outcomes.values()) <= {"ok", "partial", "needs_confirmation", "unresolved"}, outcomes
+    assert sum(status == "ok" for status in outcomes.values()) >= 15, outcomes
 
 
 @pytest.mark.parametrize(("err", "code"), [("30", "kosis_no_data"), ("31", "kosis_service_error")])
@@ -206,12 +181,3 @@ def test_kosis_error_shows_answer_and_request_and_keeps_trace(make_pipeline, tmp
     assert f'"err": "{err}"' in rows["KOSIS 응답"] and "tblId" in rows["요청 조건"]
     saved = json.loads((tmp_path / state["run_id"] / "result.json").read_text(encoding="utf-8"))
     assert any(e["event"] == "data_response_error" for e in saved["trace_events"])
-
-
-def test_table_stage_says_when_a_did_not_confirm_and_lists_alternatives(make_pipeline):
-    state = make_pipeline().run(
-        "2024년 공산품과 서비스의 생산자물가가 어떻게 달랐는지 월별로 비교해줘", as_of=AS_OF
-    )
-    table = next(s for s in state["stages"] if s["id"] == "table")
-    assert ["확정 방식", "A 1순위 표로 진행(A가 확정하지 못함)"] in table["rows"]
-    assert "다른 후보" in table["note"] and "DT_404Y014" in table["note"]

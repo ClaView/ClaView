@@ -4,8 +4,8 @@
 #   docker compose up -d --build --wait        then open http://localhost:10300/
 # Keys come from .env (env_file) only. Never write key values in this file.
 x-backend: &backend
-  build: .
-  image: claview-backend:latest
+  image: ${CLAVIEW_BACKEND_IMAGE:-claview-backend:latest}
+  pull_policy: never
   env_file: .env
   environment: &backend-env
     GIT_SHA: ${GIT_SHA:-unknown}      # shown in /info; set by `make up` (git rev-parse --short HEAD)
@@ -43,6 +43,7 @@ services:
 
   pipeline:
     <<: *backend
+    build: .
     environment:
       <<: *backend-env
       CLAVIEW_A_RUN_ROOT: /claview/runs/a_service
@@ -56,7 +57,7 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile
-    image: claview-frontend:latest
+    image: ${CLAVIEW_FRONTEND_IMAGE:-claview-frontend:latest}
     restart: unless-stopped
     ports: ["${FRONTEND_PORT:-10300}:80"]
     networks: [claview_net]

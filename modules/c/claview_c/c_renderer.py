@@ -14,33 +14,13 @@ from uuid import uuid4
 
 from claview_common import periods
 
-WIDTH = {"Y": 1, "H": 2, "Q": 4, "M": 12}
+WIDTH = periods.WIDTH
 
 
 # Period arithmetic and labels live in claview_common.periods (shared with B); C keeps its names.
 period_index = periods.period_index
 periods_between = periods.periods_between
 period_label = periods.period_label
-
-
-def periods_between(start: str, end: str, frequency: str) -> list[str]:
-    first, last = period_index(start, frequency), period_index(end, frequency)
-    if first > last or last - first > 20000:
-        raise ValueError("조회 기간 범위를 확인해 주세요.")
-    if frequency == "Y":
-        return [str(n) for n in range(first, last + 1)]
-    width = WIDTH[frequency]
-    return [f"{n // width:04d}{n % width + 1:02d}" for n in range(first, last + 1)]
-
-
-def period_label(period: str, frequency: str) -> str:
-    period_index(period, frequency)
-    if frequency == "Y":
-        return f"{period}년"
-    sub = int(period[4:])
-    if frequency == "H":
-        return f"{period[:4]}년 {'상반기' if sub == 1 else '하반기'}"
-    return f"{period[:4]}년 {sub}{'분기' if frequency == 'Q' else '월'}"
 
 
 def prepare(query: str, data_result: dict) -> dict:

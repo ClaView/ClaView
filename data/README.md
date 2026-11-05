@@ -26,10 +26,10 @@ A·B는 같은 [목록](catalog/search_catalog.json)과 [원메타](raw/boK_meta
 | [A1 사전 실험](mappings/experiments/a1_source_checked_v1/README.md) | 명시 옵션으로만 쓰는 10건 출처 확인 |
 | `mappings/review/`, `samples/`, 기타 catalog 자료 | 생성·초안 검수에 필요한 원천 |
 | [기존22](../eval/cases/golden/golden_set_v1.json) · [Schema](../eval/cases/golden/golden_set_v1.schema.json) | 현재 평가 자료, 모두 단일 표 정답 |
-| `eval/cases/legacy/a_stage2/`, `eval/cases/b/search_review/` | 계약 회귀·개발 테스트. 임의 추가48은 성능 지표에서 제외 |
+| `eval/cases/b/search_review/` | B 검색 검토·개발 자료. 성능 지표와 분리하며 현재 시험 위치는 루트 README를 따른다 |
 | [B 기간 시험](../eval/cases/b/period/) | 지정 B ZIP의 증강13·스키마. 코드 정책 기능 시험으로 분리하고 기존22 지표에 합산하지 않음 |
 
-전체 메타는 별도 전달받아 위 경로에 준비합니다. 현재 로컬에는 준비돼 있습니다. 저장 자료 묶음이 생성기 규약과 일치하면 `scripts/b/prepare_pipeline_data.py --source-root <자료묶음>`을 사용합니다. 목적지 내용이 다르면 덮어쓰지 않고 중단합니다. 전체 자료 없이 기능만 확인할 때는 [3표 fixture](../tests/b/fixtures/README.md)를 사용합니다.
+전체 메타는 별도 전달받아 위 경로에 준비합니다. 현재 로컬에는 준비돼 있습니다. 저장 자료 묶음이 생성기 규약과 일치하면 `scripts/b/prepare_pipeline_data.py --source-root <자료묶음>`을 사용합니다. 목적지 내용이 다르면 덮어쓰지 않고 중단합니다. 전체 자료 없이 기능만 확인할 때는 [3표 fixture](../modules/b/tests/fixtures/README.md)를 사용합니다.
 
 기본 legacy 문서는 표명·경로·항목·분류·주석으로 실행 중 생성합니다. D0~D3는 비교 옵션이며 공식 인용·해시·부모 경로를 보존합니다. 목록 depth와 표 내부 항목 depth는 다릅니다. 큰 파생 문서·색인은 Git 제외입니다.
 

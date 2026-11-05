@@ -6,28 +6,24 @@ TestClient needs; this suite blocks every non-loopback connection instead.
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+from types import SimpleNamespace
+
 import pytest
 
-from claview_b.synthetic import SyntheticFetchClient, SyntheticSelectionModel
+from claview_b_api.service import store as load_store
 from claview_common.testing import block_external_network  # noqa: F401  (autouse fixture)
-from claview_pipeline import FlowSession
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tests"))
 
 
 @pytest.fixture(scope="session")
-def base() -> FlowSession:
-    return FlowSession.load()
+def base():
+    return SimpleNamespace(store=load_store())
 
 
 @pytest.fixture()
 def make_pipeline(base):
-    from claview_pipeline.staged import Pipeline
-
-    def build(*, model: bool = True, client: bool = True):
-        return Pipeline(
-            model=SyntheticSelectionModel(base.store) if model else None,
-            client=SyntheticFetchClient() if client else None,
-            runs_dir=None,
-            session=base,
-        )
-
-    return build
+    from flow_support import make_runner
+    return lambda **kwargs: make_runner(base.store, **kwargs)

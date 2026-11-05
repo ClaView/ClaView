@@ -1,21 +1,2 @@
-# Replace the placeholder teams/users with real GitHub handles after creating the repository.
-# Later lines win. Require code owner review in the main branch protection rule.
-
-*                              @claview/mentor
-
-/modules/a/                    @claview/part-a
-/modules/b/                    @claview/part-b
-/modules/c/                    @claview/part-c
-/frontend/                     @claview/part-c
-/pipeline/                     @claview/integrator @claview/mentor
-
-# Shared: every part lead reviews
-/common/                       @claview/part-a @claview/part-b @claview/part-c @claview/mentor
-/requirements.txt              @claview/part-a @claview/part-b @claview/part-c @claview/mentor
-/requirements-dev.txt          @claview/part-a @claview/part-b @claview/part-c @claview/mentor
-/pyproject.toml                @claview/mentor
-/Dockerfile                    @claview/mentor
-/docker-compose*.yaml          @claview/mentor
-/eval/cases/                   @claview/part-a @claview/part-b @claview/part-c
-/data/                         @claview/part-a @claview/part-b
-/docs/contracts/               @claview/part-a @claview/part-b @claview/part-c
+# No active owner rules: replace this comment with verified account/team names after team agreement.
+# Review responsibilities are documented in CONTRIBUTING.md. Branch protection is configured on GitHub.

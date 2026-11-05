@@ -7,7 +7,7 @@ probe of B). Its answer passes through B's ScriptedModel so
 B's own trace events and schema trimming apply. The synthetic fetch client returns
 the value "1" for each requested period. Used by module B's API in
 synthetic mode, by pipeline/tests, by `claview run --synthetic-b`, and as the fetch
-client of the golden replay (`claview_pipeline.evaluate`). B owns it (moved from the pipeline).
+client used by pipeline wiring checks. B owns these synthetic providers.
 """
 
 from __future__ import annotations

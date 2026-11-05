@@ -3,8 +3,7 @@
     PYTHONPATH=common:modules/a:modules/b:modules/c:pipeline python -B -X utf8 pipeline/scripts/build_fixtures.py
 
 Per case:
-    a_request/   {query, as_of}                         input of POST /a/legacy/select
-    a_result/    decision, tables, b_requests, pending  output of A (rules, no model); state left out
+    a_request/   {query, as_of}                         question corpus (not an HTTP request)
     b_request/   {query, tables, as_of}                 input of POST /b/resolve, tables = golden expected A tables
     b_result/    B envelope                             output of B with the SYNTHETIC model
     data_result/ fetch envelope                         output of fetch with the SYNTHETIC client (values "1")
@@ -15,7 +14,7 @@ b_request does not depend on A's answer, so B can be developed and measured with
 Synthetic outputs check shapes and wiring only, never accuracy.
 
 Use --a-http-only to wrap the existing synthetic AView fixtures for the new HTTP boundary,
-without rebuilding any legacy A, B or C fixture.
+without rebuilding B or C fixtures.
 Use --period-contract-only for the synthetic period request/result examples and updated
 AView/HTTP wrappers only. It imports common models, never module services or providers.
 """
@@ -160,21 +159,18 @@ def main() -> int:
         write_http_fixtures()
         return 0
 
-    from claview_a_api import service as a_service
     from claview_b.synthetic import SyntheticFetchClient, SyntheticSelectionModel
     from claview_b_api.service import BService, store
     from claview_c_api.service import present
 
     if OUT.exists():
-        for kind in ("a_request", "a_result", "b_request", "b_result", "data_result", "data_result_saved", "view"):
+        for kind in ("a_request", "b_request", "b_result", "data_result", "data_result_saved", "view"):
             shutil.rmtree(OUT / kind, ignore_errors=True)
     b = BService(SyntheticSelectionModel(store()), SyntheticFetchClient(), "synthetic")
     cases = json.loads(GOLDEN.read_text(encoding="utf-8-sig"))["cases"]
     for case in cases:
         cid, query = case["case_id"], case["query"]
         write("a_request", cid, {"query": query, "as_of": AS_OF})
-        a = a_service.select(query, AS_OF)
-        write("a_result", cid, {k: a[k] for k in ("decision", "tables", "b_requests", "pending_question")})
         tables = case["expected"]["A"]["tables"]
         if not tables:
             continue

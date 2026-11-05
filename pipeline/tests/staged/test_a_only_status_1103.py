@@ -11,7 +11,7 @@ def test_a_only_explains_scope_in_event_and_saved_result(make_pipeline, tmp_path
     events = []
     state = pipeline.run(PROCEED_Q, as_of=AS_OF, through="A", emit=events.append)
     assert state["status"] == "a_verified"
-    assert state["calls"] == {"HCX": 0, "KOSIS": 0}
+    assert state["calls"] == {"HCX": 0, "KOSIS": 0, "A_judge": 1}
     assert state["message"] == "A 조건 확정 · 조회 미실행"
     skipped = [stage for stage in state["stages"] if stage["status"] == "not_run"]
     assert skipped

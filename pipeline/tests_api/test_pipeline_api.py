@@ -9,6 +9,7 @@ import time
 
 import pytest
 from fastapi.testclient import TestClient
+from flow_support import WAIT_Q, answer_payload
 
 from claview_pipeline import api
 
@@ -47,21 +48,14 @@ def test_query_confirm_resume_over_http(client):
     assert info["model_ready"] and info["b_model"] == "synthetic"
     assert info["confirmation_resume"] is True and info["b_condition_resume"] is False
     token = info["token"]
-    started = post(client, "/api/query", {"query": "총고정자본형성 2023년"}, token)
+    started = post(client, "/api/query", {"query": WAIT_Q}, token)
     assert started.status_code == 202
     job = wait(client, token, started.json()["job_id"])
     assert job["result"]["status"] == "needs_confirmation"
-    group = job["result"]["confirmation"]["groups"][0]
-    bad = {
-        "choices": [{"requirement_id": group["requirement_id"], "option_id": "q:forged"}],
-        "interpretation_confirmed": False,
-    }
+    good = answer_payload(job["result"], 1)
+    bad = {**good, "session_id": "forged"}
     job_id = started.json()["job_id"]
     assert post(client, "/api/resume", {"job_id": job_id, "confirmation": bad}, token).status_code == 400
-    good = {
-        "choices": [{"requirement_id": group["requirement_id"], "option_id": group["options"][1]["option_id"]}],
-        "interpretation_confirmed": False,
-    }
     resumed = post(client, "/api/resume", {"job_id": job_id, "confirmation": good}, token)
     assert resumed.status_code == 202
     done = wait(client, token, resumed.json()["job_id"])

@@ -30,13 +30,14 @@ import json
 import os
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 from claview_a_api import screen as a_screen
 from claview_a_api import view as a_view
 from claview_a_api.synthetic_judges import ScriptJudge, by_question
 from claview_b_api import service as b_service
+from claview_b_api.service import store as load_store
 from claview_common.settings import usable_key
-from claview_pipeline import FlowSession
 from claview_pipeline.screen import ScreenPipeline
 
 STATISTIC = [{"id": "s1", "quote": "M2 통화량", "name": "M2"}]
@@ -456,7 +457,7 @@ def main(argv=None) -> int:
     out.mkdir(parents=True, exist_ok=True)
     budget = Budget(a.max_openai, a.max_kosis)
     model, client = build_clients(a.dry_run, budget)
-    session = FlowSession.load()
+    session = SimpleNamespace(store=load_store())
     wanted = set(a.only.split(",")) if a.only else None
     results, stopped = [], None
     for case in CASES:

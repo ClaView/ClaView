@@ -12,7 +12,7 @@ import pytest
 from claview_b.metadata import periods_between
 
 AS_OF = "2026-10-22"
-PROCEED_Q = "GDP 2023년 보여줘"
+from flow_support import PROCEED_Q
 
 
 def make_series(

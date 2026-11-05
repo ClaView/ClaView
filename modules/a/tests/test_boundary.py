@@ -199,8 +199,6 @@ def test_forbidden_dirs_are_component_wise():
     assert _guard.is_forbidden_source(cache / f"fetch.{sys.implementation.cache_tag}.pyc")
     assert not _guard.is_under(PKG) and not _guard.is_under(PKG / "catalog" / "x.py")
     assert not any(_guard.is_forbidden_name(n) for n in ("claview_a", "claview_a.x", "claview_a.catalog.x"))
-    # Beside this package: the old A (claview_a_legacy) is refused; the table-level tests and evaluator are not.
-    assert _guard.is_under(SRC / "claview_a_legacy" / "x.py") and _guard.is_under(SRC / "tests_legacy" / "x.py")
     assert not _guard.is_under(SRC / "tests_tl" / "x.py") and not _guard.is_under(SRC / "scripts" / "tl_eval" / "x.py")
     # The old parent package name is refused too.
     assert all(_guard.is_forbidden_name(n) for n in ("claview", "claview_c", "claview_pipeline", "claview_common"))

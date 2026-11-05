@@ -1,4 +1,4 @@
-"""The new HTTP contract is explicit, bounded, and separate from legacy AResult."""
+"""The new HTTP contract is explicit, bounded, and rejects unspecified versions."""
 
 import json
 from pathlib import Path
