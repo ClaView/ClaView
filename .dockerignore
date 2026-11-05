@@ -12,3 +12,11 @@ frontend/dist/
 frontend/node_modules/
 research/
 docs/
+
+# Runtime images carry services and data; local test/research tools stay outside.
+**/tests/
+**/tests_api/
+**/tests_tl/
+modules/*/scripts/
+pipeline/scripts/
+common/fixtures/

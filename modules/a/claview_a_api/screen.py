@@ -1,6 +1,6 @@
 """Module A's screen service for the new A (plan 54): question -> AView, and answers -> AView.
 
-The pipeline's screen path calls only this for A; it never falls back to the old A (``claview_a_legacy``).
+The pipeline and module HTTP boundary share this AView service.
 
 - ``select`` runs the official entry ``claview_a.run`` with the run profile given explicitly (first judgment
   ``gpt-6.1-terra``, one re-search with a re-judgment by ``gpt-6.1-sol``; the entry's default model is not used),

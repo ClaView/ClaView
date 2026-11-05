@@ -8,7 +8,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from claview_a_api import screen as a_screen
-from claview_a_api import service as a_legacy_service
 from claview_a_api.synthetic_judges import ScriptJudge, by_question
 from claview_b.synthetic import SyntheticFetchClient, SyntheticSelectionModel
 from claview_pipeline import api
@@ -29,11 +28,6 @@ SCRIPT = {TWO: {
 
 @pytest.fixture()
 def client(base, monkeypatch):
-    def refuse(*args, **kwargs):
-        raise AssertionError("the old A service was called on the screen path")
-
-    monkeypatch.setattr(a_legacy_service, "select", refuse)
-    monkeypatch.setattr(a_legacy_service, "answer", refuse)
     monkeypatch.setattr(api, "STATE", api._State())
 
     def judges():

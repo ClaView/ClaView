@@ -1,8 +1,8 @@
 # ruff: noqa: E501  (user-facing Korean text: ruff counts full-width characters as two columns)
 """화면 경로의 새 A 실행기: 질문 → 새 A(claview_a_api.screen) → AView → B → 조회 → C (계획 54).
 
-A 단계만 `staged.Pipeline`과 다르다. 새 A의 공개 결과(AView)만 읽고 A 내부 상태(record·decisions)는 읽지 않는다.
-옛 A(`claview_a_api.service`, claview_a_legacy)를 부르지 않으며, 새 A가 실패해도 옛 A로 대신하지 않는다.
+A 단계만 `staged.StagePipeline`과 다르다. 새 A의 공개 결과(AView)만 읽고 A 내부 상태(record·decisions)는 읽지 않는다.
+AView를 생산하는 A service가 유일한 A 실행 경로다.
 
 - 되묻기: AView의 질문을 확인 카드(kind `a_view`)로 보여 주고 멈춘다. 브라우저는 세션 ID와
   {question_id, question_version, option_id | text}만 돌려보낸다. 서버가 보관한 새 A 체크포인트에 적용하고
@@ -27,7 +27,7 @@ from claview_a_api.runtime import LedgerError, ProviderError
 from claview_common.periods import PeriodError, period_index, periods_between
 
 from .confirmation import _label_card, _table_card, _table_index, validate_confirmation
-from .staged import MESSAGES, Pipeline, StageFailure, now
+from .staged import MESSAGES, StageFailure, StagePipeline, now
 
 
 def _sent_a(judges, query):
@@ -147,9 +147,18 @@ def a_view_confirmation(view: dict, store) -> dict:
     by_sid = {s["statistic"]: s for s in view["statistics"]}
     groups = []
     for q in view["questions"]:
+        answered_basis = [a["value"] for sid in q["statistics"] if sid in by_sid
+                          for a in by_sid[sid]["answers"] if a["kind"] == "basis_axis" and a.get("value")]
+        # Axis options are examples from the first judgment, not final tables for a combination of replies.
+        # Keep their answer IDs unchanged; only hide those examples once another basis has been answered.
+        partial_basis = q["kind"] == "basis_axis" and bool(answered_basis)
+        indicator = q["text"]
+        if partial_basis:
+            indicator = (f"이미 선택한 기준({', '.join(answered_basis)})은 유지합니다. {indicator} "
+                         "최종 통계표는 남은 기준에 답한 뒤 확인합니다.")
         options = []
         for o in q["options"]:
-            if o.get("table_id"):
+            if o.get("table_id") and not partial_basis:
                 card = _table_card(store, index, o["table_id"], [])
                 card["different_axes"] = [f"{q['axis_label'] or q['axis']}: {o['value']}"]
                 card["search_note"] = "새 A가 제시한 선택지 표"
@@ -165,7 +174,7 @@ def a_view_confirmation(view: dict, store) -> dict:
                 "statistics": q["statistics"],
                 "synthetic": q["synthetic"],
                 "quote": " · ".join(by_sid[s]["quote"] for s in q["statistics"] if s in by_sid),
-                "indicator": q["text"],
+                "indicator": indicator,
                 "breakdown": [],
                 "a_status": "question",
                 "reasons": [q.get("axis") or q["kind"]],
@@ -195,13 +204,13 @@ def a_view_confirmation(view: dict, store) -> dict:
         "conditions": [],
         "groups": groups,
         "settled": settled,
-        "question_text": " / ".join(q["text"] for q in view["questions"]),
+        "question_text": " / ".join(g["indicator"] for g in groups),
         "dimension": "a_view",
     }
 
 
-class ScreenPipeline(Pipeline):
-    """The screen's runner: the new A, then the shared B/fetch/C steps of `staged.Pipeline`."""
+class ScreenPipeline(StagePipeline):
+    """The screen's runner: the new A, then the shared B/fetch/C steps of `staged.StagePipeline`."""
 
     a_model_mode = "new_a"
     a_running_text = "새 A가 질문을 읽고 통계표를 고릅니다(모델 판단 + 코드 검사)."

@@ -35,7 +35,7 @@ from claview_common.settings import B_MODEL_ID, PATHS, load, reveal
 from . import saved_runs
 from .runtime import ServiceTransports
 from .screen import ScreenPipeline
-from .staged import Pipeline, validate_query
+from .staged import validate_query
 
 MAX_JOBS = 30
 MAX_BODY = 16000
@@ -51,16 +51,16 @@ class _State:
         self.busy, self.lock = threading.Lock(), threading.Lock()
         self.jobs: dict[str, dict] = {}
         self.checkpoints: dict[str, dict] = {}
-        self._runner: Pipeline | None = None
+        self._runner: ScreenPipeline | None = None
 
     @property
-    def runner(self) -> Pipeline:
+    def runner(self) -> ScreenPipeline:
         if self._runner is None:
             self._runner = _make_runner()
         return self._runner
 
 
-def _make_runner() -> Pipeline:
+def _make_runner() -> ScreenPipeline:
     """The new A service and the actual B/fetch/C path, with no evaluation manifest required."""
     cfg = load()
     if cfg.live:

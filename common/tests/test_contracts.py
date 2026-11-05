@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from claview_common.contracts import ARequest, BRequest, Decision, Outcome, PendingQuestion, TableRef
+from claview_common.contracts import A_HTTP_VERSION, AHTTPSelectRequest, BRequest, Outcome
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
 
@@ -25,17 +25,9 @@ def test_every_golden_case_has_requests():
 
 @pytest.mark.parametrize(("name", "body"), load("a_request"))
 def test_a_request(name, body):
-    ARequest(**body)
+    AHTTPSelectRequest(contract_version=A_HTTP_VERSION, **body)
 
 
-@pytest.mark.parametrize(("name", "body"), load("a_result"))
-def test_a_result_summary(name, body):
-    assert body["decision"] in Decision.__args__
-    tables = [TableRef(**t) for t in body["tables"]]
-    if body["decision"] in ("proceed", "assume", "partial"):
-        assert tables, name
-    if body["pending_question"]:
-        PendingQuestion(**body["pending_question"])
 
 
 @pytest.mark.parametrize(("name", "body"), load("b_request"))
@@ -61,8 +53,8 @@ def test_json_schemas_export():
     from claview_common import contracts
 
     for model in (
-        contracts.ARequest,
-        contracts.AResult,
+        contracts.AHTTPSelectRequest,
+        contracts.AHTTPResult,
         contracts.BRequest,
         contracts.BResult,
         contracts.FetchResult,

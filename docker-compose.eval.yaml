@@ -1,27 +1,15 @@
-# Evaluation runners (profile "eval"), used with docker-compose.yaml:
-#   docker compose -f docker-compose.yaml -f docker-compose.eval.yaml run --rm test
-# The module evaluation runners (eval-a/b/c/pipeline calling the module APIs) come with
-# design step 6; until then this file runs the offline test suites inside the image.
-x-eval: &eval
-  image: claview-backend:latest
-  env_file: .env
-  networks: [claview_net]
-  profiles: ["eval"]
-  working_dir: /claview
-  volumes:
-    - ./eval/reports:/claview/eval/reports
-    - ./runs:/claview/runs
-  environment:
-    PYTHONHASHSEED: "0"
-    CLAVIEW_MODE: synthetic  # This runner replays golden answers and uses synthetic fetches.
-    # Module evaluation runners (design step 6) call the module APIs at these addresses.
-    A_URL: http://module-a:8888
-    B_URL: http://module-b:8888
-    C_URL: http://module-c:8888
-    PIPELINE_URL: http://pipeline:8888
-
+# Offline AView pipeline wiring check. Synthetic judgments and data are not an accuracy score.
+# Use a new output directory on every run:
+# docker compose -f docker-compose.yaml -f docker-compose.eval.yaml run --rm eval-pipeline
 services:
-  # Golden 22 through A -> B (replayed golden answers) -> synthetic fetch, in process.
   eval-pipeline:
-    <<: *eval
-    command: ["python", "-m", "claview_pipeline", "evaluate", "--as-of", "2026-10-22", "--out", "runs/pipeline-golden"]
+    image: ${CLAVIEW_BACKEND_IMAGE:-claview-backend:latest}
+    profiles: ["eval"]
+    network_mode: none
+    working_dir: /claview
+    volumes:
+      - ./runs:/claview/runs
+    environment:
+      PYTHONHASHSEED: "0"
+      CLAVIEW_MODE: synthetic
+    command: ["python", "-m", "claview_pipeline", "evaluate", "--as-of", "${EVAL_AS_OF:-2026-10-29}", "--out", "${EVAL_OUT:-runs/pipeline-check}"]

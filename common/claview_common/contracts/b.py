@@ -7,14 +7,14 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer, model_validator
 from pydantic_core import PydanticCustomError
 
-from .a import TableRef
 from .envelope import Meta, Outcome
 from .period_condition import BResultData, PeriodCondition
+from .table import TableRef
 from .versions import B_RESULT_VERSION, DATA_RESULT_VERSION
 
 
 class BTableRef(TableRef):
-    """B-only additions; A's legacy TableRef and response shape remain unchanged."""
+    """B selection inputs extend the shared table identity."""
 
     model_config = ConfigDict(extra="forbid")
 

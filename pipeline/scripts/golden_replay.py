@@ -1,7 +1,7 @@
 # ruff: noqa: E501  (user-facing Korean text: ruff counts full-width characters as two columns)
 """다중 통계표·이중 축 골든셋(v3) 재생기: 같은 파이프라인(B 조건 결정 → 조회 → 정렬 → C)으로 시험한다.
 
-A의 외부 키 연결이 끝나지 않았으므로 A 단계(`claview_a_api.service`)는 골든셋의 정답 통계표로 대신한다.
+A 판단은 평가하지 않으며, 골든 표를 AView 경로의 B 입력으로 명시적으로 전달한다.
 B 이후(`claview_b_api.service`의 조건 결정·조회·정렬, C 표시)는 서비스 흐름(`claview_pipeline.staged`)이 그대로 돈다.
 
 모드
@@ -43,7 +43,7 @@ if str(HERE) not in sys.path:
 def _install_guard(mode: str):
     """Block every network transport in replay mode (the same guard the test suites use)."""
     if mode == "replay":
-        from claview_a_legacy import _guard
+        from claview_a import _guard
 
         _guard.install_network_block()
         return _guard
@@ -142,48 +142,25 @@ NOT_GOLDEN_MESSAGE = (
 
 # ---- A stand-in: the golden tables --------------------------------------------------------
 def make_golden_a(cases: list[dict], *, table_focus: bool = False):
-    """An A service look-alike (`select`, `answer`) that answers with the golden tables of the matching query.
-
-    With `table_focus` the tables A hands to B also carry `focus`, the golden `indicator` (the
-    wording of the question for that table): a stand-in for an A that names the indicator per table.
-    The tables go through the port's table rule (`to_table_request`: B's three fields plus `focus`).
-    """
-    from claview_pipeline.b_port import to_table_request
-
+    """Explicit preselected-table handoff for B/C replay; it does not evaluate A."""
     by_query = {query_key(c["query"]): c for c in cases}
 
     class GoldenA:
         @staticmethod
         def select(query, as_of=None):
+            from claview_common.contracts import BRequest
             from claview_pipeline.staged import StageFailure
 
             case = by_query.get(query_key(query))
             if case is None:
                 raise StageFailure("a_no_table", "unresolved")
-            tables = case["expected"]["A"]["tables"]
-            handed = [
-                {**t, "focus": t["indicator"]} if table_focus and t.get("indicator") else t
-                for t in tables
-            ]
-            request = to_table_request({"selections": [{"tables": handed}]}, a_assumptions={})
-            state = {
-                "as_of": as_of,
-                "response": {"status": "proceed", "assumptions": {"items": []}, "skipped": []},
-                "analysis": {"interpretation": {"status": "golden_tables", "requirements": []}},
-                "selections": [
-                    {"requirement_id": "R1", "status": "auto", "tables": tables, "alternatives": []}
-                ],
-            }
-            return {
-                "state": state,
-                "b_requests": [
-                    {"requirement_ids": ["R1"], "tables": request["a_result"]["tables"]}
-                ],
-            }
-
-        @staticmethod
-        def answer(state, option_id):
-            raise ValueError("the golden stand-in for A asks no question")
+            tables = [{k: t[k] for k in ("org_id", "table_id", "table_name") if k in t}
+                      | ({"focus": t["indicator"]} if table_focus and t.get("indicator") else {})
+                      for t in case["expected"]["A"]["tables"]]
+            checked = BRequest(query=query, as_of=as_of, tables=tables)
+            return [{"requirement_ids": ["R1"],
+                     "tables": [t.model_dump(exclude_none=True) for t in checked.tables],
+                     "period_answers": [], "assignments": []}]
 
     return GoldenA
 
@@ -223,26 +200,42 @@ class AlignRecorder:
 
 
 @contextlib.contextmanager
-def patched_pipeline(
-    cases: list[dict], *, table_focus: bool = False, multi_table_prompt: bool = True
-):
-    """Swap A for the golden tables and record alignment blocks; restores everything on exit."""
+def patched_pipeline(cases: list[dict], *, table_focus: bool = False, multi_table_prompt: bool = True):
+    """Use a replay-only A adapter; production A selection is never monkeypatched."""
+    from types import SimpleNamespace
+
     from claview_b import stages
     from claview_pipeline import staged as cp
+    from claview_pipeline.screen import ScreenPipeline
 
-    original = (cp.a_service, cp.b_service.align, cp.MESSAGES["a_no_table"])
-    original_rule = stages.MULTI_TABLE_PROMPT
-    if not multi_table_prompt:
-        stages.MULTI_TABLE_PROMPT = ""  # experiment: B's multi-table prompt block switched off
+    handoff = make_golden_a(cases, table_focus=table_focus)
+
+    class GoldenPipeline(ScreenPipeline):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, judges_factory=lambda: None, **kwargs)
+
+        def _run_a(self, state, query, resume, update):
+            groups = handoff.select(query, state["as_of"])
+            state["b_requests"] = groups
+            state["a_model_mode"] = "preselected_tables"
+            state["extra_calls"] = {"A_judge": 0}
+            labels = [t["table_id"] for g in groups for t in g["tables"]]
+            update("question", "completed", "골든 재생 입력 · A 판단 미실행")
+            update("table", "completed", "골든 표를 B 입력으로 사용", listing=labels)
+            return groups, [], labels
+
+    original = (cp.b_service.align, cp.MESSAGES["a_no_table"], stages.MULTI_TABLE_PROMPT)
     recorder = AlignRecorder(cp.b_service.align)
-    cp.a_service = make_golden_a(cases, table_focus=table_focus)
+    if not multi_table_prompt:
+        stages.MULTI_TABLE_PROMPT = ""
     cp.b_service.align = recorder
     cp.MESSAGES["a_no_table"] = NOT_GOLDEN_MESSAGE
+    namespace = SimpleNamespace(**vars(cp))
+    namespace.Pipeline = GoldenPipeline
     try:
-        yield cp, recorder
+        yield namespace, recorder
     finally:
-        cp.a_service, cp.b_service.align, cp.MESSAGES["a_no_table"] = original
-        stages.MULTI_TABLE_PROMPT = original_rule
+        cp.b_service.align, cp.MESSAGES["a_no_table"], stages.MULTI_TABLE_PROMPT = original
 
 
 def make_runner(
@@ -254,9 +247,8 @@ def make_runner(
     synthetic: ReplayFetchClient | None = None,
     hcx_retries: int = 0,
 ):
-    """A service-flow `Pipeline` (golden A stand-in), with the model/client the mode asks for."""
+    """AView pipeline with explicitly preselected tables, with the model/client the mode asks for."""
     from claview_b.evaluation import scripted_answers
-    from claview_pipeline import FlowSession
 
     answers: dict = {}
     for case in cases:
@@ -270,21 +262,18 @@ def make_runner(
         # A 429 waits for the reset time the service reports (at most 60 s) and sends the same request again.
         model = HcxModel(keys["hcx"], retries=hcx_retries, min_interval=35)
     client = synthetic if mode == "replay" else None
-    runner_cls = _replay_pipeline_class() if mode == "replay" else cp.Pipeline
+    runner_cls = _replay_pipeline_class(cp.Pipeline) if mode == "replay" else cp.Pipeline
     return runner_cls(
         keys.get("hcx") if mode == "hcx" else None,
         keys.get("kosis") if mode in {"kosis", "hcx"} else None,
         model=model,
         client=client,
         runs_dir=None,
-        session=FlowSession.load(),
     )
 
 
-def _replay_pipeline_class():
-    from claview_pipeline import staged as cp
-
-    class _ReplayPipeline(cp.Pipeline):
+def _replay_pipeline_class(base):
+    class _ReplayPipeline(base):
         """Marks every replay result so synthetic values can never pass for KOSIS data."""
 
         def _finish(self, state, emit):

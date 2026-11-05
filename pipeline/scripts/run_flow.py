@@ -1,15 +1,9 @@
-"""Run questions through the one flow (A session -> B port -> fetch), offline only.
+"""Shortcut for the offline AView CLI (same runner as the screen).
 
-Examples (repository root, `uv run --locked python -B -X utf8` in front of each):
-    scripts/pipeline/run_flow.py --question "GDP 2023년 보여줘"
-    scripts/pipeline/run_flow.py --synthetic-b --question "GDP 2023년 보여줘"
-    scripts/pipeline/run_flow.py --synthetic-b --synthetic-answer --question "총고정자본형성 2023년"
-    scripts/pipeline/run_flow.py --synthetic-b --question "GDP 2023년 보여줘" --out runs/flow-demo
+    python pipeline/scripts/run_flow.py --as-of 2026-10-29 --question "가계신용" --out runs/flow-demo
 
-The same as `python -m claview_pipeline run ...` (`claview_pipeline.cli`): network blocked for
-the whole process; without --synthetic-b no B port is built; --synthetic-b uses the SYNTHETIC
-B model and fetch client of `claview_pipeline.synthetic` (a wiring check, not model or value
-accuracy). Live HCX/KOSIS runs are not wired into this script.
+A and B judgments and fetched values are synthetic. Pending confirmations are recorded,
+never answered automatically. This is a wiring check, not an accuracy evaluation.
 """
 
 from __future__ import annotations

@@ -1,7 +1,7 @@
 """The versioned HTTP API uses the production screen flow and server-held records.
 
 Only scripted judges, temporary RunStores and TestClient requests are used.
-Legacy fixture assertions live separately under the explicit legacy routes.
+Only the versioned AView HTTP boundary is served.
 """
 
 from __future__ import annotations

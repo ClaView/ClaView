@@ -56,7 +56,7 @@ uv run --env-file .env --locked claview run-b @common --set-id $setId --b-respon
 
 B 실패 후 A는 유지됩니다. 원인을 해결하고 `--retry`를 붙이면 B부터 다시 실행합니다. 성공한 B는 결과를 재사용합니다. 실패 시험은 아직 B를 실행하지 않은 새 묶음에 `b_empty_responses.json`을 사용합니다. lease·시도 ID로 중복과 늦은 응답을 구분하지만 외부 요청의 정확히 한 번 실행까지 보장하지 않습니다.
 
-실제 B 의미·수치 검증과 팀원 구현 통합은 별도 범위입니다. [B 계약](../design/A에서_B로_전달하는_인터페이스.md)을 확인합니다.
+실제 B 의미·수치 검증과 팀원 구현 통합은 별도 범위입니다. [B 계약](../modules/b/design/A에서_B로_전달하는_인터페이스.md)을 확인합니다.
 
 ## 평가와 호환 실행
 
@@ -67,6 +67,6 @@ uv run --env-file .env --locked python -m pytest -q
 uv run --env-file .env --locked claview demo --case CV-AB-19
 ```
 
-통합 평가는 전체 메타와 보존된 기준 기록을 사용하고 외부 연결을 차단합니다. [22건 결과](../_이전_A1A2_20261006/A1_A2_22건_통합평가_6단계_2026-10-06.md)의 해석을 따릅니다.
+통합 평가는 전체 메타와 보존된 기준 기록을 사용하고 외부 연결을 차단합니다. [22건 결과](_이전_A1A2_20261006/A1_A2_22건_통합평가_6단계_2026-10-06.md)의 해석을 따릅니다.
 
 `TableDiscovery`·`build_discovery_graph`가 사용자 선택 경로입니다. `build_a_graph`·`select_tables`·`evaluate-a`·`run --selection-mode legacy`는 기존 자동 선택 호환 경로입니다. 새 A와 결과를 합산하지 않습니다.

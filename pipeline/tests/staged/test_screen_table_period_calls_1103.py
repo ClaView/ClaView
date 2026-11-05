@@ -167,9 +167,10 @@ def test_a_single_request_has_nothing_to_hand_over(base):
 
 
 if __name__ == "__main__":  # record of every case: question -> calls -> request range -> read range -> fetch parameters
-    from claview_pipeline import FlowSession
+    from types import SimpleNamespace
+    from claview_b_api.service import store as load_store
 
-    session = FlowSession.load()
+    session = SimpleNamespace(store=load_store())
     for item in CASES:
         got = record(session, item)
         print(f"\n[{got['id']}] {got['query']}  -> {got['status']}")

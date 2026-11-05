@@ -121,7 +121,7 @@ def evaluate(
                 {"query": query, "a_result": expected["A"]},
                 {"recursion_limit": 10 + 4 * len(expected["A"]["tables"])},
             )["stage_outcome"]
-            # The A -> B end-to-end evaluation lives in claview_pipeline.evaluate (new A).
+            # A -> B wiring checks are separate from B selection accuracy.
             row.update(
                 {
                     "b_independent_status": b["status"],

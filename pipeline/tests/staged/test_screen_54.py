@@ -8,7 +8,6 @@ from __future__ import annotations
 import pytest
 
 from claview_a_api import screen as a_screen
-from claview_a_api import service as a_legacy_service
 from claview_a_api.synthetic_judges import ScriptJudge, by_question
 from claview_pipeline.synthetic import SyntheticFetchClient, SyntheticSelectionModel
 
@@ -52,13 +51,6 @@ def stage_status(state):
     return {s["id"]: s["status"] for s in state["stages"]}
 
 
-@pytest.fixture(autouse=True)
-def _no_legacy_a(monkeypatch):
-    def refuse(*args, **kwargs):
-        raise AssertionError("the old A service was called on the screen path")
-
-    monkeypatch.setattr(a_legacy_service, "select", refuse)
-    monkeypatch.setattr(a_legacy_service, "answer", refuse)
 
 
 class RecordingB:

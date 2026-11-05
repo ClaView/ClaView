@@ -1,20 +1,9 @@
-# ruff: noqa: E501  (user-facing Korean text: ruff counts full-width characters as two columns)
-"""질문 → A(질문 해석·표 선택) → B(항목·기간 결정) → KOSIS 조회 → C(표시 자료).
-
-각 모듈은 자기 service 함수로만 부른다(모듈 API `/a/select`·`/b/resolve`·`/b/fetch`·
-`/c/present`와 같은 코드): A `claview_a_api.service.select/answer` → A가 넘기는 요구 묶음마다
-B `claview_b_api.service.BService.resolve` → `fetch` → C `claview_c_api.service.present`.
-여기서는 (1) 키/모델/조회 클라이언트를 주입하고, (2) 결과를 5단계(STAGES) 진행 기록으로 바꾸고,
-(3) C 결과를 화면 카드로 옮긴다. 읽는 순서: Pipeline.run → _assemble → _render → ui_cases.
-
-A의 확인 질문이 오면 실행을 멈추고(status=needs_confirmation) 서버가 A의 전체 상태를
-보관한다. 브라우저는 option_id만 돌려보내며 A의 `answer`로 이어 실행한다.
-정답/샘플 숫자는 읽지 않는다. 미확정 결과를 성공으로 바꾸지 않는다.
-"""
+"""Shared B selection, retrieval, presentation and run lifecycle for the AView pipeline."""
 
 from __future__ import annotations
 
 import copy
+from abc import ABC, abstractmethod
 import json
 import re
 from datetime import UTC, date, datetime
@@ -24,7 +13,6 @@ from uuid import uuid4
 import hashlib
 import os
 
-from claview_a_api import service as a_service
 from claview_b_api import service as b_service
 from claview_c_api import service as c_service
 from claview_common.contracts import CONTRACT_VERSION
@@ -33,8 +21,6 @@ from claview_common.settings import load as load_settings
 
 from .confirmation import (
     make_alignment_confirmation,
-    make_confirmation,
-    table_names,
     validate_confirmation,
 )
 from .request_capabilities import unsupported_request
@@ -126,11 +112,6 @@ COMBINE_REQUEST = re.compile(
     r"(?:한\s*(?:그래프|차트|화면)|하나의\s*(?:그래프|차트|화면)|같은\s*(?:그래프|차트)|이중\s*축|양축|겹쳐|한꺼번에)"
     + _REFUSED
 )
-SKIP_REASONS = {
-    "no_table": "질문에 맞는 표 후보를 찾지 못했습니다.",
-    "execution_unresolved": "조회에 필요한 조건이 확정되지 않았습니다.",
-    "indicator_meaning_unsupported": "지표의 의미를 확정하지 못해 조회하지 않았습니다.",
-}
 BLOCKED_STATUSES = {"needs_confirmation", "unresolved", "unsupported", "awaiting_user"}
 # Stops that no user choice can fix: shown as failed, not as waiting for confirmation.
 HARD_STOPS = {
@@ -515,10 +496,9 @@ class _ClientProbe:
         return getattr(self._client, name)
 
 
-class Pipeline:
-    # The A this runner calls (legacy A through claview_a_api.service; the new A's runner is claview_pipeline.screen).
-    a_model_mode = "rules_only"
-    a_running_text = "A(규칙 기반)가 질문을 해석하고 통계표를 고릅니다."
+class StagePipeline(ABC):
+    a_model_mode = "new_a"
+    a_running_text = "질문에서 통계표와 조회 조건을 확인합니다."
     b_factory = b_service.BService
 
     def __init__(
@@ -670,121 +650,13 @@ class Pipeline:
         ]
         return self._finish(state, emit)
 
-    # ---- A (legacy service) -> question/table stages -------------------------------------
+    @abstractmethod
     def _run_a(self, state, query, resume, update):
-        """Run A and write the question and table stages: (b_requests, A-side failures, table listing).
-
-        Raises StageFailure when A waits for an answer or decides nothing."""
-        if resume:
-            paused, answer = resume
-            state["parent_run_id"] = paused["run_id"]
-            state["resume_kind"] = "a_question"
-            a_out = a_service.answer(paused["a_state"], answer["option_id"])
-            a_state = a_out["state"]
-            if a_state["response"].get("answer_error"):
-                state["answer_error"] = a_state["response"]["answer_error"]
-                raise StageFailure("answer_invalid", "unresolved")
-            state["user_confirmation"] = {
-                "source": "user_confirmation",
-                "parent_run_id": paused["run_id"],
-                "at": now(),
-                "question_id": answer["question_id"],
-                "option_id": answer["option_id"],
-            }
-        else:
-            a_out = a_service.select(query, state["as_of"])
-            a_state = a_out["state"]
-        state["a_state"] = a_state
-        state["as_of"] = a_state["as_of"]
-        state["b_requests"] = a_out["b_requests"]
-        listing = self._report_a(state, a_state, update, bool(resume))
-        return a_out["b_requests"], [], listing
-
-    def _report_a(self, state, a_state, update, resumed):
-        response, analysis = a_state["response"], a_state.get("analysis") or {}
-        interp = analysis.get("interpretation") or {}
-        requirements = interp.get("requirements") or []
-        status = response["status"]
-        notes = list(
-            dict.fromkeys(
-                item["adopted"]["interpretation"]
-                for item in (response.get("assumptions") or {}).get("items", [])
-                if not item.get("confirmed") and (item.get("adopted") or {}).get("interpretation")
-            )
-        )
-        update(
-            "question",
-            "completed",
-            f"요구 {len(requirements)}개를 해석했습니다."
-            if requirements
-            else "질문을 해석하지 못했습니다.",
-            [
-                ["질문", state["query"]],
-                ["해석 상태", interp.get("status", "미확정")],
-                ["해석 방식", "규칙 기반 · HCX 미호출"],
-            ],
-            [f"{r['id']}: {r.get('quote', '')} ({r.get('status', '')})" for r in requirements],
-            "\n".join(notes) + ("\n사용자가 선택한 답변으로 이어 실행했습니다." if resumed else ""),
-        )
-        selected = [
-            f"{s['requirement_id']} · {s['status']} · "
-            + (
-                ", ".join(f"{t['table_name']} [{t['table_id']}]" for t in s.get("tables", []))
-                or "후보 없음"
-            )
-            for s in a_state.get("selections") or []
-        ]
-        if status == "awaiting_answer":
-            state["confirmation"] = make_confirmation(a_state, self.store)
-            update(
-                "table", "needs_confirmation", "통계표·해석 후보를 확인해 주세요.", listing=selected
-            )
-            raise StageFailure("a_selection_unsettled", "needs_confirmation")
-        if status == "no_result":
-            reasons = [
-                SKIP_REASONS.get(s.get("reason"), s.get("reason", ""))
-                for s in response.get("skipped") or []
-            ]
-            update(
-                "table",
-                "failed",
-                "질문에 맞는 통계표를 확정하지 못했습니다.",
-                listing=selected,
-                note="\n".join(dict.fromkeys(r for r in reasons if r)),
-            )
-            raise StageFailure("a_no_table", "unresolved")
-        names = table_names(self.store)
-        selections = a_state.get("selections") or []
-        unsure = [x for x in selections if x.get("status") != "auto"]
-        method = "A 자동 확정" if not unsure else "A 1순위 표로 진행(A가 확정하지 못함)"
-        skipped = response.get("skipped") or []
-        alternatives = [
-            f"{x['requirement_id']}: A가 이 표를 확정하지 못하고 1순위로 진행했습니다. 다른 후보: "
-            + ", ".join(f"{names.get(b[0], b[0])} [{b[0]}]" for b in x["alternatives"][:3] if b)
-            for x in unsure
-            if x.get("alternatives") and not resumed
-        ]
-        update(
-            "table",
-            "completed" if status in {"proceed", "assume"} else "warning",
-            f"통계표 {len({t['table_id'] for s in a_state.get('selections') or [] for t in s.get('tables', [])})}개를 정했습니다."
-            + (" 일부 요구는 제외됐습니다." if status == "partial" else ""),
-            [
-                ["B 전달 정보", "원래 질문 + 기관·표 코드·표 이름"],
-                ["확정 방식", "사용자 후보 선택" if resumed else method],
-            ],
-            selected,
-            "\n".join(
-                [
-                    *(SKIP_REASONS.get(s.get("reason"), s.get("reason", "")) for s in skipped),
-                    *alternatives,
-                ]
-            ),
-        )
-        return selected
+        """Return AView handoff groups, blocked statistics and display labels."""
+        raise NotImplementedError
 
     def _resolve_extra(self, group, b):
-        """Extra B inputs of one request (none on the legacy path)."""
+        """Extra B inputs of one request (empty unless provided by the AView adapter)."""
         return {}
 
     @staticmethod
@@ -808,7 +680,7 @@ class Pipeline:
         return others + copy.deepcopy(group.get("unhanded_period_wording") or [])
 
     def _b_conditions_lost(self, state, group, b_outcome):
-        """A failure code when B's answer drops a condition A handed over (no check on the legacy path)."""
+        """A failure code when B's answer drops a condition A handed over (implemented by the AView adapter)."""
         return None
 
     # ---- A's requests -> B (per requirement group) -> fetch -> C -> stages ---------------
@@ -1081,7 +953,6 @@ class Pipeline:
         state["parent_run_id"] = paused["run_id"]
         state["resume_kind"] = "alignment"
         state["as_of"] = paused["as_of"]
-        state["a_state"] = paused.get("a_state")
         # The stopped run did the B and fetch work; this run only re-aligns. Keep that record
         # (B outcomes, requests, trace events) so the saved result still shows what B did.
         for key, value in (paused.get("stage_outcomes") or {}).items():
